@@ -31,7 +31,7 @@ vi.mock('../modules', () => ({ moduly: [{ id: 'syreny', nazwa: 'Syreny', Panel: 
 const grochowska: Adres = { id: '1', ulica: 'Grochowska', numer: '200', dzielnica: 'Praga-Południe', lat: 52.2457, lon: 21.0874 };
 const marszalkowska: Adres = { id: '2', ulica: 'Marszałkowska', numer: '1', dzielnica: 'Śródmieście', lat: 52.2297, lon: 21.0122 };
 const dom: MiejsceUzytkownika = { rola: 'dom', etykieta: 'Dom', adres: grochowska };
-const tutaj = (adres: Adres): MiejsceUzytkownika => ({ rola: 'tutaj', etykieta: 'Tutaj', adres });
+const tutaj = (adres: Adres): MiejsceUzytkownika => ({ rola: 'tutaj', etykieta: 'Lokalizacja', adres });
 
 beforeEach(() => {
   zapisane = undefined;
@@ -84,15 +84,23 @@ describe('onboarding', () => {
 });
 
 describe('pasek', () => {
-  it('przycisk „Tutaj” dodaje miejsce na początek listy i je wybiera', async () => {
+  it('miejsce z GPS zapisane jeszcze jako „Tutaj” pokazuje się jako „Lokalizacja”', async () => {
+    zapisane = [{ ...tutaj(marszalkowska), etykieta: 'Tutaj' }, dom];
+    render(<App />);
+    const wybor = await screen.findByRole<HTMLSelectElement>('combobox', { name: 'Wybrane miejsce' });
+    expect(wybor.textContent).toContain('Lokalizacja: Marszałkowska 1');
+  });
+
+  it('przycisk „Lokalizacja” dodaje miejsce na początek listy i je wybiera', async () => {
     zapisane = [dom];
     vi.mocked(najblizszyAdres).mockResolvedValue(marszalkowska);
     render(<App />);
     const wybor = await screen.findByRole<HTMLSelectElement>('combobox', { name: 'Wybrane miejsce' });
     expect(wybor.value).toBe('dom');
+    expect(screen.getByRole('button', { name: 'Użyj mojej lokalizacji' }).textContent).toBe('Lokalizacja');
     fireEvent.click(screen.getByRole('button', { name: 'Użyj mojej lokalizacji' }));
     await waitFor(() => expect(wybor.value).toBe('tutaj'));
-    expect(wybor.textContent).toContain('Tutaj: Marszałkowska 1');
+    expect(wybor.textContent).toContain('Lokalizacja: Marszałkowska 1');
     expect(wybor.textContent).toContain('Dom: Grochowska 200');
     expect(zapisane).toEqual([tutaj(marszalkowska), dom]);
     expect(screen.queryByRole('alert')).toBeNull();

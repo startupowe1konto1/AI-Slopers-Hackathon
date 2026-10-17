@@ -40,7 +40,7 @@ describe('miejsceTutaj', () => {
   it('z ?lokalizacja= szuka najbliższego adresu i daje miejsce „Tutaj” bez pytania GPS', async () => {
     history.replaceState(null, '', '/?lokalizacja=52.2457,21.0874');
     vi.mocked(najblizszyAdres).mockResolvedValue(adres);
-    expect(await miejsceTutaj()).toEqual({ rola: 'tutaj', etykieta: 'Tutaj', adres });
+    expect(await miejsceTutaj()).toEqual({ rola: 'tutaj', etykieta: 'Lokalizacja', adres });
     expect(najblizszyAdres).toHaveBeenCalledWith({ lat: 52.2457, lon: 21.0874 });
   });
 

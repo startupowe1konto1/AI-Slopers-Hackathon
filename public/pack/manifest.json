@@ -1,6 +1,6 @@
 {
- "wersja": "2026-10-17T20:24",
- "zbudowano": "2026-10-17T20:24:04+00:00",
+ "wersja": "2026-10-17T21:05",
+ "zbudowano": "2026-10-17T21:05:00+00:00",
  "pliki": [
   {
    "sciezka": "adresy/adresy.json",
@@ -43,13 +43,18 @@
    "modul": "syreny"
   },
   {
+   "sciezka": "transport/linie.json",
+   "bajty": 245681,
+   "modul": "transport"
+  },
+  {
    "sciezka": "transport/meta.json",
-   "bajty": 348,
+   "bajty": 399,
    "modul": "transport"
   },
   {
    "sciezka": "transport/przystanki.json",
-   "bajty": 478014,
+   "bajty": 533499,
    "modul": "transport"
   }
  ],
@@ -67,10 +72,10 @@
    "pobrano": "2026-10-17"
   },
   "gtfs-ztm": {
-   "nazwa": "GTFS Warszawa (mkuran.pl, wersja 2026-10-17 00:15:22), źródło nieoficjalne, na podstawie danych ZTM",
+   "nazwa": "GTFS Warszawa (mkuran.pl, wersja 2026-10-17 00:15:22): przystanki i linie autobusów, tramwajów i metra, źródło nieoficjalne, na podstawie danych ZTM",
    "licencja": "do weryfikacji (dane ZTM; GTFS: Mikołaj Kuranowski)",
    "url": "https://mkuran.pl/gtfs/",
-   "pobrano": "2026-10-17T15:50:31+02:00"
+   "pobrano": "2026-10-17T22:50:39+02:00"
   },
   "wfs-apteki": {
    "nazwa": "m.st. Warszawa, apteki (WFS, dane z marca 2017)",

@@ -1,7 +1,7 @@
 import { expect, it, vi } from 'vitest';
 import type { Map as MapLibreMap } from 'maplibre-gl';
 import type { Trasa } from '../contracts';
-import { pokazTrase } from './trasaNaMapie';
+import { pokazPlan, pokazTrase } from './trasaNaMapie';
 
 function atrapa() {
   const warstwy = new Map<string, { paint: Record<string, unknown> }>();
@@ -44,6 +44,35 @@ it('trasa z mniej niż dwoma punktami nic nie rysuje i nie rusza mapy', () => {
   const sprzatnij = pokazTrase(a.map, { ...t, linia: [[21.0, 52.23]] });
   expect(a.warstwy.size).toBe(0);
   expect(a.zrodla.size).toBe(0);
+  expect(a.fitBounds).not.toHaveBeenCalled();
+  expect(() => sprzatnij()).not.toThrow();
+});
+
+it('plan komunikacji: dojścia przerywane, przejazd w kolorze linii, przystanki; cały plan w kadrze i sprzątanie', () => {
+  const a = atrapa();
+  const sprzatnij = pokazPlan(
+    a.map,
+    [
+      { rodzaj: 'pieszo', linia: [[21.0, 52.23], [21.005, 52.231]] },
+      { rodzaj: 'tramwaj', linia: [[21.005, 52.231], [21.02, 52.24], [21.03, 52.25]] },
+      { rodzaj: 'pieszo', linia: [[21.03, 52.25], [21.031, 52.252]] },
+    ],
+    [[21.005, 52.231], [21.03, 52.25]],
+  );
+  expect(a.warstwy.size).toBe(3);
+  const [pieszo, przejazd] = [...a.warstwy.values()];
+  expect(pieszo.paint['line-dasharray']).toBeDefined();
+  expect(przejazd.paint['line-dasharray']).toBeUndefined();
+  expect(a.fitBounds).toHaveBeenCalledWith([[21.0, 52.23], [21.031, 52.252]], { padding: 60, maxZoom: 17 });
+  sprzatnij();
+  expect(a.warstwy.size).toBe(0);
+  expect(a.zrodla.size).toBe(0);
+});
+
+it('pusty plan nic nie rysuje', () => {
+  const a = atrapa();
+  const sprzatnij = pokazPlan(a.map, [], []);
+  expect(a.warstwy.size).toBe(0);
   expect(a.fitBounds).not.toHaveBeenCalled();
   expect(() => sprzatnij()).not.toThrow();
 });

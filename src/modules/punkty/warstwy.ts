@@ -1,6 +1,6 @@
 import { Popup, type ExpressionSpecification, type GeoJSONSource, type Map as MapLibreMap, type MapLayerMouseEvent, type Subscription } from 'maplibre-gl';
 import type { FeatureCollection } from 'geojson';
-import type { Manifest, Punkt, RodzajPunktu } from '../../contracts';
+import type { Manifest, Punkt, RodzajPunktu, WyznaczTrase } from '../../contracts';
 import { wczytajPunkty, zrodlaPaczki } from './najblizsze';
 import { RODZAJE } from './rodzaje';
 import { sluchajOdcinka, type Odcinek } from './trasa';
@@ -31,16 +31,38 @@ const odcinek = (o: Odcinek): FeatureCollection => ({
     : [],
 });
 
+// Treść dymka punktu. „Wyznacz trasę” prosi aplikację o trasę (arkusz trasy w src/app) i zamyka dymek.
+export function trescDymka(nazwa: string, zrodlo: string, [lon, lat]: [number, number], zamknij: () => void): HTMLElement {
+  const el = document.createElement('div');
+  el.className = 'dymek';
+  const tytul = document.createElement('strong');
+  tytul.textContent = nazwa;
+  const opis = document.createElement('div');
+  opis.className = 'dymek-zrodlo';
+  opis.textContent = `Źródło: ${zrodlo}`;
+  const przycisk = document.createElement('button');
+  przycisk.type = 'button';
+  przycisk.className = 'dymek-trasa';
+  przycisk.textContent = 'Wyznacz trasę';
+  przycisk.addEventListener('click', () => {
+    window.dispatchEvent(new CustomEvent<WyznaczTrase>('wyznacz-trase', { detail: { cel: { lat, lon }, nazwa } }));
+    zamknij();
+  });
+  el.append(tytul, opis, przycisk);
+  return el;
+}
+
 function popup(map: MapLibreMap, e: MapLayerMouseEvent, zrodla: Manifest['zrodla']) {
   const f = e.features?.[0];
   if (!f || f.geometry.type !== 'Point') return;
-  const el = document.createElement('div');
-  const nazwa = document.createElement('strong');
-  nazwa.textContent = f.properties.nazwa;
-  const zrodlo = document.createElement('div');
-  zrodlo.textContent = `Źródło: ${zrodla[f.properties.zrodlo]?.nazwa ?? f.properties.zrodlo}`;
-  el.append(nazwa, zrodlo);
-  new Popup().setLngLat(f.geometry.coordinates as [number, number]).setDOMContent(el).addTo(map);
+  const wsp = f.geometry.coordinates as [number, number];
+  // Dymek nad punktem; mapa jest niska, więc przesuwamy punkt w dół kadru, żeby przycisk się zmieścił.
+  const p = new Popup({ maxWidth: '260px', anchor: 'bottom', offset: 10 });
+  const el = trescDymka(f.properties.nazwa, zrodla[f.properties.zrodlo]?.nazwa ?? f.properties.zrodlo, wsp, () => p.remove());
+  const bezRuchu = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+  const h = map.getContainer().clientHeight;
+  map.easeTo({ center: wsp, offset: [0, Math.max(h / 4, h / 2 - 32)], duration: bezRuchu ? 0 : 350 });
+  p.setLngLat(wsp).setDOMContent(el).addTo(map);
 }
 
 export function dodajWarstwy(map: MapLibreMap): () => void {

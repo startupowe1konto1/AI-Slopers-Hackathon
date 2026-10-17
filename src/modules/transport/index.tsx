@@ -3,6 +3,8 @@ import { Panel } from './Panel';
 import { wskazowkiBliskich } from './wskazowki';
 
 export { trasyMin } from './trasy';
+export { planKomunikacji, najblizszyOdjazd, opisPrzejazdu, opisPlanu } from './komunikacja';
+export type { Przejazd, PlanKomunikacji, TypLinii } from './komunikacja';
 
 export const modul: Modul = {
   id: 'transport',

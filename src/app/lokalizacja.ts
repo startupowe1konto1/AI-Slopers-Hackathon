@@ -18,14 +18,14 @@ function gps(): Promise<Wsp> {
   });
 }
 
-// „Tutaj” = najbliższy punkt adresowy z paczki, więc syreny i punkty liczą się jak dla wpisanego adresu.
+// „Lokalizacja” = najbliższy punkt adresowy z paczki, więc syreny i punkty liczą się jak dla wpisanego adresu.
 export async function miejsceTutaj(): Promise<MiejsceUzytkownika> {
   const wsp = lokalizacjaZAdresu(location.search) ?? (await gps());
   const adres = await najblizszyAdres(wsp).catch(() => {
     throw new Error('Nie udało się wczytać adresów z paczki (brak sieci?). Pobierz paczkę offline i spróbuj ponownie.');
   });
   if (!adres) throw new Error('Jesteś poza Warszawą albo daleko od adresu z naszej paczki. Wpisz adres.');
-  return { rola: 'tutaj', etykieta: 'Tutaj', adres };
+  return { rola: 'tutaj', etykieta: 'Lokalizacja', adres };
 }
 
 export function zTutaj(miejsca: MiejsceUzytkownika[], tutaj: MiejsceUzytkownika): MiejsceUzytkownika[] {

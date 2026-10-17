@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { Map as MapLibreMap } from 'maplibre-gl';
-import type { KontekstWskazowek, RolaMiejsca } from '../contracts';
+import type { KontekstWskazowek, RolaMiejsca, WyznaczTrase } from '../contracts';
 import { moduly } from '../modules';
 import { useSiec } from '../offline/siec';
 import { zapiszTrasyOffline } from '../offline/zapisTras';
@@ -13,6 +13,7 @@ import { MapView } from '../map/MapView';
 import { stanPaczki } from '../offline/paczka';
 import { Kafelki } from './Kafelki';
 import { Karty } from './Karty';
+import { ArkuszTrasy } from './ArkuszTrasy';
 import { useWskazowki } from './wskazowki';
 import { Stopka } from './Stopka';
 
@@ -63,6 +64,16 @@ export default function App() {
   const { karty, ladowanie } = useWskazowki(moduly, przygotowanie ? kontekst : null, proba);
   const odswiez = useCallback(() => setProba((p) => p + 1), []);
 
+  // Trasa do punktu z dymka na mapie (src/modules/punkty/warstwy.ts) otwiera arkusz zamiast listy kart.
+  const [celMapy, setCelMapy] = useState<WyznaczTrase | null>(null);
+  const [blackout, setBlackout] = useState(false);
+  useEffect(() => {
+    const sluchaj = (e: Event) => setCelMapy((e as CustomEvent<WyznaczTrase>).detail);
+    window.addEventListener('wyznacz-trase', sluchaj);
+    return () => window.removeEventListener('wyznacz-trase', sluchaj);
+  }, []);
+  useEffect(() => setCelMapy(null), [miejsce?.adres.lat, miejsce?.adres.lon]);
+
   const [bladLokalizacji, setBladLokalizacji] = useState<string | null>(null);
   const [ustalam, setUstalam] = useState(false);
   const tutaj = async () => {
@@ -101,12 +112,12 @@ export default function App() {
         <select aria-label="Wybrane miejsce" value={miejsce.rola} onChange={(e) => setRola(e.target.value as RolaMiejsca)}>
           {miejsca.map((m) => (
             <option key={m.rola} value={m.rola}>
-              {m.etykieta}: {m.adres.ulica} {m.adres.numer}
+              {m.rola === 'tutaj' ? 'Lokalizacja' : m.etykieta}: {m.adres.ulica} {m.adres.numer}
             </option>
           ))}
         </select>
         <button className="pasek-przycisk" onClick={tutaj} disabled={ustalam} aria-label="Użyj mojej lokalizacji">
-          {ustalam ? 'Ustalam…' : 'Tutaj'}
+          {ustalam ? 'Ustalam…' : 'Lokalizacja'}
         </button>
         <button className="pasek-przycisk" onClick={() => setEdycja(true)} aria-label="Edytuj adresy">
           Adresy
@@ -121,7 +132,11 @@ export default function App() {
         <MapView centrum={miejsce.adres} moduly={moduly} onMapa={setMapa} />
         <Kafelki kafelki={KAFELKI} mapa={mapa} />
       </main>
-      <Karty karty={karty} ladowanie={ladowanie} mapa={mapa} od={miejsce.adres} onOdswiez={odswiez} />
+      {celMapy ? (
+        <ArkuszTrasy mapa={mapa} od={miejsce.adres} cel={celMapy} blackout={blackout} onBlackout={setBlackout} onZamknij={() => setCelMapy(null)} />
+      ) : (
+        <Karty karty={karty} ladowanie={ladowanie} mapa={mapa} od={miejsce.adres} onOdswiez={odswiez} blackout={blackout} onBlackout={setBlackout} />
+      )}
       <Stopka />
     </div>
   );

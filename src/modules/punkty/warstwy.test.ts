@@ -1,10 +1,10 @@
 import { afterEach, expect, it, vi } from 'vitest';
 import type { FeatureCollection } from 'geojson';
 import type { Map as MapLibreMap } from 'maplibre-gl';
-import type { Punkt } from '../../contracts';
+import type { Punkt, WyznaczTrase } from '../../contracts';
 import { wczytajPunkty, zrodlaPaczki } from './najblizsze';
 import { pokazOdcinek } from './trasa';
-import { dodajWarstweRodzaju, dodajWarstwy } from './warstwy';
+import { dodajWarstweRodzaju, dodajWarstwy, trescDymka } from './warstwy';
 
 vi.mock('maplibre-gl', () => ({ Popup: class {} }));
 vi.mock('./najblizsze', () => ({ wczytajPunkty: vi.fn(), zrodlaPaczki: vi.fn() }));
@@ -132,4 +132,20 @@ it('wyłączenie kafelka przed wczytaniem danych nie dodaje warstwy', async () =
   dodajWarstweRodzaju(a.map, 'aed')();
   await poczekaj();
   expect(a.zrodla.size).toBe(0);
+});
+
+it('dymek punktu: nazwa, źródło i „Wyznacz trasę”, które prosi aplikację o trasę i zamyka dymek', () => {
+  const zamknij = vi.fn();
+  const el = trescDymka('Apteka Pod Lwem', 'WFS m.st. Warszawy', [21.01, 52.23], zamknij);
+  expect(el.textContent).toContain('Apteka Pod Lwem');
+  expect(el.textContent).toContain('Źródło: WFS m.st. Warszawy');
+  const zdarzenia: WyznaczTrase[] = [];
+  const sluchaj = (e: Event) => void zdarzenia.push((e as CustomEvent<WyznaczTrase>).detail);
+  window.addEventListener('wyznacz-trase', sluchaj);
+  const przycisk = el.querySelector('button');
+  expect(przycisk?.textContent).toBe('Wyznacz trasę');
+  przycisk?.click();
+  window.removeEventListener('wyznacz-trase', sluchaj);
+  expect(zdarzenia).toEqual([{ cel: { lat: 52.23, lon: 21.01 }, nazwa: 'Apteka Pod Lwem' }]);
+  expect(zamknij).toHaveBeenCalledOnce();
 });
