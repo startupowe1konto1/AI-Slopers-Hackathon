@@ -198,7 +198,7 @@ Stan na 17.10 wieczorem. Na `main` są: szkielet (O1-A1), mapa offline (O1-A2, O
 | Przed kryzysem | karta do wydruku | O2-C2 (dobudowa) | pomijamy „i kartę do wydruku” |
 | Alarm | miejsca schronienia według PSP, metro, przycisk PSP | O3-A1 (jest), O3-B1 (#6), eksport PSP | przycisk PSP i wejścia do metra |
 | Uderzenie | wiatr | O4-B1 (jest), O4-A1 (#5) | sam wiatr bez dymu |
-| Uderzenie | dym i pomiar powietrza | O4-C1 (dobudowa) | mówimy tylko o wietrze |
+| Uderzenie | dym i pomiar powietrza | O4-C1 (jest na `main`) | mówimy tylko o wietrze |
 | Uderzenie | AED i SOR | O3-B1 (#6) | jw. |
 | Powrót | autobusy z przystanku | O2-C1 | pokazujemy „co jeździ w okolicy” z modułu na żywo |
 | Powrót | co jeździ w okolicy | O4-A1 (#5) | zrzut ekranu |
