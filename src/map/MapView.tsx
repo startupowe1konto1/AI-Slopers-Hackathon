@@ -3,7 +3,7 @@ import { Map as MapLibreMap, Marker, NavigationControl, addProtocol, setWorkerUr
 import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url';
 import { FileSource, PMTiles, Protocol } from 'pmtiles';
 import type { Modul, Wsp } from '../contracts';
-import { plikMapy } from '../offline/paczka';
+import { zapewnijMape } from '../offline/paczka';
 import { styl } from './styl';
 
 const BBOX: [number, number, number, number] = [20.85, 52.09, 21.28, 52.37];
@@ -12,14 +12,11 @@ setWorkerUrl(workerUrl);
 const protocol = new Protocol();
 addProtocol('pmtiles', protocol.tile);
 
-// Mapa z OPFS (po pobraniu paczki) albo z serwera.
+// Mapa zawsze z OPFS: przy pierwszym otwarciu pobierana w całości (hosting nie obsługuje Range).
 async function zrodloMapy(): Promise<string> {
-  const plik = await plikMapy();
-  if (plik) {
-    protocol.add(new PMTiles(new FileSource(plik)));
-    return `pmtiles://${plik.name}`;
-  }
-  return `pmtiles://${location.origin}/map/warszawa.pmtiles`;
+  const plik = await zapewnijMape();
+  protocol.add(new PMTiles(new FileSource(plik)));
+  return `pmtiles://${plik.name}`;
 }
 
 export function MapView({ centrum, moduly }: { centrum: Wsp | null; moduly: Modul[] }) {
@@ -27,11 +24,16 @@ export function MapView({ centrum, moduly }: { centrum: Wsp | null; moduly: Modu
   const mapa = useRef<MapLibreMap | null>(null);
   const znacznik = useRef<Marker | null>(null);
   const [gotowa, setGotowa] = useState(false);
+  const [blad, setBlad] = useState(false);
 
   useEffect(() => {
     let anulowano = false;
     const sprzatanie: (() => void)[] = [];
-    zrodloMapy().then((url) => {
+    zrodloMapy().catch(() => {
+      if (!anulowano) setBlad(true);
+      return null;
+    }).then((url) => {
+      if (!url) return;
       if (anulowano || !kontener.current) return;
       const m = new MapLibreMap({
         container: kontener.current,
@@ -72,5 +74,16 @@ export function MapView({ centrum, moduly }: { centrum: Wsp | null; moduly: Modu
     znacznik.current = new Marker({ color: '#b91c1c' }).setLngLat([centrum.lon, centrum.lat]).addTo(m);
   }, [centrum, gotowa]);
 
-  return <div ref={kontener} aria-label="Mapa Warszawy" />;
+  return (
+    <>
+      <div ref={kontener} aria-label="Mapa Warszawy" />
+      {!gotowa && (
+        <div className="mapa-stan" role="status">
+          {blad
+            ? 'Mapa niedostępna bez sieci. Połącz się raz, żeby ją zapisać w przeglądarce.'
+            : 'Ładowanie mapy Warszawy (12 MB przy pierwszym otwarciu)…'}
+        </div>
+      )}
+    </>
+  );
 }

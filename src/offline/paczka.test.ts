@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { ZASOBY_MAPY, plikMapy, pobierzPaczke, stanPaczki } from './paczka';
+import { ZASOBY_MAPY, plikMapy, pobierzPaczke, stanPaczki, zapewnijMape } from './paczka';
 
 // Minimalny OPFS w pamięci.
 function opfs() {
@@ -75,5 +75,14 @@ describe('paczka offline', () => {
     ));
     await expect(pobierzPaczke(() => {})).rejects.toThrow('syreny/syreny.json');
     expect(await stanPaczki()).toBeNull();
+  });
+
+  it('zapewnijMape: pobiera cały plik raz, potem czyta z OPFS', async () => {
+    const f = vi.fn(async () => new Response('MAPA'));
+    vi.stubGlobal('fetch', f);
+    expect(await (await zapewnijMape()).text()).toBe('MAPA');
+    expect(await (await zapewnijMape()).text()).toBe('MAPA');
+    expect(f).toHaveBeenCalledTimes(1);
+    expect(f).toHaveBeenCalledWith('/map/warszawa.pmtiles');
   });
 });

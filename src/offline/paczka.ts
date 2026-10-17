@@ -21,6 +21,25 @@ export async function plikMapy(): Promise<File | null> {
   }
 }
 
+async function zapiszMapeZSerwera(): Promise<void> {
+  const res = await fetch(`/map/${MAPA}`);
+  if (!res.ok || !res.body) throw new Error('Nie pobrano mapy');
+  const root = await navigator.storage.getDirectory();
+  const fh = await root.getFileHandle(MAPA, { create: true });
+  await res.body.pipeTo(await fh.createWritable());
+}
+
+// Plik mapy do wyświetlenia. Hosting (Cloudflare) nie obsługuje zapytań Range, więc mapę
+// pobieramy w całości raz (12 MB) i od razu zapisujemy w OPFS; kolejne otwarcia czytają z OPFS.
+export async function zapewnijMape(): Promise<File> {
+  const zapisana = await plikMapy();
+  if (zapisana) return zapisana;
+  await zapiszMapeZSerwera();
+  const plik = await plikMapy();
+  if (!plik) throw new Error('Nie zapisano mapy');
+  return plik;
+}
+
 // Pobiera wszystkie pliki z manifestu (zapisuje je service worker w cache "pack") i mapę do OPFS.
 export async function pobierzPaczke(onPostep: (zrobione: number, wszystkie: number) => void): Promise<void> {
   await navigator.storage.persist?.();
@@ -40,11 +59,7 @@ export async function pobierzPaczke(onPostep: (zrobione: number, wszystkie: numb
     if (!r.ok) throw new Error(`Nie pobrano ${url}`);
     await r.arrayBuffer();
   }
-  const res = await fetch(`/map/${MAPA}`);
-  if (!res.ok || !res.body) throw new Error('Nie pobrano mapy');
-  const root = await navigator.storage.getDirectory();
-  const fh = await root.getFileHandle(MAPA, { create: true });
-  await res.body.pipeTo(await fh.createWritable());
+  await zapiszMapeZSerwera();
   localStorage.setItem('paczka', JSON.stringify({ wersja: manifest.wersja, zbudowano: manifest.zbudowano }));
   onPostep(++z, wszystkie);
 }
