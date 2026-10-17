@@ -26,8 +26,8 @@ Sam plik `index.html` otwarty z dysku też działa. Font Archivo pobiera się z 
 
 Kroki na slajdach:
 - **3:** jedno naciśnięcie przewraca domino.
-- **4:** jedno naciśnięcie wyłącza prąd (mapa gaśnie, 92,5% → 69,1%).
-- **8:** pięć etapów dnia Kasi, a szóste naciśnięcie wyłącza sieć w telefonie.
+- **4:** jedno naciśnięcie wyłącza prąd (mapa gaśnie, głośna syrena 75 dB i więcej: 48,3% → 36,6% adresów; kształt mapy to najgorszy wariant).
+- **8:** pięć kroków demo (lokalizacja, karta Syreny, karta miejsca schronienia, pozostałe karty, brak sieci), a szóste naciśnięcie wyłącza sieć w telefonie.
 
 Adres slajdu jest w pasku adresu (`#4.1` to slajd 4, krok 1), więc po odświeżeniu wracamy w to samo miejsce.
 

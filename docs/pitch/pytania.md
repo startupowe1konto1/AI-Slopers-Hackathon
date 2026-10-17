@@ -33,12 +33,14 @@ Oznaczenie ⚠️ znaczy, że odpowiedź opiera się na czymś, co trzeba potwie
 
 ## 2. Skąd założenie, że przy blackoucie działają tylko syreny cyfrowe?
 
-> To założenie, ale oparte na dokumentach. 233 z 235 syren analogowych w Warszawie należą do wojewody. W jego przetargu to syreny wirnikowe na silnikach trójfazowych 4–7,5 kW, bez słowa o zasilaniu rezerwowym. Dla syren cyfrowych przetargi wymagają akumulatorów. Nie wiemy, czy któraś syrena wirnikowa ma agregat, dlatego mówimy „jeśli”. Pierwszy krok to potwierdzić to u wojewody mazowieckiego.
+> To założenie, ale oparte na dokumentach. 233 z 235 syren analogowych w Warszawie należy do wojewody, a w jego przetargu to syreny wirnikowe na silnikach 4–7,5 kW, bez słowa o zasilaniu rezerwowym. Cyfrowe mają akumulatory. Nie wiemy, czy któraś analogowa ma agregat, dlatego mówimy „jeśli”. Gdyby nie miały, głośnej syreny (75 dB i więcej) ubyłoby z 48,3% do 36,6% adresów. Pierwszy krok to potwierdzić to u wojewody.
 
 **Fakty w zanadrzu:**
 - 451 syren: 235 analogowych, 216 cyfrowych. Właściciele: wojewoda 234, Prezydent Miasta 197, KW PSP 18, OSP 2 (`dane/soia-warszawa/tabele/syreny_inwentaryzacja_warszawa.csv`).
-- Wszystkie syreny: 92,5% adresów w zasięgu. Tylko cyfrowe: 69,1%. Zasięg traci 29 676 ze 126 923 adresów (`dane/soia-warszawa/analiza/syreny_blackout_podsumowanie.csv`).
-- Największy spadek: Żoliborz −57,2 pp, Praga-Północ −53,9, Wola −51,8, Praga-Południe −50,3 (`syreny_blackout_dzielnice.csv`).
+- Liczby z `pipeline/syreny/WYNIKI.md`. Wszystkie syreny: 92,5% adresów ≥ 65 dB i 48,3% adresów ≥ 75 dB. Jeśli zabraknie prądu (przybliżenie): 91,5% i 36,6%. Zasięg 65 dB traci 1 230 adresów (wrażliwość ±1 dB: 697–1 928), więc mówimy „ok. tysiąca”, rząd wielkości.
+- Najgorszy wariant (dolne oszacowanie: tylko strefy, gdzie SOIA pokazuje syrenę cyfrową): 69,1% adresów w zasięgu 65 dB, zasięg traci 29 676 ze 126 923 adresów. Jest skrajny, bo tam, gdzie SOIA pokazuje syrenę analogową, zakłada, że nie ma żadnej syreny. Nie jest naszą główną liczbą.
+- Dlaczego przybliżenie: SOIA dzieli miasto według syreny dominującej, czyli najgłośniejszej. Tam, gdzie dominuje analogowa, nie podaje poziomu syreny cyfrowej. Przybliżenie szacuje poziom najgłośniejszej syreny cyfrowej z odległości i mocy (`pipeline/syreny/przyblizenie.py`).
+- Największy spadek adresów ≥ 75 dB: Praga-Południe 81,7% → 45,2% (−36,5 pp), Praga-Północ 85,5% → 52,6% (−32,9), Żoliborz 93,0% → 64,0% (−29,0), Wola 88,2% → 60,4% (−27,8) (`WYNIKI.md`, tabela „Dzielnice”).
 - Właściciele a rodzaj (z inwentaryzacji): wojewoda ma 233 syreny analogowe i 1 cyfrową, OSP 2 analogowe, a wszystkie 197 syren Prezydenta Miasta i 18 syren KW PSP to cyfrowe. Pytanie o zasilanie syren analogowych idzie więc do wojewody (Mazowiecki Urząd Wojewódzki), nie do miasta.
 - Syreny wojewody: opis przedmiotu zamówienia z czerwca 2024, „Przegląd techniczny 235 oraz modernizacja 40 syren alarmowych… na terenie m. st. Warszawy”. Punkt alarmowy to „syrena wirnikowa napędzana silnikiem elektrycznym 3-fazowym o mocy 4–7,5 kW”, skrzynka ze stycznikiem i sterowanie radiowe. O zasilaniu rezerwowym dokument nie mówi nic ([bip.mazowieckie.pl](https://bip.mazowieckie.pl/attachments/download/44393)).
 - Nowa syrena elektroniczna dla Warszawy (wojewoda, lipiec 2022): zasilanie 230 V i „zasilanie rezerwowe… na bazie akumulatorów” AGM, co najmniej 10 trzyminutowych alarmów w ciągu 48 godzin od zaniku prądu, zgłaszanie zaniku zasilania do centrali ([bip.mazowieckie.pl](https://bip.mazowieckie.pl/attachments/download/33459)).
@@ -46,7 +48,7 @@ Oznaczenie ⚠️ znaczy, że odpowiedź opiera się na czymś, co trzeba potwie
 - Uwaga na długi blackout: akumulatory syren cyfrowych też się kiedyś kończą (wymóg z 2022 r. to 48 godzin alarmów). Nasz wariant blackout dotyczy pierwszych godzin i dni.
 - W inwentaryzacji SOIA nie ma pola o zasilaniu awaryjnym. Sama PSP pisze, że przed zakupem syren trzeba potwierdzić m.in. zasilanie, a wyłączenie energii to utrata kanału ostrzegania (repozytorium KGPSP/soia-analiza-zasiegu).
 - Szczegóły i metoda: `dane/soia-warszawa/zasilanie-syren.md`.
-- Wariant blackout to jedna kolumna w danych. Kiedy dostaniemy listę syren analogowych z zasilaniem awaryjnym, przeliczamy go jednym skryptem (`dane/soia-warszawa/analiza/syreny_blackout.py`).
+- Kiedy dostaniemy listę syren analogowych z zasilaniem awaryjnym, przeliczamy wariant blackout skryptami z `pipeline/syreny/` i `dane/soia-warszawa/analiza/syreny_blackout.py`.
 
 ---
 
@@ -76,7 +78,7 @@ Oznaczenie ⚠️ znaczy, że odpowiedź opiera się na czymś, co trzeba potwie
 
 ## 5. Dlaczego nie wystarczy gdziesieukryc.pl?
 
-> Nie konkurujemy z gdziesieukryc.pl, tylko do niego odsyłamy. Przycisk w aplikacji otwiera aplikację PSP dokładnie w miejscu, w którym jest użytkownik. Dodajemy to, czego tam nie ma: czy usłyszysz syrenę pod swoim adresem, także przy blackoucie, jak dotrzesz do bliskich, gdy stoją tramwaje i metro, oraz AED, apteki, SOR i toalety w jednym miejscu. Wszystko dla twoich adresów i bez sieci.
+> Nie konkurujemy z gdziesieukryc.pl, tylko do niego odsyłamy. Przycisk w aplikacji otwiera aplikację PSP dokładnie w miejscu, w którym jest użytkownik. Dodajemy to, czego tam nie ma: czy usłyszysz syrenę pod swoim adresem, także przy blackoucie, jak dotrzesz do bliskich pieszo albo rowerem, jeśli zabraknie prądu, a tramwaje i metro stoją, oraz AED, apteki, SOR i toalety w jednym miejscu. Wszystko dla twoich adresów i bez sieci.
 
 **Fakty w zanadrzu:**
 - Odrzuciliśmy pomysł kolejnej mapy miejsc schronienia właśnie dlatego, że gdziesieukryc.pl już istnieje (HANDOFF §2).
@@ -87,23 +89,27 @@ Oznaczenie ⚠️ znaczy, że odpowiedź opiera się na czymś, co trzeba potwie
 
 ## 6. Na ile dokładny jest model syren?
 
-> To model Komendy Głównej PSP, nie nasz. Liczy, gdzie dźwięk syreny przekracza na zewnątrz 65 decybeli. Nie mówi, czy usłyszysz ją w mieszkaniu przy zamkniętych oknach, i tak to opisujemy w aplikacji. Liczymy punkty adresowe, nie mieszkańców. Model trzeba porównać ze zgłoszeniami mieszkańców o słyszalności z ćwiczeń. To nasz drugi krok wdrożenia.
+> To model Komendy Głównej PSP, nie nasz. Liczy, gdzie dźwięk syreny przekracza na zewnątrz 65 decybeli. Nie mówi, czy usłyszysz ją w mieszkaniu przy zamkniętych oknach. Wariant blackoutu to nasze przybliżenie, dopasowane do tego modelu, więc podajemy je jako rząd wielkości. Liczymy punkty adresowe, nie mieszkańców. Model porównamy ze zgłoszeniami mieszkańców z ćwiczeń.
 
 **Fakty w zanadrzu:**
 - SOIA modeluje zasięgi 65, 70 i 75 dB(A). Rastry w wycinku mają komórki 100 m (`dane/soia-warszawa/README.md`).
 - Według SOIA przy wszystkich syrenach co najmniej 65 dB(A) ma 96,8% mieszkańców Warszawy (GUS NSP 2021). Nasze 92,5% to adresy, nie mieszkańcy. Tych liczb nie mieszamy.
 - Klasy ryzyka w SOIA dotyczą ostrzegania przed powodzią. Nie używamy ich.
 - Model nie uwzględnia zasilania awaryjnego syren analogowych. Patrz pytanie 2.
+- Przybliżenie blackoutu (`WYNIKI.md`): zgadza się z SOIA co do progu 65 dB na 95,6% adresów, a co do klasy głośności na 76,3%. Błąd na progu 65 dB (około 4% adresów) jest większy niż różnica między wszystkimi syrenami a samymi cyfrowymi, dlatego liczbę adresów tracących zasięg traktujemy jako rząd wielkości.
+- Przybliżenie pomija syreny cyfrowe z gmin sąsiednich (inwentaryzacja nie ma ich współrzędnych), więc przy granicach miasta może zaniżać zasięg.
 
 ---
 
 ## 7. Co z prywatnością? Wpisuję tam adres domu i przedszkola dziecka.
 
-> Adresy zostają w telefonie. Nie ma kont ani logowania. Adres wyszukujemy w telefonie, w paczce 126 923 punktów adresowych, bez GPS i bez wysyłania zapytania. Dane na żywo pobieramy dla całego miasta, a to, co jest w twojej okolicy, telefon wybiera sam. Na serwer nie trafia więc ani twój adres, ani lokalizacja.
+> Adresy zostają w telefonie. Nie ma kont ani logowania. Adres wyszukujemy w telefonie, w paczce 126 923 punktów adresowych. Lokalizację z GPS bierzemy tylko wtedy, gdy sam klikniesz „Użyj mojej lokalizacji”, i zostaje w telefonie. Jedyny wyjątek to trasa po chodnikach: do jej policzenia współrzędne początku i celu oraz sposób poruszania się (pieszo albo rower) idą przez nasz serwer do publicznego serwera tras OSRM, na danych OpenStreetMap. Bez konta i bez żadnego identyfikatora użytkownika. Zapisane trasy są potem w telefonie, więc offline nic nie wychodzi.
 
 **Fakty w zanadrzu:**
 - Zapisane miejsca: IndexedDB w przeglądarce (`src/app/miejsca.ts`).
-- Dane na żywo: telefon pyta `/api/live/<źródło>` bez żadnych parametrów, a filtruje w przeglądarce (`src/offline/live-cache.ts`, `src/modules/live/Panel.tsx`).
+- Dane na żywo (wiatr, powietrze i inne): telefon pyta `/api/live/<źródło>` bez żadnych parametrów, a filtruje w przeglądarce (`src/offline/live-cache.ts`; w v3 widać to w karcie „Powietrze i wiatr”, zadanie L2, `src/modules/live/wskazowki.ts`, jeszcze niescalone na `main`).
+- Trasy (`server/live/trasa.ts`, PR #24; `HANDOFF-v3.md` §5): `GET /api/live/trasa?od=lon,lat&do=lon,lat&profil=pieszo|rower` niesie tylko współrzędne początku i celu oraz profil. Idzie przez naszego Workera do publicznego serwera OSRM `routing.openstreetmap.de` (FOSSGIS), z ogólnym User-Agent projektu. Nie ma kont ani identyfikatorów użytkownika, a klucz API miasta w ogóle nie bierze w tym udziału. Lokalizacja z GPS zostaje w przeglądarce, poza tym, że może być punktem startu trasy. Odpowiedź trafia do cache Workera na 24 h.
+- Lokalizacja z przeglądarki (V2): zgoda użytkownika w oknie przeglądarki, potem najbliższy punkt adresowy z paczki, liczony w telefonie. Na demo jest też `?lokalizacja=lat,lon`.
 - Klucz API miasta jest tylko na serwerze, nigdy w przeglądarce.
 - ⚠️ Wyszukiwanie adresów offline (moduł `adresy`, O2) nie jest jeszcze na `main`. Przed pitchem sprawdzić, że działa bez zapytań do sieci.
 
@@ -114,7 +120,7 @@ Oznaczenie ⚠️ znaczy, że odpowiedź opiera się na czymś, co trzeba potwie
 > Dla nich jest karta do wydruku ⚠️. Kasia drukuje ją dla mamy z Grochowa: adres, czy słychać tam syrenę, najbliższe miejsca schronienia według PSP i co zrobić. Karta działa bez prądu i bez telefonu. Do tego jeden z kroków to umówić się z sąsiadem, kto kogo budzi. Nie zastępujemy syren, radia ani Alertu RCB. Pomagamy upewnić się, że alarm dotrze do każdego.
 
 **Fakty w zanadrzu:**
-- ⚠️ Karta do wydruku to zadanie O2-C2 (dobudowa). Nie ma jej jeszcze na `main`. Jeśli nie zdąży, mówimy: „Karta do wydruku jest następna w planie”. Nie mówimy, że karta jest, dopóki jej nie ma.
+- ⚠️ Karta do wydruku jest w module syren na `main` (`KartaDoDruku` w `src/modules/syreny/Karta.tsx`). W v3 ma być akcją karty Syreny (zadanie S1, `HANDOFF-v3.md` §7). Przed pitchem sprawdzić na próbie, że przycisk „Drukuj” jest osiągalny z karty Syreny na ekranie „Twoja sytuacja”. Jeśli nie, mówimy: „Karta do wydruku jest następna w planie”.
 - Seniorzy to w analizie JTBD osobna grupa (M2): windy stają, schody są barierą, a smartfona częściej brak (`kontekst/jtbd-kryzys-warszawa.md`).
 - Aplikacja nie ogłasza alarmów. To rola RCB, RSO i syren (SPEC, sekcja 7).
 
@@ -126,5 +132,5 @@ Krótkie odpowiedzi, gdyby jury zapytało o coś spoza listy.
 
 - **Czy to nie daje fałszywego poczucia bezpieczeństwa?** Nie nazywamy niczego „schronem”, przy każdym punkcie pokazujemy źródło i datę, a wynik syreny ma zastrzeżenie o modelu i blackoucie. Pokazujemy też, czego dane nie wiedzą (szare zadania na siatce).
 - **Dym: skąd wiecie, gdzie leci?** Nie wiemy i tak to mówimy. Aplikacja pokazuje stożek w kierunku wiatru z najbliższej stacji i pomiar PM2.5 i PM10. W aplikacji jest dopisek: „To kierunek wiatru, nie model rozprzestrzeniania się dymu”.
-- **Co działa na żywo?** Pięć źródeł: pozycje autobusów i tramwajów, wiatr, PM2.5 i PM10, Veturilo i utrudnienia w ruchu. Bez sieci aplikacja pokazuje ostatni stan z godziną.
+- **Co działa na żywo?** Wiatr i pomiary PM2.5 i PM10 (karta Powietrze i wiatr), stacje Veturilo z rowerami (karta Dotarcie do bliskich) i trasy po chodnikach z OSRM. Bez sieci aplikacja pokazuje ostatni stan z godziną, a zapisane trasy są w telefonie. Pozycje autobusów i utrudnienia mamy w kodzie, ale w tej wersji ich nie pokazujemy.
 - **Dlaczego nie aplikacja ze sklepu?** Strona otwiera się od razu z linku, bez instalacji i bez konta. Na iOS warto ją dodać do ekranu głównego, bo inaczej Safari po 7 dniach usuwa dane offline.

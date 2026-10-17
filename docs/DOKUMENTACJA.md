@@ -2,7 +2,7 @@
 
 Zespół AI Slopers, Warsaw Open Data Hackathon, 17–18.10.2026.
 
-**W skrócie:** strona internetowa (PWA) dla mieszkańców Warszawy na czas ataku i blackoutu. Pod adresem mieszkańca pokazuje, czy usłyszy syrenę (normalnie i przy blackoucie), gdzie są najbliższe punkty pomocy i jak dotrzeć do bliskich autobusem albo pieszo. Działa także bez sieci. Korzysta z otwartych danych m.st. Warszawy, Państwowej Straży Pożarnej i innych otwartych źródeł.
+**W skrócie:** strona internetowa (PWA) dla mieszkańców Warszawy na czas ataku i blackoutu. Pod adresem mieszkańca pokazuje, czy usłyszy syrenę (normalnie i przy blackoucie), gdzie są najbliższe punkty pomocy i jak dotrzeć do bliskich pieszo albo rowerem. Zamiast zakładek ma jeden ekran „Twoja sytuacja” z pięcioma kartami dla wybranego miejsca: Syreny, Najbliższe miejsce schronienia według PSP, Pomoc medyczna, Powietrze i wiatr, Dotarcie do bliskich. Działa także bez sieci. Korzysta z otwartych danych m.st. Warszawy, Państwowej Straży Pożarnej i innych otwartych źródeł.
 
 Ten dokument spełnia wymóg regulaminu (§4 ust. 6): wykorzystane dane miejskie, założenia, frameworki i narzędzia. Opis użycia AI (§4 ust. 4) jest w sekcji 4.
 
@@ -35,12 +35,12 @@ Zasady, których się trzymamy:
 | Apteki | WFS `wfs:APTEKI` | najbliższe punkty | **DO UZUPEŁNIENIA** | **DO UZUPEŁNIENIA** |
 | Lokalizacja defibrylatorów (AED) | portal, `get_scb_lokalizacja_defibrylatorow` | najbliższe punkty | 710 | **DO UZUPEŁNIENIA** |
 | Toalety | portal, `get_m_toalety` | najbliższe punkty (blackout) | 695 | **DO UZUPEŁNIENIA** |
-| Lokalizacja pojazdów komunikacji miejskiej | portal, `get_ztm_lokalizacja_pojazdow` (`type` 1 i 2) | autobusy i tramwaje do 1 km od adresu, na mapie i w liście | ok. 1100 aktualnych pozycji | na żywo |
+| Lokalizacja pojazdów komunikacji miejskiej | portal, `get_ztm_lokalizacja_pojazdow` (`type` 1 i 2) | autobusy i tramwaje do 1 km od adresu (w tej wersji niewidoczne w interfejsie, kod i dane zostają w repo) | ok. 1100 aktualnych pozycji | na żywo |
 | Pogoda (stacje ZOM) | portal, `get_zom_pogoda` | kierunek i prędkość wiatru z najbliższej stacji; kierunek stożka dymu | 16 stacji | na żywo |
 | Monitoring jakości powietrza | portal, `get_bopipk_monitoring_jakosci_powietrza` | PM2.5 i PM10 ze stacji najbliższej adresowi albo zgłoszonemu dymowi | 140 stacji z pomiarem pyłów (miejskie, GIOŚ, czujniki w gminach) | na żywo |
-| Utrudnienia w ruchu drogowym | portal, `get_bin_utrudnienia_drogowe` | utrudnienia do 2 km od adresu, linie na mapie | 61 aktywnych lub zaczynających się w ciągu 3 dni | na żywo |
+| Utrudnienia w ruchu drogowym | portal, `get_bin_utrudnienia_drogowe` | utrudnienia do 2 km od adresu (w tej wersji niewidoczne w interfejsie, kod zostaje w repo) | 61 aktywnych lub zaczynających się w ciągu 3 dni | na żywo |
 
-Liczby rekordów dla danych na żywo pochodzą z odpowiedzi API z 17.10.2026 ok. 16:40. Wszystkie cztery zbiory na żywo (pas O4) weszły do wersji końcowej: pojazdy i wiatr w panelu „Na żywo”, a powietrze i utrudnienia w dobudowie (PR #5 i #8). Proxy odrzuca pozycje pojazdów starsze niż 5 minut od najnowszej, bo API zwraca też pozycje sprzed dni, a nawet lat.
+Liczby rekordów dla danych na żywo pochodzą z odpowiedzi API z 17.10.2026 ok. 16:40. Wiatr i powietrze zasilają kartę „Powietrze i wiatr”. Pozycje pojazdów i utrudnienia w ruchu są w kodzie i w proxy (PR #5 i #8), ale interfejs v3 ich nie pokazuje (`HANDOFF-v3.md` §4). Proxy odrzuca pozycje pojazdów starsze niż 5 minut od najnowszej, bo API zwraca też pozycje sprzed dni, a nawet lat.
 
 **DO UZUPEŁNIENIA** (O3): które zbiory punktów pomocy weszły do wersji końcowej, liczby rekordów i daty pobrania.
 
@@ -56,8 +56,8 @@ Liczby rekordów dla danych na żywo pochodzą z odpowiedzi API z 17.10.2026 ok.
 | Zbiór | Źródło | Do czego | Licencja |
 |---|---|---|---|
 | Szpitalne oddziały ratunkowe (SOR) | dane.gov.pl, zbiór 1642 (ewidencja RPRM) | najbliższe punkty | CC BY 4.0 |
-| Rozkład jazdy GTFS | [mkuran.pl/gtfs/warsaw.zip](https://mkuran.pl/gtfs/warsaw.zip), źródło nieoficjalne na podstawie danych ZTM | linie autobusowe na przystankach (dojazd przy blackoucie) | **DO UZUPEŁNIENIA** |
-| Stacje Veturilo | GBFS nextbike (`gbfs.nextbike.net/maps/gbfs/v2/nextbike_vw/gbfs.json`), bez klucza | do 3 stacji z wolnymi rowerami w promieniu 1 km, na żywo | CC0-1.0 (pole `license_id` w `system_information` feedu) |
+| Rozkład jazdy GTFS | [mkuran.pl/gtfs/warsaw.zip](https://mkuran.pl/gtfs/warsaw.zip), źródło nieoficjalne na podstawie danych ZTM | linie autobusowe na przystankach (w tej wersji niewidoczne w interfejsie) | **DO UZUPEŁNIENIA** |
+| Stacje Veturilo | GBFS nextbike (`gbfs.nextbike.net/maps/gbfs/v2/nextbike_vw/gbfs.json`), bez klucza | najbliższa stacja z wolnymi rowerami, w karcie „Dotarcie do bliskich”, na żywo | CC0-1.0 (pole `license_id` w `system_information` feedu) |
 | Mapa | Protomaps, plik `20261017.pmtiles` wycięty do Warszawy, dane OpenStreetMap | mapa online i offline | ODbL |
 
 ---
@@ -69,7 +69,9 @@ Liczby rekordów dla danych na żywo pochodzą z odpowiedzi API z 17.10.2026 ok.
 - Model SOIA liczy poziom dźwięku **na zewnątrz** budynków. Nie mówi, czy syrenę słychać w mieszkaniu przy zamkniętych oknach.
 - Wariant „blackout” zakłada, że syreny analogowe nie działają bez prądu, a cyfrowe działają na akumulatorach. **To założenie, nie fakt.** Nie wiemy, które syreny analogowe mają zasilanie awaryjne. Dlatego aplikacja i pitch mówią „jeśli”.
 - Liczymy punkty adresowe, nie mieszkańców. Blok z setką mieszkań i dom jednorodzinny to po jednym punkcie.
-- Wynik dla całego miasta (`dane/soia-warszawa/analiza/`): 92,5% ze 126 923 adresów jest w zasięgu co najmniej 65 dB(A). Przy samych syrenach cyfrowych zostaje 69,1%, a zasięg traci 29 676 adresów.
+- Wynik dla całego miasta (`pipeline/syreny/WYNIKI.md`, 126 923 adresy): przy wszystkich syrenach 92,5% adresów jest w zasięgu co najmniej 65 dB(A), a 48,3% w zasięgu co najmniej 75 dB(A), czyli głośnej syreny. Jeśli zabraknie prądu, a syreny analogowe nie mają zasilania awaryjnego (przybliżenie): 91,5% adresów przy 65 dB, a przy 75 dB tylko 36,6%. Zasięg 65 dB traci wtedy około tysiąca adresów (1 230; wrażliwość ±1 dB: 697–1 928). Największy spadek głośnej syreny: Praga-Południe z 81,7% do 45,2% adresów (−36,5 pp), Praga-Północ z 85,5% do 52,6% (−32,9), Żoliborz z 93,0% do 64,0% (−29,0), Wola z 88,2% do 60,4% (−27,8).
+- Przybliżenie szacuje poziom najgłośniejszej syreny cyfrowej z odległości i mocy (`pipeline/syreny/przyblizenie.py`), bo SOIA nie podaje go tam, gdzie dominuje syrena analogowa. Zgadza się z SOIA co do progu 65 dB na 95,6% adresów, a co do klasy głośności na 76,3%. Błąd na progu 65 dB (około 4% adresów) jest większy niż różnica między wszystkimi syrenami a samymi cyfrowymi, dlatego liczbę adresów tracących zasięg traktujemy jako rząd wielkości. Przybliżenie pomija syreny cyfrowe z gmin sąsiednich, więc przy granicach miasta może zaniżać zasięg.
+- Najgorszy wariant (dolne oszacowanie z `dane/soia-warszawa/analiza/`): gdyby uznać, że tam, gdzie SOIA pokazuje syrenę analogową, nie ma żadnej syreny, zostaje 69,1% adresów w zasięgu 65 dB, a 29 676 adresów traci zasięg. To wariant skrajny, nie nasz wynik główny.
 - Klasy ryzyka i luki priorytetowe w SOIA dotyczą ostrzegania powodziowego (mapy ISOK). Nie używamy ich.
 
 ### Dym i powietrze
@@ -85,17 +87,17 @@ Liczby rekordów dla danych na żywo pochodzą z odpowiedzi API z 17.10.2026 ok.
 - Nie nazywamy ich „schronami”. Dane PSP nie mówią o pojemności (są zanonimizowane z mocy ustawy).
 - Pokazujemy źródło i datę danych. Przycisk „Otwórz w aplikacji PSP” prowadzi do oficjalnej, aktualnej wersji.
 
-### Dojazd
+### Dotarcie do bliskich
 
-- Wersja minimalna: odległość, czas pieszo i rowerem oraz bezpośrednie linie autobusowe z przystanku przy starcie, które zatrzymują się do 500 m od celu. Bez przesiadek.
-- Przy blackoucie zakładamy, że tramwaje, metro i SKM stoją, a autobusy jeżdżą.
-- Rozkład pochodzi z nieoficjalnego GTFS.
+- Karta pokazuje dla każdego zapisanego adresu czas pieszo i rowerem po ulicach (trasy z OSRM, „Trasy: OSRM, © OpenStreetMap contributors”) oraz najbliższą stację Veturilo z rowerami.
+- Jeśli zabraknie prądu, zakładamy, że tramwaje, metro i SKM stoją. To założenie, nie fakt.
+- Zakładka Dojazd, „co jeździ w okolicy” (pozycje tramwajów i autobusów) i dolne menu modułów są w tej wersji ukryte (`HANDOFF-v3.md` §4). Linie autobusowe z rozkładu GTFS nie są pokazywane.
 
 ### Dane na żywo
 
-- Proxy pozwala buforować odpowiedzi: pojazdy 15 s, Veturilo 60 s, wiatr 5 min, powietrze i utrudnienia 10 min. Panel odświeża dane co 20 s, gdy jest sieć.
+- Proxy pozwala buforować odpowiedzi: pojazdy 15 s, Veturilo 60 s, wiatr 5 min, powietrze i utrudnienia 10 min. Karty odświeżają dane na żywo, gdy jest sieć.
 - Bez sieci aplikacja pokazuje ostatni zapisany stan z godziną („Brak sieci. Ostatni stan z HH:MM.”). Gdy padnie tylko źródło, pokazuje ostatni stan z dopiskiem, że źródło nie odpowiada.
-- API ZTM obejmuje tylko autobusy i tramwaje, bez metra.
+- API ZTM obejmuje tylko autobusy i tramwaje, bez metra (w tej wersji niewidoczne w interfejsie).
 - Utrudnienia: pokazujemy zgłoszenia trwające albo zaczynające się w ciągu 3 dni. Trzy zgłoszenia nie mają daty końca, więc pokazujemy je jako „do odwołania”.
 - Veturilo: stacja liczy się tylko wtedy, gdy ma wolne rowery i wypożycza.
 
@@ -104,9 +106,11 @@ Liczby rekordów dla danych na żywo pochodzą z odpowiedzi API z 17.10.2026 ok.
 - Aplikacja nie ogłasza alarmów. To rola RCB, RSO i syren. Pomagamy upewnić się, że alarm dotrze do mieszkańca.
 - Nie pokazujemy miejsc uderzeń.
 - Adresy użytkownika zostają w przeglądarce (IndexedDB). Nie ma kont ani logowania.
+- Lokalizacja z GPS zostaje w przeglądarce, poza tym, że może być punktem startu trasy. Zapytanie o trasę niesie tylko współrzędne początku i celu oraz profil (pieszo albo rower) i idzie przez nasz serwer do publicznego serwera OSRM (`routing.openstreetmap.de`), bez kont i identyfikatorów użytkownika; klucz API miasta w nim nie uczestniczy.
 
 ### Zakres demo
 
+- Interfejs v3: ekran „Twoja sytuacja” z pięcioma kartami i kafelkami warstw. Zakładka Dojazd, „co jeździ w okolicy” i dolne menu są ukryte, kod zostaje w repo.
 - Demo działa w przeglądarce na laptopie, w widoku telefonu. Nie testowaliśmy aplikacji na telefonach.
 - Na iOS dane offline przetrwają dłużej niż 7 dni tylko po dodaniu strony do ekranu głównego.
 - **DO UZUPEŁNIENIA:** co ostatecznie nie weszło do wersji końcowej (np. mapa offline, jeśli zadziałał plan B z SPEC §12).
