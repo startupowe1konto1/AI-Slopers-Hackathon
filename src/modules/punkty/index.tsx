@@ -1,8 +1,13 @@
 import type { Modul } from '../../contracts';
+import { Panel } from './Panel';
+import { dodajWarstwy } from './warstwy';
 
-// Atrapa ze szkieletu. Właściciel modułu podmienia ją w swoim folderze.
+// Interfejs dla innych modułów (SPEC.md §5), np. karta do wydruku O2.
+export { linkPSP, najblizsze } from './najblizsze';
+
 export const modul: Modul = {
   id: 'punkty',
   nazwa: 'Pomoc',
-  Panel: () => <p className="w-budowie">Moduł w budowie</p>,
+  Panel,
+  dodajWarstwy,
 };
