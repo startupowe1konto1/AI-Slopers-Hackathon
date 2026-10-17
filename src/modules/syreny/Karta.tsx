@@ -17,7 +17,7 @@ function odleglosc(a: Wsp, b: Wsp): string {
 }
 
 // Karta ma się wydrukować także bez części danych: brak jednego źródła nie blokuje reszty.
-async function wczytaj(miejsce: MiejsceUzytkownika): Promise<DaneMiejsca> {
+export async function wczytaj(miejsce: MiejsceUzytkownika): Promise<DaneMiejsca> {
   const [syreny, punkty] = await Promise.all([
     wynikSyreny(miejsce.adres.id).catch(() => null),
     najblizsze(miejsce.adres, 'schronienie_psp', 3).catch(() => null),
@@ -25,7 +25,7 @@ async function wczytaj(miejsce: MiejsceUzytkownika): Promise<DaneMiejsca> {
   return { miejsce, syreny, punkty };
 }
 
-function Tresc({ dane, data }: { dane: DaneMiejsca[]; data: string }) {
+export function Tresc({ dane, data }: { dane: DaneMiejsca[]; data: string }) {
   return (
     <>
       <h2 style={{ fontSize: 18, margin: '0 0 8px' }}>Karta na czas alarmu i blackoutu</h2>
