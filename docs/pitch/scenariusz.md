@@ -187,7 +187,7 @@ Adresy Kasi zapisane w telefonie przed pitchem (każdy dziś w zasięgu syren, p
 
 ## Zależności demo
 
-Stan na 17.10 wieczorem. Na `main` są: szkielet (O1-A1), mapa offline (O1-A2, O1-B1), proxy na żywo (O4-B1), punkty pomocy (O3-A1) i test ścieżki Kasi (O1-C1). W toku są PR-y: moduł na żywo (#5), dane punktów (#6) i poprawka proxy (#7). Na przejściu P4 odhaczamy, co działa.
+Stan na 17.10 wieczorem. Na `main` są: szkielet (O1-A1), mapa offline (O1-A2, O1-B1), proxy na żywo (O4-B1), punkty pomocy (O3-A1) i test ścieżki Kasi (O1-C1). Później doszły moduł na żywo (O4-A1) i dobudowa: dym, powietrze, Veturilo, utrudnienia (O4-C1). W toku: dane punktów (#6). Na przejściu P4 odhaczamy, co działa.
 
 | Slajd lub etap | Funkcja | Zadanie w PLAN.md | Jeśli nie zdąży |
 |---|---|---|---|
@@ -197,11 +197,11 @@ Stan na 17.10 wieczorem. Na `main` są: szkielet (O1-A1), mapa offline (O1-A2, O
 | Przed kryzysem | wynik syreny, kroki | O2-B2, O2-A2 | zrzut karty syren z danych testowych |
 | Przed kryzysem | karta do wydruku | O2-C2 (dobudowa) | pomijamy „i kartę do wydruku” |
 | Alarm | miejsca schronienia według PSP, metro, przycisk PSP | O3-A1 (jest), O3-B1 (#6), eksport PSP | przycisk PSP i wejścia do metra |
-| Uderzenie | wiatr | O4-B1 (jest), O4-A1 (#5) | sam wiatr bez dymu |
+| Uderzenie | wiatr | O4-B1, O4-A1 (są na `main`) | sam wiatr bez dymu |
 | Uderzenie | dym i pomiar powietrza | O4-C1 (jest na `main`) | mówimy tylko o wietrze |
 | Uderzenie | AED i SOR | O3-B1 (#6) | jw. |
 | Powrót | autobusy z przystanku | O2-C1 | pokazujemy „co jeździ w okolicy” z modułu na żywo |
-| Powrót | co jeździ w okolicy | O4-A1 (#5) | zrzut ekranu |
+| Powrót | co jeździ w okolicy | O4-A1 (jest na `main`) | zrzut ekranu |
 | Blackout | `?offline=1` w telefonie | O1 (jest) | przejście na drugą kartę z `?offline=1` |
 
 Ryzyko techniczne iframe: przeglądarka trzyma pamięć strony w ramce osobno od zwykłej karty. Rozwiązanie w prezentacji: przed pitchem otwieramy ją z `?edycja=1` i w telefonie na slajdzie wpisujemy adresy Kasi oraz pobieramy paczkę (instrukcja w `prezentacja/README.md`). Podawanie prezentacji z adresu aplikacji (`/pitch/`) nie jest potrzebne.
