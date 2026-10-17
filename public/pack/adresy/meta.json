@@ -1,0 +1,12 @@
+{
+ "modul": "adresy",
+ "rekordy": 126923,
+ "zrodla": {
+  "wfs-adresy": {
+   "nazwa": "m.st. Warszawa, WFS PUNKTY_ADRESOWE_WGS84",
+   "licencja": "CC BY",
+   "url": "https://wfs.um.warszawa.pl/serwis",
+   "pobrano": "2026-10-17T14:28:00+02:00"
+  }
+ }
+}

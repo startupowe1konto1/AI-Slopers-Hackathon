@@ -97,7 +97,7 @@ def main(klucze: list[str]) -> None:
         (PROBKI / plik).write_bytes(dane)
         pobrano[k] = date.today().isoformat()
         print(f"{k}: {len(dane)} B → dane/probki/{plik}")
-    POBRANO.write_text(json.dumps(pobrano, indent=1, sort_keys=True) + "\n", encoding="utf-8")
+    POBRANO.write_text(json.dumps(pobrano, indent=1, sort_keys=True) + "\n", encoding="utf-8", newline="\n")
 
 
 if __name__ == "__main__":
