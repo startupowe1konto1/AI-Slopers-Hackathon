@@ -1,8 +1,9 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { Map as MapLibreMap } from 'maplibre-gl';
 import type { KontekstWskazowek, RolaMiejsca } from '../contracts';
 import { moduly } from '../modules';
 import { useSiec } from '../offline/siec';
+import { zapiszTrasyOffline } from '../offline/zapisTras';
 import type { Przygotowanie } from '../offline/polaczenie';
 import { useMiejsca, zapiszMiejsca } from './miejsca';
 import { miejsceTutaj, zTutaj } from './lokalizacja';
@@ -26,6 +27,20 @@ export default function App() {
     if (siec.online) setPrzygotowanie((p) => (p && !p.siec ? { ...p, siec: true } : p));
   }, [siec.online]);
   const online = siec.online && przygotowanie?.siec !== false;
+  // Trasy na offline zapisujemy w tle, gdy jest sieć (HANDOFF-v3 §5): raz na zestaw miejsc, nie przy każdym renderze.
+  // Zapisane trasy nie idą drugi raz do OSRM. Bez sieci zapominamy zestaw, żeby po jej powrocie dokończyć brakujące.
+  const zapisTras = !!przygotowanie && online;
+  const kluczMiejsc = miejsca.map((m) => `${m.adres.lat},${m.adres.lon}`).sort().join(';');
+  const zapisanyZestaw = useRef<string | null>(null);
+  useEffect(() => {
+    if (!zapisTras || !miejsca.length) {
+      zapisanyZestaw.current = null;
+      return;
+    }
+    if (zapisanyZestaw.current === kluczMiejsc) return;
+    zapisanyZestaw.current = kluczMiejsc;
+    void zapiszTrasyOffline(miejsca).catch(() => {});
+  }, [zapisTras, kluczMiejsc, miejsca]);
   const [edycja, setEdycja] = useState(false);
   const [rola, setRola] = useState<RolaMiejsca>('dom');
   const [paczka, setPaczka] = useState<string | null>(null);
