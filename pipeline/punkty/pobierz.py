@@ -35,11 +35,12 @@ RPRM = "https://rprm.ezdrowie.gov.pl/Registry/PublicExport?" + urllib.parse.urle
     "FilterApplied": "True",
 })
 # Główny serwer i zapasowe (DECYZJE-v3 O3-1, W6): overpass-api.de zrywa połączenia z chmury,
-# kumi odpowiadał 500; dane z 17.10 są z maps.mail.ru.
+# kumi odpowiadał 500. Próbkę z 17.10 pobrano z maps.mail.ru (wtedy jedyny działający serwer),
+# ale w aplikacji obrony cywilnej nie trzymamy go na liście domyślnych serwerów.
 OVERPASS = (
     "https://overpass-api.de/api/interpreter",
     "https://overpass.kumi.systems/api/interpreter",
-    "https://maps.mail.ru/osm/tools/overpass/api/interpreter",
+    "https://overpass.private.coffee/api/interpreter",
 )
 # Przychodnie, gabinety i szpitale w bbox Warszawy (sprawdzone 17.10: 1044 obiekty).
 ZAPYTANIE_OSM = """[out:json][timeout:120];
