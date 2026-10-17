@@ -1,14 +1,36 @@
 import type { Adres } from '../../contracts';
+import { adres, szukaj, type PaczkaAdresow } from './szukaj';
 
-// Atrapa ze szkieletu (3 adresy z persony Kasi). O2 podmienia ją wyszukiwaniem w paczce (O2-A1).
-const TEST: Adres[] = [
-  { id: 't1', ulica: 'ul. Powstańców Śląskich', numer: '10', dzielnica: 'Bemowo', lat: 52.2385, lon: 20.9131 },
-  { id: 't2', ulica: 'rondo Ignacego Daszyńskiego', numer: '1', dzielnica: 'Wola', lat: 52.2302, lon: 20.984 },
-  { id: 't3', ulica: 'ul. Grochowska', numer: '200', dzielnica: 'Praga-Południe', lat: 52.2457, lon: 21.0911 },
-];
+const URL_PACZKI = '/pack/adresy/adresy.json';
+
+// Paczka ładowana raz. Po błędzie (np. brak sieci i paczki) następne wywołanie próbuje znowu.
+let paczka: Promise<PaczkaAdresow> | null = null;
+let indeksy: Map<string, number> | null = null;
+
+function wczytaj(): Promise<PaczkaAdresow> {
+  paczka ??= fetch(URL_PACZKI)
+    .then((r) => {
+      if (!r.ok) throw new Error(`Nie pobrano ${URL_PACZKI}`);
+      return r.json() as Promise<PaczkaAdresow>;
+    })
+    .catch((e: unknown) => {
+      paczka = null;
+      throw e;
+    });
+  return paczka;
+}
 
 export async function znajdzAdres(q: string, limit = 10): Promise<Adres[]> {
-  const s = q.toLowerCase().trim();
-  if (!s) return [];
-  return TEST.filter((a) => `${a.ulica} ${a.numer}`.toLowerCase().includes(s)).slice(0, limit);
+  return szukaj(await wczytaj(), q, limit);
+}
+
+export async function adresPoIndeksie(i: number): Promise<Adres> {
+  return adres(await wczytaj(), i);
+}
+
+// Numer wiersza adresu w paczce (ten sam wiersz w syreny.json) albo -1.
+export async function indeksAdresu(id: string): Promise<number> {
+  const p = await wczytaj();
+  indeksy ??= new Map(p.id.map((x, i) => [x, i]));
+  return indeksy.get(id) ?? -1;
 }
