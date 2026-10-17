@@ -26,6 +26,12 @@ export const STALE_ZRODLA: Zrodlo[] = [
     url: 'https://gdziesieukryc.pl',
     pobrano: '2026-10-17',
   },
+  {
+    nazwa: 'Trasy: OSRM (routing.openstreetmap.de, FOSSGIS), © OpenStreetMap contributors',
+    licencja: 'ODbL',
+    url: 'https://routing.openstreetmap.de',
+    pobrano: '2026-10-17',
+  },
 ];
 
 // Stałe atrybucje + źródła z manifestu paczki, bez powtórzeń nazw.
