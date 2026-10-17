@@ -159,7 +159,7 @@ Opcja na później: zamiast PNG warstwa „utracony zasięg przy blackoucie” w
 
 ## Zależności demo
 
-Stan na 17.10, około 15:30: na `main` jest tylko szkielet O1-A1. Każdy odcinek demo zależy od pracy innych pasów. Na przejściu P4 (21:00) odhaczamy, co działa, i skracamy scenariusz o resztę.
+Stan na 17.10, po południu: na `main` są szkielet O1-A1 oraz mapa Warszawy działająca offline (O1-A2, O1-B1; sprawdzone przez O1 po zatrzymaniu serwera). Pozostałe odcinki demo zależą od pracy innych pasów. Na przejściu P4 (21:00) odhaczamy, co działa, i skracamy scenariusz o resztę.
 
 | Odcinek | Funkcja | Zadanie w PLAN.md | Jeśli nie zdąży |
 |---|---|---|---|
@@ -169,7 +169,7 @@ Stan na 17.10, około 15:30: na `main` jest tylko szkielet O1-A1. Każdy odcinek
 | 1:45 Syreny | klasa syreny dla adresu, kroki, dopisek | O2-B2, O2-A2 | slajd z mapą z analizy (`syreny_blackout_mapa.png`) |
 | 2:05 Pomoc | 6 rodzajów punktów, lista, przycisk PSP | O3-B1, O3-A1, eksport PSP (`kontekst/TODO-schrony-eksport.md`) | punkty bez miejsc schronienia, tylko przycisk PSP |
 | 2:25 Dojazd | czas pieszo i rowerem, autobusy | O2-C1 (pas C, najbardziej zagrożony) | pomijamy, mówimy jedno zdanie o scenariuszach transportu |
-| 2:40 Wi-Fi | działanie po odświeżeniu bez sieci, „stan na …” | O1-B1 (decyzja o mapie offline o 16:30), `src/offline/live-cache.ts` | plan B z SPEC §12: offline bez mapy wektorowej, same listy |
+| 2:40 Wi-Fi | działanie po odświeżeniu bez sieci, „stan na …” | mapa offline gotowa (O1-B1 na `main`); dane modułów w paczce (O2, O3), „stan na” z `src/offline/live-cache.ts` (O4-A1) | pokazujemy samą mapę i kartę syren offline |
 | 3:00 Syreny | warstwa utraconego zasięgu w aplikacji | O2-C2 (opcjonalne) | PNG z analizy |
 | pytania jury | karta do wydruku | O2-C2 | pokazujemy kroki z karty syren |
 
