@@ -107,7 +107,7 @@ Oznaczenie ⚠️ znaczy, że odpowiedź opiera się na czymś, co trzeba potwie
 
 **Fakty w zanadrzu:**
 - Zapisane miejsca: IndexedDB w przeglądarce (`src/app/miejsca.ts`).
-- Dane na żywo (wiatr, powietrze i inne): telefon pyta `/api/live/<źródło>` bez żadnych parametrów, a filtruje w przeglądarce (`src/offline/live-cache.ts`, `src/modules/live/Panel.tsx`).
+- Dane na żywo (wiatr, powietrze i inne): telefon pyta `/api/live/<źródło>` bez żadnych parametrów, a filtruje w przeglądarce (`src/offline/live-cache.ts`; w v3 widać to w karcie „Powietrze i wiatr”, zadanie L2, `src/modules/live/wskazowki.ts`, jeszcze niescalone na `main`).
 - Trasy (`server/live/trasa.ts`, PR #24; `HANDOFF-v3.md` §5): `GET /api/live/trasa?od=lon,lat&do=lon,lat&profil=pieszo|rower` niesie tylko współrzędne początku i celu oraz profil. Idzie przez naszego Workera do publicznego serwera OSRM `routing.openstreetmap.de` (FOSSGIS), z ogólnym User-Agent projektu. Nie ma kont ani identyfikatorów użytkownika, a klucz API miasta w ogóle nie bierze w tym udziału. Lokalizacja z GPS zostaje w przeglądarce, poza tym, że może być punktem startu trasy. Odpowiedź trafia do cache Workera na 24 h.
 - Lokalizacja z przeglądarki (V2): zgoda użytkownika w oknie przeglądarki, potem najbliższy punkt adresowy z paczki, liczony w telefonie. Na demo jest też `?lokalizacja=lat,lon`.
 - Klucz API miasta jest tylko na serwerze, nigdy w przeglądarce.
@@ -120,7 +120,7 @@ Oznaczenie ⚠️ znaczy, że odpowiedź opiera się na czymś, co trzeba potwie
 > Dla nich jest karta do wydruku ⚠️. Kasia drukuje ją dla mamy z Grochowa: adres, czy słychać tam syrenę, najbliższe miejsca schronienia według PSP i co zrobić. Karta działa bez prądu i bez telefonu. Do tego jeden z kroków to umówić się z sąsiadem, kto kogo budzi. Nie zastępujemy syren, radia ani Alertu RCB. Pomagamy upewnić się, że alarm dotrze do każdego.
 
 **Fakty w zanadrzu:**
-- ⚠️ Karta do wydruku to zadanie O2-C2 (dobudowa). Nie ma jej jeszcze na `main`. Jeśli nie zdąży, mówimy: „Karta do wydruku jest następna w planie”. Nie mówimy, że karta jest, dopóki jej nie ma.
+- ⚠️ Karta do wydruku jest w module syren na `main` (`KartaDoDruku` w `src/modules/syreny/Karta.tsx`). W v3 ma być akcją karty Syreny (zadanie S1, `HANDOFF-v3.md` §7). Przed pitchem sprawdzić na próbie, że przycisk „Drukuj” jest osiągalny z karty Syreny na ekranie „Twoja sytuacja”. Jeśli nie, mówimy: „Karta do wydruku jest następna w planie”.
 - Seniorzy to w analizie JTBD osobna grupa (M2): windy stają, schody są barierą, a smartfona częściej brak (`kontekst/jtbd-kryzys-warszawa.md`).
 - Aplikacja nie ogłasza alarmów. To rola RCB, RSO i syren (SPEC, sekcja 7).
 

@@ -76,7 +76,7 @@ Oznaczenie ⚠️ znaczy, że slajd pokazuje funkcję, której jeszcze nie ma na
 
 **Na ekranie:** mapa Warszawy i duża liczba „48,3%” (adresy, gdzie syrena jest głośna, 75 dB i więcej), nad nią „Dziś syrenę słychać przy 92,5% adresów”. Prezenter klika przełącznik „wyłącz prąd”: liczba spada do „36,6%”, pod nią „Przy 65 dB i więcej zostaje 91,5% adresów: zasięg traci ok. tysiąca (rząd wielkości)”, a cztery dzielnice z największym spadkiem podświetlają się z podpisem „przed → po” (Praga-Południe 81,7 → 45,2%, Praga-Północ 85,5 → 52,6%, Żoliborz 93,0 → 64,0%, Wola 88,2 → 60,4%). Na dole drobnym drukiem: „Model dźwięku na zewnątrz, wynik przybliżony. Blackout: jeśli syreny analogowe nie mają zasilania awaryjnego, a cyfrowe działają. Dane: KG PSP, SOIA 2026.05.”
 
-**Uwaga o mapie.** Kształt mapy pochodzi z najgorszego wariantu (dolne oszacowanie: tylko strefy, gdzie SOIA pokazuje syrenę cyfrową, 69,1% adresów w zasięgu 65 dB). Podpis pod mapą mówi to wprost. Nie mówimy ze sceny „mapa pokazuje spadek do 69,1%”. Gdy O2 doda okręgi z modelu (`okregi.json`, zadanie S2), można wymienić mapę na przybliżenie.
+**Uwaga o mapie.** Kształt mapy pochodzi z najgorszego wariantu (dolne oszacowanie: tylko strefy, gdzie SOIA pokazuje syrenę cyfrową, 69,1% adresów w zasięgu 65 dB). Legenda pod mapą mówi to wprost: przed kliknięciem „zasięg wszystkich syren”, po kliknięciu „najgorszy wariant: zasięg zostaje tylko w strefach syren cyfrowych (69,1%)” i czerwony obszar „zasięg tracony w najgorszym wariancie, to nie jest »ok. tysiąca«”. Podpis pod liczbą dodaje: „Czerwony obszar na mapie to najgorszy wariant, nie ta liczba.” Nie mówimy ze sceny „mapa pokazuje spadek do 69,1%”. Gdy O2 doda okręgi z modelu (`okregi.json`, zadanie S2), można wymienić mapę na przybliżenie.
 
 Dane do slajdu: liczby z `pipeline/syreny/WYNIKI.md` (czyta je `prezentacja/build_dane.py` do `dane.js`), kształt mapy z `dane/soia-warszawa/analiza/syreny_zasieg_tylko_cyfrowe.geojson`, `syreny_blackout_utracony_zasieg.geojson`, `granica_warszawy.geojson`.
 
@@ -134,36 +134,31 @@ Jak przygotować telefon na slajdzie: `prezentacja/README.md`, sekcja „Telefon
 
 | Czas | Krok | Klikamy | Widać | Wartość |
 |---|---|---|---|---|
-| 2:30–2:40 | 1. Lokalizacja | link `?lokalizacja=…`, „Użyj mojej lokalizacji” | punkt użytkownika na pustej mapie, bez ikonek | zaczyna od miejsca, w którym stoi |
-| 2:40–2:50 | 2. Połączenie | nic, czekamy | „Sprawdzam połączenie…” → „Jest połączenie. Dane na żywo włączone.” ⚠️ | wie, na jakich danych działa |
-| 2:50–3:10 | 3. Syreny | karta Syreny | okręgi najbliższych syren na mapie, tekst o zasięgu i o blackoucie (z „jeśli”) | wie, czy usłyszy alarm, i zna kroki |
-| 3:10–3:30 | 4. Miejsce schronienia | karta Najbliższe miejsce schronienia (PSP) | trasa piesza po chodnikach, odległość i czas, przycisk do aplikacji PSP | nie szuka w panice |
-| 3:30–3:40 | 5. Pozostałe karty | przewinięcie listy: Pomoc medyczna, Powietrze, Bliscy | trzy karty z poziomem (zielony, pomarańczowy, czerwony, szary) | rekomendacja, nie suche dane |
-| 3:40–4:05 | 6. Brak sieci | wyłączamy Wi-Fi, odświeżamy, klik w miejsce schronienia | „Brak sieci. Działam na danych z paczki z …” ⚠️, ta sama trasa „zapisana w telefonie” | nie zostaje z pustym ekranem |
+| 2:30–2:50 | 1. Start: lokalizacja i połączenie | link `?lokalizacja=…`, „Użyj mojej lokalizacji”, potem czekamy | punkt użytkownika na pustej mapie, bez ikonek; „Sprawdzam połączenie…” → „Jest połączenie. Dane na żywo włączone.” ⚠️ | zaczyna od miejsca, w którym stoi, i wie, na jakich danych działa |
+| 2:50–3:10 | 2. Syreny | karta Syreny | okręgi najbliższych syren na mapie, tekst o zasięgu i o blackoucie (z „jeśli”) | wie, czy usłyszy alarm, i zna kroki |
+| 3:10–3:30 | 3. Miejsce schronienia | karta Najbliższe miejsce schronienia (PSP) | trasa piesza po chodnikach, odległość i czas, przycisk do aplikacji PSP | nie szuka w panice |
+| 3:30–3:40 | 4. Pozostałe karty | przewinięcie listy: Pomoc medyczna, Powietrze i wiatr, Dotarcie do bliskich | trzy karty z poziomem (zielony, pomarańczowy, czerwony, szary) | rekomendacja, nie suche dane |
+| 3:40–4:05 | 5. Brak sieci | wyłączamy Wi-Fi, odświeżamy, klik w miejsce schronienia | „Brak sieci. Działam na danych z paczki z …” ⚠️, ta sama trasa „zapisana w telefonie” | nie zostaje z pustym ekranem |
 
 **Mówimy:**
 
-**Krok 1, lokalizacja (10 s)**
+**Krok 1, start: lokalizacja i połączenie (20 s)** ⚠️
 
-> Pokażę to na Kasi. Jest u mamy na Grochowie i otwiera aplikację z linku. Jedno dotknięcie: „Użyj mojej lokalizacji”.
+> Pokażę to na Kasi. Jest u mamy na Grochowie i otwiera aplikację z linku. Jedno dotknięcie: „Użyj mojej lokalizacji”. Aplikacja sprawdza połączenie. Jest sieć, więc dane na żywo są włączone, a paczka z danymi zapisuje się w telefonie.
 
-**Krok 2, połączenie (10 s)** ⚠️
-
-> Aplikacja sprawdza połączenie. Jest sieć, więc dane na żywo są włączone, a paczka z danymi zapisuje się w telefonie.
-
-**Krok 3, karta Syreny (20 s)** ⚠️
+**Krok 2, karta Syreny (20 s)** ⚠️
 
 > Pierwsza karta: syreny. Klik i na mapie widać okręgi najbliższych syren. Kasia dowiaduje się, czy usłyszy alarm i co zrobić, jeśli zabraknie prądu.
 
-**Krok 4, miejsce schronienia (20 s)** ⚠️
+**Krok 3, miejsce schronienia (20 s)** ⚠️
 
 > Druga karta: najbliższe miejsce schronienia według PSP, z odległością i czasem. Klik i trasa piesza po chodnikach, a obok przycisk do oficjalnej aplikacji PSP.
 
-**Krok 5, pozostałe karty (10 s)** ⚠️
+**Krok 4, pozostałe karty (10 s)** ⚠️
 
 > Dalej pomoc medyczna, powietrze i wiatr, dotarcie do bliskich. Każda karta mówi, co zrobić, a nie tylko pokazuje dane.
 
-**Krok 6, brak sieci (25 s)** ⚠️
+**Krok 5, brak sieci (25 s)** ⚠️
 
 > A teraz najgorsze: pada sieć. [wyłączamy Wi-Fi, odświeżamy] Aplikacja pisze: „Brak sieci. Działam na danych z paczki”. Klikamy miejsce schronienia i jest ta sama trasa, zapisana w telefonie. Działa, gdy wszystko pada.
 
@@ -202,12 +197,12 @@ Stan na 17.10 wieczorem, po rozpisce v3 (`docs/PLAN-v3.md`). Ekran z kartami (V4
 |---|---|---|---|
 | 0:55 Syreny | mapa z przełącznikiem w prezentacji, liczby z `WYNIKI.md` | L4 (to zadanie), dane w repo | gotowe, zależy tylko od prezentacji |
 | 1:40 Siatka | siatka zadań i danych w prezentacji | O4-P | statyczny obraz siatki |
-| 1. Lokalizacja | „Użyj mojej lokalizacji”, `?lokalizacja=lat,lon` | V2 | zapisany adres Kasi zamiast lokalizacji |
-| 2. Połączenie | „Sprawdzam połączenie…”, automatyczne pobranie paczki | V3 | pomijamy krok, mówimy od razu o kartach |
-| 3. Syreny | karta Syreny i okręgi na mapie | S1, S2 | sama karta z tekstem, bez okręgów |
-| 4. Miejsce schronienia | karta, trasa piesza, przycisk PSP | P2, L1 (proxy tras), V5 (`trasa()`) | karta bez trasy, trasa jako linia prosta |
-| 5. Pozostałe karty | Pomoc medyczna, Powietrze, Bliscy | P3, L2, S3 | pokazujemy tylko karty, które są gotowe (bez atrap „Karta w budowie.”) |
-| 6. Brak sieci | tryb offline, trasa „zapisana w telefonie” | V3, V5 | `?offline=1`, potem nagranie wideo |
+| 1. Start: lokalizacja | „Użyj mojej lokalizacji”, `?lokalizacja=lat,lon` | V2 | zapisany adres Kasi zamiast lokalizacji |
+| 1. Start: połączenie | „Sprawdzam połączenie…”, automatyczne pobranie paczki | V3 | pomijamy to zdanie, mówimy od razu o kartach |
+| 2. Syreny | karta Syreny i okręgi na mapie | S1, S2 | sama karta z tekstem, bez okręgów |
+| 3. Miejsce schronienia | karta, trasa piesza, przycisk PSP | P2, L1 (proxy tras), V5 (`trasa()`) | karta bez trasy, trasa jako linia prosta |
+| 4. Pozostałe karty | Pomoc medyczna, Powietrze i wiatr, Dotarcie do bliskich | P3, L2, S3 | pokazujemy tylko karty, które są gotowe (bez atrap „Karta w budowie.”) |
+| 5. Brak sieci | tryb offline, trasa „zapisana w telefonie” | V3, V5 | `?offline=1`, potem nagranie wideo |
 | Telefon w prezentacji | aplikacja w iframe | wdrożenie na Workerze (jest) | zrzuty ekranu zamiast iframe |
 
 Ryzyko techniczne iframe: przeglądarka trzyma pamięć strony w ramce osobno od zwykłej karty. Rozwiązanie w prezentacji: przed pitchem otwieramy ją z `?edycja=1` i w telefonie na slajdzie zapisujemy adresy Kasi oraz pobieramy paczkę (instrukcja w `prezentacja/README.md`). Podawanie prezentacji z adresu aplikacji (`/pitch/`) nie jest potrzebne.

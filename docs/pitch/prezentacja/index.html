@@ -147,8 +147,10 @@ body.ciemno { background: var(--noc); }
 .legenda-mapy span { display: inline-flex; align-items: center; gap: 10px; }
 .legenda-mapy i { width: 18px; height: 18px; border-radius: 4px; background: var(--tusz); display: inline-block; }
 .noc .legenda-mapy i.z { background: var(--noc-tekst); }
-.legenda-mapy .u { display: none; }
-.noc .legenda-mapy .u { display: inline-flex; }
+.legenda-mapy .u, .legenda-mapy .n { display: none; }
+.noc .legenda-mapy .u, .noc .legenda-mapy .n { display: inline-flex; }
+.noc .legenda-mapy .d { display: none; }
+.legenda-mapy { flex-wrap: wrap; row-gap: 8px; }
 .legenda-mapy i.u2 { background: var(--alarm); }
 
 /* 5: macierz JTBD */
@@ -302,7 +304,7 @@ body.ciemno .nawig { color: var(--noc-2); }
       </div>
       <div>
         <div class="mapa" id="mapa" style="height:640px"></div>
-        <div class="legenda-mapy"><span><i class="z"></i><em style="font-style:normal">mapa pokazuje najgorszy wariant: <b id="mapa-po">69,1%</b> adresów ≥ 65 dB, tylko strefy syren cyfrowych w SOIA</em></span><span class="u"><i class="u2"></i>zasięg tracony przy blackoucie</span></div>
+        <div class="legenda-mapy"><span class="d"><i class="z"></i><em style="font-style:normal">zasięg wszystkich syren (SOIA)</em></span><span class="n"><i class="z"></i><em style="font-style:normal">najgorszy wariant: zasięg zostaje tylko w strefach syren cyfrowych (<b id="mapa-po">69,1%</b> adresów ≥ 65 dB)</em></span><span class="u"><i class="u2"></i><em style="font-style:normal">zasięg tracony w najgorszym wariancie, to nie jest „ok. tysiąca”</em></span></div>
       </div>
     </div>
   </section>
@@ -525,7 +527,7 @@ body.ciemno .nawig { color: var(--noc-2); }
     document.getElementById('blackout-tekst').textContent = wl ? 'Włącz prąd' : 'Wyłącz prąd';
     liczDo(wl ? M.glosne_przed : M.glosne_po, wl ? M.glosne_po : M.glosne_przed);
     roznica.textContent = wl
-      ? `Jeśli syreny analogowe nie mają zasilania awaryjnego. Przy 65 dB i więcej zostaje ${pct(M.po_przyblizenie)} adresów: zasięg traci ok. tysiąca (rząd wielkości, ${tys(M.traci_zakres[0])}–${tys(M.traci_zakres[1])}).`
+      ? `Jeśli syreny analogowe nie mają zasilania awaryjnego. Przy 65 dB i więcej zostaje ${pct(M.po_przyblizenie)} adresów: zasięg traci ok. tysiąca (rząd wielkości, ${tys(M.traci_zakres[0])}–${tys(M.traci_zakres[1])}). Czerwony obszar na mapie to najgorszy wariant, nie ta liczba.`
       : '';
   }
   btnBlackout.addEventListener('click', () => { ustawKrok(btnBlackout.getAttribute('aria-pressed') === 'true' ? 0 : 1); });
