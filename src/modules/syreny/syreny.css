@@ -1,0 +1,7 @@
+/* Karta do wydruku: na ekranie podgląd w panelu, do druku tylko kopia w <body>. */
+.karta-druk-portal { display: none; }
+
+@media print {
+  body.druk-karty > * { display: none !important; }
+  body.druk-karty > .karta-druk-portal { display: block !important; color: #000; font-size: 12pt; }
+}

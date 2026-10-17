@@ -57,6 +57,29 @@ describe('trasyZ', () => {
   });
 });
 
+describe('trasyZ: przystanki w promieniu 600 m, nie tylko 3 najbliższe', () => {
+  // Jak u Kasi na Bemowie: 3 najbliższe przystanki nie mają linii do celu, czwarty (w zasięgu 600 m) ma.
+  const BLISKO: Przystanek[] = [
+    { id: 'b1', nazwa: 'Blisko 01', lat: 52.2305, lon: 21.0, linie: ['129'] }, // ~56 m
+    { id: 'b2', nazwa: 'Blisko 02', lat: 52.2295, lon: 21.0, linie: ['129'] }, // ~56 m
+    { id: 'b3', nazwa: 'Blisko 03', lat: 52.231, lon: 21.0, linie: ['189'] }, // ~111 m
+    { id: 'b4', nazwa: 'Dalej 01', lat: 52.234, lon: 21.0, linie: ['105', '129'] }, // ~445 m
+    { id: 'b5', nazwa: 'Dalej 02', lat: 52.2345, lon: 21.0, linie: ['105'] }, // ~500 m, ta sama linia dalej
+    { id: 'c1', nazwa: 'Przy pracy 01', lat: 52.249, lon: 21.0, linie: ['105'] },
+  ];
+  const idx = zbuduj(BLISKO);
+
+  it('znajduje linię z dalszego przystanku do 600 m, gdy 3 najbliższe jej nie mają', () => {
+    const [t] = trasyZ(idx, [DOM, PRACA]);
+    expect(t.autobusy.map((a) => [a.przystanek, a.linie])).toEqual([['Dalej 01', ['105']]]);
+  });
+
+  it('każdą linię podaje tylko przy najbliższym przystanku', () => {
+    const [t] = trasyZ(idx, [DOM, PRACA]);
+    expect(t.autobusy.flatMap((a) => a.linie)).toEqual(['105']);
+  });
+});
+
 describe('opisTrasy', () => {
   const baza: TrasaMin = { z: 'dom', do: 'praca', dystansM: 2224, pieszoMin: 35, rowerMin: 12, autobusy: [] };
 
@@ -70,6 +93,6 @@ describe('opisTrasy', () => {
   });
 
   it('bez wspólnej linii mówi o braku bezpośredniego autobusu', () => {
-    expect(opisTrasy(baza)[1]).toBe('Brak bezpośredniego autobusu. Pieszo ~35 min.');
+    expect(opisTrasy(baza)[1]).toBe('Przy blackoucie: tramwaje, metro i SKM stoją. Brak bezpośredniego autobusu. Pieszo ~35 min.');
   });
 });
