@@ -1,6 +1,6 @@
 {
- "wersja": "2026-10-17T18:34",
- "zbudowano": "2026-10-17T18:34:50+00:00",
+ "wersja": "2026-10-17T18:52",
+ "zbudowano": "2026-10-17T18:52:09+00:00",
  "pliki": [
   {
    "sciezka": "adresy/adresy.json",
@@ -14,7 +14,7 @@
   },
   {
    "sciezka": "punkty/meta.json",
-   "bajty": 1562,
+   "bajty": 1563,
    "modul": "punkty"
   },
   {
@@ -97,7 +97,7 @@
    "pobrano": "2026-10-17"
   },
   "osm-przychodnie": {
-   "nazwa": "OpenStreetMap: przychodnie, gabinety i szpitale (Overpass API)",
+   "nazwa": "© OpenStreetMap contributors: przychodnie, gabinety i szpitale",
    "licencja": "ODbL",
    "url": "https://www.openstreetmap.org/copyright",
    "pobrano": "2026-10-17"

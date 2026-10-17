@@ -123,3 +123,21 @@ def test_pobierz_zapasowy_serwer_overpass(tmp_path, monkeypatch):
     assert "osm-przychodnie" in json.loads((tmp_path / "pobrano.json").read_text())
     with pytest.raises(ValueError):
         pobierz._caly_wynik_overpass(b'{"elements": [], "remark": "runtime error: Query timed out"}')
+
+
+def test_pobierz_uciety_wynik_przechodzi_do_nastepnego_serwera(tmp_path, monkeypatch):
+    # Overpass po przekroczeniu czasu odpowiada 200 z „remark”: to błąd serwera, nie koniec pobierania.
+    adresy = []
+
+    def pobierz_atrapa(req, proby=3):
+        adresy.append(req.full_url)
+        if req.full_url == pobierz.OVERPASS[0]:
+            return b'{"elements": [], "remark": "runtime error: Query timed out"}'
+        return b'{"elements": [{"type": "node", "id": 1}]}'
+
+    monkeypatch.setattr(pobierz, "_pobierz", pobierz_atrapa)
+    monkeypatch.setattr(pobierz, "PROBKI", tmp_path)
+    monkeypatch.setattr(pobierz, "POBRANO", tmp_path / "pobrano.json")
+    pobierz.main(["osm-przychodnie"])
+    assert adresy == list(pobierz.OVERPASS[:2])
+    assert len(json.loads((tmp_path / "osm-przychodnie.json").read_text())["elements"]) == 1

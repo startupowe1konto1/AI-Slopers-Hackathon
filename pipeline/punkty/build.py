@@ -33,7 +33,7 @@ ZRODLA = {
     "rprm-sor": (zrodla.sor, "Rejestr SOR (rprm.ezdrowie.gov.pl)", "CC BY 4.0", "https://rprm.ezdrowie.gov.pl/"),
     "osm-przychodnie": (
         zrodla.przychodnie,
-        "OpenStreetMap: przychodnie, gabinety i szpitale (Overpass API)",
+        "© OpenStreetMap contributors: przychodnie, gabinety i szpitale",
         "ODbL",
         "https://www.openstreetmap.org/copyright",
     ),
