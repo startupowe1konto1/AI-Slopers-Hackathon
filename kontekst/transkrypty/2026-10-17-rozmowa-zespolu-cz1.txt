@@ -1,0 +1,706 @@
+You: No, możesz.
+You:  Możesz, no, żeby sprawdzić.
+You:  Dobra.
+You:  Czyli co tam teraz? Są 2 pomysły, tak?
+You:  Te "defense"?
+You:  Tak, jest. No, ten "defense", ta apka.
+You:  No, nie wiem, mi się wydaje, że.
+You:  I ja idę tam, bo ja muszę widzieć.
+You:  Yyy, jeżeli... to może ten.
+You:  Ja zrobię tak i będziecie mi mówić.
+You:  Nie, no.
+You:  Nie wiem. To sobie tak po prostu wszyscy na zewnątrz.
+You:  Tylko ten, że mikrofon był jakoś dobrze.
+You:  Okej.
+You:  To starajmy się mówić tak, że nie przerywamy sobie.
+You:  Żeby jedna osoba mówiła, bo będzie trudno.
+You:  Yyy, czyli tak: no, mamy 2 pomysły.
+You:  Jeden ten "defense" powiedzmy, obronnościowe, połączeniem... moim zdaniem, jeżeli jakakolwiek taka apka, to musiałaby być połączenie. Bo te AED same za małe, te schrony, to nie są dane z API Warszawy.
+You:  Yyy, transport to jest kwestia wtórna.
+You:  Ale też są takie apki.
+You:  Więc mało innowacyjne.
+You:  I...
+You:  I jakość powietrza tam.
+You:  Yyy, jakby to jest ciekawe, ale według mnie w sytuacji jakby samego zagrożenia, tej wojny, to będzie słabe. No bo mówię, ja bym...
+You:  jak już to robił offline'owe.
+You:  Yyy, nie, no, w sensie, ja nie uważam, że.
+You:  Ty mówisz o tym konkretnym, nie?
+You:  O tym A.
+You:  A co to jest? Weryfikator plotek w sytuacji kryzysowej.
+You:  Okej.
+You:  Yyy, ja bym... ja bym to zostawił.
+You:  No.
+You:  Ja bym ten research jeszcze.
+You:  Zostawił z tym, co się dzieje w Kijowie, na przykład.
+You:  Że na podstawie tego.
+You:  Mhm.
+You:  A może jakieś bombowanie mają.
+You:  Albo jeszcze wszystko, skorygować o aplikację działające po prostu na podstawie tych danych, te co mamy w open data, tam z tych danych Warszawy, to skroszczekować to w innych miastach, na przykład. No, na przykład może być ten Kijów w przypadku tego "defense", albo w przypadku innych, na przykład jak proponujemy te rozwiązania z budżetu obywatelskiego na inne miasta, czy też w innych nawet państwach, jak to działa.
+You:  Czy są takie apki.
+You:  No, apki.
+You:  Możemy.
+You:  Pewnie ma jakieś swoje.
+You:  No, na pewno możemy wykorzystać.
+You:  I rozwiązania, i jakieś zbiory danych właśnie.
+You:  No, dokładnie.
+You:  To jest kolejny zbiór danych, który można wykorzystać.
+You:  No, połączenie z danymi z Kijowa to by było ciekawe.
+You:  No.
+You:  A propos drugiego pomysłu.
+You:  Nie danymi, tylko wiesz, jakby ich problemami.
+You:  No tak, no problemy.
+You:  Ale.
+You:  A danymi też.
+You:  I danymi też może być.
+You:  A, okej. Na przykład jak...
+You:  jak funkcjonuje transport podczas ataków, na przykład.
+You:  No.
+You:  No tak, jakie procedury, i...
+You:  No tak, no całe procedury, wszystko co tam się robi, jak to działa, jak funkcjonuje, no też mają jakieś swoje rozwiązania.
+You:  Apki, nie apki, i tak dalej.
+You:  Wiesz, no jakby, ja nie uważam, że dostęp do internetu takiego LTE, tak, to będzie jakieś duży problem. Podczas ataków, ale nie wiem.
+You:  Ale nie można założyć, że wszyscy będą mieli, nie?
+You:  Tak, ale można zrobić tak właśnie, że wiesz, że jakby przychodzi ci powiadomienie od razu w aplikacji, tak?
+You:  Że jest ryzyko.
+You:  Mhm.
+You:  No to taki trochę alert, jakieś RCB.
+You:  Ale działający szybciej.
+You:  I lokalnie.
+You:  A w Anglii, w Anglii mają jakiś inny system chyba, nie wiem jak.
+You:  Nie, no, RCB też działa lokalnie.
+You:  No, ale no.
+You:  Yyy, no okej, dobra, bo sięga ci ten.
+You:  On działa na podstawie pewnie.
+You:  Lokalizacji.
+You:  Lokalizacji ostatniego.
+You:  No właśnie, tak.
+You:  Jakiegoś, nie wiem, telefonu wykonanego czy coś.
+You:  Tak.
+You:  A my byśmy na przykład działali tak, że musisz wpisać nazwę miejscowości, w której jesteś, tak? W sensie, no dobra, no tutaj potencjalnie tylko Warszawa, no.
+You:  I też jest ciekawe, co może być ciekawe przy takich sobie celach.
+You:  Tylko jak to się łączy ze zbiorami, nie?
+You:  W sensie, byłoby ciekawe, gdyby to była aplikacja pokazywała czas dojazdu dokądś, jak na przykład dana droga będzie zablokowana, albo coś takiego.
+You:  Czyli taki model predykcyjny może.
+You:  Tak.
+You:  W tę stronę.
+You:  Yyy, no to właśnie można by wtedy połączyć jakoś, jeżeli są jakieś dane z Kijowa, tak?
+You:  No, że o ile się na przykład zmienia czas dojazdu podczas konfliktu.
+You:  Procentowo, no.
+You:  Zestawić to z jakimś obecnymi danymi tego transportu.
+You:  Mhm.
+You:  To jest też pomysł.
+You:  No i rozwiązanie, nie? No bo ile się procentowo zmienia, jakie są te wąskie gardła problemu.
+You:  Okej, no ale.
+You:  Tak.
+You:  Jakie jest rozwiązanie? No i w sumie to powinno być tym, co robimy.
+You:  To są tylko "defense", tak?
+You:  Yyy, tak.
+You:  Okej.
+You:  Czy też jest ciekawe w sumie.
+You:  Ale to jest jednorazowe, to jest bardziej analiza znowu, nie?
+You:  Yyy, gra.
+You:  Kryzysowa, nie wiem, czy chcemy iść w gamifikację. To jest takie miękkie, mocne.
+You:  Yyy, no właśnie.
+You:  Innowacyjność.
+You:  Zróbmy grę korzystającą... że korzysta z transportu miejskiego w Warszawie.
+You:  Dobra, i ten budżet obywatelski.
+You:  Ciekawe, no.
+You:  Yyy, ale możemy sobie jeszcze zapisać to, co mówiliśmy o tym, czyli że w kontekście.
+You:  A to powiedz, może chyba że nie chcesz, ale.
+You:  Yyy, czego?
+You:  No, żeby słyszał.
+You:  Nie, no, to już mówiliśmy, jakby teraz to jeszcze pogłębić ten pomysł chcę, czyli to, co mówiliśmy, że z tymi skroszczekowań, nie?
+You:  Yyy, tak.
+You:  A ciekawe, jak ja uważam, że tutaj potencjał wdrożeniowy to może być... w sensie, że samo działanie modelu może być problemem.
+You:  Właśnie, dane jak.
+You:  No dobra, czy my mamy.
+You:  My lubimy się bawić w modele predykcyjne, ale to jest jednak duże niepewność, nie?
+You:  Okej.
+You:  Ale wiesz, to może być po prostu kierunek, jeśli my dobrze zaprezentujemy kierunek, to.
+You:  No, kumam, kumam.
+You:  Tak.
+You:  Yyy, no i ile chcemy zrobić, nie wiem, pomysłów, czy.
+You:  No.
+You:  Rozwiązań, jakby wiecie, musimy sobie też ustalić.
+You:  No, myślę, że gadamy teraz realnie o trzech ewentualnie.
+You:  Ale trzech pomysłach i trzech, nie wiem, apkach, czy tam jakkolwiek.
+You:  No.
+You:  W jakimś rozwiązaniu, czy.
+You:  No, trzech, no bo, czyli te apka ogólnie, "defense", apka z transportem i przewidywanymi opóźnieniami.
+You:  Mhm.
+You:  Yyy, i z tymi projektami obywatelskimi, tylko projekty obywatelskie.
+You:  Moim zdaniem to jest ryzyko duże.
+You:  Wiadomo, że wszyscy korzystają z sztucznej inteligencji, jeżeli tobie i mi wypluło.
+You:  Taki pomysł, to.
+You:  No.
+You:  Zgaduję, że nie tylko nam to wypluje.
+You:  Więc tutaj albo musielibyśmy to zrobić najlepiej, albo tego nie robić.
+You:  Dobra, jeszcze czytamy teraz tę drugą sekcję.
+You:  Ja tego nie znam.
+You:  Nie ma tych na przykład niezrealizowanych projektów, nie wiem, czy wy coś o tym chcieliście robić.
+You:  Ale co, no.
+You:  Choć serwis tak pokazuje.
+You:  Ale to może.
+You:  No co, no.
+You:  Co? Tam są dane osobowe?
+You:  Ale pojebane.
+You:  O, to mi też zwróciło uwagę właśnie, że.
+You:  No, wiem.
+You:  To może być zapętlanie.
+You:  Ktoś po jakimś czasie.
+You:  Proponują, tak?
+You:  Tak, no, bo to jest kto i wnioski inicjatywa jest.
+You:  Informacja.
+You:  Yyy, trzy.
+You:  To blokuje cały czas?
+You:  Nie no, to znowu jest te luki.
+You:  No właśnie, te innowacyjność.
+You:  To też trzeba na ile te pomysły są innowacyjne, no i nie jestem przekonany.
+You:  No, w sensie, że nie ma takiego rozwiązania.
+You:  To nie, na przykład, czekaj, jak.
+You:  No nie ma, bo na razie może nie być.
+You:  No, czyli nie ma nawet potrzeby.
+You:  O, o, o, o, o, research z Kijowa.
+You:  Znaczy, to też może być hardware.
+You:  Oparte o jakieś dane API, nie? W sensie, możemy sobie zrobić mockup hardware'u jakiegoś, nie?
+You:  Tylko nie wiem, co ten hardware by miał robić, nie?
+You:  Zamiast software'u.
+You:  Utykają w blokach.
+You:  Dobra.
+You:  Gdy pada sieć, znikają alarmy i mapy.
+You:  A gdyby.
+You:  Aplikacja wykrywała nie wiem, chciałem powiedzieć, że gdyby na przykład aplikacja wykrywała, że pada sieć, czy coś takiego.
+You:  To wtedy odpala się alarm.
+You:  Jako właśnie w ramach "defense", czy coś takiego.
+You:  Ale gdzie się odpala?
+You:  No, że gdy aplikacja widzi, że na przykład.
+You:  Ktoś załączy.
+You:  Padają jakieś dane API z danego miejsca, no to może informować, że w tym miejscu jest prawdopodobne jakieś zagrożenie.
+You:  Mhm.
+You:  W ten sposób.
+You:  Że brak sygnału to od razu jest wtedy też jakby sygnał, nie?
+You:  Że w danym miejscu na przykład nagle wycięło.
+You:  Ileś punktów API.
+You:  Mhm.
+You:  No to.
+You:  To potencjalnie.
+You:  Jest podejrzenie, że wtedy, że tam na przykład tam był jakiś atak, nie? Czy coś takiego.
+You:  Panika i dezinformacja.
+You:  Dezinformacja zaraz po ataku.
+You:  O.
+You:  Czyli jest mapa EED ogólnie.
+You:  I tu jest też API.
+You:  O dym po pożarach?
+You:  To może być ciekawe, jakby to, co mówiłem wcześniej, nie?
+You:  Mhm.
+You:  O, no.
+You:  Czy jest kofeina?
+You:  Mhm.
+You:  No dobra, "defense" to jest jedno, tylko że to jest trochę wykracza poza to rozwiązanie realnych problemów miasta.
+You:  W takim sensie, że no.
+You:  To może się przydać, a nie musi.
+You:  Mhm.
+You:  No bo tak, no bo myślę, że właśnie.
+You:  Ale warto mieć i tak dalej.
+You:  Mi się wydaje, że ze względu na obecny kontekst polityczny.
+You:  Tak, to dlatego wiadomo, każdy wie o co chodzi, ale nadal.
+You:  Że na chwilę obecną, tak?
+You:  Tak, teraz to nie rozwiązuje żadnego problemu.
+You:  Tak, aczkolwiek.
+You:  Bo nie ma, no jeszcze.
+You:  Jakoś to jest łatwo obronić, bo jeżeli.
+You:  Lepiej mieć niż nie mieć.
+You:  No, zaistnieje taki zaistnieje taka sytuacja, to już będzie za późno.
+You:  Prewencyjnie, oczywiście, że tak.
+You:  Ale nadal opieram się na założeniach, że coś się wydarzy.
+You:  Nie, że coś jest.
+You:  No to.
+You:  Nie, że coś nie funkcjonuje.
+You:  I można obronić i można ten, nie?
+You:  Tak, właśnie, no mi się wydaje, że jakby to było.
+You:  Na podstawie doświadczeń z Kijowa.
+You:  Przy obecnej infrastrukturze Warszawy, jakieś rozwiązanie, no to.
+You:  No.
+You:  Mi się wydaje, że dobrze może sięgać, nie?
+You:  Tak, i ja nie mówię, że.
+You:  Jakby wiem, o co ci chodzi, nie? Że to na chwilę obecną nie jest jakiś palący problem, nie?
+You:  Można to.
+You:  Brak rozwiązania też może być problemem, nie?
+You:  To można dać, ale nie jako główny.
+You:  I o którym teraz mówisz.
+You:  No, ogólnie "defense".
+You:  Okej.
+You:  Że jako fajny dodatek na pewno, ale nie jako główne rozwiązanie problem.
+You:  Czyli nie chcesz jako "defense" jako główne, bo ja myślałem, żeby "defense" jako główne robić.
+You:  No, ja wydaje mi się, że kurde, nie.
+You:  Też jest.
+You:  Okej, nie mówię nie, ale trochę się waham.
+You:  No, ale oczywiście trzeba mieć alternatywę dobrą, nie? Więc...
+You:  Czy awaryjny.
+You:  Taka mapa jest więcej o.
+You:  Ale dym po pożarze mógłby na przykład nie być tylko na z tą jakością powietrza, to mogłoby też być jakoś nie tylko koniecznie podczas "defense", no.
+You:  No tak, tak.
+You:  Tylko dobra, trochę krytycznie myślę, ale wydaje mi się, że trochę trzeba.
+You:  Bo tak będą dobrze myśleć.
+You:  No dobrze.
+You:  Że nadal to jest, no, znikomy problem.
+You:  No tak, no.
+You:  W sensie, że to się na tyle rzadko zdarza, że no, no.
+You:  Brzmi okej i fajnie coś takiego mieć, ale no, nie rozwiązuje nadal jakichś głównych problemów codziennych, problemów mieszkańców, nie?
+You:  Jakie byłoby, jakie wejdziesz na stronę i zobaczysz, jakie jest dokładnie treść wyzwania?
+You:  No właśnie, to też chcę znaleźć.
+You:  Regulamin?
+You:  No, to jest na stronie.
+You:  Nie ma nic o tym.
+You:  I żeby pomysł miał być na teraz.
+You:  Masz pomysł na wykorzystanie otwartych danych Warszawy, których nie mieści się w żadnych z powyższych tematów. Czas na wasz zespół, zespoły ruchu.
+You:  No to po ocenie też jest takie nijakie.
+You:  No, mniej pierwszy temat.
+You:  To też by było tak, to było ta Warszawa 2.86, nie? To by w ogóle też idealnie pasowało.
+You:  A co za co?
+You:  Że jak sobie wyobrażasz.
+You:  No to bloków, w których awaria winty, więzi ludzi.
+You:  Ale to bez sensu.
+You:  Generalnie.
+You:  Eee, tryb awaryjny dla bloku, ocenia aplikacja w.
+You:  Najbliższe woda i toaleta, a dopiero.
+You:  A z tej strony bazujemy na tej stronie, tak?
+You:  Tak, tak, no.
+You:  A to pierwsze na przykład?
+You:  Nie wiem, czy widziałeś, że na ziemi leży karton?
+You:  Okej, dobra, tutaj też patrząc po tym, to dosłownie może być wszystko i myślę, że tutaj będą bardzo sobie cenić taką jakąś.
+You:  Albo kreatywność.
+You:  No, a właśnie nie uważam, że to nie jest kreatywne.
+You:  W sensie, i rozwiązuje realne, w sensie może rozwiązywać realny problem.
+You:  To brzmi tak, jak to rozwiązanie miałoby być zabawne i takie trochę hi-hi-ha-ha, takie głupkowate.
+You:  Nie, jakby to, jak brzmi, że może być cokolwiek, nie?
+You:  Tak, ale w stronę możesz zrobić grę, aplikację, dowcipny bot.
+You:  No to wiesz.
+You:  To brzmi, jakby miało być coś takiego.
+You:  No, ja myślę właśnie, że będą mieli słabe case'y biznesowe, w sensie że będą mieli słabe use case'y, po prostu use case'y pokonane, nie?
+You:  No tak, no właśnie.
+You:  Który będzie na palący, w sensie palący, no, w przyszłości.
+You:  Trzeba po prostu to przemyśleć, nie tak jak teraz myślimy o tym.
+You:  No, można zrobić to w jakiś zabawnej formie.
+You:  No, nie ma być właśnie, jakby ja bym nie szedł w ogóle w zabawny.
+You:  Nie, nie, nie, ja bym szedł w takie rzeczywisty use case.
+You:  Nie, no tak, no lepiej, oczywiście, to po prostu mówię, że to polecenie tak brzmi.
+You:  I w.
+You:  Jeszcze może.
+You:  A może, wiesz co, zrobić?
+You:  I połączyć wszystkie i na przykład apteki.
+You:  Połączyć jeszcze z tymi jakoś jeszcze schronami, żeby to wszystko offline'owo działało i.
+You:  No, tutaj coś proponuję o tej grze awaryjnej dla bloku.
+You:  Ale to nadal, nadal i tak idziemy w tą apkę, która jest dość mocno skonsolidowana, ma dużo różnych opcji.
+You:  Jakby ja nie uważam, że to jest złe, tylko pytanie, czy damy radę to zrobić na czas.
+You:  Eee, co jeszcze chciałem, aha.
+You:  Spójrz, jest jak się nazywa ten podręcznik bezpieczeństwa, coś takiego w to, co rozesłali.
+You:  O, podręcznik.
+You:  Żeby spojrzał na te problemy.
+You:  Tak, podręcznik bezpieczeństwa.
+You:  Podręcznik zachowań, zachowań.
+You:  Rozesłany.
+You:  Eee, dobra, jeszcze mu napiszę, że żaden z tych, żadne z tych dwóch koncepcji.
+You:  Powyżej ma dwie odpowiada.
+You:  Dobra, kilka punktów napisałem.
+You:  Cieszcie się, że to nie jest jakieś rozwiązanie eko, gdzie musimy coś eko robić.
+You:  No.
+You:  Czy mamy jeszcze temat narzucony, nie?
+You:  Plan potem trzeba zrobić na fejdu, jakby jakoś ustalimy to, nie?
+You:  Żeby fejdu rozpisał?
+You:  A to nie lepiej na opusie ekstra?
+You:  Mi się wydaje, że fejdu to jest overkill, że za długo to potrwa.
+You:  Okej.
+You:  Eee, witam wszystkich, czy wszystko sobie odpalę potem.
+You:  No, jeżeli zużyjemy.
+You:  W sensie nagarzać pięciogodzinnym, co nie?
+You:  No, na razie jest git, nie?
+You:  No to, no.
+You:  Ale problemy właśnie, że my będziemy właśnie.
+You:  No, mamy mało czasu, a pięciogodzinny to jednak.
+You:  Mówię, jeszcze mamy chmurę, więc na chmurze trochę można.
+You:  Na chmurę się liczy do limitu, czy nie?
+You:  Nie, tam jest bez limitu, tam jest 170 dolarów jeszcze do wykorzystania.
+You:  Na opusie 5.5 myślę, że tam można bardzo dużo zużyć.
+You:  Co czytasz, Mikołaj?
+You:  No, jeszcze jakieś inne pomysły.
+You:  A tam cały czas notuje, w sensie tak git, git.
+You:  Jakieś parkowanie.
+You:  Czy mapka wykorzystująca ruch, żeby unikać jakichś problemów z parkowaniem.
+You:  To po prostu bardzo nie chcę główne rozwiązania robić, nie? W sensie takiego miękkiego.
+You:  No, ja kocham, no, kocham, kocham. Ja też bym się kierował właśnie w taką, no.
+You:  A co?
+You:  W rzeczywisty use case.
+You:  W sensie co mi, co.
+You:  No, właśnie coś, co, nie wiem, jakieś bardzo wąskie.
+You:  Tak jak mówiłeś, nie wiem, odnośnie tych, nie wiem, pożarów czy coś, nie? Coś takie wąskie, albo jakieś takie apka.
+You:  Która niby coś robi, ale nie do końca rozwiązuje problem, nie? Czyli sprawdzanie live tego autobusu, czy coś takiego, nie?
+You:  A jak zrobimy narrację, że taki problem wystąpiły w Kijowie i mamy taką infrastrukturę, i jak to samo zestawimy, to mamy jakieś rozwiązanie jakby na przyszłość, no to myślę, że to jest spoko narracja, że może ich zainteresować.
+You:  No, jest, jest. No, trzeba to dobrze sprzedać, oczywiście.
+You:  Tak.
+You:  No, właśnie opowiedzieć w to, żeby to.
+You:  Zrobimy narrację konsultingową po prostu.
+You:  Ale to jest taki, ten model ładny, predykcyjny, nie? Bo można opieramy o aktualny use case.
+You:  No, tak.
+You:  Wykorzystując.
+You:  O, jest jakiś artykuł naukowy.
+You:  O zatoczeniu dróg w Kijowie, Lwowie, pierwszych tygodniach inwazji.
+You:  No, zajebiście.
+You:  To inne miasto, wręcz dopiero że to inne miasto i sieć. No, o to chodzi.
+You:  No, jest to.
+You:  Reguły scenariuszy, o, to jest spoko.
+You:  A ja bym też w ogóle szedł narracją, że w Warszawie byłoby gorzej, nie? No, bo Kijów ma lepsze predyspozycje do obrony niż Warszawa i tak dalej.
+You:  No, znacznie większe metro.
+You:  No.
+You:  No.
+You:  To jest jedno z większych metrów.
+You:  Metro staje się na odcinkach naziemnych.
+You:  No, tak, bo sowieckie jeszcze.
+You:  Tam jest w Kijowie zdarzało się kilkanaście alarmów dziennie, blackout.
+You:  Czyli tramwaje i metro tam jeżdżą na prąd, nie? Autobusy, nie?
+You:  O, o, to jest, to jest ciekawe. To sobie przeczytajcie, że w danych ZTM tramwaje mają typ 2, typ równa się 2, więc wprost widać, które osiedla są zależne tylko od tramwaju.
+You:  To jest ciekawe.
+You:  Wisła to wąski gardło Warszawy.
+You:  Może na przykład, o, jakbyśmy zrobili wiecie.
+You:  Mamy mapkę, tak? Mamy mapkę z transportem, i powiedzmy, mamy różne linie transportu: metro, autobus, tramwaj.
+You:  Jeżeli wysiądzie prąd, nie pojadą tramwaje, nie pojedzie metro.
+You:  Aha.
+You:  Autobusy mogą pojechać.
+You:  No.
+You:  I żeby zrobić takie scenariusze, co nie?
+You:  Scenariusze, no, ale tylko nadal rozwiązanie.
+You:  Musimy podać rozwiązanie tego.
+You:  To miałoby.
+You:  No, to na przykład, nie wiem, pokazuje ci trasę pieszo do najbliższego miejsca, gdzie możesz się schronić, tak?
+You:  Jakieś takie podstawowe informacje.
+You:  Eee, no, to.
+You:  Ale to jest jedno, jedno tylko z rozwiązań. I do tego.
+You:  Dobra, to jest dobre. Ja bym widział to jako taka mapka.
+You:  I tak.
+You:  Jeszcze na mapce.
+You:  O, jeszcze mamy mapkę, tak? Która działa co do zasady online.
+You:  Czyli mamy wszystkie podłączone dane miejskie na temat całego transportu miejskiego.
+You:  Eee, więc powiedzmy, dajesz lokalizację, że jestem teraz w tym miejscu, i chcę dojechać do tego miejsca.
+You:  I on wybiera tobie trasę, no, czyli tak jak to jadę działa, tak?
+You:  No, alternatywną.
+You:  Nie wiem, czy my jesteśmy w stanie to tak szybko zbudować ogólnie, akurat to same połączenia.
+You:  No, mockup może być, nie? W sensie.
+You:  No, tak, no.
+You:  Nie wiem, ma powiedziane, że musi być już działające, tak?
+You:  Czyli tylko to jest, poczekaj, to jest jedno i na tej mapce masz opcję też, no, działającą offline, czyli masz mapkę, powiedzmy, zaktualizowaną rano.
+You:  Mhm.
+You:  Raz dziennie, czy tam, no, kilka razy dziennie możesz się aktualizować.
+You:  Tak na stałe.
+You:  I aktualizuje ci się mapka, no.
+You:  I na tej mapce masz punkt EED.
+You:  Schrony zaznaczone.
+You:  Eee, i to mapka offline, tak? Wtedy, czy.
+You:  Tak, tak, i wtedy na przykład włączysz offline i.
+You:  I online i offline.
+You:  Masz offline.
+You:  I po prostu jak nie ma internetu, to ci działa na przykład.
+You:  Raz dziennie.
+You:  Ostatniego odświeżenia.
+You:  I łatwo można połączyć zbiorek wtedy, nie? Bo można z tą apką.
+You:  Ale jaki jeszcze raz, jaki to problem rozwiązuje?
+You:  W sensie ja muszę zaraz kreatynę załadować, bo widzę, że.
+You:  No, jaki problem? No, czyli, no, przykładowo, no, jest atak, tak?
+You:  No.
+You:  I nie ma internetu.
+You:  Nie ma prądu.
+You:  I nie wiesz, gdzie.
+You:  I tramwaj nie działa metro.
+You:  Nie tylko schron, pokazuje ci, ale mi, w sensie jak dojść, w sensie pokazuje ci trasę, jaką musisz najbardziej optymalną wybrać, żeby uchronić się po prostu.
+You:  Przed?
+You:  W zależności od tego, biorąc pod uwagę te czynniki, które Oskar wskazał, nie? Czy mamy prąd, czy nie mamy, i w zależności jaki rodzaj transportu będzie.
+You:  I to się różni od mapy Google na przykład.
+You:  Eee, no.
+You:  No, nie wyszukasz na mapie.
+You:  No, bo nie będzie.
+You:  Od schronu jakiegoś bez tego, bez internetu.
+You:  Możesz się poruszać.
+You:  Ale na tej mapce MSVA, no, to ci pokazuje te schrony, nie?
+You:  Tak, ale to będzie wzbogacona właśnie.
+You:  To masz osobną, no, ale tam masz tego schronu, a tu byś miał EED, jak jest transport, no, musimy zobaczyć tą apkę, tą.
+You:  Wie ktoś, jak to się nazywa?
+You:  Gdzie się ukryć.
+You:  Eee, chyba by trochę wzbogacona, nie? I jeszcze poszerzona o to, jak, jak w sensie i.
+You:  Ja ją wczoraj otwierałem, te linki.
+You:  Gdzie schrony jakieś.
+You:  Chyba że w emulatorze może to jest na przykład.
+You:  Nie, tutaj, patrz.
+You:  Ale ty, ale.
+You:  To nie go.
+You:  Ale tu masz ten, to jest aplikacja, czy tylko strona?
+You:  No, jest i aplikacja, i strona, nie?
+You:  Ja właśnie nie widziałem aplikacji nigdzie.
+You:  Ja też nie widzę aplikacji.
+You:  Z lokalizacji.
+You:  Okej, co tu się stało?
+You:  Nie wiem, co tu się stało, odpaliłem na telefon i.
+You:  Jest jakaś apka, gdzie jest schron.
+You:  Ale to chyba nie jest.
+You:  Tak, tak wygląda na telefonie, a teraz tu masz widok.
+You:  Z telefonu, jakieś co innego, co nie?
+You:  No dobra, ale jak wyłączysz ten, jak wyłączysz internet, to nie zadziała.
+You:  Sprawdź. Ja nie wiem, mi się wydaje, że działa offline.
+You:  No, okej.
+You:  Dobra, czyli.
+You:  87 000 punktów schronienia.
+You:  Eee, no, one są takie, tak jak Mateusz mówił, chujowe te punkty.
+You:  A co jest w Poznaniu? Sprawdź.
+You:  O Jezu, no, 55 minut temu niby pokazuje, że.
+You:  Co?
+You:  Jest trasa jakaś, a jest tutaj. No, ale, no, ale bez internetu nie zadziała strona internetowa.
+You:  No, ale masz aplikację też.
+You:  No, ja nie wiem, ja ci mówię, że jest aplikacja.
+You:  Ja powiem, że znalazł, to by było dobrze.
+You:  To nie jest takie proste.
+You:  Mam ze strony, nie? W sensie, ale no strona to.
+You:  A na tam w tym artykule nie ma, że jest aplikacja?
+You:  No, no właśnie jest, ale nie przynosi mnie do pobrania. Właśnie to, i wszędzie jest tylko ta strona.
+You:  No, jest, jest jakaś.
+You:  Jest Safari.
+You:  Masz?
+You:  Nie, w.
+You:  Może.
+You:  Aha, wydaje mi się, że.
+You:  No to sprawdźcie, nie wiem, spytaj Claude'a na telefonie. Masz Claude'a na telefonie?
+You:  No.
+You:  No, czy ta aplikacja działa offline po prostu i to, czy to rozwiązanie działa offline.
+You:  Jeśli działają offline.
+You:  No.
+You:  Jeśli ukryć.
+You:  Mi się wydaje, że to jest tak, że jak wejdziesz na tą stronę i otworzysz sobie tą stronę teraz, to.
+You:  No dobra, czyli generalnie coś takiego jest, no.
+You:  Ale tylko, no, te schrony, co nie?
+You:  Masz to.
+You:  I teraz jak tu klikniesz.
+You:  Nie wiem.
+You:  Dotknij.
+You:  I teraz jak.
+You:  No właśnie, masz opcję pobrania, nie?
+You:  Eee, tutaj byłby jakiś, tu mi zaproponowało w kontekście transportu i kryzysu.
+You:  No to zaproponowało jakieś planowanie komunikacji zastępczej.
+You:  I on tutaj miałby robić symulator skalibrowanych na danych żywo, jak będą wyglądać właśnie przestoje, nie?
+You:  Ale to jest ciężkie.
+You:  Tym po pożarze.
+You:  Przy kształcie stożka.
+You:  Eee, no.
+You:  Bo chodzi mi też o to, że na przykład patrzcie, ta aplikacja działa tylko z lokalizacjami schronów, tak?
+You:  A, jeżeli będziemy mieli na przykład sytuację, w której, no, mamy atak dronowy, i gdzieś jest pożar, nasza aplikacja by wykryła, że jest gdzieś pożar przez API, bo załóżmy, że akurat by działał internet, tak?
+You:  W sensie nawet nie musi mierzyć, jakby jest pożar, tylko jakość powietrza wtedy.
+You:  Tak, tak, no, jakby.
+You:  Że wiesz.
+You:  I po prostu wiedziałby.
+You:  Regulacja po prostu.
+You:  Wiedziałby na przykład, że na trasie do tego schronu jest kurwa jakieś zdarzenie, tak? To wybierać, możesz.
+You:  Alternatywną trasę.
+You:  Inną trasę, tak?
+You:  Tak, no, to.
+You:  No, tylko że.
+You:  No, wiem, tylko teraz to zostawiasz.
+You:  Czy to jest rzeczywiście występuje na przykład w Kijowie, nie? Czy coś takiego występuje.
+You:  No, ale nie musi występować.
+You:  W sensie tego nie rozumiem.
+You:  No, że lepszy prognostyk, nie?
+You:  Tak, tak, no, ale.
+You:  Możesz zmodyfikować lekko dane.
+You:  Jeśli my im pokażemy coś takiego, występuje, że jest taki problem.
+You:  Możesz sprawdzić.
+You:  Tak, bo jak ja tobie pokażę, ja powiedzmy, że tu jest stacja metra, co nie? Przy tym budynku.
+You:  Tak.
+You:  I ten budynek jebnął dron i wszędzie.
+You:  Wtedy już nie wejdziesz do tego schronu, bo tam dymi.
+You:  No, nie wiem, ale nie wiadomo, co się dzieje.
+You:  Ale w sensie nie, nie, bo to chodzi o to, że ludzie na przykład tam za winklem, w sensie będą nie widzieć, nie? Czy, czy mogą wejść na przykład i schować się, o to chodziło bardziej, nie?
+You:  Że ludzie, którzy tego nie widzieli, to jest dla nich bardziej.
+You:  To już się zastanawiam, no bo znowu to się opiera o działanie musimy jakby lewarować tym, żeby też nie było w pełni online, nie? W sensie zastanawiam się, nie?
+You:  No dobra, tutaj to akurat nie ma opcji bez offline.
+You:  W sensie bez online, ja też się na tym martwię, co prawda, nie?
+You:  Ale no to nie, no ale to nie da się wszystkiego zrobić offline, co nie?
+You:  No, no tak, no.
+You:  Ale jakby im więcej użyteczności online, offline, to jest git.
+You:  A, i dodatkowe użyteczności online, jakby, są też ważne, co nie?
+You:  Mhm.
+You:  Offline to może być ta trasa na przykład.
+You:  No.
+You:  Nie, w sensie.
+You:  Trasa.
+You:  A, a no, online to musimy niestety być zaciągane co chwilę z.
+You:  Te punkty, te, te apteki nawet, tak?
+You:  Mhm.
+You:  A to kurde, tutaj ktoś wskazuje źródło pożaru.
+You:  Bierzemy wiatr z najbliższej stacji, wyznaczamy strefę, gdzie trzeba zamknąć, ale to.
+You:  Chodzi o zamknięcie okien na przykład.
+You:  Nawet nie, no nawet nie tylko, nie tylko apteki, ale na przykład też.
+You:  Myślę, jeszcze jakieś punkty.
+You:  Najbliższe punkty, jakieś lecznice.
+You:  No właśnie, no właśnie.
+You:  Jakiekolwiek punkty medyczne.
+You:  Patrz, patrz, Oskar, odnośnie tego dymu.
+You:  To jest jakby związek z poradnikiem, nie?
+You:  Nie wiem, ja bym w to szedł ogólnie.
+You:  Dym?
+You:  Nie, w kompleks.
+You:  Nie wiem, czy damy radę to dowieźć do tego czasu, ale no, mi się wydaje, że chociaż takie MVP, tak?
+You:  W sensie właśnie.
+You:  Prezentacja ma trwać 5 minut ogólnie.
+You:  No tak.
+You:  To co my mamy tam prezentować? W sensie, no przecież aplikacja.
+You:  Musimy wylistować wszystko.
+You:  A kiedyś możemy w HTML-u po prostu pokazać, nie?
+You:  No tak.
+You:  Tak, no, no wtedy pewnie apkę byśmy pokazali, nie?
+You:  No tak.
+You:  I prezent, w sensie narrację.
+You:  Tak, i no, i dlaczego, nie?
+You:  Urywki prezentacji, jakby to mogą być animacje po prostu też, nie? Aczkolwiek trzeba uważać z animacjami, żeby się nie wyjebało, nie?
+You:  Po prostu.
+You:  Mhm.
+You:  Eee, no.
+You:  Ale to, to powiedz jeszcze raz, Oskar, punkty tej aplikacji.
+You:  Działa jako mapa.
+You:  Na mapie działa w trybie online i offline.
+You:  W trybie offline masz.
+You:  Weź zobacz, wyłapuje, jak Oskar mówi, ma ważne rzeczy, jak mówisz.
+You:  To mów, mów specjalnie.
+You:  Eee, w trybie offline masz punkty ED, masz schrony zaznaczone.
+You:  Masz najbliższe miejsca medyczne.
+You:  Apteki.
+You:  Chyba to tyle.
+You:  No, jeszcze chciałeś pożar, w sensie dym, tak? To w online.
+You:  No, w online masz dodatkowo właśnie to.
+You:  Dodane jakieś miejsca, w których są zagrożenia pożarowe, powiedzmy, gdzieś jakiś dym.
+You:  Dodatkowo opóźnienia w transporcie.
+You:  Co nie działa, co działa.
+You:  Mhm, coś jeszcze chyba miało być.
+You:  Dobra, ale jeszcze tak wracając do, załóżmy, że to robimy, to to jest to i robimy coś jeszcze?
+You:  Czy to jest to jedno.
+You:  Ja bym też wyszedł od takiego spiralnego założenia biznesowego, że robimy jobs to be done takie persony podczas kryzysu, nie? W sensie, co ta osoba musi zrobić, jak to musimy zrobić personę taką, nie?
+You:  No, no, no.
+You:  I jak, i to też zajebiście się wpisze w narrację, że.
+You:  I to będzie fajnie, można było zaprezentować, tak?
+You:  No tak, no.
+You:  Tak, no to musimy sobie rozprzedać. Ja mam wrażenie, że.
+You:  No, to, to musisz.
+You:  I techniczne.
+You:  Tak.
+You:  I jak to będzie wyglądać.
+You:  To, to.
+You:  Technicznie to wyjebane, jakby.
+You:  To, w sensie.
+You:  Pomysł, okej, ma być ważny, ale jak to dobrze sprzedamy, to automatycznie ten pomysł się staje.
+You:  Musi być dobrze.
+You:  Narracja.
+You:  I oni muszą, wiesz, to jest problem. Problem jest, to jest do wdrożenia.
+You:  Tak, ale coś muszą mieć.
+You:  Dokładnie.
+You:  Myślę, że to już.
+You:  Powiedzmy, tam na rondzie Daszyńskiego było wejście do metra, tak?
+You:  No.
+You:  Jak na środek skrzyżowania zawalił się wieżowiec, to nie chuja nie wejdziesz do tego metra.
+You:  No.
+You:  Więc jeżeli będziesz miał dane z, jakby dostępne internetowo, to będziesz wiedział, że no, do tego schronu nie możesz iść.
+You:  O, patrz, jakby myślałem też o tym, to co przed chwilą mówiłem, odnośnie tego wykrywania zagrożenia po zaniku danych na żywo.
+You:  Aha, że jak z jakiegoś miejsca na przykład by zniknęły dane, tak?
+You:  Tak.
+You:  O, no to też.
+You:  To jest inwersja taka.
+You:  No.
+You:  No to, tak, to jest dobre.
+You:  No, że na przykład jak jakiś punkt, tak, z tym, czyli pomiar powietrza przestaje działać, no to jest zagrożenie, że został zniszczony na przykład.
+You:  A ja od razu Georgia Tech robi to samo.
+You:  Tak, to jest spoko, nie?
+You:  No, no i coś takiego, tak?
+You:  Nie powie: uderzył dron, powie tylko: obszar X ucichł.
+You:  Zasilania lub łączności.
+You:  No.
+You:  No tak, i to jest.
+You:  To też jest kolejny.
+You:  Jest kolejny.
+You:  No okej.
+You:  To możemy jeszcze jakieś tam, mogą być jeszcze zakłócenia, w sensie chodzi, może być zanieczyszczone przez właśnie jakieś tam zjazdy do zajezdni i tak dalej, nie?
+You:  Mhm.
+You:  Ale może mieć w kodzie wpisane, że wtedy jest planowany zjazd do zajezdni na przykład, nie? Coś takiego.
+You:  Mhm.
+You:  I wtedy wyklucza to z, jakby z listy anomalii, nie? Że jakby to jest regularne.
+You:  Tak, wykrywanie anomalii. Czy coś jest, a nie powinno być.
+You:  Tak.
+You:  Więc jakby sama aplikacja by działała i offline, i online, opcje offline już sobie pozwalają zapewnić bezpieczeństwo na podstawowym poziomie, tak?
+You:  Eee, poradnik bezpieczeństwa, dane miasta.
+You:  Informacja.
+You:  Można jeszcze pomyśleć, co tam dodać, bo jak już takie coś by było, to można tam, wiesz, wpieprzyć dużo innych rzeczy.
+You:  Plus jakieś inne zbiory danych, żeby też były załączone.
+You:  Tak, no ale no.
+You:  O, to jest jakby cisza czynników, jest wysoka innowacyjność, pierwsze minuty po ataku.
+You:  Wdrożenie średnie ceny w system bez offline.
+You:  Nie, moim zdaniem to, co ja teraz przedstawiłem, to jest dość kompletne rozwiązanie.
+You:  Ile pojazdów.
+You:  Które no, realnie mogłoby się sprawdzić, no.
+You:  Tak, no.
+You:  Sprawdzić.
+You:  Jest skalowalne na inne miasta też.
+You:  Pierwsze.
+You:  Oczywiście dużo źródeł danych, nie? Będzie, więc.
+You:  Trzeba by faktycznie pomyśleć z tym, z tą komunikacją typu, jak przysiądzie prąd.
+You:  Mhm.
+You:  I nie jedzie metro, nie jedzie tramwaj.
+You:  No właśnie, no wiesz.
+You:  To co za to?
+You:  No to pieszo zawierdalasz, albo z autem, tak? Tylko jeżeli, o, na przykład może ci pokazywać trasę autem, no tylko to możesz sobie w Google sprawdzić, no.
+You:  To jest minus. Offline właśnie to jest ważne, ale offline nie sprawdzimy, nie ma tego jak sprawdzić, co nie?
+You:  Czy trasę pieszo powiedzmy zawsze zakłada na przykład.
+You:  Trzy punkty.
+You:  Dodatkowo.
+You:  Zresztą trasa pieszo czy rowerem i tak nie wiem, czy nie jest zawsze jakaś najlepsza.
+You:  No tak, bo każdy.
+You:  Może połączyć.
+You:  Kurwa, jakby się dało połączyć z jakąś bazą w Bolta na przykład, z kolejnagami.
+You:  Z rowerami miejskimi.
+You:  Ej, o, rowery miejskie.
+You:  Ej, ja wiem, rowery miejskie są.
+You:  Ale tutaj nie ma chyba.
+You:  Ale, ale może w jakimś innym API są.
+You:  Czy jest rowerem dostęp.
+You:  To jest zajebiście.
+You:  Tak, rower z wszystkich korków.
+You:  W sumie Ukraińcy tam widziałem, uciekali z jakiegoś miasta na rowerach.
+You:  Tak.
+You:  Tego branżowego.
+You:  No wiesz, jak nie, no nie da się wyjechać z takiego.
+You:  No i podobno są korki właśnie.
+You:  Nie, nie, nie, nie, nie.
+You:  I rowerem wszędzie przejedziesz. W sensie przez pola, łąkę, cokolwiek.
+You:  A autem nie wjedziesz z takiego miasta w ciągu 10 godzin pewnie.
+You:  Tak.
+You:  No.
+You:  2 miliony osób próbuje wyjechać z miasta autem.
+You:  No tylko z rowerami to jest problem.
+You:  Dostęp do hulajnóg to też jest głupie, w sensie. No tak, no tylko pytanie, czy tam jest API, co nie?
+You:  Z tym się łączy.
+You:  API nie, ale to może być online'owo.
+You:  W sensie.
+You:  W sumie jest apka, na której jest lokalizacja.
+You:  No więc właśnie, dostęp, w sensie wtedy online'owo, nie? Jak nie ma API, nie?
+You:  No właśnie, w sensie dosłownie masz apkę po prostu.
+You:  No tak, tak, no dlatego.
+You:  Online.
+You:  To raczej myślę, że.
+You:  To to jako live jest.
+You:  Jakby z rowerami na przykład, co nie?
+You:  Z rowerami też masz, tylko, tylko jest osobna apka.
+You:  Ale to są osobne. Dobra, Oskar dyktuj, co mam pisać odnośnie twojego konceptu.
+You:  To tam będzie.
+You:  No tak, ale ja chcę mu jeszcze od razu już zapodać. Wrzuć mu, nie, nie rób tak, wrzuć mu transkrypcję ze spotkania.
+You:  Jeszcze nie, tak, bo tam jest wszystko bardzo szczegółowo.
+You:  Nie, serio, przerwij i wrzuć mu transkrypcję.
+You:  Serio.
+You:  Jakby.
+You:  Dobra, to też możesz zapisać, wiadomo, weź stąd skopiuj coś, skopiuj to, co.
+You:  Nie no, ja bym to.
+You:  To zostaw i jeszcze, tylko jakiś ostatni.
+You:  I dopisać.
+You:  Zabierz transkrypcję i wyślij tutaj sobie i wrzuć na tego. Moim zdaniem lepiej.
+You:  Możemy dodatkowo jeszcze opisać, ale no.
+You:  Stop.
