@@ -1,6 +1,6 @@
 {
- "wersja": "2026-10-17T13:36",
- "zbudowano": "2026-10-17T13:36:46+00:00",
+ "wersja": "2026-10-17T13:52",
+ "zbudowano": "2026-10-17T13:52:44+00:00",
  "pliki": [
   {
    "sciezka": "adresy/adresy.json",
@@ -11,6 +11,16 @@
    "sciezka": "adresy/meta.json",
    "bajty": 262,
    "modul": "adresy"
+  },
+  {
+   "sciezka": "transport/meta.json",
+   "bajty": 359,
+   "modul": "transport"
+  },
+  {
+   "sciezka": "transport/przystanki.json",
+   "bajty": 478014,
+   "modul": "transport"
   }
  ],
  "zrodla": {
@@ -19,6 +29,12 @@
    "licencja": "CC BY",
    "url": "https://wfs.um.warszawa.pl/serwis",
    "pobrano": "2026-10-17T14:28:00+02:00"
+  },
+  "gtfs-ztm": {
+   "nazwa": "GTFS Warszawa (mkuran.pl, wersja 2026-10-17 00:15:22), źródło nieoficjalne, na podstawie danych ZTM",
+   "licencja": "do weryfikacji (dane ZTM; GTFS: Mikołaj Kuranowski)",
+   "url": "https://mkuran.pl/gtfs/",
+   "pobrano": "2026-10-17T15:50:31+02:00"
   }
  }
 }
