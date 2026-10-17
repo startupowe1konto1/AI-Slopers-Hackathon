@@ -1024,5 +1024,13 @@ Gotowe, gdy: po „Pobierz paczkę” i przełączeniu w Offline strona i mapa d
 - [ ] Czysta instalacja na świeżym klonie: `npm ci && npm run typecheck && npm test && npm run build && uv run --project pipeline pipeline/validate.py && npm run test:e2e`. Zapisz wyniki w `docs/DOKUMENTACJA.md`.
 - [ ] Sprawdź oba linki z prezentacji w oknie incognito; `?offline=1` po pobraniu paczki.
 - [ ] Skan sekretów: `git log -p | grep -E "WARSAW_API_TOKEN=.+|Authorization: [A-Za-z0-9]{20,}"` → pusty wynik.
-- [ ] Oddanie przez kanał organizatora: prezentacja, link do repo, dokumentacja. Potwierdzenie oddania zapisz w `docs/DOKUMENTACJA.md`.
+- [ ] Wymagania organizatora wobec repozytorium. Repozytorium musi być publiczne i zawierać:
+  - całe rozwiązanie,
+  - gotową prezentację,
+  - nazwę projektu,
+  - nazwę i numer zespołu.
+
+  Stan na 17.10, 22:10: repo jest publiczne. `README.md` ma nazwę projektu („Warszawa w trybie kryzysowym”) i nazwę zespołu („AI Slopers”), brakuje numeru zespołu. Prezentacja jest w HTML w `docs/pitch/prezentacja/`, nie ma jeszcze pliku nazwanego według zasady niżej.
+- [ ] Nazwa pliku prezentacji: `numerWyzwania_nazwaDrużyny_nazwaProjektu`, np. `1_Brzęczyszczykiewiczowie_otwartaDanownia.pptx`. Startujemy w wyzwaniu 3.
+- [ ] Oddanie mailem na `rozwiazania@42warsaw.pl`: prezentacja, link do repo, dokumentacja. Potwierdzenie oddania zapisz w `docs/DOKUMENTACJA.md`.
 - [ ] Po 11:00 żadnych zmian w repo (regulamin §5A ust. 6).
