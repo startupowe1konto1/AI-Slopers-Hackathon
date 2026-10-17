@@ -35,8 +35,7 @@ RPRM = "https://rprm.ezdrowie.gov.pl/Registry/PublicExport?" + urllib.parse.urle
     "FilterApplied": "True",
 })
 # Główny serwer i zapasowe (DECYZJE-v3 O3-1, W6): overpass-api.de zrywa połączenia z chmury,
-# kumi odpowiadał 500. Próbkę z 17.10 pobrano z maps.mail.ru (wtedy jedyny działający serwer),
-# ale w aplikacji obrony cywilnej nie trzymamy go na liście domyślnych serwerów.
+# kumi odpowiadał 500. Próbka z 17.10 jest z overpass-api.de (pobrana ponownie 17.10 ok. 21:33, 1044 obiekty).
 OVERPASS = (
     "https://overpass-api.de/api/interpreter",
     "https://overpass.kumi.systems/api/interpreter",
