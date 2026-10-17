@@ -40,7 +40,7 @@ Oznaczenie ⚠️ znaczy, że odpowiedź opiera się na czymś, co trzeba potwie
 - Liczby z `pipeline/syreny/WYNIKI.md`. Wszystkie syreny: 92,5% adresów ≥ 65 dB i 48,3% adresów ≥ 75 dB. Jeśli zabraknie prądu (przybliżenie): 91,5% i 36,6%. Zasięg 65 dB traci 1 230 adresów (wrażliwość ±1 dB: 697–1 928), więc mówimy „ok. tysiąca”, rząd wielkości.
 - Najgorszy wariant (dolne oszacowanie: tylko strefy, gdzie SOIA pokazuje syrenę cyfrową): 69,1% adresów w zasięgu 65 dB, zasięg traci 29 676 ze 126 923 adresów. Jest skrajny, bo tam, gdzie SOIA pokazuje syrenę analogową, zakłada, że nie ma żadnej syreny. Nie jest naszą główną liczbą.
 - Dlaczego przybliżenie: SOIA dzieli miasto według syreny dominującej, czyli najgłośniejszej. Tam, gdzie dominuje analogowa, nie podaje poziomu syreny cyfrowej. Przybliżenie szacuje poziom najgłośniejszej syreny cyfrowej z odległości i mocy (`pipeline/syreny/przyblizenie.py`).
-- Największy spadek adresów ≥ 75 dB: Praga-Południe 81,7% → 45,2%, Praga-Północ 85,5% → 52,6%, Żoliborz 93,0% → 64,0%, Wola 88,2% → 60,4% (`WYNIKI.md`, tabela „Dzielnice”).
+- Największy spadek adresów ≥ 75 dB: Praga-Południe 81,7% → 45,2% (−36,5 pp), Praga-Północ 85,5% → 52,6% (−32,9), Żoliborz 93,0% → 64,0% (−29,0), Wola 88,2% → 60,4% (−27,8) (`WYNIKI.md`, tabela „Dzielnice”).
 - Właściciele a rodzaj (z inwentaryzacji): wojewoda ma 233 syreny analogowe i 1 cyfrową, OSP 2 analogowe, a wszystkie 197 syren Prezydenta Miasta i 18 syren KW PSP to cyfrowe. Pytanie o zasilanie syren analogowych idzie więc do wojewody (Mazowiecki Urząd Wojewódzki), nie do miasta.
 - Syreny wojewody: opis przedmiotu zamówienia z czerwca 2024, „Przegląd techniczny 235 oraz modernizacja 40 syren alarmowych… na terenie m. st. Warszawy”. Punkt alarmowy to „syrena wirnikowa napędzana silnikiem elektrycznym 3-fazowym o mocy 4–7,5 kW”, skrzynka ze stycznikiem i sterowanie radiowe. O zasilaniu rezerwowym dokument nie mówi nic ([bip.mazowieckie.pl](https://bip.mazowieckie.pl/attachments/download/44393)).
 - Nowa syrena elektroniczna dla Warszawy (wojewoda, lipiec 2022): zasilanie 230 V i „zasilanie rezerwowe… na bazie akumulatorów” AGM, co najmniej 10 trzyminutowych alarmów w ciągu 48 godzin od zaniku prądu, zgłaszanie zaniku zasilania do centrali ([bip.mazowieckie.pl](https://bip.mazowieckie.pl/attachments/download/33459)).
@@ -78,7 +78,7 @@ Oznaczenie ⚠️ znaczy, że odpowiedź opiera się na czymś, co trzeba potwie
 
 ## 5. Dlaczego nie wystarczy gdziesieukryc.pl?
 
-> Nie konkurujemy z gdziesieukryc.pl, tylko do niego odsyłamy. Przycisk w aplikacji otwiera aplikację PSP dokładnie w miejscu, w którym jest użytkownik. Dodajemy to, czego tam nie ma: czy usłyszysz syrenę pod swoim adresem, także przy blackoucie, jak dotrzesz do bliskich, gdy stoją tramwaje i metro, oraz AED, apteki, SOR i toalety w jednym miejscu. Wszystko dla twoich adresów i bez sieci.
+> Nie konkurujemy z gdziesieukryc.pl, tylko do niego odsyłamy. Przycisk w aplikacji otwiera aplikację PSP dokładnie w miejscu, w którym jest użytkownik. Dodajemy to, czego tam nie ma: czy usłyszysz syrenę pod swoim adresem, także przy blackoucie, jak dotrzesz do bliskich pieszo albo rowerem, jeśli zabraknie prądu, a tramwaje i metro stoją, oraz AED, apteki, SOR i toalety w jednym miejscu. Wszystko dla twoich adresów i bez sieci.
 
 **Fakty w zanadrzu:**
 - Odrzuciliśmy pomysł kolejnej mapy miejsc schronienia właśnie dlatego, że gdziesieukryc.pl już istnieje (HANDOFF §2).
@@ -103,12 +103,12 @@ Oznaczenie ⚠️ znaczy, że odpowiedź opiera się na czymś, co trzeba potwie
 
 ## 7. Co z prywatnością? Wpisuję tam adres domu i przedszkola dziecka.
 
-> Adresy zostają w telefonie. Nie ma kont ani logowania. Adres wyszukujemy w telefonie, w paczce 126 923 punktów adresowych. Lokalizację z GPS bierzemy tylko wtedy, gdy sam klikniesz „Użyj mojej lokalizacji”, i zostaje w telefonie. Jedyny wyjątek to trasa po chodnikach: do jej policzenia współrzędne początku i końca idą przez nasz serwer do OSRM ⚠️, bez nazwy adresu i bez konta. Zapisane trasy są potem w telefonie, więc offline nic nie wychodzi.
+> Adresy zostają w telefonie. Nie ma kont ani logowania. Adres wyszukujemy w telefonie, w paczce 126 923 punktów adresowych. Lokalizację z GPS bierzemy tylko wtedy, gdy sam klikniesz „Użyj mojej lokalizacji”, i zostaje w telefonie. Jedyny wyjątek to trasa po chodnikach: do jej policzenia współrzędne początku i celu oraz sposób poruszania się (pieszo albo rower) idą przez nasz serwer do publicznego serwera tras OSRM, na danych OpenStreetMap. Bez konta i bez żadnego identyfikatora użytkownika. Zapisane trasy są potem w telefonie, więc offline nic nie wychodzi.
 
 **Fakty w zanadrzu:**
 - Zapisane miejsca: IndexedDB w przeglądarce (`src/app/miejsca.ts`).
 - Dane na żywo (wiatr, powietrze i inne): telefon pyta `/api/live/<źródło>` bez żadnych parametrów, a filtruje w przeglądarce (`src/offline/live-cache.ts`, `src/modules/live/Panel.tsx`).
-- Trasy (nowy przepływ, `HANDOFF-v3.md` §5): `GET /api/live/trasa?od=lon,lat&do=lon,lat&profil=…`. Współrzędne są w adresie zapytania, więc trafiają do naszego Workera, do OSRM (`routing.openstreetmap.de`) i do cache Workera (24 h). ⚠️ Przed próbą potwierdzić w kodzie (L1, V5), że proxy nie loguje zapytań i że wysyłamy tylko punkty tras, a nie ciągły ślad. Do tego czasu nie mówimy, że na serwer „nie trafia lokalizacja”.
+- Trasy (`server/live/trasa.ts`, PR #24; `HANDOFF-v3.md` §5): `GET /api/live/trasa?od=lon,lat&do=lon,lat&profil=pieszo|rower` niesie tylko współrzędne początku i celu oraz profil. Idzie przez naszego Workera do publicznego serwera OSRM `routing.openstreetmap.de` (FOSSGIS), z ogólnym User-Agent projektu. Nie ma kont ani identyfikatorów użytkownika, a klucz API miasta w ogóle nie bierze w tym udziału. Lokalizacja z GPS zostaje w przeglądarce, poza tym, że może być punktem startu trasy. Odpowiedź trafia do cache Workera na 24 h.
 - Lokalizacja z przeglądarki (V2): zgoda użytkownika w oknie przeglądarki, potem najbliższy punkt adresowy z paczki, liczony w telefonie. Na demo jest też `?lokalizacja=lat,lon`.
 - Klucz API miasta jest tylko na serwerze, nigdy w przeglądarce.
 - ⚠️ Wyszukiwanie adresów offline (moduł `adresy`, O2) nie jest jeszcze na `main`. Przed pitchem sprawdzić, że działa bez zapytań do sieci.
@@ -132,5 +132,5 @@ Krótkie odpowiedzi, gdyby jury zapytało o coś spoza listy.
 
 - **Czy to nie daje fałszywego poczucia bezpieczeństwa?** Nie nazywamy niczego „schronem”, przy każdym punkcie pokazujemy źródło i datę, a wynik syreny ma zastrzeżenie o modelu i blackoucie. Pokazujemy też, czego dane nie wiedzą (szare zadania na siatce).
 - **Dym: skąd wiecie, gdzie leci?** Nie wiemy i tak to mówimy. Aplikacja pokazuje stożek w kierunku wiatru z najbliższej stacji i pomiar PM2.5 i PM10. W aplikacji jest dopisek: „To kierunek wiatru, nie model rozprzestrzeniania się dymu”.
-- **Co działa na żywo?** Pięć źródeł: pozycje autobusów i tramwajów, wiatr, PM2.5 i PM10, Veturilo i utrudnienia w ruchu. Bez sieci aplikacja pokazuje ostatni stan z godziną.
+- **Co działa na żywo?** Wiatr i pomiary PM2.5 i PM10 (karta Powietrze i wiatr), stacje Veturilo z rowerami (karta Dotarcie do bliskich) i trasy po chodnikach z OSRM. Bez sieci aplikacja pokazuje ostatni stan z godziną, a zapisane trasy są w telefonie. Pozycje autobusów i utrudnienia mamy w kodzie, ale w tej wersji ich nie pokazujemy.
 - **Dlaczego nie aplikacja ze sklepu?** Strona otwiera się od razu z linku, bez instalacji i bez konta. Na iOS warto ją dodać do ekranu głównego, bo inaczej Safari po 7 dniach usuwa dane offline.

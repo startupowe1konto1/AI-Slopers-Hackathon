@@ -29,7 +29,7 @@ Same nagłówki czytane po kolei dają cały wywód.
 | 0:55–1:20 | 25 | Jeśli zabraknie prądu, głośnej syreny ubywa z 48,3% do 36,6% adresów | innowacyjność (25%), otwarte dane (20%) |
 | 1:20–1:40 | 20 | Zaczęliśmy od zadań mieszkańców, nie od danych | innowacyjność |
 | 1:40–2:05 | 25 | Każde zadanie połączyliśmy z danymi i widać, gdzie dane pomagają, a gdzie nie | otwarte dane Warszawy (20%) |
-| 2:05–2:30 | 25 | Sześć funkcji w jednej stronie, a to, co da się policzyć z góry, jest w telefonie | praktyczne zastosowanie (20%) |
+| 2:05–2:30 | 25 | Pięć kart w jednej stronie, a to, co da się policzyć z góry, jest w telefonie | praktyczne zastosowanie (20%) |
 | 2:30–4:05 | 95 | Aplikacja sama pokazuje, co jest ważne w tym miejscu, także gdy padnie sieć | praktyczne zastosowanie, innowacyjność |
 | 4:05–4:40 | 35 | Mieszkaniec zyskuje spokój, a miasto narzędzie na danych, które już ma | potencjał wdrożeniowy (20%) |
 | 4:40–5:00 | 20 | Działa, gdy wszystko pada | jakość prezentacji (20%) |
@@ -112,13 +112,13 @@ Liczby do slajdu (z części 6 pliku JTBD, dla 24 zadań mieszkańców): pokryci
 
 ---
 
-## 2:05–2:30 · Sześć funkcji w jednej stronie, a to, co da się policzyć z góry, jest w telefonie
+## 2:05–2:30 · Pięć kart w jednej stronie, a to, co da się policzyć z góry, jest w telefonie
 
-**Na ekranie:** sześć kafli z jednym słowem i krótkim opisem: „Syrena pod adresem”, „Punkty pomocy”, „Dojazd przy blackoucie”, „Na żywo”, „Karta do wydruku”, „Paczka offline”. Pod spodem prosty diagram: dane → paczka w telefonie (offline); API miasta → nasz serwer → telefon (na żywo).
+**Na ekranie:** sześć kafli z nazwą i krótkim opisem. Pięć to karty z ekranu „Twoja sytuacja”: „Syreny”, „Najbliższe miejsce schronienia (PSP)”, „Pomoc medyczna”, „Powietrze i wiatr”, „Dotarcie do bliskich”. Szósty kafel to „Paczka offline”. Pod spodem prosty diagram: dane → paczka w telefonie (offline); API miasta → nasz serwer → telefon (na żywo, za kartami Powietrze i wiatr oraz Dotarcie do bliskich).
 
 **Mówimy:**
 
-> Tak powstała Warszawa w trybie kryzysowym. Sześć funkcji w jednej stronie internetowej: syrena pod twoim adresem, najbliższe punkty pomocy, dojazd, gdy stoją tramwaje i metro, dane na żywo, karta do wydruku i paczka offline. Wszystko, co da się policzyć z góry, jest w telefonie. Działa, gdy wszystko pada.
+> Tak powstała Warszawa w trybie kryzysowym. Jedna strona internetowa, a po wpisaniu adresu pięć kart dopasowanych do twojej sytuacji: syreny, najbliższe miejsce schronienia według PSP, pomoc medyczna, powietrze i wiatr, dotarcie do bliskich. Za kartami są dane na żywo, a wszystko, co da się policzyć z góry, jest w telefonie. Działa, gdy wszystko pada.
 
 ---
 
