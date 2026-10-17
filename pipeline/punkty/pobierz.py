@@ -34,8 +34,13 @@ RPRM = "https://rprm.ezdrowie.gov.pl/Registry/PublicExport?" + urllib.parse.urle
     "ActionName": "Public",
     "FilterApplied": "True",
 })
-# Główny serwer i zapasowy (DECYZJE-v3 O3-1): overpass-api.de zrywa połączenia z chmury.
-OVERPASS = ("https://overpass-api.de/api/interpreter", "https://maps.mail.ru/osm/tools/overpass/api/interpreter")
+# Główny serwer i zapasowe (DECYZJE-v3 O3-1, W6): overpass-api.de zrywa połączenia z chmury,
+# kumi odpowiadał 500; dane z 17.10 są z maps.mail.ru.
+OVERPASS = (
+    "https://overpass-api.de/api/interpreter",
+    "https://overpass.kumi.systems/api/interpreter",
+    "https://maps.mail.ru/osm/tools/overpass/api/interpreter",
+)
 # Przychodnie, gabinety i szpitale w bbox Warszawy (sprawdzone 17.10: 1044 obiekty).
 ZAPYTANIE_OSM = """[out:json][timeout:120];
 (
@@ -116,10 +121,11 @@ def main(klucze: list[str]) -> None:
         plik, zadanie, przetworz = ZRODLA[k]
         zadania = zadanie()
         # Lista zapytań = kolejne serwery tego samego źródła; pierwszy, który odpowie, wygrywa.
+        # Główny dostaje 3 próby, zapasowe po jednej (W6).
         zadania = zadania if isinstance(zadania, list) else [zadania]
         for i, z in enumerate(zadania):
             try:
-                dane = _pobierz(z)
+                dane = _pobierz(z, 3 if i == 0 else 1)
                 break
             except (OSError, http.client.HTTPException):
                 if i == len(zadania) - 1:

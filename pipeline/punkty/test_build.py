@@ -105,12 +105,12 @@ def test_przychodnie_z_osm(tmp_path):
 
 
 def test_pobierz_zapasowy_serwer_overpass(tmp_path, monkeypatch):
-    # Pierwszy serwer zrywa połączenie, drugi odpowiada; ucięty wynik („remark”) jest błędem.
+    # Dwa pierwsze serwery zawodzą, trzeci odpowiada; ucięty wynik („remark”) jest błędem.
     adresy = []
 
     def pobierz_atrapa(req, proby=3):
-        adresy.append(req.full_url)
-        if req.full_url == pobierz.OVERPASS[0]:
+        adresy.append((req.full_url, proby))
+        if req.full_url != pobierz.OVERPASS[-1]:
             raise ConnectionResetError("reset")
         return b'{"elements": []}'
 
@@ -118,7 +118,7 @@ def test_pobierz_zapasowy_serwer_overpass(tmp_path, monkeypatch):
     monkeypatch.setattr(pobierz, "PROBKI", tmp_path)
     monkeypatch.setattr(pobierz, "POBRANO", tmp_path / "pobrano.json")
     pobierz.main(["osm-przychodnie"])
-    assert adresy == list(pobierz.OVERPASS)
+    assert adresy == list(zip(pobierz.OVERPASS, (3, 1, 1)))
     assert json.loads((tmp_path / "osm-przychodnie.json").read_text()) == {"elements": []}
     assert "osm-przychodnie" in json.loads((tmp_path / "pobrano.json").read_text())
     with pytest.raises(ValueError):
