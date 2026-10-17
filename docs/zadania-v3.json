@@ -97,7 +97,7 @@
       "docs/pitch/zrzuty/ (nowy zrzut)",
       "docs/pitch/zrzuty.md"
     ],
-    "czlowiek": "O1 o pełnych godzinach uruchamia npm run test:e2e na main i zgłasza błędy (proponowane: GitHub issue zamiast kanału). Po scaleniu obejrzeć wygląd ekranu na telefonie.",
+    "czlowiek": "Po scaleniu obejrzeć wygląd ekranu na telefonie.",
     "konflikty": [
       "L4b (docs/pitch/zrzuty.md, docs/pitch/zrzuty/)"
     ]
@@ -144,7 +144,9 @@
     "galaz": "o1/v6-sciezka-kasi",
     "po": [
       "V4",
-      "V5b",
+      "V5b"
+    ],
+    "miekkie": [
       "S1",
       "P2",
       "P3",
@@ -248,7 +250,7 @@
       "public/pack/punkty/meta.json",
       "public/pack/manifest.json"
     ],
-    "czlowiek": "Człowiek lokalnie (sieć z dostępem do Overpass; katalog z dane/psp-schronienia/): uv run --project pipeline python pipeline/punkty/pobierz.py osm-przychodnie; potem pipeline/punkty/build.py, pipeline/build_manifest.py, pipeline/validate.py; commit dane/probki/osm-przychodnie.json i public/pack/*. Agent w chmurze tego nie zrobi: Overpass go nie obsługuje, a surowy CSV z PSP jest poza gitem.",
+    "czlowiek": "Człowiek lokalnie (sieć z dostępem do Overpass; katalog z dane/psp-schronienia/): uv run --project pipeline python pipeline/punkty/pobierz.py osm-przychodnie; uv run --project pipeline python pipeline/punkty/build.py; uv run --project pipeline python pipeline/build_manifest.py; uv run --project pipeline python pipeline/validate.py; commit dane/probki/osm-przychodnie.json i public/pack/*. Agent w chmurze tego nie zrobi: Overpass go nie obsługuje, a surowy CSV z PSP jest poza gitem.",
     "konflikty": [
       "S2a (public/pack/manifest.json)"
     ]
@@ -382,7 +384,7 @@
       "docs/DOKUMENTACJA.md",
       "HANDOFF.md (tylko liczby, za zgodą O1)"
     ],
-    "czlowiek": "O1 decyduje o zmianie HANDOFF.md (tylko liczby, linie 105 i 202; propozycja jest w opisie PR #29). Jeśli prezentacja końcowa to .pptx poza repo, ktoś podmienia w niej liczby ręcznie.",
+    "czlowiek": null,
     "konflikty": []
   },
   {

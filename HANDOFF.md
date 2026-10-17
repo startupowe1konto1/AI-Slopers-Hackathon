@@ -102,7 +102,7 @@ Przegląd konkurencji: Ukraina, Izrael, kraje nordyckie i bałtyckie, Niemcy, Sz
 Analiza: `dane/soia-warszawa/analiza/` (skrypt `syreny_blackout.py`, mapa PNG, tabele CSV, GeoJSON).
 
 - **Wszystkie syreny:** 92,5% ze 126 923 punktów adresowych Warszawy jest w zasięgu co najmniej 65 dB(A).
-- **Przybliżenie blackoutu** (`pipeline/syreny/WYNIKI.md`): głośnej syreny (≥ 75 dB) ubywa z 48,3% do 36,6% adresów, zasięg ≥ 65 dB spada z 92,5% do 91,5% (ok. tysiąca adresów traci zasięg). Najgorszy wariant: 69,1%, 29 676 adresów. Założenie: syreny analogowe nie działają bez prądu, do weryfikacji.
+- **Przybliżenie blackoutu** (`pipeline/syreny/WYNIKI.md`): głośnej syreny (≥ 75 dB) ubywa z 48,3% do 36,6% adresów, zasięg ≥ 65 dB spada z 92,5% do 91,5% (ok. tysiąca adresów traci zasięg). Najgorszy wariant: zasięg zostaje dla 69,1% adresów, 29 676 adresów go traci. Jeśli syreny analogowe nie działają bez prądu, takie byłyby skutki; założenie do weryfikacji.
 - **Największy spadek głośnej syreny (≥ 75 dB):** Praga-Południe 81,7% → 45,2%, Praga-Północ 85,5% → 52,6%, Żoliborz 93,0% → 64,0%, Wola 88,2% → 60,4%.
 - **W Warszawie jest 451 syren:** 235 analogowych, 216 cyfrowych. Właściciele: wojewoda 234, Prezydent Miasta 197.
 - **Zastrzeżenia, które trzeba mówić wprost:**
