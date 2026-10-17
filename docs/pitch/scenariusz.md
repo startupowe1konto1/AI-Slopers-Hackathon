@@ -116,7 +116,7 @@ Jeśli ktoś dopyta o najgorszy wariant: „Gdybyśmy wyrzucili wszystkie strefy
 
 Liczby liczy slajd z `dane.js`: zadanie z co najmniej jednym zbiorem w paczce to „w telefonie”, zadanie tylko ze zbiorami na żywo to „na żywo”, zadanie bez zbiorów to szare. Połączenia zadań ze zbiorami: `build_dane.py`, słownik `ZADANIA` (na podstawie kolumny „Dane” w pliku JTBD; zadanie 1 przestawione na SOIA, zadanie 2 na dane PSP, bo analiza powstała przed pozyskaniem obu źródeł).
 
-Uwaga: podział pochodzi z analizy zadań, nie z listy funkcji wersji 3. Karta „Na żywo” wymienia m.in. utrudnienia w ruchu, a aplikacja v3 ich nie pokazuje (`HANDOFF-v3.md` §4). Gdy jury zapyta, mówimy, że to analiza zadań i danych, a pokazane funkcje to pięć kart.
+Uwaga: podział pochodzi z analizy zadań, nie z listy funkcji wersji 3. Wśród 5 zbiorów na żywo z analizy są też utrudnienia i pozycje pojazdów ZTM, których aplikacja v3 nie pokazuje (`HANDOFF-v3.md` §4). Karta „Na żywo” jako przykłady podaje tylko zbiory obecne w aplikacji: pogodę i wiatr, jakość powietrza i Veturilo. Gdy jury zapyta, mówimy, że to analiza zadań i danych, a pokazane funkcje to pięć kart.
 
 **Mówimy:**
 

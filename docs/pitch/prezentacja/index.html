@@ -543,7 +543,7 @@ mark { background: linear-gradient(transparent 62%, var(--zolty) 62%, var(--zolt
 
   <!-- 8. Na jakich danych stoimy -->
   <section class="slajd" data-kroki="0" id="s-dane"
-    data-notatka="Na czym to stoi. Sześć zbiorów to otwarte dane miasta z portalu dane.um.warszawa.pl, miejskiego API i WFS: defibrylatory, toalety, pogoda i wiatr, jakość powietrza, punkty adresowe i apteki. Do tego dane PSP: miejsca schronienia i syreny SOIA, oraz inne otwarte źródła: OpenStreetMap z trasami OSRM, rejestr SOR, rozkład GTFS i Veturilo. Wszystko, co da się policzyć z góry, trafia do paczki w telefonie. Pogoda, powietrze, rowery i trasy idą na żywo przez nasz serwer, który trzyma klucz do API miasta. Z tego powstaje pięć kart, czyli odpowiedzi na pytania mieszkańca.">
+    data-notatka="Stoimy na otwartych danych. Sześć zbiorów to dane Warszawy, z API i WFS miasta: między innymi defibrylatory, pogoda, powietrze i punkty adresowe. Do tego PSP: miejsca schronienia i syreny. Co da się policzyć z góry, jest w telefonie, resztę bierzemy na żywo.">
     <h2 class="tytul" style="font-size:52px">Na jakich danych stoimy</h2>
     <div class="diagram" id="diagram">
       <svg class="laczniki" id="laczniki" viewBox="0 0 1376 626" aria-hidden="true"></svg>
@@ -615,7 +615,7 @@ mark { background: linear-gradient(transparent 62%, var(--zolty) 62%, var(--zolt
   </section>
   <!-- 9. Dzień Kasi: demo w telefonie (telefon.js) -->
   <section class="slajd" data-kroki="0" id="s-kasia"
-    data-notatka="Pokażę to na Kasi. Jest u mamy na Grochowie. | TUTAJ: Kasia klika „Tutaj”, aplikacja bierze jej lokalizację. | POŁĄCZENIE: aplikacja sprawdza połączenie: „Jest połączenie. Dane na żywo włączone. Trasy na offline zapisuję w tle.” | KARTA SYRENY: pierwsza karta mówi, czy usłyszy alarm, i pokazuje okręgi najbliższych syren. Jeśli zabraknie prądu, a syreny analogowe nie mają zasilania awaryjnego, może być ciszej. | MIEJSCE SCHRONIENIA: najbliższe miejsce schronienia według PSP, trasa piesza po ulicach i przycisk do aplikacji PSP. | POZOSTAŁE KARTY: pomoc medyczna, powietrze i wiatr, dotarcie do bliskich. Każda mówi, co robić, a nie tylko pokazuje dane. | BRAK SIECI: padła sieć. „Offline · paczka z 17.10” i ta sama trasa, zapisana w telefonie.">
+    data-notatka="Pokażę to na Kasi. Jest u mamy na Grochowie i otwiera aplikację, a ta sprawdza połączenie. | 1–2 POŁĄCZENIE I TUTAJ: jest sieć, więc dane na żywo działają, a trasy na wypadek braku sieci zapisują się w tle. Kasia dotyka „Tutaj” i dostaje pięć kart dla miejsca, w którym stoi. | 3 SYRENY: okręgi najbliższych syren, czy Kasia usłyszy alarm i co zrobić. Jeśli zabraknie prądu, a syreny analogowe nie mają zasilania awaryjnego, może być ciszej. | 4 MIEJSCE SCHRONIENIA: najbliższe według PSP, 70 metrów, trasa piesza po ulicach, przycisk do aplikacji PSP. | 5–6 POZOSTAŁE KARTY: powietrze i wiatr, czyli rekomendacja, a nie tabela. Dotarcie do bliskich: pieszo, rowerem, najbliższe Veturilo, bo jeśli zabraknie prądu, tramwaje i metro stoją. | 7–9 BRAK SIECI: pada sieć, Kasia odświeża, pasek „Offline · paczka z 17.10”, karty działają i ta sama trasa jest zapisana w telefonie. Działa, gdy wszystko pada.">
     <div id="demo-kasi"></div>
   </section>
 
