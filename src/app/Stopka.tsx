@@ -26,8 +26,9 @@ export function Stopka() {
           <li key={z.nazwa}>
             <a href={z.url} target="_blank" rel="noreferrer">
               {z.nazwa}
-            </a>{' '}
-            ({z.licencja}, pobrano {data(z.pobrano)})
+            </a>
+            {/* Bez nawiasu wokół licencji: nazwy i licencje źródeł mają własne nawiasy. */}
+            {` · ${z.licencja}, pobrano ${data(z.pobrano)}`}
           </li>
         ))}
       </ul>

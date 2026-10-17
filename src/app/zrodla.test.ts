@@ -23,4 +23,9 @@ describe('zrodlaDoStopki', () => {
     expect(z.filter((x) => x.nazwa === STALE_ZRODLA[1].nazwa)).toHaveLength(1);
     expect(z.at(-1)?.nazwa).toBe('m.st. Warszawa, defibrylatory AED');
   });
+
+  it('SOIA z paczki pod inną nazwą nie dubluje pełnej atrybucji ze stałych', () => {
+    const z = zrodlaDoStopki(manifest({ soia: { ...STALE_ZRODLA[1], nazwa: 'KG PSP, SOIA, wersja danych 2026.05; przycięte do granic m.st. Warszawy' } }));
+    expect(z).toEqual(STALE_ZRODLA);
+  });
 });

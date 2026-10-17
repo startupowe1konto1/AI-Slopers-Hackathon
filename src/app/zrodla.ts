@@ -34,12 +34,15 @@ export const STALE_ZRODLA: Zrodlo[] = [
   },
 ];
 
+// Źródła z manifestu, które stałe atrybucje już opisują pełniej (SOIA: przycięcie i źródła składowe, wymóg CC BY).
+const W_STALYCH = new Set(['soia']);
+
 // Stałe atrybucje + źródła z manifestu paczki, bez powtórzeń nazw.
 export function zrodlaDoStopki(manifest: Manifest | null): Zrodlo[] {
   const wynik = [...STALE_ZRODLA];
   const nazwy = new Set(wynik.map((z) => z.nazwa));
-  for (const z of Object.values(manifest?.zrodla ?? {})) {
-    if (!nazwy.has(z.nazwa)) {
+  for (const [klucz, z] of Object.entries(manifest?.zrodla ?? {})) {
+    if (!W_STALYCH.has(klucz) && !nazwy.has(z.nazwa)) {
       nazwy.add(z.nazwa);
       wynik.push(z);
     }
