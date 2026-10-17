@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, expect, it, vi } from 'vitest';
-import { act, cleanup, render, screen } from '@testing-library/react';
+import { act, cleanup, render, screen, waitFor } from '@testing-library/react';
 import type { Pojazd, StanLive, Wiatr } from '../../contracts';
 import { fetchLive } from '../../offline/live-cache';
 import { ustawPojazdy } from './warstwy';
@@ -41,7 +41,8 @@ it('pokazuje pojazdy do 1 km, ich linie i godzinę stanu, a na mapę przekazuje 
   expect(await screen.findByText('Autobusy: 1 · Tramwaje: 2')).toBeTruthy();
   expect(screen.getByText('Linie: 9, 22, 128')).toBeTruthy();
   expect(screen.getAllByText('Stan na 14:56').length).toBeGreaterThan(0);
-  expect(vi.mocked(ustawPojazdy).mock.calls.at(-1)?.[0].map((p) => p.linia)).toEqual(['9', '128', '22']);
+  // efekt przekazujący pojazdy na mapę może ruszyć chwilę po pojawieniu się tekstu
+  await waitFor(() => expect(vi.mocked(ustawPojazdy).mock.calls.at(-1)?.[0].map((p) => p.linia)).toEqual(['9', '128', '22']));
 });
 
 it('wiatr z najbliższej stacji: skąd wieje, prędkość i stacja', async () => {
