@@ -1,6 +1,6 @@
 import { Popup, type ExpressionSpecification, type GeoJSONSource, type Map as MapLibreMap, type MapLayerMouseEvent, type Subscription } from 'maplibre-gl';
 import type { FeatureCollection } from 'geojson';
-import type { Manifest, Punkt } from '../../contracts';
+import type { Manifest, Punkt, RodzajPunktu } from '../../contracts';
 import { wczytajPunkty, zrodlaPaczki } from './najblizsze';
 import { RODZAJE } from './rodzaje';
 import { sluchajOdcinka, type Odcinek } from './trasa';
@@ -108,5 +108,64 @@ export function dodajWarstwy(map: MapLibreMap): () => void {
     subskrypcje.forEach((s) => s.unsubscribe());
     WARSTWY.forEach((id) => map.getLayer(id) && map.removeLayer(id));
     [ODCINEK, PSP, INNE].forEach((id) => map.getSource(id) && map.removeSource(id));
+  };
+}
+
+// Kafelek (P4): warstwa jednego rodzaju punktów. PSP (ok. 8 tys.) w klastrach, reszta pojedynczo.
+export function dodajWarstweRodzaju(map: MapLibreMap, rodzaj: RodzajPunktu): () => void {
+  let aktywne = true;
+  const id = `punkty-${rodzaj}`;
+  const klastry = rodzaj === 'schronienie_psp';
+  const warstwy = klastry ? [`${id}-klastry`, `${id}-liczba`, `${id}-punkty`] : [`${id}-punkty`];
+  const subskrypcje: Subscription[] = [];
+
+  Promise.all([wczytajPunkty(), zrodlaPaczki().catch(() => ({}))])
+    .then(([punkty, zrodla]) => {
+      if (!aktywne) return;
+      map.addSource(id, { type: 'geojson', data: kolekcja(punkty.filter((p) => p.rodzaj === rodzaj)), ...(klastry ? { cluster: true, clusterRadius: 40 } : {}) });
+      if (klastry) {
+        map.addLayer({
+          id: warstwy[0],
+          type: 'circle',
+          source: id,
+          filter: ['has', 'point_count'],
+          paint: { 'circle-color': '#b91c1c', 'circle-opacity': 0.85, 'circle-radius': ['step', ['get', 'point_count'], 14, 50, 18, 500, 24] },
+        });
+        map.addLayer({
+          id: warstwy[1],
+          type: 'symbol',
+          source: id,
+          filter: ['has', 'point_count'],
+          layout: { 'text-field': ['get', 'point_count_abbreviated'], 'text-font': ['Noto Sans Medium'], 'text-size': 12 },
+          paint: { 'text-color': '#ffffff' },
+        });
+      }
+      map.addLayer({
+        id: `${id}-punkty`,
+        type: 'circle',
+        source: id,
+        ...(klastry ? { filter: ['!', ['has', 'point_count']] as ExpressionSpecification } : {}),
+        paint: { 'circle-color': kolor, 'circle-radius': 6, 'circle-stroke-color': '#ffffff', 'circle-stroke-width': 1.5 },
+      });
+      subskrypcje.push(map.on('click', `${id}-punkty`, (e) => popup(map, e, zrodla)));
+      if (klastry) {
+        subskrypcje.push(
+          map.on('click', warstwy[0], async (e) => {
+            const f = e.features?.[0];
+            if (!f || f.geometry.type !== 'Point') return;
+            const zoom = await map.getSource<GeoJSONSource>(id)?.getClusterExpansionZoom(f.properties.cluster_id);
+            map.easeTo({ center: f.geometry.coordinates as [number, number], zoom });
+          }),
+        );
+      }
+    })
+    // bez paczki kafelek nic nie rysuje; karty pokazują błąd źródła
+    .catch(() => {});
+
+  return () => {
+    aktywne = false;
+    subskrypcje.forEach((s) => s.unsubscribe());
+    warstwy.forEach((l) => map.getLayer(l) && map.removeLayer(l));
+    if (map.getSource(id)) map.removeSource(id);
   };
 }
