@@ -1,4 +1,4 @@
-import type { Adres } from '../../contracts';
+import type { Adres, Wsp } from '../../contracts';
 
 // Format kolumnowy public/pack/adresy/adresy.json (O2-B1). Wiersz i = adres i.
 export type PaczkaAdresow = {
@@ -41,4 +41,21 @@ export function szukaj(p: PaczkaAdresow, q: string, limit: number): Adres[] {
   wynik.sort((a, b) => Number(p.nr[b].toLowerCase() === numer) - Number(p.nr[a].toLowerCase() === numer)
     || porownajNumery(p.nr[a], p.nr[b]));
   return wynik.slice(0, limit).map((i) => adres(p, i));
+}
+
+// Najbliższy punkt adresowy w rzucie równoodległościowym (wystarcza w skali miasta) albo -1, gdy dalej niż maksM.
+export function najblizszyIndeks(p: PaczkaAdresow, w: Wsp, maksM = 1000): number {
+  const kx = Math.cos((w.lat * Math.PI) / 180);
+  let naj = -1;
+  let najD = Infinity;
+  for (let i = 0; i < p.lat.length; i++) {
+    const dx = (p.lon[i] - w.lon) * kx;
+    const dy = p.lat[i] - w.lat;
+    const d = dx * dx + dy * dy;
+    if (d < najD) {
+      najD = d;
+      naj = i;
+    }
+  }
+  return naj >= 0 && Math.sqrt(najD) * 111_195 <= maksM ? naj : -1;
 }
