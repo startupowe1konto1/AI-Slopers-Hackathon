@@ -18,6 +18,18 @@ def test_psp_z_eksportu():
     assert (p["nazwa"], p["lat"], p["lon"], p["zrodlo"]) == ("ul. Wilanowska 8H, Józefosław", 52.09778, 21.04373, "psp")
     assert "adres" not in p  # adres jest nazwą: dane PSP nie mają nazw obiektów
     assert not any(p["nazwa"].startswith("ulica ") for p in s)
+    assert not any(p["nazwa"].startswith(("ul. Alej", "al. Alej")) for p in s)
+
+
+def test_nazwa_psp_bez_podwojnego_przedrostka():
+    # PSP pisze „ul. Aleje Jerozolimskie” i „al. Aleje …”; „Aleje” już mówią, czym jest ulica.
+    assert zrodla.nazwa_psp("ul. Aleje Jerozolimskie 200, Warszawa") == "Aleje Jerozolimskie 200, Warszawa"
+    assert zrodla.nazwa_psp("al. Aleje Jerozolimskie 107, Ochota") == "Aleje Jerozolimskie 107, Ochota"
+    assert zrodla.nazwa_psp("ulica Aleje Ujazdowskie 1") == "Aleje Ujazdowskie 1"
+    assert zrodla.nazwa_psp("ulica  Grochowska 5,  Warszawa") == "ul. Grochowska 5, Warszawa"
+    assert zrodla.nazwa_psp("ul. Wilanowska 8H, Józefosław") == "ul. Wilanowska 8H, Józefosław"
+    assert zrodla.nazwa_psp("Aleja Krakowska 1") == "Aleja Krakowska 1"
+    assert zrodla.nazwa_psp("") == "Miejsce schronienia według PSP"
 
 
 def test_sor_z_probki():

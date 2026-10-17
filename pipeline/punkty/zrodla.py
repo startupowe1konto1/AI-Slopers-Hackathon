@@ -27,13 +27,19 @@ def _tekst(t: str | None) -> str:
     return " ".join((t or "").split())
 
 
+def nazwa_psp(adres: str) -> str:
+    """Adres z eksportu PSP jako nazwa: „ulica X” → „ul. X”, a „ul. Aleje X” i „al. Aleje X” → „Aleje X”."""
+    t = re.sub(r"^ulica ", "ul. ", _tekst(adres))
+    return re.sub(r"^(?:ul\.|al\.) (?=Alej[ae] )", "", t) or "Miejsce schronienia według PSP"
+
+
 def psp(plik: Path = PSP) -> list[dict]:
     """Miejsca schronienia według PSP. Dane są zanonimizowane (bez nazw obiektów), więc nazwą jest adres."""
     with open(plik, encoding="utf-8-sig") as f:
         return [
             _punkt(
                 id=f"psp-{x['id_publiczny']}", rodzaj="schronienie_psp",
-                nazwa=re.sub(r"^ulica ", "ul. ", _tekst(x["adres"])) or "Miejsce schronienia według PSP",
+                nazwa=nazwa_psp(x["adres"]),
                 dostepnosc=x["dostepnosc"], lat=float(x["lat"]), lon=float(x["lon"]), zrodlo="psp",
             )
             for x in csv.DictReader(f)

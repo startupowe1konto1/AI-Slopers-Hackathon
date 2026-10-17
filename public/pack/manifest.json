@@ -1,6 +1,6 @@
 {
- "wersja": "2026-10-17T21:33",
- "zbudowano": "2026-10-17T21:33:50+00:00",
+ "wersja": "2026-10-17T22:26",
+ "zbudowano": "2026-10-17T22:26:19+00:00",
  "pliki": [
   {
    "sciezka": "adresy/adresy.json",
@@ -19,7 +19,7 @@
   },
   {
    "sciezka": "punkty/punkty.json",
-   "bajty": 2115790,
+   "bajty": 2114902,
    "modul": "punkty"
   },
   {
