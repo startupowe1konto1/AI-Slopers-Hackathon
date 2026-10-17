@@ -1,3 +1,4 @@
+import type { Trasa } from '../../src/contracts';
 import { BladPortalu, blad } from '../portal';
 
 // Publiczne serwery OSRM FOSSGIS (routing.openstreetmap.de); jeden profil na serwer, „driving” w ścieżce to stała nazwa.
@@ -13,9 +14,7 @@ const DOBA_S = 86_400;
 const TIMEOUT_MS = 8000;
 const LICZBA = /^-?\d+(\.\d+)?$/;
 
-// TODO po scaleniu V1 (typ `Trasa` w src/contracts.ts): zamienić na
-// `export type OdpowiedzTrasy = Pick<Trasa, 'dystansM' | 'czasMin' | 'linia'>;`
-export type OdpowiedzTrasy = { dystansM: number; czasMin: number; linia: [number, number][] };
+export type OdpowiedzTrasy = Pick<Trasa, 'dystansM' | 'czasMin' | 'linia'>;
 type Osrm = { code: string; routes?: { distance: number; duration: number; geometry: { coordinates: [number, number][] } }[] };
 
 // „lon,lat” (dokładnie dwie liczby) w bbox Warszawy → „lon,lat” z 5 miejscami (ok. 1 m; te same trasy trafiają w cache) albo null.
