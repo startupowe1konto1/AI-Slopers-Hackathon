@@ -35,12 +35,24 @@ Adres slajdu jest w pasku adresu (`#4.1` to slajd 4, krok 1), więc po odśwież
 
 W ramce działa prawdziwa aplikacja: `https://warszawa-kryzys.startupaplikujmy.workers.dev/`. Inny adres podaje się w parametrze, np. `?app=http://localhost:5173/`.
 
-Przed pitchem:
-1. Otwórz prezentację z `?edycja=1`. Wtedy prezentacja nie zabiera fokusu z telefonu i da się wpisywać.
-2. W telefonie na slajdzie 8 wpisz adresy Kasi (scenariusz, tabela adresów) i pobierz paczkę offline.
-3. Otwórz prezentację jeszcze raz, bez `?edycja=1`. Po kliknięciu w telefon fokus wraca do prezentacji po 3 s, więc pilot dalej działa.
+Adresów Kasi nie da się wpisać do telefonu z prezentacji automatycznie. Aplikacja jest w ramce z innej domeny, a przeglądarka nie pozwala stronie zapisywać danych (IndexedDB) w ramce z innej domeny. Dlatego adresy wpisujemy raz, ręcznie, przed pitchem:
 
-Przeglądarka trzyma dane ramki osobno dla adresu prezentacji. Adresy wpisane w zwykłej karcie aplikacji nie pojawią się w telefonie na slajdzie, i odwrotnie.
+1. Otwórz prezentację z `?edycja=1`, np. http://127.0.0.1:8765/?edycja=1#8.0. Na slajdzie 8 pojawi się czarna ramka z instrukcją i adresami. Prezentacja nie zabiera wtedy fokusu z telefonu, więc da się wpisywać.
+2. W telefonie wpisz adresy Kasi (wyszukiwanie po ulicy) i zapisz:
+
+   | Rola | Adres |
+   |---|---|
+   | dom | ul. Powstańców Śląskich 10, Bemowo |
+   | praca | rondo Ignacego Daszyńskiego 1, Wola |
+   | bliska osoba | ul. Grochowska 200, Praga-Południe |
+
+   To adresy testowe aplikacji. Dopóki O2 nie scali wyszukiwania w pełnej paczce, aplikacja zna tylko te trzy.
+3. Pobierz paczkę offline w telefonie.
+4. Otwórz prezentację jeszcze raz pod tym samym adresem, ale bez `?edycja=1`. Po kliknięciu w telefon fokus wraca do prezentacji po 3 s, więc pilot dalej działa.
+
+Przeglądarka zapamiętuje dane ramki osobno dla każdego adresu prezentacji. Na pitchu otwieraj ją zawsze tak samo (ten sam laptop, ta sama przeglądarka, ten sam adres, np. http://127.0.0.1:8765/). Adresy wpisane w zwykłej karcie aplikacji nie pojawią się w telefonie na slajdzie, i odwrotnie.
+
+Jeśli telefon nie zadziała na sali: zrzuty ekranu aplikacji są w `docs/pitch/zrzuty/`, a druga karta z `?offline=1` to zapas.
 
 ## Dane wykresów
 

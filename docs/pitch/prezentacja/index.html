@@ -220,6 +220,15 @@ body.ciemno { background: var(--noc); }
 .stan-sieci { font-size: 19px; color: var(--tusz-2); display: flex; gap: 14px; align-items: center; }
 .stan-sieci .przelacznik { margin: 0; font-size: 18px; padding: 8px 18px 8px 10px; }
 
+.przygotowanie { position: absolute; left: 112px; top: 64px; width: 860px; background: var(--tusz); color: var(--papier); border-radius: 12px; padding: 28px 32px; font-size: 20px; line-height: 1.45; z-index: 5; }
+.przygotowanie[hidden] { display: none; }
+.przygotowanie h3 { font-stretch: 78%; font-weight: 750; font-size: 30px; margin-bottom: 10px; }
+.przygotowanie ol { margin: 10px 0 0 22px; display: grid; gap: 6px; }
+.przygotowanie table { border-collapse: collapse; margin-top: 12px; width: 100%; }
+.przygotowanie td { padding: 4px 12px 4px 0; vertical-align: top; }
+.przygotowanie td:first-child { color: var(--brak); width: 130px; }
+.przygotowanie .uwaga { color: var(--brak); font-size: 17px; margin-top: 12px; }
+
 /* 9: wartość */
 .kolumny { display: grid; grid-template-columns: 1fr 1fr; gap: 72px; margin-top: 56px; }
 .kolumny h3 { font-stretch: 78%; font-weight: 750; font-size: 40px; }
@@ -346,13 +355,27 @@ body.ciemno .nawig { color: var(--noc-2); }
 
   <!-- 8. Dzień Kasi -->
   <section class="slajd" data-kroki="6" id="s-kasia"
-    data-notatka="Pokażę to na Kasi. Mieszka na Bemowie, pracuje przy rondzie Daszyńskiego, syn chodzi do przedszkola, a mama mieszka sama na Grochowie. | PRZED: Kasia raz wpisuje cztery adresy i pobiera paczkę. Od razu widzi, że syrenę w domu słychać, ale przy blackoucie może jej nie usłyszeć. Dostaje kroki: włączyć Alert RCB, zainstalować RSO, umówić się z sąsiadem. I kartę do wydruku. | ALARM: Kasia jest w pracy. Telefon pokazuje najbliższe miejsca schronienia według PSP i wejścia do metra, z odległością. Jednym przyciskiem otwiera oficjalną aplikację PSP. | UDERZENIE: widzi, skąd wieje wiatr i w którą stronę może iść dym, a obok pomiar powietrza. Ma pod ręką najbliższy defibrylator i SOR. | POWRÓT: Tramwaje stoją, więc aplikacja pokazuje autobusy z przystanku przy pracy, które dojeżdżają w pobliże przedszkola. I to, co naprawdę jeździ teraz w okolicy. | BLACKOUT: Wieczorem pada sieć. [klik: wyłącz sieć] Aplikacja dalej działa: syrena, punkty pomocy, dojazd. Dane na żywo pokazują ostatni stan z godziną. Toalety i apteki są na mapie.">
+    data-notatka="[PRZYGOTOWANIE przed pitchem: otwórz prezentację z ?edycja=1, na tym slajdzie wpisz w telefonie adresy Kasi i pobierz paczkę offline.] Pokażę to na Kasi. Mieszka na Bemowie, pracuje przy rondzie Daszyńskiego, syn chodzi do przedszkola, a mama mieszka sama na Grochowie. | PRZED: Kasia raz wpisuje adresy i pobiera paczkę. Od razu widzi, że w domu syrenę usłyszy nawet przy blackoucie, ale w pracy i u mamy na Grochowie może jej wtedy nie usłyszeć. Dostaje kroki: włączyć Alert RCB, zainstalować RSO, umówić się z sąsiadem. I kartę do wydruku. | ALARM: Kasia jest w pracy. Telefon pokazuje najbliższe miejsca schronienia według PSP i wejścia do metra, z odległością. Jednym przyciskiem otwiera oficjalną aplikację PSP. | UDERZENIE: widzi, skąd wieje wiatr i w którą stronę może iść dym, a obok pomiar powietrza. Ma pod ręką najbliższy defibrylator i SOR. | POWRÓT: Tramwaje stoją, więc aplikacja pokazuje autobusy z przystanku przy pracy, które dojeżdżają w pobliże przedszkola. I to, co naprawdę jeździ teraz w okolicy. | BLACKOUT: Wieczorem pada sieć. [klik: wyłącz sieć] Aplikacja dalej działa: syrena, punkty pomocy, dojazd. Dane na żywo pokazują ostatni stan z godziną. Toalety i apteki są na mapie.">
+    <div class="przygotowanie" id="przygotowanie" hidden>
+      <h3>Przygotowanie telefonu przed pitchem</h3>
+      <ol>
+        <li>W telefonie obok wpisz adresy Kasi (wyszukaj po ulicy) i zapisz.</li>
+        <li>Pobierz paczkę offline.</li>
+        <li>Otwórz prezentację jeszcze raz, pod tym samym adresem, ale bez <code>?edycja=1</code>.</li>
+      </ol>
+      <table>
+        <tr><td>Dom</td><td>ul. Powstańców Śląskich 10, Bemowo</td></tr>
+        <tr><td>Praca</td><td>rondo Ignacego Daszyńskiego 1, Wola</td></tr>
+        <tr><td>Bliska osoba</td><td>ul. Grochowska 200, Praga-Południe</td></tr>
+      </table>
+      <p class="uwaga">Przeglądarka zapamiętuje te adresy tylko dla prezentacji otwartej spod tego samego adresu (np. zawsze http://127.0.0.1:8765/). Adresy wpisane w zwykłej karcie aplikacji tu się nie pojawią.</p>
+    </div>
     <div class="kasia">
       <div>
         <h2 class="tytul" style="font-size:56px">Dzień Kasi</h2>
         <p class="wstep">Mieszka na Bemowie, pracuje przy rondzie Daszyńskiego. Syn chodzi do przedszkola na Bemowie, mama mieszka sama na Grochowie.</p>
         <ol class="etapy" id="etapy">
-          <li><div role="button" tabindex="0" class="etap" data-etap="1"><span class="kiedy">Przed kryzysem</span><span class="problem">Czy usłyszę alarm?</span><span class="szczegol"><span class="w"><p>Cztery adresy i paczka offline. Wynik syreny normalnie i przy blackoucie, kroki: Alert RCB, RSO, umowa z sąsiadem. Karta do wydruku.</p><p class="wartosc">Wie zawczasu i ma plan na papierze.</p></span></span></div></li>
+          <li><div role="button" tabindex="0" class="etap" data-etap="1"><span class="kiedy">Przed kryzysem</span><span class="problem">Czy usłyszę alarm?</span><span class="szczegol"><span class="w"><p>Adresy i paczka offline. W domu syrenę słychać także przy blackoucie, w pracy i u mamy już nie. Kroki: Alert RCB, RSO, umowa z sąsiadem. Karta do wydruku.</p><p class="wartosc">Wie zawczasu i ma plan na papierze.</p></span></span></div></li>
           <li><div role="button" tabindex="0" class="etap" data-etap="2"><span class="kiedy">Alarm, 0–15 min</span><span class="problem">Gdzie się schować?</span><span class="szczegol"><span class="w"><p>Najbliższe miejsca schronienia według PSP i wejścia do metra, z odległością. Przycisk „Otwórz w aplikacji PSP”.</p><p class="wartosc">Nie szuka w panice.</p></span></span></div></li>
           <li><div role="button" tabindex="0" class="etap" data-etap="3"><span class="kiedy">Uderzenie, 15–60 min</span><span class="problem">Czy dym idzie na mnie?</span><span class="szczegol"><span class="w"><p>Kierunek wiatru i pomiar powietrza z najbliższej stacji. Najbliższy defibrylator i SOR.</p><p class="wartosc">Wie, gdzie jest pomoc medyczna.</p></span></span></div></li>
           <li><div role="button" tabindex="0" class="etap" data-etap="4"><span class="kiedy">Powrót, 1–6 h</span><span class="problem">Jak dotrę do syna?</span><span class="szczegol"><span class="w"><p>Autobusy z przystanku przy pracy, które dojeżdżają w pobliże przedszkola. Co naprawdę jeździ teraz w okolicy.</p><p class="wartosc">Dociera do bliskich bez tramwaju i metra.</p></span></span></div></li>
@@ -659,6 +682,7 @@ body.ciemno .nawig { color: var(--noc-2); }
   // Pilot wysyła klawisze do okna z fokusem. Po kliknięciu w telefon fokus wraca do prezentacji po 3 s,
   // chyba że prezentacja jest otwarta z ?edycja=1 (np. żeby wpisać adresy Kasi w telefonie przed pitchem).
   const edycja = new URLSearchParams(location.search).has('edycja');
+  document.getElementById('przygotowanie').hidden = !edycja;
   let zwrot = null;
   addEventListener('blur', () => {
     if (edycja) return;
