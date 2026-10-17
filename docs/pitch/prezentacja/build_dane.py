@@ -1,22 +1,24 @@
-"""Buduje dane.js dla prezentacji: ścieżki SVG mapy syren, macierz JTBD i siatkę zadań z danymi.
+"""Buduje dane.js dla prezentacji: paski i mapę głośności syren, macierz JTBD i siatkę zadań z danymi.
 
 Uruchom z katalogu repozytorium:  python -I docs/pitch/prezentacja/build_dane.py
-Tylko biblioteka standardowa. Źródła: dane/soia-warszawa/, dane/adresy/, kontekst/jtbd-kryzys-warszawa.md
-oraz pipeline/syreny/WYNIKI.md (liczby syren do pitchu; nie liczymy ich ręcznie, tylko czytamy z tego pliku).
+Tylko biblioteka standardowa. Źródła: public/pack/syreny/syreny.json i public/pack/adresy/adresy.json (ta sama
+paczka co w aplikacji), dane/soia-warszawa/granica_warszawy.geojson, kontekst/jtbd-kryzys-warszawa.md.
+Liczby syren liczymy z paczki i sprawdzamy, że zgadzają się z pipeline/syreny/WYNIKI.md.
 """
-import csv
 import json
 import math
 import re
+from collections import Counter
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[3]
 SOIA = ROOT / 'dane' / 'soia-warszawa'
+PACK = ROOT / 'public' / 'pack'
 WYNIKI = ROOT / 'pipeline' / 'syreny' / 'WYNIKI.md'
-PODPIS_Z_LEWEJ = {'Żoliborz'}  # podpis nie nachodzi na Pragę-Północ
 OUT = Path(__file__).with_name('dane.js')
 
 W = 1000  # szerokość viewBox mapy
+KOMORKA_M = 280  # bok kwadratu mapy głośności w metrach
 
 
 def load(p):
@@ -29,28 +31,20 @@ def pl(txt):
 
 
 def wyniki_syren():
-    """Czyta pipeline/syreny/WYNIKI.md: tabelę „Miasto”, wrażliwość i dzielnice."""
+    """Czyta tabelę „Miasto” z pipeline/syreny/WYNIKI.md: udział adresów ≥ 65 dB i ≥ 75 dB."""
     wiersze = [[c.strip() for c in l.strip().strip('|').split('|')]
                for l in WYNIKI.read_text(encoding='utf-8').splitlines() if l.startswith('|')]
 
     def miasto(prefiks):
         r = next(r for r in wiersze if r[0].startswith(prefiks))
-        return {'p65': pl(r[1]), 'traci': None if r[2] == '—' else pl(r[2]),
-                'p75': None if r[3] == '—' else pl(r[3])}
+        return {'p65': pl(r[1]), 'p75': pl(r[3])}
 
-    wszystkie = miasto('Wszystkie syreny')
-    przyblizenie = miasto('Blackout, przybliżenie')
-    dolne = miasto('Blackout, dolne oszacowanie')
-    # wrażliwość ±1 dB: pierwszy i ostatni wiersz tabeli (2,85 dB i 4,85 dB) -> zakres adresów tracących zasięg
-    wrazl = [r for r in wiersze if re.fullmatch(r'\d,\d+ dB', r[0])]
-    zakres = sorted(pl(r[2]) for r in wrazl)
-    # dzielnice: kolumny ... | ≥75 normalnie | ≥75 blackout
-    dz = []
-    for r in wiersze:
-        if len(r) == 7 and re.fullmatch(r'[\d ]+', r[1]) and r[5].endswith('%'):
-            dz.append({'nazwa': r[0], 'p75_przed': pl(r[5]), 'p75_po': pl(r[6])})
-    assert len(wrazl) == 3 and len(dz) >= 10, (len(wrazl), len(dz))
-    return wszystkie, przyblizenie, dolne, (zakres[0], zakres[-1]), dz
+    return miasto('Wszystkie syreny'), miasto('Blackout, przybliżenie')
+
+
+def proc(licznik, mianownik):
+    """Procent zaokrąglony do 0,1 w górę od połowy (jak w WYNIKI.md), na liczbach całkowitych."""
+    return (licznik * 2000 + mianownik) // (2 * mianownik) / 10
 
 
 def rings(geom):
@@ -102,54 +96,78 @@ def path(geom, tol=0.7):
     return ''.join(out)
 
 
-cyfrowe = load(SOIA / 'analiza' / 'syreny_zasieg_tylko_cyfrowe.geojson')['features'][0]['geometry']
-utracony = load(SOIA / 'analiza' / 'syreny_blackout_utracony_zasieg.geojson')['features'][0]['geometry']
+# --- Syreny: jedna miara w trzech klasach głośności na zewnątrz budynku (model SOIA, KG PSP) ---
+# Kody w syreny.json: '3' = ≥ 75 dB, '2' = 70–75, '1' = 65–70, '0' = poniżej 65 (src/modules/syreny/wynik.ts).
+# n = wszystkie syreny, b = jeśli zabraknie prądu (przybliżenie: działają tylko syreny cyfrowe).
+# Wiersz i w syreny.json to wiersz i w adresy.json.
+syreny = load(PACK / 'syreny' / 'syreny.json')
+adresy = load(PACK / 'adresy' / 'adresy.json')
+N = len(adresy['lat'])
+assert len(syreny['n']) == len(syreny['b']) == len(adresy['lon']) == N, 'paczki syren i adresów rozjechały się'
+KLASA = {'3': 0, '2': 1, '1': 1, '0': 2}  # 0 = głośno (≥ 75 dB), 1 = słychać na zewnątrz (65–75), 2 = może nie dotrzeć (< 65)
 
-podsum = {r['']: float(r['wartosc']) for r in csv.DictReader(open(SOIA / 'analiza' / 'syreny_blackout_podsumowanie.csv', encoding='utf-8'))}
 
-# Liczby do pitchu z WYNIKI.md. Główna liczba to ≥ 75 dB (48,3% -> 36,6%), przybliżenie blackoutu.
-# 69,1% i 29 676 (dolne oszacowanie) zostają wyłącznie jako „najgorszy wariant”.
-w_wszystkie, w_przyblizenie, w_dolne, w_zakres, w_dz = wyniki_syren()
-assert w_dolne['p65'] == podsum['adresy_zasieg_tylko_cyfrowe_pct'] and w_dolne['traci'] == podsum['adresy_traca_zasieg'], 'WYNIKI.md i CSV rozjechały się'
-assert w_wszystkie['p65'] == podsum['adresy_zasieg_wszystkie_pct']
+def udzialy(kody):
+    c = Counter(kody)
+    p75, p65 = proc(c['3'], N), proc(N - c['0'], N)
+    # Środkowa klasa jako różnica zaokrąglonych progów: pasek sumuje się do 100,0 i zgadza z 92,5% / 91,5%.
+    return {'p75': p75, 'p65': p65, 'paski': [p75, round(p65 - p75, 1), round(100 - p65, 1)]}
 
-# Dzielnice z największym spadkiem udziału adresów ≥ 75 dB (w punktach procentowych), według WYNIKI.md.
-top = sorted(w_dz, key=lambda r: -(r['p75_przed'] - r['p75_po']))[:4]
 
-# środki dzielnic jako średnia punktów adresowych (do podpisów na mapie)
-sumy = {}
-for r in csv.DictReader(open(ROOT / 'dane' / 'adresy' / 'punkty_adresowe_wgs84.csv', encoding='utf-8')):
-    s = sumy.setdefault(r['dzielnica'], [0.0, 0.0, 0])
-    s[0] += float(r['lon']); s[1] += float(r['lat']); s[2] += 1
-etykiety = []
-for r in top:
-    lon, lat, n = sumy[r['nazwa']]
+dzis, bez_pradu = udzialy(syreny['n']), udzialy(syreny['b'])
+w_wszystkie, w_przyblizenie = wyniki_syren()
+assert (dzis['p75'], dzis['p65'], bez_pradu['p75'], bez_pradu['p65']) == \
+    (w_wszystkie['p75'], w_wszystkie['p65'], w_przyblizenie['p75'], w_przyblizenie['p65']), \
+    ('paczka a WYNIKI.md', dzis, bez_pradu, w_wszystkie, w_przyblizenie)
+print('syreny: dziś', dzis['paski'], 'jeśli zabraknie prądu', bez_pradu['paski'])
+
+# Mapa: kwadraty KOMORKA_M × KOMORKA_M w układzie viewBox mapy; kolor = klasa, w której jest najwięcej adresów
+# (remis: głośniejsza klasa, żeby nie przesadzać). Wiersze siatki to napisy: '.' = brak adresów,
+# inaczej cyfra 3 * klasa_dziś + klasa_bez_prądu.
+bok = KOMORKA_M * scale / 111320  # stopień szerokości ≈ 111,32 km; proj() ma tę samą skalę w obu osiach
+komorki = {}
+for i in range(N):
+    x, y = proj(adresy['lon'][i], adresy['lat'][i])
+    k = komorki.setdefault((int(y // bok), int(x // bok)), ([0, 0, 0], [0, 0, 0]))
+    k[0][KLASA[syreny['n'][i]]] += 1
+    k[1][KLASA[syreny['b'][i]]] += 1
+wiersze = 1 + max(r for r, _ in komorki)
+kolumny = 1 + max(c for _, c in komorki)
+
+
+def wiekszosc(t):
+    return max(range(3), key=lambda j: (t[j], -j))
+
+
+siatka = [['.'] * kolumny for _ in range(wiersze)]
+for (r, c), (tn, tb) in komorki.items():
+    siatka[r][c] = str(3 * wiekszosc(tn) + wiekszosc(tb))
+
+# Podpisy: trzy dzielnice z największym spadkiem udziału adresów „głośno” (w punktach procentowych)
+dz = {}
+for i in range(N):
+    d = dz.setdefault(adresy['dz'][i], [0.0, 0.0, 0, 0, 0])
+    d[0] += adresy['lon'][i]
+    d[1] += adresy['lat'][i]
+    d[2] += 1
+    d[3] += syreny['n'][i] == '3'
+    d[4] += syreny['b'][i] == '3'
+podpisy = []
+for kod, (lon, lat, n, g_n, g_b) in sorted(dz.items(), key=lambda kv: -(kv[1][3] - kv[1][4]) / kv[1][2])[:3]:
     x, y = proj(lon / n, lat / n)
-    etykiety.append({'nazwa': r['nazwa'], 'x': round(x, 1), 'y': round(y, 1),
-                     'przed': r['p75_przed'], 'po': r['p75_po'],
-                     # podpis po lewej stronie punktu tam, gdzie po prawej zasłaniałby sąsiednią dzielnicę
-                     'strona': 'l' if r['nazwa'] in PODPIS_Z_LEWEJ else 'p'})
+    podpisy.append({'nazwa': adresy['dzielnice'][kod], 'x': round(x, 1), 'y': round(y, 1),
+                    'przed': proc(g_n, n), 'po': proc(g_b, n)})
 
 mapa = {
     'w': W, 'h': H,
     'granica': path(granica, 0.5),
-    # Geometria mapy to najgorszy wariant (dolne oszacowanie): strefy, gdzie SOIA pokazuje syrenę cyfrową.
-    'cyfrowe': path(cyfrowe),
-    'utracony': path(utracony),
-    # Wszystkie syreny (SOIA), ≥ 65 dB
-    'przed': w_wszystkie['p65'],
-    # Główna liczba: adresy ≥ 75 dB normalnie -> jeśli zabraknie prądu (przybliżenie, WYNIKI.md)
-    'glosne_przed': w_wszystkie['p75'],
-    'glosne_po': w_przyblizenie['p75'],
-    # Adresy ≥ 65 dB jeśli zabraknie prądu (przybliżenie) i ile adresów traci zasięg (rząd wielkości)
-    'po_przyblizenie': w_przyblizenie['p65'],
-    'traci_przyblizenie': int(w_przyblizenie['traci']),
-    'traci_zakres': [int(w_zakres[0]), int(w_zakres[1])],
-    # NAJGORSZY WARIANT (dolne oszacowanie): tylko strefy, gdzie SOIA pokazuje syrenę cyfrową. Nie jako główna liczba.
-    'po': podsum['adresy_zasieg_tylko_cyfrowe_pct'],
-    'traci': int(podsum['adresy_traca_zasieg']),
-    'adresy': int(podsum['adresy_w_granicy']),
-    'dzielnice': etykiety,
+    'bok': round(bok, 3),
+    'siatka': [''.join(r) for r in siatka],
+    'dzis': dzis['paski'],          # [głośno, słychać na zewnątrz, może nie dotrzeć] w % adresów
+    'bez_pradu': bez_pradu['paski'],
+    'p65': dzis['p65'],             # syrenę słychać (≥ 65 dB) dziś, do notatki
+    'adresy': N,
+    'dzielnice': podpisy,
 }
 
 # --- JTBD: zadania mieszkańców (segment M albo „wszyscy”) z części 6 ---

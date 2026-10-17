@@ -1,76 +1,89 @@
-/* Slajd 8 „Dzień Kasi”: zaprogramowane, deterministyczne demo aplikacji na makiecie telefonu.
-   Bez sieci i bez żywej aplikacji: zrzuty z produkcji w ekrany/ (Grochowska 200, 17.10.2026).
+/* Slajd demo (sekcja s-kasia) „Dzień Kasi”: zaprogramowane, deterministyczne demo aplikacji na makiecie telefonu.
+   Bez sieci i bez żywej aplikacji: zrzuty z produkcji w ekrany/ (42 Warsaw, al. Solidarności 171, 18.10.2026).
    Umowa z silnikiem prezentacji: window.telefonDemo = { kroki: N, krok(k) } dla k = 0..N.
-   krok(k) jest idempotentny. Krok o jeden do przodu gra animację (tapnięcie, przejście),
-   każdy inny skok (wstecz, deep link #8.3, powrót na slajd) ustawia stan od razu. */
+   krok(k) jest idempotentny. Krok o jeden do przodu gra animację (tapnięcie, przejście, lupa wylatuje z ekranu),
+   każdy inny skok (wstecz, deep link #N.k, powrót na slajd) ustawia stan od razu.
+   Lupa: powiększony wycinek ekranu obok telefonu (tekst z zrzutu ≥ 24 px na scenie), połączony stożkiem
+   z ramką na telefonie, żeby z sali było widać i dało się przeczytać, o czym mówimy. */
 (function () {
   'use strict';
 
   var SKALA = 0.4; // px zrzutu (960×1920) → px sceny (384×768)
   var OS = ['Start', 'Karta Syreny', 'Miejsce schronienia', 'Pozostałe karty', 'Brak sieci'];
+  // Strefa lupy na scenie 1600×900 (pod podpisem, w lewej kolumnie). maxM: najwyżej 3× tyle co na telefonie.
+  var LUPA = { x: 112, gora: 560, dol: 860, szer: 790, maxM: 1.2 };
 
   var POL = {
     sprawdzam: 'Sprawdzam połączenie…',
     jest: 'Jest połączenie. Dane na żywo włączone. Trasy na offline zapisuję w tle.',
-    offline: 'Brak sieci. Działam na danych z paczki z 17.10, 20:52.'
+    offline: 'Brak sieci. Działam na danych z paczki z 17.10, 23:33.'
   };
 
-  var WIDOKI = ['polaczenie', 'dom', 'glowny', 'syreny', 'trasa', 'powietrze', 'bliscy', 'offline-glowny', 'offline-trasa'];
+  var WIDOKI = ['polaczenie', 'dom', 'glowny', 'syreny', 'trasa', 'powietrze', 'bliscy', 'komunikacja', 'offline-dom', 'offline-glowny', 'offline-trasa'];
 
-  // Miejsca na zrzutach w px zrzutu 960×1920: [x1, y1, x2, y2] albo punkt [x, y].
+  // Punkty tapnięć na zrzutach (px zrzutu 960×1920), z pozycji elementów w aplikacji.
   var M = {
-    tutaj: [626, 57],
-    wybraneMiejsce: [24, 22, 564, 92],
-    kartaSyreny: [480, 1130],
-    okregiSyren: [196, 194, 766, 852],
-    kartaSchronienia: [480, 1376],
-    trasaMapa: [360, 380, 606, 652],
-    trasaZapisana: [44, 1472, 838, 1532],
-    powietrzeRada: [44, 1432, 568, 1500],
-    bliscyDom: [42, 1070, 920, 1224],
-    paczkaOffline: [584, 28, 936, 88],
+    lokalizacja: [576, 56],
+    lokalizacjaOffline: [700, 56],
+    kartaSyreny: [480, 1114],
+    kartaSchronienia: [480, 1342],
+    komunikacja: [692, 1242],
     przewin: [[560, 1700], [560, 1240]]
+  };
+  // Wycinki pod lupę [x1, y1, x2, y2] w px zrzutu.
+  var L = {
+    pasek: [12, 6, 676, 106],              // „Lokalizacja: al. „Solidarności”” i przycisk „Lokalizacja”
+    pasekOffline: [12, 6, 800, 170],       // to samo bez sieci, z „Offline · paczka z 17.10, 23:33”
+    syreny: [24, 1004, 936, 1226],         // karta Syreny
+    schronienie: [24, 1230, 936, 1500],    // karta schronienia z „60 m po ulicach…”
+    powietrze: [24, 1322, 936, 1504],      // „Powietrze dobre. Możesz wietrzyć.”
+    bliscy: [24, 934, 936, 1198],          // dom pieszo/rowerem i „4,9 km po ulicach…”
+    komunikacja: [24, 1144, 936, 1492]     // tramwaj 26, odjazd z rozkładu ZTM, przełącznik, blackout
   };
 
   // os: indeks na osi; ekran: widok końcowy; przed: fazy przed widokiem końcowym (tylko przy kroku do przodu);
-  // tap/przewin: gest przed zmianą ekranu; ring: podświetlenia na widoku końcowym.
+  // tap/przewin: gest przed zmianą ekranu; lupa: wycinek powiększony obok telefonu (i ramka na telefonie).
   var KROKI = [
     { os: 0, ekran: 'polaczenie', pol: 'sprawdzam',
-      h: 'Kasia otwiera aplikację u mamy na Grochowie.',
+      h: 'Kasia otwiera aplikację w 42 Warsaw.',
       p: 'Najpierw aplikacja sprawdza, czy jest sieć.' },
     { os: 0, ekran: 'polaczenie', pol: 'jest',
       h: 'Jest sieć, więc dane na żywo są włączone.',
       p: 'W tle zapisuje trasy na wypadek, gdyby sieci zabrakło.' },
-    { os: 0, ekran: 'glowny', przed: [{ ekran: 'dom', czekaj: 1000 }], tap: M.tutaj, ring: [M.wybraneMiejsce],
-      h: 'Jedno dotknięcie: „Tutaj”.',
-      p: 'Zamiast adresu domu miejsce, w którym Kasia stoi. Pięć kart dla tego miejsca.' },
-    { os: 1, ekran: 'syreny', tap: M.kartaSyreny, ring: [{ r: M.okregiSyren, okrag: true }],
-      h: 'Karta Syreny: okręgi najbliższych syren.',
-      p: 'Kasia wie, czy usłyszy alarm, także jeśli zabraknie prądu.' },
-    { os: 2, ekran: 'trasa', przed: [{ ekran: 'glowny', czekaj: 650 }], tap: M.kartaSchronienia, ring: [M.trasaMapa],
-      h: 'Miejsce schronienia według PSP: 70 m.',
-      p: 'Trasa piesza po ulicach. Kasia nie szuka w panice.' },
-    { os: 3, ekran: 'powietrze', przewin: true, ring: [M.powietrzeRada],
+    { os: 0, ekran: 'glowny', przed: [{ ekran: 'dom', czekaj: 1000 }], tap: M.lokalizacja, lupa: L.pasek,
+      h: 'Jedno dotknięcie: „Lokalizacja”.',
+      p: 'Zamiast adresu domu miejsce, w którym Kasia stoi: al. Solidarności 171. Pięć kart dla tego miejsca.' },
+    { os: 1, ekran: 'syreny', tap: M.kartaSyreny, lupa: L.syreny,
+      h: 'Karta Syreny: Kasia jest w zasięgu syreny.',
+      p: '75 dB i więcej na zewnątrz, także jeśli zabraknie prądu. Okręgi na mapie to najbliższe syreny.' },
+    { os: 2, ekran: 'trasa', przed: [{ ekran: 'glowny', czekaj: 650 }], tap: M.kartaSchronienia, lupa: L.schronienie,
+      h: 'Miejsce schronienia według PSP: 60 m.',
+      p: 'Trasa piesza po ulicach, ok. 1 minuty. Kasia nie szuka w panice.' },
+    { os: 3, ekran: 'powietrze', przewin: true, lupa: L.powietrze,
       h: 'Powietrze i wiatr: „Możesz wietrzyć”.',
-      p: 'Rekomendacja z pomiaru 230 m dalej, a nie suche dane.' },
-    { os: 3, ekran: 'bliscy', przewin: true, ring: [M.bliscyDom],
-      h: 'Do domu pieszo 172 min, rowerem 58.',
-      p: 'Jeśli zabraknie prądu, tramwaje i metro stoją. Najbliższe Veturilo: 280 m.' },
-    { os: 4, ekran: 'bliscy', bezSieci: true, dymek: true, cien: true,
+      p: 'Rekomendacja z czujnika miasta 770 m dalej, a nie tabela liczb.' },
+    { os: 3, ekran: 'bliscy', przewin: true, lupa: L.bliscy,
+      h: 'Do domu pieszo 66 min, rowerem 26.',
+      p: '4,9 km po ulicach, trasa zapisana w telefonie. Jeśli zabraknie prądu, tramwaje i metro stoją.' },
+    { os: 3, ekran: 'komunikacja', tap: M.komunikacja, lupa: L.komunikacja,
+      h: 'Komunikacja: odjazdy ZTM z API miasta, na żywo.',
+      p: 'Tramwaj 26, na który Kasia zdąży: za 11 min (dane.um.warszawa.pl). Przy blackoucie zostają same autobusy.' },
+    { os: 4, ekran: 'komunikacja', bezSieci: true, dymek: true, cien: true,
       h: 'Pada sieć.',
       p: 'Bez prądu znika zasięg. Tak było w Kijowie.' },
     { os: 4, ekran: 'offline-glowny', bezSieci: true,
-      przed: [{ ekran: 'polaczenie', pol: 'sprawdzam', czekaj: 700 }, { ekran: 'polaczenie', pol: 'offline', czekaj: 1700 }],
-      ring: [M.paczkaOffline],
-      h: 'Odświeżamy: aplikacja działa dalej z paczki w telefonie.',
-      p: 'Pasek mówi wprost: offline, dane z 17.10, 20:52.' },
-    { os: 4, ekran: 'offline-trasa', bezSieci: true, tap: M.kartaSchronienia, ring: [M.trasaMapa, M.trasaZapisana],
+      przed: [{ ekran: 'polaczenie', pol: 'sprawdzam', czekaj: 700 }, { ekran: 'polaczenie', pol: 'offline', czekaj: 1700 }, { ekran: 'offline-dom', czekaj: 900 }],
+      tap: M.lokalizacjaOffline, lupa: L.pasekOffline,
+      h: 'Odświeżamy: aplikacja działa dalej z paczki.',
+      p: '„Lokalizacja” działa też bez sieci. Pasek mówi wprost: offline, paczka z 17.10, 23:33.' },
+    { os: 4, ekran: 'offline-trasa', bezSieci: true, tap: M.kartaSchronienia, lupa: L.schronienie,
       h: 'Ta sama trasa, zapisana w telefonie.',
       p: 'Działa, gdy wszystko pada.' }
   ];
 
   var N = KROKI.length - 1;
   var ruchOgr = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var E_OUT = 'cubic-bezier(0.23, 1, 0.32, 1)';
 
   var el = {};          // referencje do elementów
   var aktualny = -1;    // ostatni ustawiony krok (-1: jeszcze nic)
@@ -88,6 +101,11 @@
     if (html != null) e.innerHTML = html;
     return e;
   }
+  function svg(tag, attrs) {
+    var e = document.createElementNS('http://www.w3.org/2000/svg', tag);
+    for (var a in attrs) e.setAttribute(a, attrs[a]);
+    return e;
+  }
   function czekaj(ms, z) {
     return new Promise(function (ok) {
       timery.push(setTimeout(function () { ok(z === zeton); }, ruchOgr ? Math.min(ms, 250) : ms));
@@ -103,6 +121,12 @@
     var a = e.animate(klatki, opcje);
     animacje.push(a);
     return a;
+  }
+  function bezRuchu(e, fn) {
+    e.classList.add('dk-bez-ruchu');
+    fn();
+    void e.offsetWidth;
+    e.classList.remove('dk-bez-ruchu');
   }
 
   var IKONY =
@@ -122,7 +146,7 @@
     host.innerHTML = '';
 
     var lewa = h('div', 'dk-lewa');
-    lewa.appendChild(h('p', 'dk-nad', 'Kasia jest u mamy na Grochowie, ul.&nbsp;Grochowska 200'));
+    lewa.appendChild(h('p', 'dk-nad', 'Kasia jest w 42 Warsaw, al.&nbsp;Solidarności 171B, Wola'));
     lewa.appendChild(h('h2', 'dk-tytul', 'Dzień Kasi'));
     var os = h('ol', 'dk-os');
     os.setAttribute('aria-label', 'Kroki demo');
@@ -145,12 +169,12 @@
     el.telefon = h('div', 'dk-telefon');
     el.telefon.setAttribute('role', 'img');
     el.telefon.setAttribute('aria-label', 'Telefon z aplikacją Warszawa w trybie kryzysowym');
-    var ekran = h('div', 'dk-ekran');
-    var stan = h('div', 'dk-stan', '<span>21:04</span><span class="dk-wyspa"></span><span class="dk-ikony">' + IKONY + '</span>');
-    ekran.appendChild(stan);
+    el.ekran = h('div', 'dk-ekran');
+    var stan = h('div', 'dk-stan', '<span>15:40</span><span class="dk-wyspa"></span><span class="dk-ikony">' + IKONY + '</span>');
+    el.ekran.appendChild(stan);
 
     el.app = h('div', 'dk-app');
-    var warstwy = h('div', 'dk-widoki'); // własny kontekst nakładania: z-index widoków nie przykrywa podświetleń
+    var warstwy = h('div', 'dk-widoki'); // własny kontekst nakładania: z-index widoków nie przykrywa ramki
     el.app.appendChild(warstwy);
     el.widoki = {};
     WIDOKI.forEach(function (w) {
@@ -174,18 +198,36 @@
     });
     el.cien = h('div', 'dk-cien');
     el.app.appendChild(el.cien);
-    el.ringi = [h('div', 'dk-ring'), h('div', 'dk-ring')];
-    el.ringi.forEach(function (r) { el.app.appendChild(r); });
+    el.ring = h('div', 'dk-ring');
+    el.app.appendChild(el.ring);
     el.fala = h('div', 'dk-fala');
     el.palec = h('div', 'dk-palec');
     el.app.appendChild(el.fala);
     el.app.appendChild(el.palec);
-    ekran.appendChild(el.app);
+    el.ekran.appendChild(el.app);
 
     el.dymek = h('div', 'dk-dymek', WIFI_OFF_DUZE + '<span>Brak sieci</span>');
-    ekran.appendChild(el.dymek);
-    el.telefon.appendChild(ekran);
+    el.ekran.appendChild(el.dymek);
+    el.telefon.appendChild(el.ekran);
     host.appendChild(el.telefon);
+
+    // Stożek od lupy do ramki na telefonie (nad telefonem, pod lupą).
+    el.stozek = svg('svg', { 'class': 'dk-stozek', viewBox: '0 0 1600 900', 'aria-hidden': 'true' });
+    el.stozekPole = svg('polygon', { 'class': 'dk-stozek-pole', points: '0,0 0,0 0,0' });
+    el.stozekG = svg('line', { 'class': 'dk-stozek-linia' });
+    el.stozekD = svg('line', { 'class': 'dk-stozek-linia' });
+    el.stozek.appendChild(el.stozekPole);
+    el.stozek.appendChild(el.stozekG);
+    el.stozek.appendChild(el.stozekD);
+    host.appendChild(el.stozek);
+
+    el.lupa = h('div', 'dk-lupa');
+    el.lupa.setAttribute('aria-hidden', 'true');
+    el.lupaImg = new Image();
+    el.lupaImg.alt = '';
+    el.lupaImg.draggable = false;
+    el.lupa.appendChild(el.lupaImg);
+    host.appendChild(el.lupa);
 
     gotowe = true;
     return true;
@@ -196,7 +238,7 @@
     if (!stan || el.polTekst.textContent === POL[stan]) return;
     el.polTekst.textContent = POL[stan];
     el.pol.classList.toggle('dk-wynik', stan !== 'sprawdzam');
-    if (!odRazu && !ruchOgr) anim(el.polTekst, [{ opacity: 0 }, { opacity: 1 }], { duration: 260, easing: 'cubic-bezier(0.23, 1, 0.32, 1)' });
+    if (!odRazu && !ruchOgr) anim(el.polTekst, [{ opacity: 0 }, { opacity: 1 }], { duration: 260, easing: E_OUT });
   }
 
   function pokazWidok(nazwa, opcje) {
@@ -206,12 +248,11 @@
     var juz = v.classList.contains('dk-on') && Number(v.style.zIndex) === zWarstwa;
     if (juz) return;
     if (opcje.odRazu) {
-      el.app.classList.add('dk-bez-ruchu');
-      WIDOKI.forEach(function (w) { el.widoki[w].classList.remove('dk-on', 'dk-z-dolu'); });
-      v.style.zIndex = ++zWarstwa;
-      v.classList.add('dk-on');
-      void el.app.offsetWidth;
-      el.app.classList.remove('dk-bez-ruchu');
+      bezRuchu(el.app, function () {
+        WIDOKI.forEach(function (w) { el.widoki[w].classList.remove('dk-on', 'dk-z-dolu'); });
+        v.style.zIndex = ++zWarstwa;
+        v.classList.add('dk-on');
+      });
       return;
     }
     // Nowy widok wchodzi nad stary; stary znika pod spodem po zakończeniu przejścia (bez prześwitu tła).
@@ -224,34 +265,113 @@
     v.classList.add('dk-on');
     var z = zeton;
     timery.push(setTimeout(function () {
-      if (z !== zeton) return;
+      // Nowszy widok wszedł w międzyczasie (krótka faza, np. przy ograniczonym ruchu): sprząta jego własny timer.
+      if (z !== zeton || Number(v.style.zIndex) !== zWarstwa) return;
       WIDOKI.forEach(function (w) { if (w !== nazwa) el.widoki[w].classList.remove('dk-on', 'dk-z-dolu'); });
     }, 460));
   }
 
-  function ustawRingi(lista, widoczne, odRazu) {
-    el.ringi.forEach(function (r, i) {
-      var d = lista && lista[i];
-      if (odRazu) r.classList.add('dk-bez-ruchu');
-      if (!d) { r.classList.remove('dk-on'); }
-      else {
-        var b = d.r || d;
-        r.classList.toggle('dk-okrag', !!d.okrag);
-        r.style.left = px(b[0]); r.style.top = px(b[1]);
-        r.style.width = px(b[2] - b[0]); r.style.height = px(b[3] - b[1]);
-        r.classList.toggle('dk-on', !!widoczne);
+  /* ---------- lupa ---------- */
+  // Lewy górny róg obszaru aplikacji w px sceny (offsetLeft nie zależy od skalowania sceny).
+  function poczatekEkranu() {
+    return {
+      x: el.telefon.offsetLeft + el.ekran.offsetLeft + el.app.offsetLeft,
+      y: el.telefon.offsetTop + el.ekran.offsetTop + el.app.offsetTop
+    };
+  }
+
+  function geometria(r) {
+    var w = r[2] - r[0], wys = r[3] - r[1];
+    var m = Math.min(LUPA.szer / w, (LUPA.dol - LUPA.gora) / wys, LUPA.maxM);
+    var W = Math.round(w * m), H = Math.round(wys * m);
+    var o = poczatekEkranu();
+    var ring = { x: o.x + r[0] * SKALA, y: o.y + r[1] * SKALA, w: w * SKALA, h: wys * SKALA };
+    // Lupa zawsze w tym samym miejscu pod podpisem (stały rytm między krokami); stożek pokazuje, skąd jest wycinek.
+    return { m: m, x: LUPA.x, y: LUPA.gora, W: W, H: H, ring: ring };
+  }
+
+  function ustawRing(r, widoczny, odRazu) {
+    var f = function () {
+      if (r) {
+        el.ring.style.left = px(r[0]); el.ring.style.top = px(r[1]);
+        el.ring.style.width = px(r[2] - r[0]); el.ring.style.height = px(r[3] - r[1]);
       }
-      if (odRazu) { void r.offsetWidth; r.classList.remove('dk-bez-ruchu'); }
-    });
+      el.ring.classList.toggle('dk-on', !!(r && widoczny));
+    };
+    if (odRazu) bezRuchu(el.ring, f); else f();
+  }
+
+  function ustawStozek(g, widoczny, opoznienie, odRazu) {
+    var f = function () {
+      if (g) {
+        var lx = g.x + g.W, rx = g.ring.x;
+        el.stozekPole.setAttribute('points', lx + ',' + g.y + ' ' + rx + ',' + g.ring.y + ' ' + rx + ',' + (g.ring.y + g.ring.h) + ' ' + lx + ',' + (g.y + g.H));
+        el.stozekG.setAttribute('x1', lx); el.stozekG.setAttribute('y1', g.y + 1); el.stozekG.setAttribute('x2', rx); el.stozekG.setAttribute('y2', g.ring.y);
+        el.stozekD.setAttribute('x1', lx); el.stozekD.setAttribute('y1', g.y + g.H - 1); el.stozekD.setAttribute('x2', rx); el.stozekD.setAttribute('y2', g.ring.y + g.ring.h);
+      }
+      el.stozek.style.transitionDelay = widoczny && opoznienie ? opoznienie + 'ms' : '0ms';
+      el.stozek.classList.toggle('dk-on', !!(g && widoczny));
+    };
+    if (odRazu) bezRuchu(el.stozek, f); else f();
+  }
+
+  // tryb: 'lot' (wylatuje z ramki na telefonie), 'fade' (skok), 'od-razu' (pierwsze ustawienie).
+  function pokazLupe(s, tryb) {
+    var r = s.lupa;
+    var g = geometria(r);
+    var src = 'ekrany/' + s.ekran + '.jpg';
+    var klucz = src + '|' + r.join(',');
+    // Ten sam stan jeszcze raz (np. powtórne krok(k)): nic nie mrugnie.
+    if (tryb === 'fade' && el.lupa.classList.contains('dk-on') && el.lupa.dataset.klucz === klucz) {
+      ustawRing(r, true, false);
+      ustawStozek(g, true, 0, false);
+      return;
+    }
+    el.lupa.dataset.klucz = klucz;
+    if (el.lupaImg.getAttribute('src') !== src) el.lupaImg.setAttribute('src', src);
+    var st = el.lupa.style;
+    st.left = g.x + 'px'; st.top = g.y + 'px'; st.width = g.W + 'px'; st.height = g.H + 'px';
+    var is = el.lupaImg.style;
+    is.width = Math.round(960 * g.m) + 'px'; is.height = Math.round(1920 * g.m) + 'px';
+    is.left = -Math.round(r[0] * g.m) + 'px'; is.top = -Math.round(r[1] * g.m) + 'px';
+    el.lupa.classList.add('dk-on');
+    ustawRing(r, true, tryb === 'od-razu');
+    if (tryb === 'od-razu') { ustawStozek(g, true, 0, true); return; }
+    if (tryb === 'lot' && !ruchOgr) {
+      // FLIP: lupa startuje dokładnie na ramce (ten sam wycinek w skali telefonu) i rośnie na swoje miejsce.
+      var od = 'translate(' + (g.ring.x - g.x) + 'px, ' + (g.ring.y - g.y) + 'px) scale(' + (g.ring.w / g.W) + ')';
+      anim(el.lupa, [
+        { transform: od, opacity: 0 },
+        { opacity: 1, offset: 0.12 },
+        { transform: 'none', opacity: 1 }
+      ], { duration: 520, easing: E_OUT });
+      ustawStozek(g, true, 260, false);
+      return;
+    }
+    anim(el.lupa, [{ opacity: 0 }, { opacity: 1 }], { duration: 220, easing: E_OUT });
+    ustawStozek(g, true, 0, false);
+  }
+
+  function schowajLupe(odRazu) {
+    var bylo = el.lupa.classList.contains('dk-on');
+    el.lupa.classList.remove('dk-on');
+    ustawRing(null, false, odRazu);
+    ustawStozek(null, false, 0, odRazu);
+    if (!bylo || odRazu) return;
+    anim(el.lupa, [
+      { opacity: 1, transform: 'none' },
+      { opacity: 0, transform: ruchOgr ? 'none' : 'translateX(12px) scale(0.98)' }
+    ], { duration: 180, easing: E_OUT });
   }
 
   function ustawUrzadzenie(k, odRazu) {
     var s = KROKI[k];
-    if (odRazu) { el.telefon.classList.add('dk-bez-ruchu'); }
-    el.telefon.classList.toggle('dk-bez-sieci', !!s.bezSieci);
-    el.telefon.classList.toggle('dk-przyciemnij', !!s.cien);
-    el.dymek.classList.toggle('dk-on', !!s.dymek);
-    if (odRazu) { void el.telefon.offsetWidth; el.telefon.classList.remove('dk-bez-ruchu'); }
+    var f = function () {
+      el.telefon.classList.toggle('dk-bez-sieci', !!s.bezSieci);
+      el.telefon.classList.toggle('dk-przyciemnij', !!s.cien);
+      el.dymek.classList.toggle('dk-on', !!s.dymek);
+    };
+    if (odRazu) bezRuchu(el.telefon, f); else f();
   }
 
   function ustawOs(k) {
@@ -287,7 +407,6 @@
     var x = px(p[0]), y = px(p[1]);
     el.palec.style.left = x; el.palec.style.top = y;
     el.fala.style.left = x; el.fala.style.top = y;
-    var E = 'cubic-bezier(0.23, 1, 0.32, 1)';
     anim(el.palec, [
       { opacity: 0, transform: 'scale(1.25)' },
       { opacity: 1, transform: 'scale(1)', offset: 0.3 },
@@ -298,7 +417,7 @@
     anim(el.fala, [
       { opacity: 0.7, transform: 'scale(0.7)' },
       { opacity: 0, transform: 'scale(2)' }
-    ], { duration: 520, delay: 400, easing: E, fill: 'both' });
+    ], { duration: 520, delay: 400, easing: E_OUT, fill: 'both' });
     return czekaj(480, z);
   }
 
@@ -320,7 +439,8 @@
   function ustawOdRazu(k, bezPrzejscia) {
     var s = KROKI[k];
     pokazWidok(s.ekran, { pol: s.pol, odRazu: bezPrzejscia });
-    ustawRingi(s.ring, true, bezPrzejscia);
+    if (s.lupa) pokazLupe(s, bezPrzejscia ? 'od-razu' : 'fade');
+    else schowajLupe(bezPrzejscia);
     ustawUrzadzenie(k, bezPrzejscia);
     ustawOs(k);
     ustawPodpis(k, bezPrzejscia);
@@ -331,7 +451,7 @@
     var z = zeton;
     ustawOs(k);
     ustawPodpis(k, false);
-    ustawRingi(null, false);
+    schowajLupe(false);
     ustawUrzadzenie(k, false);
 
     var fazy = s.przed || [];
@@ -342,9 +462,9 @@
     if (s.tap) { if (!(await tapnij(s.tap, z))) return; }
     if (s.przewin) { if (!(await przewin(z))) return; }
     pokazWidok(s.ekran, { pol: s.pol, zDolu: s.przewin });
-    if (!s.ring) return;
+    if (!s.lupa) return;
     if (!(await czekaj(380, z))) return;
-    ustawRingi(s.ring, true, false);
+    pokazLupe(s, 'lot');
   }
 
   function krok(k) {
