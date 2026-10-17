@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import type { MiejsceUzytkownika } from '../contracts';
 import { najblizszyAdres } from '../modules/adresy';
-import { lokalizacjaZAdresu, miejsceTutaj, zTutaj } from './lokalizacja';
+import { BladLokalizacji, lokalizacjaZAdresu, miejsceTutaj, zTutaj } from './lokalizacja';
 
 vi.mock('../modules/adresy', () => ({ najblizszyAdres: vi.fn() }));
 
@@ -51,13 +51,14 @@ describe('miejsceTutaj', () => {
     expect(najblizszyAdres).toHaveBeenCalledWith({ lat: 52.25, lon: 21.05 });
   });
 
-  it('brak zgody, brak GPS i inny błąd GPS dają czytelny komunikat po polsku', async () => {
+  it('brak zgody, brak GPS i inny błąd GPS dają czytelny komunikat po polsku (bez „co dalej”, to dopisuje ekran)', async () => {
     odpowiedzGps(1);
-    await expect(miejsceTutaj()).rejects.toThrow('Brak zgody na lokalizację. Wpisz adres.');
+    await expect(miejsceTutaj()).rejects.toThrow(new BladLokalizacji('Brak zgody na lokalizację.'));
+    await expect(miejsceTutaj()).rejects.toBeInstanceOf(BladLokalizacji);
     odpowiedzGps(2);
-    await expect(miejsceTutaj()).rejects.toThrow('Nie udało się ustalić lokalizacji. Wpisz adres.');
+    await expect(miejsceTutaj()).rejects.toThrow(new BladLokalizacji('Nie udało się ustalić lokalizacji.'));
     ustawGps(undefined);
-    await expect(miejsceTutaj()).rejects.toThrow('Ta przeglądarka nie udostępnia lokalizacji. Wpisz adres.');
+    await expect(miejsceTutaj()).rejects.toThrow(new BladLokalizacji('Ta przeglądarka nie udostępnia lokalizacji.'));
     expect(najblizszyAdres).not.toHaveBeenCalled();
   });
 

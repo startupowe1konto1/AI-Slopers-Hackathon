@@ -2,7 +2,7 @@ import { useEffect, useId, useState, type KeyboardEvent } from 'react';
 import type { Adres, MiejsceUzytkownika, RolaMiejsca } from '../contracts';
 import { znajdzAdres } from '../modules/adresy';
 import { zapiszMiejsca } from './miejsca';
-import { miejsceTutaj, zTutaj } from './lokalizacja';
+import { BladLokalizacji, miejsceTutaj, zTutaj } from './lokalizacja';
 import { pobierzPaczke, stanPaczki } from '../offline/paczka';
 
 const ROLE: { rola: RolaMiejsca; etykieta: string; wymagane: boolean }[] = [
@@ -133,7 +133,9 @@ export function Onboarding({ poczatkowe, onGotowe }: { poczatkowe: MiejsceUzytko
       await zapiszMiejsca(zTutaj(wpisane, await miejsceTutaj()));
       onGotowe();
     } catch (e) {
-      setLokalizacja(e instanceof Error ? e.message : 'Nie udało się ustalić lokalizacji. Wpisz adres.');
+      setLokalizacja(
+        e instanceof BladLokalizacji ? `${e.message} Wpisz adres poniżej.` : e instanceof Error ? e.message : 'Nie udało się ustalić lokalizacji. Wpisz adres poniżej.',
+      );
     }
   };
 
@@ -190,7 +192,7 @@ function PaczkaOffline() {
   return (
     <div style={{ marginTop: 10 }}>
       <button className="przycisk drugi" onClick={pobierz} disabled={postep !== null}>
-        {postep ?? 'Pobierz paczkę offline'}
+        {postep ?? (stan ? 'Odśwież paczkę offline' : 'Pobierz paczkę offline')}
       </button>
       <p role="status" style={{ fontSize: 13, marginTop: 6 }}>
         {blad

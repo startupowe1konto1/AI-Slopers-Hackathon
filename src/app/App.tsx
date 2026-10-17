@@ -83,11 +83,18 @@ export default function App() {
       setRola('tutaj');
       setBladLokalizacji(null);
     } catch (e) {
-      setBladLokalizacji(e instanceof Error ? e.message : 'Nie udało się ustalić lokalizacji.');
+      // W pasku nie ma pola adresu: mówimy, co się stało z wyborem, zamiast „wpisz adres”.
+      setBladLokalizacji(`${e instanceof Error ? e.message : 'Nie udało się ustalić lokalizacji.'} Zostaję przy poprzednim miejscu.`);
     } finally {
       setUstalam(false);
     }
   };
+  // Komunikat znika sam po chwili albo po wyborze innego miejsca, żeby nie wisiał nad mapą.
+  useEffect(() => {
+    if (!bladLokalizacji) return;
+    const t = setTimeout(() => setBladLokalizacji(null), 8000);
+    return () => clearTimeout(t);
+  }, [bladLokalizacji]);
 
   if (!gotowe) return null;
   if (!miejsca.length || edycja) {
@@ -109,7 +116,16 @@ export default function App() {
   return (
     <div className="aplikacja">
       <header className="pasek">
-        <select id="wybrane-miejsce" name="miejsce" aria-label="Wybrane miejsce" value={miejsce.rola} onChange={(e) => setRola(e.target.value as RolaMiejsca)}>
+        <select
+          id="wybrane-miejsce"
+          name="miejsce"
+          aria-label="Wybrane miejsce"
+          value={miejsce.rola}
+          onChange={(e) => {
+            setRola(e.target.value as RolaMiejsca);
+            setBladLokalizacji(null);
+          }}
+        >
           {miejsca.map((m) => (
             <option key={m.rola} value={m.rola}>
               {m.rola === 'tutaj' ? 'Lokalizacja' : m.etykieta}: {m.adres.ulica} {m.adres.numer}

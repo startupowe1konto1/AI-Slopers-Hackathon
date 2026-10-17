@@ -7,12 +7,15 @@ export function lokalizacjaZAdresu(search: string): Wsp | null {
   return v && v.length === 2 && v.every(Number.isFinite) ? { lat: v[0], lon: v[1] } : null;
 }
 
+// Lokalizacji nie ma, ale adres można wpisać ręcznie. Komunikat bez „co dalej”: dopisuje to ekran (w pasku nie ma pola adresu).
+export class BladLokalizacji extends Error {}
+
 function gps(): Promise<Wsp> {
   return new Promise((ok, blad) => {
-    if (!navigator.geolocation) return blad(new Error('Ta przeglądarka nie udostępnia lokalizacji. Wpisz adres.'));
+    if (!navigator.geolocation) return blad(new BladLokalizacji('Ta przeglądarka nie udostępnia lokalizacji.'));
     navigator.geolocation.getCurrentPosition(
       (p) => ok({ lat: p.coords.latitude, lon: p.coords.longitude }),
-      (e) => blad(new Error(e.code === 1 ? 'Brak zgody na lokalizację. Wpisz adres.' : 'Nie udało się ustalić lokalizacji. Wpisz adres.')),
+      (e) => blad(new BladLokalizacji(e.code === 1 ? 'Brak zgody na lokalizację.' : 'Nie udało się ustalić lokalizacji.')),
       { enableHighAccuracy: true, timeout: 10_000, maximumAge: 60_000 },
     );
   });
@@ -24,7 +27,7 @@ export async function miejsceTutaj(): Promise<MiejsceUzytkownika> {
   const adres = await najblizszyAdres(wsp).catch(() => {
     throw new Error('Nie udało się wczytać adresów z paczki (brak sieci?). Pobierz paczkę offline i spróbuj ponownie.');
   });
-  if (!adres) throw new Error('Jesteś poza Warszawą albo daleko od adresu z naszej paczki. Wpisz adres.');
+  if (!adres) throw new BladLokalizacji('Jesteś poza Warszawą albo daleko od adresu z naszej paczki.');
   return { rola: 'tutaj', etykieta: 'Lokalizacja', adres };
 }
 

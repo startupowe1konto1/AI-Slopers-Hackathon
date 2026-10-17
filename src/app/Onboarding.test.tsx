@@ -2,7 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import type { Adres } from '../contracts';
 import { znajdzAdres } from '../modules/adresy';
-import { stanPaczki } from '../offline/paczka';
+import { pobierzPaczke, stanPaczki } from '../offline/paczka';
 import { Onboarding } from './Onboarding';
 
 vi.mock('../modules/adresy', () => ({ znajdzAdres: vi.fn(), najblizszyAdres: vi.fn() }));
@@ -87,5 +87,17 @@ describe('podpowiedzi adresu z klawiatury (combobox ARIA)', () => {
     expect(fireEvent.mouseDown(opcja)).toBe(false);
     fireEvent.click(opcja);
     expect(screen.getByText('Wybrano: Grochowska 200, Praga-Południe')).toBeTruthy();
+  });
+});
+
+describe('paczka offline', () => {
+  it('po pobraniu przycisk mówi „Odśwież paczkę offline”', async () => {
+    render(<Onboarding poczatkowe={[]} onGotowe={() => {}} />);
+    const przycisk = await screen.findByRole('button', { name: 'Pobierz paczkę offline' });
+    vi.mocked(pobierzPaczke).mockResolvedValue(undefined as never);
+    vi.mocked(stanPaczki).mockResolvedValue({ zbudowano: '2026-10-17T21:05:00+00:00' } as Awaited<ReturnType<typeof stanPaczki>>);
+    fireEvent.click(przycisk);
+    expect(await screen.findByRole('button', { name: 'Odśwież paczkę offline' })).toBeTruthy();
+    expect(screen.getByText(/^Paczka offline z dnia/)).toBeTruthy();
   });
 });

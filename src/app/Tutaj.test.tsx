@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { act, cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import type { Adres, MiejsceUzytkownika } from '../contracts';
 import { najblizszyAdres } from '../modules/adresy';
 import App from './App';
@@ -68,7 +68,7 @@ describe('onboarding', () => {
     const gotowe = vi.fn();
     render(<Onboarding poczatkowe={[]} onGotowe={gotowe} />);
     fireEvent.click(screen.getByRole('button', { name: 'Użyj mojej lokalizacji' }));
-    expect(await screen.findByText(/Jesteś poza Warszawą/)).toBeTruthy();
+    expect((await screen.findByText(/Jesteś poza Warszawą/)).textContent).toMatch(/Wpisz adres poniżej\.$/);
     expect(gotowe).not.toHaveBeenCalled();
     expect(zapisane).toBeUndefined();
     expect(screen.getByRole('button', { name: 'Użyj mojej lokalizacji' })).toHaveProperty('disabled', false);
@@ -125,5 +125,27 @@ describe('pasek', () => {
     expect(wybor.value).toBe('dom');
     expect(zapisane).toEqual([dom]);
     expect(screen.getByRole('button', { name: 'Użyj mojej lokalizacji' })).toHaveProperty('disabled', false);
+  });
+
+  it('komunikat w pasku nie każe wpisywać adresu (tu nie ma pola) i po chwili znika', async () => {
+    vi.useFakeTimers({ shouldAdvanceTime: true });
+    try {
+      history.replaceState(null, '', '/?lokalizacja=52.5,21.0');
+      zapisane = [dom];
+      vi.mocked(najblizszyAdres).mockResolvedValue(null);
+      render(<App />);
+      await screen.findByRole('combobox', { name: 'Wybrane miejsce' });
+      fireEvent.click(screen.getByRole('button', { name: 'Użyj mojej lokalizacji' }));
+      const alert = await screen.findByRole('alert');
+      expect(alert.textContent).not.toMatch(/Wpisz adres/);
+      expect(alert.textContent).toMatch(/Zostaję przy poprzednim miejscu\.$/);
+      await act(async () => {}); // efekt z licznikiem czasu musi się wykonać przed przesunięciem zegara
+      await act(async () => vi.advanceTimersByTime(7000));
+      expect(screen.queryByRole('alert')).not.toBeNull();
+      await act(async () => vi.advanceTimersByTime(1000));
+      expect(screen.queryByRole('alert')).toBeNull();
+    } finally {
+      vi.useRealTimers();
+    }
   });
 });
