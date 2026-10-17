@@ -12,7 +12,7 @@ afterEach(() => {
 it('opis trasy po ulicach, z zapisu i w linii prostej', () => {
   expect(opisTrasy(t)).toBe('540 m po ulicach, pieszo ok. 7 min.');
   expect(opisTrasy({ ...t, zrodlo: 'osrm-zapisana', profil: 'rower', dystansM: 7240, czasMin: 30 })).toBe('7,2 km po ulicach, rowerem ok. 30 min (trasa zapisana w telefonie).');
-  expect(opisTrasy({ ...t, zrodlo: 'prosta' })).toBe('540 m w linii prostej, pieszo ok. 7 min. Bez sieci nie mamy trasy po ulicach.');
+  expect(opisTrasy({ ...t, zrodlo: 'prosta' })).toBe('540 m w linii prostej, pieszo ok. 7 min. Nie mamy teraz trasy po ulicach.');
 });
 
 it('etykiety przycisków akcji', () => {

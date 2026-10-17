@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { KontekstWskazowek, Modul, Wskazowka } from '../contracts';
 
 type StanModulu = 'ladowanie' | Wskazowka[];
@@ -19,33 +19,45 @@ function kartaBledu(m: Modul): Wskazowka {
 // Karty pojawiają się, gdy moduł skończy; reszta pokazuje szkielet (ladowanie = liczba modułów w toku).
 export function useWskazowki(moduly: Modul[], k: KontekstWskazowek | null, proba: number): { karty: Wskazowka[]; ladowanie: number } {
   const [stany, setStany] = useState<Record<string, StanModulu>>({});
-  const klucz = k ? `${k.miejsce.rola}:${k.miejsce.adres.id}|${k.miejsca.map((m) => m.adres.id).join(',')}|${k.online}|${proba}` : '';
+  // baza = kontekst bez proby; sama zmiana proby to odświeżenie po akcji „przycisk”.
+  const baza = k ? `${k.miejsce.rola}:${k.miejsce.adres.id}|${k.miejsca.map((m) => m.adres.id).join(',')}|${k.online}` : '';
+  const ostatniaBaza = useRef('');
 
   useEffect(() => {
-    // Ten sam obiekt, gdy już pusto: inaczej nowa tablica modułów przy każdym renderze kręci efekt w kółko.
-    if (!k) return setStany((s) => (Object.keys(s).length ? {} : s));
+    if (!k) {
+      ostatniaBaza.current = '';
+      // Ten sam obiekt, gdy już pusto: inaczej nowa tablica modułów przy każdym renderze kręci efekt w kółko.
+      return setStany((s) => (Object.keys(s).length ? {} : s));
+    }
     let aktywne = true;
     const zKartami = moduly.filter((m) => m.wskazowki);
-    setStany(Object.fromEntries(zKartami.map((m) => [m.id, 'ladowanie' as const])));
+    // Nowy kontekst: szkielety. Samo odświeżenie: stare karty zostają, aż przyjdą nowe (bez skoku do szkieletów).
+    if (ostatniaBaza.current !== baza) setStany(Object.fromEntries(zKartami.map((m) => [m.id, 'ladowanie' as const])));
+    ostatniaBaza.current = baza;
     for (const m of zKartami) {
       // Promise.resolve().then: także wyjątek rzucony od razu (bez async) daje kartę błędu, a nie psuje pętli.
       Promise.resolve()
         .then(() => m.wskazowki!(k))
         .then(
           (w) => aktywne && setStany((s) => ({ ...s, [m.id]: w })),
-          () => aktywne && setStany((s) => ({ ...s, [m.id]: [kartaBledu(m)] })),
+          (e: unknown) => {
+            if (!aktywne) return;
+            console.error('[karty]', m.id, e);
+            setStany((s) => ({ ...s, [m.id]: [kartaBledu(m)] }));
+          },
         );
     }
     return () => {
       aktywne = false;
     };
-    // klucz opisuje kontekst w całości
+    // baza i proba opisują kontekst w całości
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [moduly, klucz]);
+  }, [moduly, baza, proba]);
 
   const wartosci = Object.values(stany);
   return {
     karty: wartosci.flatMap((s) => (s === 'ladowanie' ? [] : s)).sort((a, b) => a.kolejnosc - b.kolejnosc),
-    ladowanie: wartosci.filter((s) => s === 'ladowanie').length,
+    // Przed pierwszym efektem stany są puste: od razu szkielety zamiast mignięcia „Brak wskazówek”.
+    ladowanie: k && !wartosci.length ? moduly.filter((m) => m.wskazowki).length : wartosci.filter((s) => s === 'ladowanie').length,
   };
 }

@@ -38,3 +38,12 @@ it('linia prosta (bez sieci) jest przerywana', () => {
   pokazTrase(a.map, { ...t, zrodlo: 'prosta' });
   expect([...a.warstwy.values()][0].paint['line-dasharray']).toEqual([1.5, 1.5]);
 });
+
+it('trasa z mniej niż dwoma punktami nic nie rysuje i nie rusza mapy', () => {
+  const a = atrapa();
+  const sprzatnij = pokazTrase(a.map, { ...t, linia: [[21.0, 52.23]] });
+  expect(a.warstwy.size).toBe(0);
+  expect(a.zrodla.size).toBe(0);
+  expect(a.fitBounds).not.toHaveBeenCalled();
+  expect(() => sprzatnij()).not.toThrow();
+});

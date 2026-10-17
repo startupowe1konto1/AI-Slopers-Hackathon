@@ -36,12 +36,17 @@ test('?offline=1 pokazuje tryb offline mimo sieci', async ({ page }) => {
   await mapaGotowa(page);
 });
 
-test('Twoja sytuacja: 5 kart w kolejności, bez menu modułów', async ({ page }) => {
+test('Twoja sytuacja: 5 kart w kolejności, bez menu modułów, także offline', async ({ page, context }) => {
   await onboarding(page);
   const karty = page.getByRole('region', { name: 'Twoja sytuacja' }).locator('[data-testid^="karta-"]');
   await expect(karty).toHaveCount(5, { timeout: 30_000 });
   await expect(karty.first()).toHaveAttribute('data-testid', 'karta-syreny');
   await expect(page.getByRole('navigation', { name: 'Moduły' })).toHaveCount(0);
+
+  await context.setOffline(true);
+  await page.reload();
+  await expect(karty).toHaveCount(5, { timeout: 30_000 });
+  await expect(karty.first()).toHaveAttribute('data-testid', 'karta-syreny');
 });
 
 test('klik w kartę z trasą pokazuje opis trasy, drugi klik go chowa', async ({ page }) => {

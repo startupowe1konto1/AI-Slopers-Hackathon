@@ -19,7 +19,7 @@ export function etykietaAkcji(a: Akcja): string {
 
 export function opisTrasy(t: Trasa): string {
   const jak = t.profil === 'rower' ? 'rowerem' : 'pieszo';
-  if (t.zrodlo === 'prosta') return `${odleglosc(t.dystansM)} w linii prostej, ${jak} ok. ${t.czasMin} min. Bez sieci nie mamy trasy po ulicach.`;
+  if (t.zrodlo === 'prosta') return `${odleglosc(t.dystansM)} w linii prostej, ${jak} ok. ${t.czasMin} min. Nie mamy teraz trasy po ulicach.`;
   return `${odleglosc(t.dystansM)} po ulicach, ${jak} ok. ${t.czasMin} min${t.zrodlo === 'osrm-zapisana' ? ' (trasa zapisana w telefonie)' : ''}.`;
 }
 
@@ -54,10 +54,17 @@ function rysujGdyGotowa(mapa: MapLibreMap, rysuj: () => () => void): () => void 
 }
 
 // Akcje rysujące na mapie: zwraca sprzątanie i (dla trasy) opis do pokazania pod kartą. Nigdy się nie odrzuca.
-export async function wykonajNaMapie(a: Akcja, mapa: MapLibreMap, od: Wsp): Promise<{ sprzatanie: () => void; opis?: string }> {
+// aktualne(): czy kliknięcie jest wciąż ostatnie. Spóźniona trasa nic nie rysuje i nie przesuwa mapy.
+export async function wykonajNaMapie(
+  a: Akcja,
+  mapa: MapLibreMap,
+  od: Wsp,
+  aktualne: () => boolean = () => true,
+): Promise<{ sprzatanie: () => void; opis?: string }> {
   if (a.typ === 'mapa') return { sprzatanie: rysujGdyGotowa(mapa, () => a.pokaz(mapa)) };
   if (a.typ === 'trasa') {
     const t = await trasa(od, a.cel, a.profil ?? 'pieszo');
+    if (!aktualne()) return { sprzatanie: () => {} };
     return { sprzatanie: rysujGdyGotowa(mapa, () => pokazTrase(mapa, t)), opis: opisTrasy(t) };
   }
   return { sprzatanie: () => {} };

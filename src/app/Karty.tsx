@@ -4,6 +4,7 @@ import type { Akcja, Poziom, Wskazowka, Wsp } from '../contracts';
 import { etykietaAkcji, wykonajNaMapie } from './akcje';
 
 const POZIOM: Record<Poziom, string> = { ok: 'W porządku', uwaga: 'Uwaga', alarm: 'Ważne', brak: 'Brak danych' };
+const BEZ_MAPY = 'Mapa jeszcze się wczytuje.';
 
 type Props = { karty: Wskazowka[]; ladowanie: number; mapa: MapLibreMap | null; od: Wsp; onOdswiez: () => void };
 
@@ -19,7 +20,13 @@ export function Karty({ karty, ladowanie, mapa, od, onOdswiez }: Props) {
     sprzatanie.current = () => {};
     setOpis(null);
   };
-  useEffect(() => () => sprzatanie.current(), []);
+  useEffect(
+    () => () => {
+      nr.current++; // trasa w toku po odmontowaniu już się nie narysuje
+      sprzatanie.current();
+    },
+    [],
+  );
   // Inne miejsce: zamykamy kartę i czyścimy mapę.
   useEffect(() => {
     wyczysc();
@@ -37,10 +44,13 @@ export function Karty({ karty, ladowanie, mapa, od, onOdswiez }: Props) {
       onOdswiez();
       return;
     }
-    if (a.typ === 'link' || !mapa) return;
+    if (a.typ === 'link') return;
     wyczysc();
+    // Przed załadowaniem mapy tylko komunikat; przyciski akcji w rozwiniętej karcie działają, gdy mapa będzie gotowa.
+    if (!mapa) return setOpis(BEZ_MAPY);
     const moje = nr.current;
-    const w = await wykonajNaMapie(a, mapa, od);
+    if (a.typ === 'trasa') setOpis('Wyznaczam trasę…');
+    const w = await wykonajNaMapie(a, mapa, od, () => moje === nr.current);
     if (moje !== nr.current) return w.sprzatanie();
     sprzatanie.current = w.sprzatanie;
     setOpis(w.opis ?? null);
@@ -68,7 +78,7 @@ export function Karty({ karty, ladowanie, mapa, od, onOdswiez }: Props) {
             </button>
             {otwarta === w.id && (
               <div className="karta-szczegoly">
-                {opis && <p role="status">{opis}</p>}
+                {opis && !(mapa && opis === BEZ_MAPY) && <p role="status">{opis}</p>}
                 {w.szczegoly && (
                   <ul>
                     {w.szczegoly.map((s) => (
