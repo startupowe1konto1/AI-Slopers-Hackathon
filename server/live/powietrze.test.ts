@@ -92,7 +92,7 @@ describe('handler', () => {
     vi.stubGlobal('fetch', fetch);
     const r = await handler(new Request('http://x/api/live/powietrze'), {});
     expect(r.status).toBe(502);
-    expect(await r.json()).toEqual({ blad: 'klucz_lub_usluga' });
+    expect(await r.json()).toEqual({ blad: 'brak_klucza' });
     expect(fetch).not.toHaveBeenCalled();
   });
 });
