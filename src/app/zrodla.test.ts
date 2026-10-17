@@ -10,6 +10,7 @@ describe('zrodlaDoStopki', () => {
     expect(z).toEqual(STALE_ZRODLA);
     expect(z.map((x) => x.nazwa).join(' ')).toMatch(/OpenStreetMap.*SOIA|SOIA.*OpenStreetMap/s);
     expect(z.some((x) => x.nazwa.includes('PSP') && x.nazwa.includes('gdziesieukryc'))).toBe(true);
+    expect(z.some((x) => x.nazwa.startsWith('Trasy: OSRM'))).toBe(true);
   });
 
   it('dokłada źródła z manifestu i nie dubluje tych samych nazw', () => {
