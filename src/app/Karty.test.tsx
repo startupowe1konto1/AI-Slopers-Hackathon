@@ -115,7 +115,7 @@ it('pod trasą przełącznik „Pieszo | Komunikacja”; komunikacja i blackout 
   expect(screen.getByRole('radio', { name: 'Pieszo' }).getAttribute('aria-checked')).toBe('true');
   expect(screen.queryByRole('switch')).toBeNull();
   fireEvent.click(screen.getByRole('radio', { name: 'Komunikacja' }));
-  await waitFor(() => expect(screen.getByRole('status').textContent).toBe('Brak połączenia.'));
+  await waitFor(() => expect(screen.getByRole('status').textContent).toBe('W pobliżu nie ma bezpośredniego połączenia. 1,8 km po ulicach, pieszo ok. 22 min.'));
   expect(planKomunikacji).toHaveBeenCalledWith(od, t.do, { blackout: false });
   fireEvent.click(screen.getByRole('switch', { name: 'Zakładam blackout' }));
   expect(onBlackout).toHaveBeenCalledWith(true);

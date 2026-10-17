@@ -1,7 +1,8 @@
 import type { Map as MapLibreMap } from 'maplibre-gl';
 import type { Akcja, Trasa, Wsp } from '../contracts';
 import { pokazPlan, pokazTrase, type OdcinekPlanu } from '../map/trasaNaMapie';
-import { najblizszyOdjazd, opisPlanu, opisPrzejazdu, planKomunikacji, type PlanKomunikacji } from '../modules/transport/komunikacja';
+import { DOPISEK_BLACKOUT, najblizszyOdjazd, opisPrzejazdu, planKomunikacji, type Odjazd, type PlanKomunikacji, type Przejazd } from '../modules/transport/komunikacja';
+import { wymuszonyOffline } from '../offline/siec';
 import { trasa } from '../offline/trasy';
 
 const odleglosc = (m: number) => (m < 1000 ? `${Math.max(10, Math.round(m / 10) * 10)} m` : `${(m / 1000).toFixed(1).replace('.', ',')} km`);
@@ -73,10 +74,11 @@ export async function wykonajNaMapie(
 
 // Godzina odjazdu to dodatek: nie czekamy na nią dłużej niż 3 s.
 const ODJAZD_MS = 3000;
+const POZNY_KURS_MIN = 60;
 const zLimitem = <T>(p: Promise<T>, ms: number): Promise<T | null> =>
   Promise.race([p.catch(() => null), new Promise<null>((r) => setTimeout(() => r(null), ms))]);
 
-const tekstOdjazdu = (o: { godzina: string; zaMin: number }) => ` Najbliższy odjazd: ${o.godzina} (za ${o.zaMin} min, według rozkładu).`;
+const tekstOdjazdu = (o: Odjazd) => ` Odjazd, na który zdążysz: ${o.godzina} (za ${o.zaMin} min, według rozkładu).`;
 
 export type WynikKomunikacji = { sprzatanie: () => void; opis?: string; szczegoly?: string[] };
 
@@ -95,34 +97,60 @@ export async function wykonajKomunikacje(
   } catch {
     return { sprzatanie: () => {}, opis: 'Nie mam danych o komunikacji. Pobierz paczkę offline, gdy będzie sieć.' };
   }
-  if (!plan.warianty.length) {
+  const dopisek = plan.blackout ? [DOPISEK_BLACKOUT] : [];
+  // Bez połączenia albo gdy pieszo szybciej: na mapie trasa pieszo i jeden czas (po ulicach), bez innych opcji.
+  if (plan.pieszoSzybciej) {
     const w = await wykonajNaMapie({ typ: 'trasa', cel, nazwa: '' }, mapa, od, aktualne);
     if (!aktualne()) return { sprzatanie: w.sprzatanie };
-    return { sprzatanie: w.sprzatanie, opis: opisPlanu(plan), szczegoly: w.opis ? [w.opis] : undefined };
+    const naglowek = plan.warianty.length ? 'Pieszo będzie szybciej.' : 'W pobliżu nie ma bezpośredniego połączenia.';
+    return { sprzatanie: w.sprzatanie, opis: w.opis ? `${naglowek} ${w.opis}` : naglowek, szczegoly: dopisek.length ? dopisek : undefined };
   }
-  // Odjazdy wszystkich wariantów naraz. Linie, które dziś jeszcze jadą, idą na początek (metro jeździ do nocy, bez rozkładu w API).
+  // Odjazdy wszystkich wariantów naraz, najwcześniej po dojściu do przystanku. Z prawdziwym odjazdem „Razem” liczymy od teraz:
+  // czekanie do odjazdu + przejazd + zejście. Kolejność: znany odjazd (i metro), potem bez godziny, na końcu „dziś już nie jedzie”.
+  const teraz = new Date();
   const odjazdy = await Promise.all(
-    plan.warianty.map((w) => (w.typ === 'metro' ? Promise.resolve(null) : zLimitem(najblizszyOdjazd(w.z.id, w.linia), ODJAZD_MS))),
+    plan.warianty.map((w) => (w.typ === 'metro' ? Promise.resolve(null) : zLimitem(najblizszyOdjazd(w.z.id, w.linia, teraz, w.dojscieMin), ODJAZD_MS))),
   );
-  const warianty = plan.warianty.map((w, i) => ({ w, odjazd: odjazdy[i], brak: w.typ !== 'metro' && !odjazdy[i] }));
-  const [{ w: p, odjazd, brak }, ...inne] = [...warianty].sort((a, b) => Number(a.brak) - Number(b.brak));
-  const brakOdjazdu = navigator.onLine ? 'Według rozkładu ta linia dziś już nie jedzie.' : 'Bez sieci nie pokażę godziny odjazdu.';
+  const offline = !navigator.onLine || wymuszonyOffline();
+  const warianty = plan.warianty
+    .map((w, i) => {
+      const o = odjazdy[i];
+      const kurs = o && o !== 'brak' ? o : null;
+      // Kurs za ponad godzinę (np. pierwszy poranny po północy) to nie jest opcja na teraz.
+      const pozno = kurs && kurs.zaMin > POZNY_KURS_MIN ? kurs : null;
+      const znany = kurs && !pozno ? kurs : null;
+      const p: Przejazd = znany ? { ...w, czekanieMin: znany.zaMin - w.dojscieMin, razemMin: znany.zaMin + w.przejazdMin + w.zejscieMin } : w;
+      const kolejnosc = znany || w.typ === 'metro' ? 0 : o === 'brak' || pozno ? 2 : 1;
+      const brak =
+        w.typ === 'metro' || znany
+          ? null
+          : pozno
+            ? `Najbliższy kurs dopiero o ${pozno.godzina}.`
+            : o === 'brak'
+              ? 'Według rozkładu ta linia dziś już nie jedzie.'
+              : offline
+                ? 'Bez sieci nie pokażę godziny odjazdu.'
+                : 'Nie mam teraz godziny odjazdu.';
+      return { p, znany, brak, kolejnosc };
+    })
+    .sort((a, b) => a.kolejnosc - b.kolejnosc || a.p.razemMin - b.p.razemMin);
+  const [{ p, znany, brak }, ...inne] = warianty;
   const [dojscie, zejscie] = await Promise.all([trasa(od, p.z, 'pieszo'), trasa(p.do, cel, 'pieszo')]);
   if (!aktualne()) return { sprzatanie: () => {} };
   const odcinki: OdcinekPlanu[] = [
     { rodzaj: 'pieszo', linia: dojscie.linia },
-    { rodzaj: p.typ, linia: p.przystanki.map((s) => [s.lon, s.lat]) },
+    { rodzaj: p.typ, linia: p.ksztalt },
     { rodzaj: 'pieszo', linia: zejscie.linia },
   ];
   const przystanki: [number, number][] = [[p.z.lon, p.z.lat], [p.do.lon, p.do.lat]];
   const szczegoly = [
-    ...(plan.pieszoSzybciej || plan.blackout ? [opisPlanu(plan)] : []),
-    ...(brak ? [brakOdjazdu] : []),
-    ...inne.map((x) => `Inna opcja: ${opisPrzejazdu(x.w)}${x.odjazd ? tekstOdjazdu(x.odjazd) : x.brak ? ` ${brakOdjazdu}` : ''}`),
+    ...dopisek,
+    ...(brak ? [brak] : []),
+    ...inne.map((x) => `Inna opcja: ${opisPrzejazdu(x.p)}${x.znany ? tekstOdjazdu(x.znany) : x.brak ? ` ${x.brak}` : ''}`),
   ];
   return {
-    sprzatanie: rysujGdyGotowa(mapa, () => pokazPlan(mapa, odcinki, przystanki)),
-    opis: opisPrzejazdu(p) + (odjazd ? tekstOdjazdu(odjazd) : ''),
+    sprzatanie: rysujGdyGotowa(mapa, () => pokazPlan(mapa, odcinki, przystanki, [cel.lon, cel.lat])),
+    opis: opisPrzejazdu(p) + (znany ? tekstOdjazdu(znany) : ''),
     szczegoly: szczegoly.length ? szczegoly : undefined,
   };
 }

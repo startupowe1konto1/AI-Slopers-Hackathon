@@ -73,7 +73,8 @@ input { font: inherit; }
 @keyframes obrot { to { transform: rotate(360deg); } }
 @media (prefers-reduced-motion: reduce) { .polaczenie-kolko { animation: none; } }
 
-.karty { max-height: 48dvh; overflow: auto; padding: 12px 14px; background: var(--tlo-grupy); }
+/* Stała wysokość dolnego panelu: mapa nie zmienia rozmiaru, gdy dochodzi treść, więc kadr trasy się nie ucina. */
+.karty { height: 48dvh; overflow: auto; padding: 12px 14px; background: var(--tlo-grupy); }
 .karty h2 { font-size: 17px; line-height: 1.2; letter-spacing: -0.02em; margin: 0 0 10px 2px; }
 .karty-pusto { margin: 0; font-size: 14px; color: var(--przygaszony); }
 .karty > ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }

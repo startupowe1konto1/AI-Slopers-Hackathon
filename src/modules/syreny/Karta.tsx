@@ -36,7 +36,7 @@ export function Tresc({ dane, data }: { dane: DaneMiejsca[]; data: string }) {
             <h3 style={{ fontSize: 15, margin: '0 0 4px' }}>{tytul}</h3>
             <p style={{ margin: '0 0 4px' }}>
               {syreny
-                ? `Syrena normalnie: ${KLASA[syreny.normalnie].tekst}. Przy blackoucie: ${KLASA[syreny.blackout].tekst}${syreny.blackoutSzacunek ? ' (szacunek)' : ''}.`
+                ? `Syrena normalnie: ${KLASA[syreny.normalnie].tekst}. Jeśli zabraknie prądu: ${KLASA[syreny.blackout].tekst}${syreny.blackoutSzacunek ? ' (szacunek)' : ''}.`
                 : 'Brak danych o syrenach dla tego adresu.'}
             </p>
             {punkty ? (

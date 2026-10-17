@@ -52,7 +52,8 @@ export function trescDymka(nazwa: string, zrodlo: string, [lon, lat]: [number, n
   return el;
 }
 
-function popup(map: MapLibreMap, e: MapLayerMouseEvent, zrodla: Manifest['zrodla']) {
+// Zwraca otwarty dymek, żeby warstwa mogła go zamknąć przy wyłączeniu (dymek nie może wskazywać znikniętego punktu).
+function popup(map: MapLibreMap, e: MapLayerMouseEvent, zrodla: Manifest['zrodla']): Popup | undefined {
   const f = e.features?.[0];
   if (!f || f.geometry.type !== 'Point') return;
   const wsp = f.geometry.coordinates as [number, number];
@@ -61,14 +62,15 @@ function popup(map: MapLibreMap, e: MapLayerMouseEvent, zrodla: Manifest['zrodla
   const el = trescDymka(f.properties.nazwa, zrodla[f.properties.zrodlo]?.nazwa ?? f.properties.zrodlo, wsp, () => p.remove());
   const bezRuchu = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
   const h = map.getContainer().clientHeight;
-  map.easeTo({ center: wsp, offset: [0, Math.max(h / 4, h / 2 - 32)], duration: bezRuchu ? 0 : 350 });
-  p.setLngLat(wsp).setDOMContent(el).addTo(map);
+  map.easeTo({ center: wsp, offset: [0, Math.max(h / 4, h / 2 - 48)], duration: bezRuchu ? 0 : 350 });
+  return p.setLngLat(wsp).setDOMContent(el).addTo(map);
 }
 
 export function dodajWarstwy(map: MapLibreMap): () => void {
   let aktywne = true;
   const subskrypcje: Subscription[] = [];
   let przestanSluchac = () => {};
+  let dymek: Popup | undefined;
 
   Promise.all([wczytajPunkty(), zrodlaPaczki().catch(() => ({}))])
     .then(([punkty, zrodla]) => {
@@ -112,7 +114,10 @@ export function dodajWarstwy(map: MapLibreMap): () => void {
       map.addLayer({ id: PUNKTY[1], type: 'circle', source: INNE, paint: punkt });
 
       subskrypcje.push(
-        map.on('click', PUNKTY, (e) => popup(map, e, zrodla)),
+        map.on('click', PUNKTY, (e) => {
+          dymek?.remove();
+          dymek = popup(map, e, zrodla);
+        }),
         map.on('click', KLASTRY, async (e) => {
           const f = e.features?.[0];
           if (!f || f.geometry.type !== 'Point') return;
@@ -126,6 +131,7 @@ export function dodajWarstwy(map: MapLibreMap): () => void {
 
   return () => {
     aktywne = false;
+    dymek?.remove();
     przestanSluchac();
     subskrypcje.forEach((s) => s.unsubscribe());
     WARSTWY.forEach((id) => map.getLayer(id) && map.removeLayer(id));
@@ -140,6 +146,7 @@ export function dodajWarstweRodzaju(map: MapLibreMap, rodzaj: RodzajPunktu): () 
   const klastry = rodzaj === 'schronienie_psp';
   const warstwy = klastry ? [`${id}-klastry`, `${id}-liczba`, `${id}-punkty`] : [`${id}-punkty`];
   const subskrypcje: Subscription[] = [];
+  let dymek: Popup | undefined;
 
   Promise.all([wczytajPunkty(), zrodlaPaczki().catch(() => ({}))])
     .then(([punkty, zrodla]) => {
@@ -169,7 +176,12 @@ export function dodajWarstweRodzaju(map: MapLibreMap, rodzaj: RodzajPunktu): () 
         ...(klastry ? { filter: ['!', ['has', 'point_count']] as ExpressionSpecification } : {}),
         paint: { 'circle-color': kolor, 'circle-radius': 6, 'circle-stroke-color': '#ffffff', 'circle-stroke-width': 1.5 },
       });
-      subskrypcje.push(map.on('click', `${id}-punkty`, (e) => popup(map, e, zrodla)));
+      subskrypcje.push(
+        map.on('click', `${id}-punkty`, (e) => {
+          dymek?.remove();
+          dymek = popup(map, e, zrodla);
+        }),
+      );
       if (klastry) {
         subskrypcje.push(
           map.on('click', warstwy[0], async (e) => {
@@ -186,6 +198,7 @@ export function dodajWarstweRodzaju(map: MapLibreMap, rodzaj: RodzajPunktu): () 
 
   return () => {
     aktywne = false;
+    dymek?.remove();
     subskrypcje.forEach((s) => s.unsubscribe());
     warstwy.forEach((l) => map.getLayer(l) && map.removeLayer(l));
     if (map.getSource(id)) map.removeSource(id);

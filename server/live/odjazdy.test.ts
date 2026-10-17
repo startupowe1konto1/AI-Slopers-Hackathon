@@ -45,12 +45,20 @@ describe('handler', () => {
   it('złe parametry: 400 bez pytania API', async () => {
     const f = vi.fn();
     vi.stubGlobal('fetch', f);
-    for (const q of ['linia=523', 'przystanek=700901', 'przystanek=7009&linia=523', 'przystanek=70090a&linia=523', 'przystanek=700901&linia=52345', 'przystanek=700901&linia=5-2']) {
+    for (const q of ['linia=523', 'przystanek=700901', 'przystanek=7009&linia=523', 'przystanek=70090a&linia=523', 'przystanek=700901&linia=52345', 'przystanek=700901&linia=-52', 'przystanek=700901&linia=E--2']) {
       const r = await handler(zapytanie(q), { WARSAW_API_TOKEN: 'test' });
       expect(r.status).toBe(400);
       expect(await r.json()).toEqual({ blad: 'parametry' });
     }
     expect(f).not.toHaveBeenCalled();
+  });
+
+  it('linie z myślnikiem (np. E-2) przechodzą walidację', async () => {
+    const f = vi.fn(async () => Response.json(probka));
+    vi.stubGlobal('fetch', f);
+    const r = await handler(zapytanie('przystanek=700901&linia=e-2'), { WARSAW_API_TOKEN: 'test' });
+    expect(r.status).toBe(200);
+    expect(((await r.json()) as StanLive<Odjazdy>).dane.linia).toBe('E-2');
   });
 
   it('pyta API o zespół, słupek i linię (wielkie litery) i zwraca odjazdy z cache na godzinę', async () => {

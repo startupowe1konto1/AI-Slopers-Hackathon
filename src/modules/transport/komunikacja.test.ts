@@ -130,6 +130,35 @@ describe('planuj', () => {
   });
 });
 
+describe('planuj: sensowność i przebieg przejazdu', () => {
+  it('przejazd, który oddala od celu, odpada (wsiadka przy celu, wysiadka przy starcie)', () => {
+    const start = { lat: 52.23, lon: 21.0 };
+    const cel = { lat: 52.236, lon: 21.0 }; // ok. 670 m
+    const dane: DaneKomunikacji = {
+      przystanki: [p('q1', 'Przy celu', 52.2355), p('q2', 'Przy starcie', 52.231)],
+      linie: [l('X', 'autobus', 'Start', ['q1', 'q2'], [0, 2])],
+    };
+    const plan = planuj(dane, start, cel, { blackout: false });
+    expect(plan.warianty).toEqual([]);
+    expect(plan.pieszoSzybciej).toBe(true);
+  });
+
+  it('odcinek przejazdu idzie po przebiegu linii między przystankami, od przystanku do przystanku', () => {
+    const z: LiniaKierunek = {
+      ...l('175', 'autobus', 'Cel', ['a1', 'x1', 'b1'], [0, 6, 12]),
+      ksztalt: [[21.0, 52.2305], [21.0, 52.231], [21.003, 52.24], [21.0, 52.245], [21.003, 52.25], [21.0, 52.259], [21.0, 52.2595]],
+      indeksy: [1, 3, 5],
+    };
+    const w = planuj({ przystanki: PRZYSTANKI, linie: [z] }, START, CEL, { blackout: false }).warianty[0];
+    expect(w.ksztalt).toEqual([[21.0, 52.231], [21.0, 52.231], [21.003, 52.24], [21.0, 52.245], [21.003, 52.25], [21.0, 52.259], [21.0, 52.259]]);
+  });
+
+  it('bez przebiegu w paczce odcinek idzie po kolejnych przystankach', () => {
+    const w = planuj(DANE, START, CEL, { blackout: false }).warianty.find((x) => x.linia === '175')!;
+    expect(w.ksztalt).toEqual(w.przystanki.map((s) => [s.lon, s.lat]));
+  });
+});
+
 describe('najblizszyOdjazd', () => {
   const stan = (odjazdy: string[], zCache = false) => ({
     dane: { przystanek: 'a1', linia: '175', odjazdy },
@@ -149,9 +178,20 @@ describe('najblizszyOdjazd', () => {
     expect(await najblizszyOdjazd('a1', '175', new Date(2026, 9, 17, 23, 50))).toEqual({ godzina: '00:15', zaMin: 25, zCache: true });
   });
 
-  it('po ostatnim odjeździe: null', async () => {
+  it('po ostatnim odjeździe: „brak” (rozkład jest, kursów już nie ma)', async () => {
     vi.mocked(fetchLive).mockResolvedValue(stan(['22:10', '23:20']));
-    expect(await najblizszyOdjazd('a1', '175', new Date(2026, 9, 17, 23, 50))).toBeNull();
+    expect(await najblizszyOdjazd('a1', '175', new Date(2026, 9, 17, 23, 50))).toBe('brak');
+  });
+
+  it('pomija odjazdy, na które nie zdążysz dojść do przystanku', async () => {
+    vi.mocked(fetchLive).mockResolvedValue(stan(['14:08', '14:12', '14:27']));
+    expect(await najblizszyOdjazd('a1', '175', new Date(2026, 9, 17, 14, 7), 6)).toEqual({ godzina: '14:27', zaMin: 20, zCache: false });
+  });
+
+  it('po północy rozkład z poprzedniego dnia: liczą się tylko nocne kursy 24:xx jako 00:xx', async () => {
+    const wczoraj = { ...stan(['23:06', '23:36', '24:06', '24:36', '25:06']), stanNa: new Date(2026, 9, 17, 23, 30).toISOString() };
+    vi.mocked(fetchLive).mockResolvedValue(wczoraj);
+    expect(await najblizszyOdjazd('a1', 'N12', new Date(2026, 9, 18, 0, 20), 5)).toEqual({ godzina: '00:36', zaMin: 16, zCache: false });
   });
 
   it('metro: null bez zapytania', async () => {
@@ -174,6 +214,7 @@ const przejazd = (zmiany: Partial<Przejazd>): Przejazd => ({
   z: p('s1', 'Centrum 05', 52.23),
   do: p('s2', 'Plac Zbawiciela 02', 52.22),
   przystanki: [],
+  ksztalt: [],
   liczbaPrzystankow: 6,
   dojscieM: 240,
   dojscieMin: 3,

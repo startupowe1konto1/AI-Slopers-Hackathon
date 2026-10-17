@@ -56,6 +56,16 @@ export function ArkuszTrasy({ mapa, od, cel, blackout, onBlackout, onZamknij }: 
     },
     [],
   );
+  // Fokus na nagłówku po otwarciu (czytnik ekranu ogłasza cel), Esc zamyka arkusz.
+  const naglowek = useRef<HTMLHeadingElement>(null);
+  useEffect(() => naglowek.current?.focus(), [cel]);
+  const zamknijTeraz = useRef(onZamknij);
+  zamknijTeraz.current = onZamknij;
+  useEffect(() => {
+    const klawisz = (e: KeyboardEvent) => e.key === 'Escape' && zamknijTeraz.current();
+    window.addEventListener('keydown', klawisz);
+    return () => window.removeEventListener('keydown', klawisz);
+  }, []);
 
   const zmienTryb = (t: Tryb) => {
     setTryb(t);
@@ -71,7 +81,9 @@ export function ArkuszTrasy({ mapa, od, cel, blackout, onBlackout, onZamknij }: 
       <header className="arkusz-naglowek">
         <div>
           <span className="arkusz-nadtytul">Trasa do</span>
-          <h2>{cel.nazwa}</h2>
+          <h2 ref={naglowek} tabIndex={-1}>
+            {cel.nazwa}
+          </h2>
         </div>
         <button type="button" className="arkusz-zamknij" aria-label="Zamknij trasę" onClick={onZamknij}>
           <svg viewBox="0 0 256 256" width="16" height="16" aria-hidden="true" focusable="false">

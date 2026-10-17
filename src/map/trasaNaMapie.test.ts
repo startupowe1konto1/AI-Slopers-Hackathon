@@ -1,7 +1,7 @@
 import { expect, it, vi } from 'vitest';
 import type { Map as MapLibreMap } from 'maplibre-gl';
 import type { Trasa } from '../contracts';
-import { pokazPlan, pokazTrase } from './trasaNaMapie';
+import { KADR, pokazPlan, pokazTrase } from './trasaNaMapie';
 
 function atrapa() {
   const warstwy = new Map<string, { paint: Record<string, unknown> }>();
@@ -23,11 +23,16 @@ const t: Trasa = {
   linia: [[21.0, 52.23], [21.01, 52.235], [21.02, 52.24]], zrodlo: 'osrm',
 };
 
-it('rysuje linię, pokazuje całą trasę i sprząta po sobie', () => {
+it('kadr ma większy margines u góry (kafelki) i z prawej (przyciski zoomu)', () => {
+  expect(KADR).toEqual({ top: 80, bottom: 40, left: 40, right: 56 });
+});
+
+it('rysuje linię i znacznik celu, pokazuje całą trasę i sprząta po sobie', () => {
   const a = atrapa();
   const sprzatnij = pokazTrase(a.map, t);
-  expect(a.warstwy.size).toBe(1);
-  expect(a.fitBounds).toHaveBeenCalledWith([[21.0, 52.23], [21.02, 52.24]], { padding: 60, maxZoom: 17 });
+  expect(a.warstwy.size).toBe(2);
+  expect([...a.warstwy.keys()].some((id) => id.endsWith('-cel'))).toBe(true);
+  expect(a.fitBounds).toHaveBeenCalledWith([[21.0, 52.23], [21.02, 52.24]], { padding: KADR, maxZoom: 17 });
   sprzatnij();
   expect(a.warstwy.size).toBe(0);
   expect(a.zrodla.size).toBe(0);
@@ -58,12 +63,14 @@ it('plan komunikacji: dojścia przerywane, przejazd w kolorze linii, przystanki;
       { rodzaj: 'pieszo', linia: [[21.03, 52.25], [21.031, 52.252]] },
     ],
     [[21.005, 52.231], [21.03, 52.25]],
+    [21.031, 52.252],
   );
-  expect(a.warstwy.size).toBe(3);
+  expect(a.warstwy.size).toBe(4);
+  expect([...a.warstwy.keys()].some((id) => id.endsWith('-cel'))).toBe(true);
   const [pieszo, przejazd] = [...a.warstwy.values()];
   expect(pieszo.paint['line-dasharray']).toBeDefined();
   expect(przejazd.paint['line-dasharray']).toBeUndefined();
-  expect(a.fitBounds).toHaveBeenCalledWith([[21.0, 52.23], [21.031, 52.252]], { padding: 60, maxZoom: 17 });
+  expect(a.fitBounds).toHaveBeenCalledWith([[21.0, 52.23], [21.031, 52.252]], { padding: KADR, maxZoom: 17 });
   sprzatnij();
   expect(a.warstwy.size).toBe(0);
   expect(a.zrodla.size).toBe(0);
