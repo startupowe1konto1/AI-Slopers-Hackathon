@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { formatujOdleglosc, linkPSP, najblizszeZ, odlegloscM, zbuduj } from './najblizsze';
+import { azymut, formatujOdleglosc, kierunek, linkPSP, najblizszeZ, odlegloscM, zbuduj } from './najblizsze';
 import type { Punkt } from '../../contracts';
 
 const P: Punkt[] = [
@@ -14,6 +14,25 @@ it('zwraca najbliższe danego rodzaju w kolejności odległości', () => {
   expect(najblizszeZ(idx, { lat: 52.239, lon: 21.0 }, 'aed', 1).map((p) => p.id)).toEqual(['b']);
   expect(najblizszeZ(idx, { lat: 52.23, lon: 21.0 }, 'apteka', 3).map((p) => p.id)).toEqual(['c']);
   expect(najblizszeZ(idx, { lat: 52.23, lon: 21.0 }, 'sor', 3)).toEqual([]);
+});
+
+it('tylko całodobowe: pomija punkty bez dostępności „Całodobowa”', () => {
+  const idx = zbuduj([...P, { id: 'd', rodzaj: 'aed', nazwa: 'D', dostepnosc: 'Całodobowa', lat: 52.25, lon: 21.0, zrodlo: 'um-aed' }]);
+  expect(najblizszeZ(idx, { lat: 52.234, lon: 21.0 }, 'aed', 3).map((p) => p.id)).toEqual(['a', 'b', 'd']);
+  expect(najblizszeZ(idx, { lat: 52.234, lon: 21.0 }, 'aed', 3, true).map((p) => p.id)).toEqual(['d']);
+});
+
+it('azymut i kierunek względem północy (bez sieci, z samych współrzędnych)', () => {
+  const o = { lat: 52.23, lon: 21.0 };
+  expect(azymut(o, { lat: 52.24, lon: 21.0 })).toBeCloseTo(0, 0);
+  expect(azymut(o, { lat: 52.23, lon: 21.01 })).toBeCloseTo(90, 0);
+  expect(azymut(o, { lat: 52.22, lon: 21.0 })).toBeCloseTo(180, 0);
+  expect(azymut(o, { lat: 52.23, lon: 20.99 })).toBeCloseTo(270, 0);
+  expect(azymut(o, { lat: 52.24, lon: 21.016 })).toBeCloseTo(45, -1);
+  expect([0, 22, 44, 90, 135, 180, 225, 270, 315, 350].map(kierunek)).toEqual([
+    'północ', 'północ', 'północny wschód', 'wschód', 'południowy wschód',
+    'południe', 'południowy zachód', 'zachód', 'północny zachód', 'północ',
+  ]);
 });
 
 it('link do aplikacji PSP', () => {

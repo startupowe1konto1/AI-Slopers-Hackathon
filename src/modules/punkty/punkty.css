@@ -8,6 +8,9 @@
 .punkt-naglowek span { white-space: nowrap; font-weight: 600; }
 .punkt-zrodlo, .punkty-dane, .punkty-info { color: var(--przygaszony); font-size: 12px; }
 .punkty-info { font-size: 14px; }
-.punkty-lista a.przycisk { display: inline-block; width: auto; margin-top: 6px; padding: 6px 12px; font-size: 13px; text-decoration: none; }
+.punkt-akcje { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+.punkt-akcje .przycisk { display: inline-block; width: auto; margin-top: 0; padding: 6px 12px; font-size: 13px; text-decoration: none; }
+.strzalka { display: inline-block; color: var(--akcent); }
+.punkty-filtr { display: flex; align-items: center; gap: 8px; min-height: 36px; margin: -4px 0 8px; font-size: 14px; }
 .punkty-szkielet span { display: block; height: 56px; margin-bottom: 8px; border-radius: 8px; background: var(--linia); animation: punkty-puls 1.2s ease-in-out infinite; }
 @keyframes punkty-puls { 50% { opacity: 0.5; } }
