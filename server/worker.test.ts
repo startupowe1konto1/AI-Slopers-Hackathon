@@ -17,6 +17,12 @@ it.each(['pojazdy', 'wiatr'])('/api/live/%s trafia do handlera z kluczem z env',
   expect((init.headers as Record<string, string>).Authorization).toBe('test');
 });
 
+it.each(['powietrze', 'rowery', 'utrudnienia'])('/api/live/%s jest w rejestrze', async (nazwa) => {
+  vi.stubGlobal('fetch', vi.fn(async () => new Response('x', { status: 500 })));
+  // 502 z handlera (źródło padło) zamiast 404 oznacza, że nazwa jest zarejestrowana
+  expect((await zapytaj(`/api/live/${nazwa}`)).status).toBe(502);
+});
+
 it('nieznana nazwa daje 404', async () => {
   expect((await zapytaj('/api/live/nieistnieje')).status).toBe(404);
 });
