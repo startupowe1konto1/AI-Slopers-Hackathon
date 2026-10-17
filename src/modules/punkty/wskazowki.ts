@@ -28,7 +28,7 @@ export async function kartaSchronienia(k: KontekstWskazowek): Promise<Wskazowka>
     ...baza,
     poziom: d <= 1000 ? 'ok' : 'uwaga',
     tekst: `${p.nazwa}, ${ile}, ok. ${t.czasMin} min pieszo.${p.dostepnosc ? ` Dostępność: ${malaLitera(p.dostepnosc)}.` : ''}`,
-    szczegoly: kolejne.map((q, i) => `${i + 2}. ${q.nazwa}, ${formatujOdleglosc(odlegloscM(od, q))}${q.dostepnosc ? `, ${malaLitera(q.dostepnosc)}` : ''}`),
+    szczegoly: kolejne.map((q, i) => `${i + 2}. ${q.nazwa}, ${formatujOdleglosc(odlegloscM(od, q))} w linii prostej${q.dostepnosc ? `, ${malaLitera(q.dostepnosc)}` : ''}`),
     akcje: [
       { typ: 'trasa', cel: { lat: p.lat, lon: p.lon }, nazwa: p.nazwa, profil: 'pieszo' },
       { typ: 'link', url: linkPSP(p), etykieta: 'Otwórz w aplikacji PSP' },

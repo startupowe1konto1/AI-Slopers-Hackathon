@@ -1,6 +1,6 @@
 {
- "wersja": "2026-10-17T21:05",
- "zbudowano": "2026-10-17T21:05:00+00:00",
+ "wersja": "2026-10-17T21:33",
+ "zbudowano": "2026-10-17T21:33:50+00:00",
  "pliki": [
   {
    "sciezka": "adresy/adresy.json",
@@ -44,7 +44,7 @@
   },
   {
    "sciezka": "transport/linie.json",
-   "bajty": 245681,
+   "bajty": 1118172,
    "modul": "transport"
   },
   {

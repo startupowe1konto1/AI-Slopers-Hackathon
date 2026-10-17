@@ -20,7 +20,7 @@ it('najbliższe miejsce z trasą pieszą, dwa kolejne w szczegółach, link do a
   const w = await kartaSchronienia(k());
   expect(w).toMatchObject({ id: 'schronienie', kolejnosc: 20, tytul: 'Najbliższe miejsce schronienia według PSP', poziom: 'ok' });
   expect(w.tekst).toBe('ul. Garwolińska 9, 120 m, ok. 2 min pieszo. Dostępność: na żądanie.');
-  expect(w.szczegoly).toEqual(['2. ul. Garwolińska 11, 330 m, całodobowa', '3. ul. Garwolińska 13, 560 m, określone godziny']);
+  expect(w.szczegoly).toEqual(['2. ul. Garwolińska 11, 330 m w linii prostej, całodobowa', '3. ul. Garwolińska 13, 560 m w linii prostej, określone godziny']);
   expect(w.akcje[0]).toMatchObject({ typ: 'trasa', nazwa: 'ul. Garwolińska 9', profil: 'pieszo' });
   expect(w.akcje[1]).toMatchObject({ typ: 'link', etykieta: 'Otwórz w aplikacji PSP' });
   expect(w.akcje).toHaveLength(4);

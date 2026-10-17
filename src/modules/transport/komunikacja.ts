@@ -6,7 +6,16 @@ import { fetchLive } from '../../offline/live-cache';
 // Planer komunikacji miejskiej bez przesiadek: jedna linia od przystanku przy starcie do przystanku przy celu.
 export type TypLinii = 'autobus' | 'tramwaj' | 'metro';
 // Wpis z public/pack/transport/linie.json: jedna linia w jednym kierunku, `czasy` w minutach od pierwszego przystanku.
-export type LiniaKierunek = { linia: string; typ: TypLinii; kierunek: string; przystanki: string[]; czasy: number[] };
+// `ksztalt` to przebieg linii [lon, lat] z GTFS, `indeksy[k]` to punkt przebiegu przy k-tym przystanku (gdy jest w paczce).
+export type LiniaKierunek = {
+  linia: string;
+  typ: TypLinii;
+  kierunek: string;
+  przystanki: string[];
+  czasy: number[];
+  ksztalt?: [number, number][];
+  indeksy?: number[];
+};
 export type PrzystanekK = Wsp & { id: string; nazwa: string };
 export type Przejazd = {
   linia: string;
@@ -14,7 +23,8 @@ export type Przejazd = {
   kierunek: string;
   z: PrzystanekK;
   do: PrzystanekK;
-  przystanki: PrzystanekK[]; // od `z` do `do` włącznie, do narysowania odcinka przejazdu
+  przystanki: PrzystanekK[]; // od `z` do `do` włącznie
+  ksztalt: [number, number][]; // odcinek przejazdu do narysowania: po przebiegu linii albo po przystankach
   liczbaPrzystankow: number;
   dojscieM: number;
   dojscieMin: number;
@@ -68,6 +78,16 @@ function wPoblizu(i: Indeks, dane: DaneKomunikacji, w: Wsp): Map<string, Dojscie
   );
 }
 
+// Przebieg między przystankami a i b: z kształtu linii (końce dokładnie na przystankach) albo po kolejnych przystankach.
+function odcinek(l: LiniaKierunek, a: number, b: number, i: Indeks): [number, number][] {
+  const przystanki = l.przystanki.slice(a, b + 1).flatMap((id) => i.poId.get(id) ?? []);
+  const wsp = (s: PrzystanekK): [number, number] => [s.lon, s.lat];
+  const ia = l.indeksy?.[a];
+  const ib = l.indeksy?.[b];
+  if (!l.ksztalt || ia === undefined || ib === undefined || ib < ia || przystanki.length < 2) return przystanki.map(wsp);
+  return [wsp(przystanki[0]), ...l.ksztalt.slice(ia, ib + 1), wsp(przystanki[przystanki.length - 1])];
+}
+
 export function planuj(dane: DaneKomunikacji, od: Wsp, cel: Wsp, opcje: { blackout: boolean }): PlanKomunikacji {
   const i = indeks(dane);
   const A = wPoblizu(i, dane, od);
@@ -83,6 +103,10 @@ export function planuj(dane: DaneKomunikacji, od: Wsp, cel: Wsp, opcje: { blacko
         if (b <= a) continue; // wsiadamy przed wysiadką, więc kierunek zawsze właściwy
         const dojscie = A.get(l.przystanki[a])!;
         const zejscie = B.get(l.przystanki[b])!;
+        const pz = i.poId.get(l.przystanki[a])!;
+        const pdo = i.poId.get(l.przystanki[b])!;
+        // Przejazd ma przybliżać do celu i oddalać od startu; inaczej to krążenie (np. wsiadka przy celu).
+        if (pieszo(pz, cel).m <= zejscie.m || pieszo(od, pdo).m <= dojscie.m) continue;
         const przejazdMin = Math.ceil(l.czasy[b] - l.czasy[a]);
         const razemMin = dojscie.min + CZEKANIE[l.typ] + przejazdMin + zejscie.min;
         const dotad = najlepsze.get(klucz);
@@ -91,9 +115,10 @@ export function planuj(dane: DaneKomunikacji, od: Wsp, cel: Wsp, opcje: { blacko
           linia: l.linia,
           typ: l.typ,
           kierunek: l.kierunek,
-          z: i.poId.get(l.przystanki[a])!,
-          do: i.poId.get(l.przystanki[b])!,
+          z: pz,
+          do: pdo,
           przystanki: l.przystanki.slice(a, b + 1).flatMap((id) => i.poId.get(id) ?? []),
+          ksztalt: odcinek(l, a, b, i),
           liczbaPrzystankow: b - a,
           dojscieM: do10(dojscie.m),
           dojscieMin: dojscie.min,
@@ -143,17 +168,19 @@ function minuty(g: string): number {
 const godzina = (min: number) => `${String(Math.floor(min / 60) % 24).padStart(2, '0')}:${String(min % 60).padStart(2, '0')}`;
 
 // Najbliższy odjazd z rozkładu. Metro nie jest w API rozkładów (linie M1, M2), więc dla niego null.
-export async function najblizszyOdjazd(
-  przystanekId: string,
-  linia: string,
-  teraz = new Date(),
-): Promise<{ godzina: string; zaMin: number; zCache: boolean } | null> {
+export type Odjazd = { godzina: string; zaMin: number; zCache: boolean };
+// Najbliższy odjazd, na który zdążysz (najwcześniej za `poMin` minut, czyli po dojściu do przystanku).
+// 'brak' = rozkład jest, ale dziś nic już nie jedzie; null = nie mamy rozkładu (metro, brak sieci, błąd źródła).
+export async function najblizszyOdjazd(przystanekId: string, linia: string, teraz = new Date(), poMin = 0): Promise<Odjazd | 'brak' | null> {
   if (/^M\d/.test(linia)) return null;
   const s = await fetchLive<Odjazdy>(`odjazdy?przystanek=${encodeURIComponent(przystanekId)}&linia=${encodeURIComponent(linia)}`).catch(() => null);
   if (!s?.dane?.odjazdy) return null;
   const terazMin = teraz.getHours() * 60 + teraz.getMinutes();
-  const nast = s.dane.odjazdy.map(minuty).filter((m) => m >= terazMin);
-  if (!nast.length) return null;
+  // Rozkład pobrany przed północą jest z poprzedniego dnia: zostają z niego tylko nocne kursy 24:xx, czyli dzisiejsze 00:xx.
+  const zWczoraj = s.stanNa ? new Date(s.stanNa).toDateString() !== teraz.toDateString() && new Date(s.stanNa) < teraz : false;
+  const czasy = s.dane.odjazdy.map(minuty).flatMap((m) => (zWczoraj ? (m >= 1440 ? [m - 1440] : []) : [m]));
+  const nast = czasy.filter((m) => m >= terazMin + poMin);
+  if (!nast.length) return 'brak';
   const m = Math.min(...nast);
   return { godzina: godzina(m), zaMin: m - terazMin, zCache: s.zCache };
 }
@@ -176,6 +203,8 @@ export function opisPrzejazdu(p: Przejazd): string {
   );
 }
 
+export const DOPISEK_BLACKOUT = 'Jeśli zabraknie prądu, tramwaje i metro staną. Pokazuję tylko autobusy.';
+
 export function opisPlanu(plan: PlanKomunikacji): string {
   const [w] = plan.warianty;
   const opis = !w
@@ -183,5 +212,5 @@ export function opisPlanu(plan: PlanKomunikacji): string {
     : plan.pieszoSzybciej
       ? `Pieszo będzie szybciej: ok. ${plan.pieszoMin} min.`
       : `Najszybciej ${NARZEDNIK[w.typ]} ${w.linia}: ok. ${w.razemMin} min. Pieszo ok. ${plan.pieszoMin} min.`;
-  return plan.blackout ? `${opis} Jeśli zabraknie prądu, tramwaje i metro staną. Pokazuję tylko autobusy.` : opis;
+  return plan.blackout ? `${opis} ${DOPISEK_BLACKOUT}` : opis;
 }

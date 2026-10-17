@@ -28,12 +28,13 @@
 .trasa-szczegoly { list-style: none; display: grid; gap: 6px; margin: 0 0 8px !important; padding: 0 !important; font-size: 13px; line-height: 1.4; color: var(--przygaszony); }
 
 .arkusz-trasy {
-  max-height: 48dvh; overflow: auto; padding: 14px 16px 12px; border-top: 1px solid var(--linia); background: var(--tlo);
+  height: 48dvh; overflow: auto; padding: 14px 16px 12px; /* jak .karty: mapa zostaje tej samej wielkości */ border-top: 1px solid var(--linia); background: var(--tlo);
   animation: arkusz-wjazd 300ms cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 @keyframes arkusz-wjazd { from { opacity: 0; transform: translateY(16px); } }
 .arkusz-naglowek { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
 .arkusz-nadtytul { display: block; font-size: 12px; font-weight: 600; letter-spacing: 0.02em; text-transform: uppercase; color: var(--przygaszony); }
+.arkusz-trasy h2:focus { outline: none; }
 .arkusz-trasy h2 { margin: 2px 0 0; font-size: 19px; line-height: 1.2; letter-spacing: -0.015em; }
 .arkusz-zamknij {
   flex: none; display: grid; place-items: center; width: 30px; height: 30px; border: 0; border-radius: 50%;

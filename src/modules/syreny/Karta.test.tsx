@@ -44,7 +44,7 @@ describe('karta do wydruku', () => {
     stubFetch();
     const karta = await pokazKarte();
     const miejsce = await within(karta).findByRole('article', { name: 'Dom: ul. Grochowska 200' });
-    expect(within(miejsce).getByText('Syrena normalnie: 75 dB i więcej. Przy blackoucie: 70–75 dB (szacunek).')).toBeTruthy();
+    expect(within(miejsce).getByText('Syrena normalnie: 75 dB i więcej. Jeśli zabraknie prądu: 70–75 dB (szacunek).')).toBeTruthy();
     const lista = await within(miejsce).findByRole('list', { name: 'Najbliższe miejsca schronienia według PSP' });
     const pozycje = within(lista).getAllByRole('listitem').map((li) => li.textContent);
     expect(pozycje).toHaveLength(3);

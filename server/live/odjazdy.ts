@@ -18,7 +18,7 @@ export async function handler(req: Request, env: { WARSAW_API_TOKEN?: string }):
   const q = new URL(req.url).searchParams;
   const przystanek = q.get('przystanek') ?? '';
   const linia = (q.get('linia') ?? '').toUpperCase();
-  if (!/^\d{6}$/.test(przystanek) || !/^[A-Z0-9]{1,4}$/.test(linia)) {
+  if (!/^\d{6}$/.test(przystanek) || !/^[A-Z0-9]{1,4}(-[A-Z0-9]{1,2})?$/.test(linia)) {
     return Response.json({ blad: 'parametry' }, { status: 400 });
   }
   try {
