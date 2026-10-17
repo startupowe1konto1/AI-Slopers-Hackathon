@@ -1,5 +1,5 @@
-import type { Adres } from '../../contracts';
-import { adres, szukaj, type PaczkaAdresow } from './szukaj';
+import type { Adres, Wsp } from '../../contracts';
+import { adres, najblizszyIndeks, szukaj, type PaczkaAdresow } from './szukaj';
 
 const URL_PACZKI = '/pack/adresy/adresy.json';
 
@@ -33,4 +33,11 @@ export async function indeksAdresu(id: string): Promise<number> {
   const p = await wczytaj();
   indeksy ??= new Map(p.id.map((x, i) => [x, i]));
   return indeksy.get(id) ?? -1;
+}
+
+// Adres najbliższy współrzędnym z GPS (karta „Tutaj”) albo null poza Warszawą.
+export async function najblizszyAdres(w: Wsp): Promise<Adres | null> {
+  const p = await wczytaj();
+  const i = najblizszyIndeks(p, w);
+  return i < 0 ? null : adres(p, i);
 }
