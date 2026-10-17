@@ -2,6 +2,7 @@ import { useEffect, useId, useState } from 'react';
 import type { Adres, MiejsceUzytkownika, RolaMiejsca } from '../contracts';
 import { znajdzAdres } from '../modules/adresy';
 import { zapiszMiejsca } from './miejsca';
+import { miejsceTutaj, zTutaj } from './lokalizacja';
 import { pobierzPaczke, stanPaczki } from '../offline/paczka';
 
 const ROLE: { rola: RolaMiejsca; etykieta: string; wymagane: boolean }[] = [
@@ -68,24 +69,45 @@ function PoleAdresu({ etykieta, wartosc, onWybor }: { etykieta: string; wartosc?
   );
 }
 
+const USTALAM = 'Ustalam lokalizację…';
+
 export function Onboarding({ poczatkowe, onGotowe }: { poczatkowe: MiejsceUzytkownika[]; onGotowe: () => void }) {
   const [wybor, setWybor] = useState<Partial<Record<RolaMiejsca, Adres>>>(
     Object.fromEntries(poczatkowe.map((m) => [m.rola, m.adres])),
   );
 
+  const [lokalizacja, setLokalizacja] = useState<string | null>(null);
+
+  const wpisane = ROLE.flatMap(({ rola, etykieta }) => {
+    const adres = wybor[rola];
+    return adres ? [{ rola, etykieta, adres }] : [];
+  });
+
   const zapisz = async () => {
-    const miejsca = ROLE.flatMap(({ rola, etykieta }) => {
-      const adres = wybor[rola];
-      return adres ? [{ rola, etykieta, adres }] : [];
-    });
-    await zapiszMiejsca(miejsca);
+    const tutaj = poczatkowe.find((m) => m.rola === 'tutaj');
+    await zapiszMiejsca(tutaj ? zTutaj(wpisane, tutaj) : wpisane);
     onGotowe();
+  };
+
+  const uzyjLokalizacji = async () => {
+    setLokalizacja(USTALAM);
+    try {
+      await zapiszMiejsca(zTutaj(wpisane, await miejsceTutaj()));
+      onGotowe();
+    } catch (e) {
+      setLokalizacja(e instanceof Error ? e.message : 'Nie udało się ustalić lokalizacji. Wpisz adres.');
+    }
   };
 
   return (
     <div className="onboarding">
       <h1>Twoje miejsca</h1>
       <p>Adresy zostają tylko w tej przeglądarce. Wystarczy dom, resztę możesz dodać później.</p>
+      <button className="przycisk" onClick={uzyjLokalizacji} disabled={lokalizacja === USTALAM}>
+        Użyj mojej lokalizacji
+      </button>
+      {lokalizacja && <p role="status" className="onboarding-lokalizacja">{lokalizacja}</p>}
+      <p className="onboarding-albo">albo wpisz adresy</p>
       {ROLE.map(({ rola, etykieta }) => (
         <PoleAdresu
           key={rola}
