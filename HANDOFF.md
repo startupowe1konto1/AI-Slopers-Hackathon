@@ -102,8 +102,8 @@ Przegląd konkurencji: Ukraina, Izrael, kraje nordyckie i bałtyckie, Niemcy, Sz
 Analiza: `dane/soia-warszawa/analiza/` (skrypt `syreny_blackout.py`, mapa PNG, tabele CSV, GeoJSON).
 
 - **Wszystkie syreny:** 92,5% ze 126 923 punktów adresowych Warszawy jest w zasięgu co najmniej 65 dB(A).
-- **Tylko syreny cyfrowe:** 69,1%. Zasięg traci 29 676 adresów. Założenie: syreny analogowe nie działają bez prądu, do weryfikacji.
-- **Największe spadki:** Żoliborz −57 pp, Praga-Północ −54, Wola −52, Praga-Południe −50, Bielany −41, Mokotów −41.
+- **Przybliżenie blackoutu** (`pipeline/syreny/WYNIKI.md`): głośnej syreny (≥ 75 dB) ubywa z 48,3% do 36,6% adresów, zasięg ≥ 65 dB spada z 92,5% do 91,5% (ok. tysiąca adresów traci zasięg). Najgorszy wariant: 69,1%, 29 676 adresów. Założenie: syreny analogowe nie działają bez prądu, do weryfikacji.
+- **Największy spadek głośnej syreny (≥ 75 dB):** Praga-Południe 81,7% → 45,2%, Praga-Północ 85,5% → 52,6%, Żoliborz 93,0% → 64,0%, Wola 88,2% → 60,4%.
 - **W Warszawie jest 451 syren:** 235 analogowych, 216 cyfrowych. Właściciele: wojewoda 234, Prezydent Miasta 197.
 - **Zastrzeżenia, które trzeba mówić wprost:**
   - model dotyczy dźwięku na zewnątrz, nie w mieszkaniu;
@@ -199,7 +199,7 @@ pmtiles extract https://build.protomaps.com/20261017.pmtiles warszawa.pmtiles --
 
 - **Otwarcie od Kijowa.** Kiedy pada prąd, padają sieć komórkowa, alarmy i mapy. Mapa punktów niezłomności nie działała bez internetu, ludziom radzono spisać adresy na kartce. Przy blackoucie w styczniu 2026 stanęły tramwaje i trolejbusy.
 - **Warszawa ma mniejsze metro niż Kijów,** a krytycy wskazują, że tunele są płytkie. Tramwaje, tak jak metro, bez prądu stoją.
-- **Liczba, która robi wrażenie:** jeśli syreny analogowe nie działają bez prądu, zasięg syren spada z 92,5% do 69,1% adresów, a w centralnych dzielnicach o około połowę.
+- **Liczba, która robi wrażenie:** jeśli syreny analogowe nie działają bez prądu, głośnej syreny (≥ 75 dB) ubywa z 48,3% do 36,6% adresów, najbardziej na Pradze-Południe (81,7% → 45,2%).
 - **Rządowy poradnik bezpieczeństwa jest ogólnopolski i papierowy.** W sprawach lokalnych odsyła do gminy. My dajemy jego lokalną, warszawską warstwę pod konkretny adres.
 - **Warszawa w październiku zbierała zgłoszenia o słyszalności syren ręcznie przez 19115.** Nasz model pokazuje to dla każdego adresu od razu.
 - **Moment demo:** włączamy tryb samolotowy na żywo, a aplikacja dalej działa.
