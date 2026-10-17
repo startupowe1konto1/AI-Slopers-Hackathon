@@ -1,6 +1,6 @@
 {
- "wersja": "2026-10-17T18:25",
- "zbudowano": "2026-10-17T18:25:55+00:00",
+ "wersja": "2026-10-17T18:34",
+ "zbudowano": "2026-10-17T18:34:50+00:00",
  "pliki": [
   {
    "sciezka": "adresy/adresy.json",
@@ -14,12 +14,12 @@
   },
   {
    "sciezka": "punkty/meta.json",
-   "bajty": 1353,
+   "bajty": 1562,
    "modul": "punkty"
   },
   {
    "sciezka": "punkty/punkty.json",
-   "bajty": 1922677,
+   "bajty": 2115790,
    "modul": "punkty"
   },
   {
@@ -94,6 +94,12 @@
    "nazwa": "Rejestr SOR (rprm.ezdrowie.gov.pl)",
    "licencja": "CC BY 4.0",
    "url": "https://rprm.ezdrowie.gov.pl/",
+   "pobrano": "2026-10-17"
+  },
+  "osm-przychodnie": {
+   "nazwa": "OpenStreetMap: przychodnie, gabinety i szpitale (Overpass API)",
+   "licencja": "ODbL",
+   "url": "https://www.openstreetmap.org/copyright",
    "pobrano": "2026-10-17"
   },
   "soia": {

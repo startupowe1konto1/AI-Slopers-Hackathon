@@ -216,3 +216,24 @@ def toalety(plik: Path = PROBKI / "um-toalety.json") -> list[dict]:
             adres=_tekst(p["lokalizacja"]), dostepnosc=dostepnosc, lat=lat, lon=lon, zrodlo="um-toalety",
         ))
     return wynik
+
+
+def przychodnie(plik: Path = PROBKI / "osm-przychodnie.json") -> list[dict]:
+    """OpenStreetMap (Overpass): przychodnie, gabinety lekarskie, szpitale, także prywatne (tych nie ma w danych miasta)."""
+    wynik = []
+    for e in json.loads(plik.read_text(encoding="utf-8"))["elements"]:
+        t = e.get("tags", {})
+        if t.get("healthcare") == "pharmacy" or t.get("amenity") == "pharmacy":
+            continue  # apteki są z WFS miasta
+        srodek = e if "lat" in e else e.get("center")
+        if not srodek:
+            continue
+        nazwa = _tekst(t.get("name")) or ("Szpital" if t.get("amenity") == "hospital" else "Przychodnia")
+        godziny = _tekst(t.get("opening_hours"))
+        wynik.append(_punkt(
+            id=f"osm-{e['type']}-{e['id']}", rodzaj="przychodnia", nazwa=nazwa,
+            adres=_tekst(f"{t.get('addr:street', '')} {t.get('addr:housenumber', '')}"),
+            dostepnosc="Całodobowa" if godziny == "24/7" else godziny,
+            lat=srodek["lat"], lon=srodek["lon"], zrodlo="osm-przychodnie",
+        ))
+    return wynik

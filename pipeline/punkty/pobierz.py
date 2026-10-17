@@ -34,6 +34,20 @@ RPRM = "https://rprm.ezdrowie.gov.pl/Registry/PublicExport?" + urllib.parse.urle
     "ActionName": "Public",
     "FilterApplied": "True",
 })
+# Główny serwer i zapasowe (DECYZJE-v3 O3-1, W6): overpass-api.de zrywa połączenia z chmury,
+# kumi odpowiadał 500; dane z 17.10 są z maps.mail.ru.
+OVERPASS = (
+    "https://overpass-api.de/api/interpreter",
+    "https://overpass.kumi.systems/api/interpreter",
+    "https://maps.mail.ru/osm/tools/overpass/api/interpreter",
+)
+# Przychodnie, gabinety i szpitale w bbox Warszawy (sprawdzone 17.10: 1044 obiekty).
+ZAPYTANIE_OSM = """[out:json][timeout:120];
+(
+  nwr["amenity"~"^(clinic|doctors|hospital)$"](52.09,20.85,52.37,21.28);
+  nwr["healthcare"~"^(clinic|doctor|hospital|centre)$"](52.09,20.85,52.37,21.28);
+);
+out center tags;"""
 
 
 def _token() -> str:
@@ -67,6 +81,18 @@ def _portal(zbior: str) -> urllib.request.Request:
                                   headers={"Authorization": _token(), "Content-Type": "application/json"})
 
 
+def _overpass() -> list[urllib.request.Request]:
+    dane = urllib.parse.urlencode({"data": ZAPYTANIE_OSM}).encode()
+    return [urllib.request.Request(u, data=dane, method="POST") for u in OVERPASS]
+
+
+def _caly_wynik_overpass(odp: bytes) -> bytes:
+    # Po przekroczeniu czasu Overpass odpowiada 200 z polem „remark” i uciętą listą.
+    if "remark" in json.loads(odp):
+        raise ValueError("Overpass zwrócił niepełny wynik (remark); spróbuj ponownie")
+    return odp
+
+
 def _metro_z_gtfs(zip_gtfs: bytes) -> bytes:
     # Ze stops.txt tylko stacje metra (location_type 1) i ich wejścia (2); cały GTFS ma ok. 100 MB.
     with zipfile.ZipFile(io.BytesIO(zip_gtfs)) as z:
@@ -85,6 +111,7 @@ ZRODLA = {
     "um-aed": ("um-aed.json", lambda: _portal("get_scb_lokalizacja_defibrylatorow"), None),
     "um-toalety": ("um-toalety.json", lambda: _portal("get_m_toalety"), None),
     "rprm-sor": ("rprm-sor.csv", lambda: urllib.request.Request(RPRM), None),
+    "osm-przychodnie": ("osm-przychodnie.json", _overpass, _caly_wynik_overpass),
 }
 
 
@@ -92,7 +119,17 @@ def main(klucze: list[str]) -> None:
     pobrano = json.loads(POBRANO.read_text(encoding="utf-8")) if POBRANO.exists() else {}
     for k in klucze or ZRODLA:
         plik, zadanie, przetworz = ZRODLA[k]
-        dane = _pobierz(zadanie())
+        zadania = zadanie()
+        # Lista zapytań = kolejne serwery tego samego źródła; pierwszy, który odpowie, wygrywa.
+        # Główny dostaje 3 próby, zapasowe po jednej (W6).
+        zadania = zadania if isinstance(zadania, list) else [zadania]
+        for i, z in enumerate(zadania):
+            try:
+                dane = _pobierz(z, 3 if i == 0 else 1)
+                break
+            except (OSError, http.client.HTTPException):
+                if i == len(zadania) - 1:
+                    raise
         dane = przetworz(dane) if przetworz else dane
         (PROBKI / plik).write_bytes(dane)
         pobrano[k] = date.today().isoformat()

@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pytest
 
-from punkty import zrodla  # pipeline/ jest w pythonpath (pipeline/pyproject.toml)
+from punkty import pobierz, zrodla  # pipeline/ jest w pythonpath (pipeline/pyproject.toml)
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -81,6 +81,45 @@ def test_punkty():
     c = Counter(x["rodzaj"] for x in p)
     assert c["schronienie_psp"] > 7000 and c["aed"] > 600 and c["toaleta"] > 600
     assert c["metro"] > 50 and c["apteka"] > 300 and c["sor"] >= 5
+    assert c["przychodnia"] > 900
     assert all(20.85 <= x["lon"] <= 21.28 and 52.09 <= x["lat"] <= 52.37 for x in p)
     assert all(x["zrodlo"] and x["nazwa"] for x in p)
     assert len({x["id"] for x in p}) == len(p)
+
+
+def test_przychodnie_z_osm(tmp_path):
+    plik = tmp_path / "osm.json"
+    plik.write_text(json.dumps({"elements": [
+        {"type": "node", "id": 1, "lat": 52.23, "lon": 21.01, "tags": {
+            "amenity": "doctors", "name": "Przychodnia Lekarzy Rodzinnych", "addr:street": "Grochowska",
+            "addr:housenumber": "200", "opening_hours": "Mo-Fr 08:00-18:00"}},
+        {"type": "way", "id": 2, "center": {"lat": 52.25, "lon": 21.05}, "tags": {"amenity": "hospital", "opening_hours": "24/7"}},
+        {"type": "node", "id": 3, "lat": 52.24, "lon": 21.02, "tags": {"healthcare": "pharmacy", "name": "Apteka"}},
+        {"type": "relation", "id": 4, "tags": {"amenity": "clinic"}},  # bez współrzędnych
+    ]}), encoding="utf-8")
+    p = zrodla.przychodnie(plik)
+    assert [x["id"] for x in p] == ["osm-node-1", "osm-way-2"]
+    assert p[0] == {"id": "osm-node-1", "rodzaj": "przychodnia", "nazwa": "Przychodnia Lekarzy Rodzinnych", "adres": "Grochowska 200",
+                    "dostepnosc": "Mo-Fr 08:00-18:00", "lat": 52.23, "lon": 21.01, "zrodlo": "osm-przychodnie"}
+    assert (p[1]["nazwa"], p[1]["dostepnosc"], p[1]["lat"], "adres" in p[1]) == ("Szpital", "Całodobowa", 52.25, False)
+
+
+def test_pobierz_zapasowy_serwer_overpass(tmp_path, monkeypatch):
+    # Dwa pierwsze serwery zawodzą, trzeci odpowiada; ucięty wynik („remark”) jest błędem.
+    adresy = []
+
+    def pobierz_atrapa(req, proby=3):
+        adresy.append((req.full_url, proby))
+        if req.full_url != pobierz.OVERPASS[-1]:
+            raise ConnectionResetError("reset")
+        return b'{"elements": []}'
+
+    monkeypatch.setattr(pobierz, "_pobierz", pobierz_atrapa)
+    monkeypatch.setattr(pobierz, "PROBKI", tmp_path)
+    monkeypatch.setattr(pobierz, "POBRANO", tmp_path / "pobrano.json")
+    pobierz.main(["osm-przychodnie"])
+    assert adresy == list(zip(pobierz.OVERPASS, (3, 1, 1)))
+    assert json.loads((tmp_path / "osm-przychodnie.json").read_text()) == {"elements": []}
+    assert "osm-przychodnie" in json.loads((tmp_path / "pobrano.json").read_text())
+    with pytest.raises(ValueError):
+        pobierz._caly_wynik_overpass(b'{"elements": [], "remark": "runtime error: Query timed out"}')
