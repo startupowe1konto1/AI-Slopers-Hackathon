@@ -2,16 +2,24 @@ import { useEffect, useState } from 'react';
 import type { Modul, RolaMiejsca } from '../contracts';
 import { moduly } from '../modules';
 import { useSiec } from '../offline/siec';
+import type { Przygotowanie } from '../offline/polaczenie';
 import { useMiejsca, zapiszMiejsca } from './miejsca';
 import { miejsceTutaj, zTutaj } from './lokalizacja';
 import { Onboarding } from './Onboarding';
+import { Polaczenie } from './Polaczenie';
 import { MapView } from '../map/MapView';
 import { stanPaczki } from '../offline/paczka';
 import { Stopka } from './Stopka';
 
 export default function App() {
   const { miejsca, gotowe } = useMiejsca();
-  const { online, wymuszonyOffline } = useSiec();
+  const [przygotowanie, setPrzygotowanie] = useState<Przygotowanie | null>(null);
+  const siec = useSiec();
+  // Sieć wróciła po starcie bez sieci: przechodzimy na online bez ponownego ekranu sprawdzania.
+  useEffect(() => {
+    if (siec.online) setPrzygotowanie((p) => (p && !p.siec ? { ...p, siec: true } : p));
+  }, [siec.online]);
+  const online = siec.online && przygotowanie?.siec !== false;
   const [edycja, setEdycja] = useState(false);
   const [rola, setRola] = useState<RolaMiejsca>('dom');
   const [aktywny, setAktywny] = useState<Modul['id']>(moduly[0].id);
@@ -21,7 +29,7 @@ export default function App() {
     stanPaczki().then((s) =>
       setPaczka(s ? new Date(s.zbudowano).toLocaleString('pl-PL', { day: 'numeric', month: 'numeric', hour: '2-digit', minute: '2-digit' }) : null),
     );
-  }, [edycja]);
+  }, [edycja, przygotowanie]);
 
   useEffect(() => {
     if (miejsca.length && !miejsca.some((m) => m.rola === rola)) setRola(miejsca[0].rola);
@@ -51,6 +59,14 @@ export default function App() {
     );
   }
 
+  if (!przygotowanie) {
+    return (
+      <div className="aplikacja" style={{ display: 'block' }}>
+        <Polaczenie onGotowe={setPrzygotowanie} />
+      </div>
+    );
+  }
+
   const wybrane = miejsca.find((m) => m.rola === rola)?.adres ?? null;
   const modul = moduly.find((m) => m.id === aktywny) ?? moduly[0];
   const Panel = modul.Panel;
@@ -72,7 +88,7 @@ export default function App() {
           Adresy
         </button>
         <span className={`siec ${online ? 'online' : 'offline'}`} role="status">
-          {online ? 'Online' : wymuszonyOffline ? 'Offline (symulacja)' : 'Offline'}
+          {online ? (przygotowanie.api ? 'Online' : 'Online · bez danych na żywo') : siec.wymuszonyOffline ? 'Offline (symulacja)' : 'Offline'}
           {!online && (paczka ? ` · paczka z ${paczka}` : ' · brak paczki')}
         </span>
         {bladLokalizacji && <p className="pasek-blad" role="alert">{bladLokalizacji}</p>}
