@@ -390,7 +390,7 @@
   {
     "id": "L4b",
     "osoba": "O4",
-    "galaz": "o4/l4b-proba-zrzuty",
+    "galaz": "o4/l4-zrzuty-v3",
     "po": [
       "V4"
     ],
@@ -400,7 +400,7 @@
       "docs/pitch/zrzuty.md",
       "docs/pitch/scenariusz.md"
     ],
-    "czlowiek": "Próba pitchu o 23:30 z zespołem na main (po V4); poprawki scenariusza po próbie; zrzuty z prawdziwego ekranu.",
+    "czlowiek": "Próba pitchu o 23:30 z zespołem na main (zrzuty i scenariusz są w #48).",
     "konflikty": [
       "V4 (docs/pitch/zrzuty.md, docs/pitch/zrzuty/)"
     ]
