@@ -1,4 +1,4 @@
-export type RodzajBledu = 'klucz_lub_usluga' | 'timeout' | 'schemat';
+export type RodzajBledu = 'brak_klucza' | 'klucz_lub_usluga' | 'timeout' | 'schemat';
 
 export class BladPortalu extends Error {
   rodzaj: RodzajBledu;
@@ -9,7 +9,7 @@ export class BladPortalu extends Error {
 }
 
 export async function portal(zbior: string, body: object, token: string | undefined): Promise<unknown> {
-  if (!token) throw new BladPortalu('klucz_lub_usluga', 'brak WARSAW_API_TOKEN');
+  if (!token) throw new BladPortalu('brak_klucza', 'brak WARSAW_API_TOKEN w env');
   let r: Response;
   try {
     r = await fetch(`https://dane.um.warszawa.pl/api/action/${zbior}`, {

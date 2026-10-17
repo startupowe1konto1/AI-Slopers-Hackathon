@@ -24,8 +24,8 @@ describe('portal', () => {
     expect((init.headers as Record<string, string>).Authorization).toBe('klucz');
   });
 
-  it('bez klucza rzuca klucz_lub_usluga', async () => {
-    expect(await rodzajBledu(portal('get_zom_pogoda', {}, undefined))).toBe('klucz_lub_usluga');
+  it('bez klucza rzuca brak_klucza (Worker nie widzi WARSAW_API_TOKEN)', async () => {
+    expect(await rodzajBledu(portal('get_zom_pogoda', {}, undefined))).toBe('brak_klucza');
   });
 
   it('500 z portalu (także przy złym kluczu) to klucz_lub_usluga', async () => {
