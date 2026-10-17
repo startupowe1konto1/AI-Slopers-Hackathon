@@ -2,7 +2,7 @@
 
 Stan na sobotę, 19:10. Źródła: rozpiska lidera po wieczornym przeglądzie, transkrypt `kontekst/transkrypty/2026-10-17-rozmowa-zespolu-cz3.txt`, odpowiedzi lidera na pytania doprecyzowujące. Transkrypcje „Hackathon v3” jeszcze nie trafiły do repo; po ich dodaniu ten plik zostanie uzupełniony.
 
-Obowiązuje razem z [docs/SPEC.md](docs/SPEC.md) (dane, zasady treści §7, stany §8) i [CLAUDE.md](CLAUDE.md). Gdzie ten plik zmienia SPEC, wygrywa ten plik.
+Obowiązuje razem z [docs/SPEC.md](docs/SPEC.md) (dane, zasady treści §7, stany §8) i [CLAUDE.md](CLAUDE.md). Gdzie ten plik zmienia SPEC, wygrywa ten plik. Zadania krok po kroku (testy, kod, kolejność, praca z subagentami): [docs/PLAN-v3.md](docs/PLAN-v3.md).
 
 ---
 
@@ -54,7 +54,7 @@ Gdy użytkownik zaznaczył dym i jest w stożku z wiatrem: poziom `alarm`, „Wi
 
 ## 5. Trasy po chodnikach
 
-- **Online:** proxy `GET /api/trasa?od=lon,lat&do=lon,lat&profil=pieszo|rower` → OSRM `routing.openstreetmap.de` (`routed-foot`, `routed-bike`; sprawdzone 19:00: 536 m, 7 min, 62 punkty linii). Odpowiedź w cache Workera (24 h) i w IndexedDB przeglądarki.
+- **Online:** proxy `GET /api/live/trasa?od=lon,lat&do=lon,lat&profil=pieszo|rower` (pod `/api/live/`, bo tylko tam kierują Worker i `npm run dev`) → OSRM `routing.openstreetmap.de` (`routed-foot`, `routed-bike`; sprawdzone 19:00: 536 m, 7 min, 62 punkty linii). Odpowiedź w cache Workera (24 h) i w IndexedDB przeglądarki.
 - **Zapis na offline:** przy pobraniu paczki aplikacja liczy i zapisuje trasy z każdego zapisanego adresu do: najbliższego miejsca schronienia PSP (3), AED, SOR, apteki, przychodni, a między adresami (pieszo i rowerem). Około 50 tras na użytkownika.
 - **Offline bez zapisanej trasy** (np. z bieżącej lokalizacji): linia prosta + kierunek + odległość, opisana jako „w linii prostej”.
 - Atrybucja: „Trasy: OSRM, © OpenStreetMap contributors”. Dodać do stopki.
