@@ -49,7 +49,7 @@
       "src/app/App.tsx",
       "src/index.css"
     ],
-    "czlowiek": "Prawdziwy GPS sprawdzić ręcznie na telefonie (zgoda przeglądarki, HTTPS, np. workers.dev). Agent testuje tylko ?lokalizacja=lat,lon i atrapę geolocation.",
+    "czlowiek": null,
     "konflikty": []
   },
   {
@@ -97,7 +97,7 @@
       "docs/pitch/zrzuty/ (nowy zrzut)",
       "docs/pitch/zrzuty.md"
     ],
-    "czlowiek": "Po scaleniu obejrzeć wygląd ekranu na telefonie.",
+    "czlowiek": null,
     "konflikty": [
       "L4b (docs/pitch/zrzuty.md, docs/pitch/zrzuty/)"
     ]

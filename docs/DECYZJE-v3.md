@@ -32,7 +32,7 @@ Przyjęte przez O1 17.10 ok. 20:15: wszędzie odpowiedź rekomendowana. Pętla c
 ## O1
 
 - **O1-1. V4 a `App.tsx`.** Agent V4 nie wkleja całego pliku z planu. Zachowuje zmiany z V2b i V3 na `main` i wypisuje je w opisie PR.
-- **O1-2. GPS.** Agent testuje `?lokalizacja=lat,lon` i atrapę `navigator.geolocation`. Prawdziwy GPS sprawdza człowiek na telefonie na `workers.dev` przed 23:30. Demo opiera się na `?lokalizacja=`.
+- **O1-2. GPS i telefon.** Agent testuje `?lokalizacja=lat,lon` i atrapę `navigator.geolocation`. Zmiana z 17.10, 22:10 (O1): demo idzie w prezentacji na laptopie (aplikacja w makiecie telefonu), więc sprawdzeń na prawdziwym telefonie (GPS, wygląd) nie robimy. Demo opiera się na `?lokalizacja=`.
 - **O1-3. E2e tylko na maszynie O1,** jeden bieg naraz.
   - Pętla `wszyscy` uruchamia je co najwyżej raz na godzinę (godzina ostatniego biegu jest w lokalnym dzienniku), tylko gdy port 4174 jest wolny (`lsof -i :4174 -sTCP:LISTEN`). Czerwony wynik powtarza od razu jeszcze raz.
   - Subagenci V3, V4 i V6 oraz subagent naprawiający e2e uruchamiają je tylko przy wolnym porcie 4174. Gdy jest zajęty, czekają raz 60 sekund, a potem pomijają e2e i piszą o tym w opisie PR. Agenci O2–O4 e2e nie uruchamiają.
