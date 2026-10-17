@@ -30,3 +30,13 @@ it('AED dalej niż 1 km albo brak AED: „uwaga”; brak wszystkiego bez sieci: 
   expect(w).toMatchObject({ poziom: 'brak', akcje: [] });
   expect(w.tekst).toMatch(/^Brak sieci/);
 });
+
+it('„uwaga” mówi dlaczego; nazwa równa rodzajowi („Apteka”) nie powtarza się', async () => {
+  vi.mocked(najblizsze).mockImplementation(async (_w: Wsp, r: RodzajPunktu) =>
+    r === 'aed' ? [] : [{ ...punkt(r), nazwa: r === 'apteka' ? 'Apteka' : `Nazwa ${r}` }],
+  );
+  const w = await kartaMedyczna(k());
+  expect(w.szczegoly?.slice(0, 2)).toEqual(['W nagłym wypadku dzwoń 112.', 'Najbliższy AED jest dalej niż 1 km.']);
+  expect(w.szczegoly).toContain('Apteka, Grochowska 1, 330 m. Całodobowa');
+  expect(w.akcje.map((a) => a.typ === 'trasa' && a.nazwa)).toContain('Apteka');
+});
