@@ -1,6 +1,6 @@
 {
- "wersja": "2026-10-17T18:52",
- "zbudowano": "2026-10-17T18:52:09+00:00",
+ "wersja": "2026-10-17T20:24",
+ "zbudowano": "2026-10-17T20:24:04+00:00",
  "pliki": [
   {
    "sciezka": "adresy/adresy.json",
@@ -29,7 +29,7 @@
   },
   {
    "sciezka": "syreny/okregi.json",
-   "bajty": 46161,
+   "bajty": 46051,
    "modul": "syreny"
   },
   {

@@ -28,6 +28,15 @@ it('opis do szczegółów karty', () => {
   ]);
 });
 
+it('opis nie powtarza zdań: dwie syreny tego samego typu w tym samym miejscu to jedna linia', () => {
+  const bliskie = najblizszeOkregi([S[0], { ...S[0], nr: 'a2' }, S[1]], W);
+  expect(bliskie).toHaveLength(3);
+  expect(opisOkregow(bliskie)).toEqual([
+    'Syrena cyfrowa, 330 m od Ciebie: mieścisz się w okręgu 75 dB.',
+    'Syrena analogowa, 780 m od Ciebie: mieścisz się w okręgu 65 dB.',
+  ]);
+});
+
 it('koło ma zadany promień, a każda syrena 3 okręgi', () => {
   const [lon, lat] = kolo(S[0], 1000).coordinates[0][16]; // punkt na północy
   const m = distance(21.0, 52.23, lon, lat) * 1000;

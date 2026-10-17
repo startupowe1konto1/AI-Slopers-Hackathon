@@ -1,6 +1,6 @@
 import type { KontekstWskazowek, Poziom, Wskazowka } from '../../contracts';
 import { drukujKarte } from './druk';
-import { DOPISEK_OKREGOW, najblizszeOkregi, opisOkregow, pokazOkregi, wczytajOkregi } from './okregi';
+import { DOPISEK_OKREGOW, LEGENDA_OKREGOW, najblizszeOkregi, opisOkregow, pokazOkregi, wczytajOkregi } from './okregi';
 import { DOPISEK, KLASA } from './teksty';
 import { ocena, wynikSyreny, type Poziom as Ocena, type WynikSyrenyZSzacunkiem } from './wynik';
 
@@ -30,7 +30,13 @@ export function tekstSyren(w: WynikSyrenyZSzacunkiem): string {
 
 export async function wskazowkiSyren(k: KontekstWskazowek): Promise<Wskazowka[]> {
   const baza = { id: 'syreny', kolejnosc: 10, tytul: 'Syreny', zrodlo: ZRODLO };
-  const druk = { typ: 'przycisk' as const, etykieta: 'Drukuj kartę z adresami', wykonaj: () => drukujKarte(k.miejsca) };
+  // „Tutaj” to bieżąca lokalizacja GPS, nie adres do wydruku; gdy nic innego nie zostaje, drukujemy wszystko (karta nigdy pusta).
+  const doDruku = k.miejsca.filter((m) => m.rola !== 'tutaj');
+  const druk = {
+    typ: 'przycisk' as const,
+    etykieta: 'Drukuj kartę z adresami',
+    wykonaj: () => drukujKarte(doDruku.length ? doDruku : k.miejsca),
+  };
   let w: WynikSyrenyZSzacunkiem | null;
   try {
     w = await wynikSyreny(k.miejsce.adres.id);
@@ -45,17 +51,20 @@ export async function wskazowkiSyren(k: KontekstWskazowek): Promise<Wskazowka[]>
   const bliskie = await wczytajOkregi()
     .then((o) => najblizszeOkregi(o, k.miejsce.adres, 5))
     .catch(() => []);
+  // Zielony tylko bez ostrzeżenia: przy blackoucie 65–70 dB tekst karty mówi, że można nie usłyszeć syreny w mieszkaniu.
+  const ocenaW = ocena(w).poziom;
+  const poziom = ocenaW === 'slychac' && w.blackout === '65-70' ? 'uwaga' : POZIOM[ocenaW];
   const okregi = bliskie.length ? [{ typ: 'mapa' as const, pokaz: pokazOkregi(bliskie, k.miejsce.adres) }] : [];
   return [
     {
       ...baza,
-      poziom: POZIOM[ocena(w).poziom],
+      poziom,
       tekst: tekstSyren(w),
       szczegoly: [
         `Normalnie: ${KLASA[w.normalnie].tekst}. Jeśli zabraknie prądu: ${KLASA[w.blackout].tekst}${w.blackoutSzacunek ? ' (szacunek)' : ''}.`,
         ...KROKI,
         ...opisOkregow(bliskie),
-        ...(bliskie.length ? [DOPISEK_OKREGOW] : []),
+        ...(bliskie.length ? [LEGENDA_OKREGOW, DOPISEK_OKREGOW] : []),
         DOPISEK,
       ],
       akcje: [...okregi, druk],

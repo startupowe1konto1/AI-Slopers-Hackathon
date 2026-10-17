@@ -7,6 +7,7 @@ Uruchom po build.py: uv run --project pipeline python pipeline/syreny/okregi.py
 """
 import csv
 import json
+from math import cos, hypot, radians
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -15,10 +16,19 @@ PACZKA = ROOT / "public/pack/syreny"
 PROGI = (75, 70, 65)
 MIN_M = 30.0
 LON, LAT = (20.85, 21.28), (52.09, 52.37)  # bbox Warszawy (validate.py)
+# W danych miasta zdarzają się dwa wpisy tej samej syreny (np. SOiA-20260423-34493 i SOiA-20260429-78244, 1,8 m od siebie):
+# okrąg rysowałby się podwójnie. Syrena tego samego typu bliżej niż DUPLIKAT_M od już przyjętej jest pomijana.
+# Różne typy zostają nawet w tym samym punkcie: para cyfrowa + analogowa jest prawdziwa.
+DUPLIKAT_M = 10.0
 
 
 def promien(A: float, B: float, poprawka: float, prog: int) -> float:
     return max(MIN_M, 10 ** ((A - poprawka - prog) / -B))
+
+
+def odleglosc_m(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
+    """Odległość w metrach w rzucie lokalnym, jak kolo() w okregi.ts (wystarcza na kilka metrów)."""
+    return hypot((lon2 - lon1) * 111_320 * cos(radians(lat1)), (lat2 - lat1) * 110_574)
 
 
 def okregi(zasiegi: list[dict], inwentaryzacja: list[dict], przyblizenie: dict) -> list[dict]:
@@ -33,6 +43,8 @@ def okregi(zasiegi: list[dict], inwentaryzacja: list[dict], przyblizenie: dict) 
         byly.add(nr)
         lat, lon = wsp[nr]
         if not (LON[0] <= lon <= LON[1] and LAT[0] <= lat <= LAT[1]):
+            continue
+        if any(x["typ"] == z["typ"] and odleglosc_m(lat, lon, x["lat"], x["lon"]) < DUPLIKAT_M for x in wynik):
             continue
         a = A[float(z["spl30"])]
         wynik.append({"nr": nr, "typ": z["typ"], "lat": round(lat, 6), "lon": round(lon, 6),

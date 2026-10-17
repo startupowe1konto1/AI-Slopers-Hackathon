@@ -4,7 +4,8 @@ import type { KontekstWskazowek } from '../../contracts';
 vi.mock('./wynik', async (oryginal) => ({ ...(await oryginal<typeof import('./wynik')>()), wynikSyreny: vi.fn() }));
 vi.mock('./druk', () => ({ drukujKarte: vi.fn() }));
 vi.mock('./okregi', async (o) => ({ ...(await o<typeof import('./okregi')>()), wczytajOkregi: vi.fn(async () => []) }));
-import { DOPISEK_OKREGOW, wczytajOkregi } from './okregi';
+import { drukujKarte } from './druk';
+import { DOPISEK_OKREGOW, LEGENDA_OKREGOW, wczytajOkregi } from './okregi';
 import { wynikSyreny } from './wynik';
 import { DOPISEK } from './teksty';
 import { tekstSyren, wskazowkiSyren } from './wskazowki';
@@ -60,6 +61,9 @@ it('akcja „mapa” z okręgami najbliższych syren i opis okręgów w szczegó
   expect(karta.akcje.map((a) => a.typ)).toEqual(['mapa', 'przycisk']);
   expect(karta.szczegoly).toContain('Syrena cyfrowa, 20 m od Ciebie: mieścisz się w okręgu 75 dB.');
   expect(karta.szczegoly).toContain(DOPISEK_OKREGOW);
+  expect(karta.szczegoly).toContain(LEGENDA_OKREGOW);
+  const i = karta.szczegoly!.indexOf('Syrena cyfrowa, 20 m od Ciebie: mieścisz się w okręgu 75 dB.');
+  expect(karta.szczegoly!.slice(i + 1, i + 3)).toEqual([LEGENDA_OKREGOW, DOPISEK_OKREGOW]); // legenda zaraz po liniach okręgów, przed dopiskiem
 });
 
 it('bez pliku okręgów karta działa dalej, bez akcji mapy', async () => {
@@ -68,4 +72,30 @@ it('bez pliku okręgów karta działa dalej, bez akcji mapy', async () => {
   const [karta] = await wskazowkiSyren(k());
   expect(karta.akcje.map((a) => a.typ)).toEqual(['przycisk']);
   expect(karta.szczegoly).not.toContain(DOPISEK_OKREGOW);
+  expect(karta.szczegoly).not.toContain(LEGENDA_OKREGOW);
+});
+
+it('ostrzeżenie o blackoucie 65–70 dB nie jest zielone: poziom „uwaga”, a bez takiego ostrzeżenia zostaje „ok”', async () => {
+  vi.mocked(wynikSyreny).mockResolvedValue(w('75+', '65-70'));
+  expect((await wskazowkiSyren(k()))[0].poziom).toBe('uwaga');
+  vi.mocked(wynikSyreny).mockResolvedValue(w('70-75', '65-70'));
+  expect((await wskazowkiSyren(k()))[0].poziom).toBe('uwaga');
+  vi.mocked(wynikSyreny).mockResolvedValue(w('75+', '70-75'));
+  expect((await wskazowkiSyren(k()))[0].poziom).toBe('ok');
+});
+
+it('druk: bez miejsca „Tutaj” (to lokalizacja GPS, nie adres), a gdy nic innego nie zostaje, karta nie jest pusta', async () => {
+  vi.mocked(wynikSyreny).mockResolvedValue(w('75+', '75+'));
+  const tutaj = { rola: 'tutaj' as const, etykieta: 'Tutaj', adres };
+  const dom = { rola: 'dom' as const, etykieta: 'Dom', adres };
+  const drukuj = async (miejsca: KontekstWskazowek['miejsca']) => {
+    const [karta] = await wskazowkiSyren({ ...k(), miejsca });
+    const druk = karta.akcje.find((a) => a.typ === 'przycisk');
+    if (druk?.typ !== 'przycisk') throw new Error('brak przycisku druku');
+    await druk.wykonaj();
+  };
+  await drukuj([tutaj, dom]);
+  expect(drukujKarte).toHaveBeenLastCalledWith([dom]);
+  await drukuj([tutaj]);
+  expect(drukujKarte).toHaveBeenLastCalledWith([tutaj]);
 });

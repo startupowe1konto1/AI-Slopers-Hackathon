@@ -12,6 +12,9 @@ const PROGI: Prog[] = [65, 70, 75];
 export const DOPISEK_OKREGOW =
   'Okręgi to przybliżenie z odległości i mocy syreny, bez budynków. Wynik dla adresu wyżej pochodzi z modelu SOIA, który uwzględnia zabudowę.';
 
+export const LEGENDA_OKREGOW =
+  'Na mapie: niebieskie okręgi to syreny cyfrowe, pomarańczowe to analogowe. Jeśli zabraknie prądu, syreny analogowe mogą nie działać.';
+
 export function najblizszeOkregi(okregi: Okrag[], w: Wsp, n = 5): OkragBlisko[] {
   return okregi
     .map((o) => ({ ...o, odlegloscM: distance(w.lon, w.lat, o.lon, o.lat) * 1000 }))
@@ -28,11 +31,13 @@ export function wOkregu(o: OkragBlisko): Prog | null {
 
 const metry = (m: number) => (m < 1000 ? `${Math.max(10, Math.round(m / 10) * 10)} m` : `${(m / 1000).toFixed(1).replace('.', ',')} km`);
 
+// Bez powtórzeń, w kolejności pierwszego wystąpienia: dwie syreny tego samego typu w tej samej zaokrąglonej odległości dają identyczne zdanie.
 export function opisOkregow(bliskie: OkragBlisko[]): string[] {
-  return bliskie.map((o) => {
+  const linie = bliskie.map((o) => {
     const p = wOkregu(o);
     return `Syrena ${o.typ}, ${metry(o.odlegloscM)} od Ciebie: ${p ? `mieścisz się w okręgu ${p} dB` : 'jesteś poza jej okręgiem 65 dB'}.`;
   });
+  return [...new Set(linie)];
 }
 
 // Koło o promieniu r metrów w rzucie lokalnym (wystarcza do kilku km).
