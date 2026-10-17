@@ -134,9 +134,9 @@ Jak przygotować telefon na slajdzie: `prezentacja/README.md`, sekcja „Telefon
 
 | Czas | Krok | Klikamy | Widać | Wartość |
 |---|---|---|---|---|
-| 2:30–2:50 | 1. Start: lokalizacja i połączenie | link `?lokalizacja=…`, „Użyj mojej lokalizacji”, potem czekamy | „Sprawdzam połączenie…” → „Jest połączenie. Pobieram paczkę offline: … z 11”, potem mapa z punktem „Tutaj” i karty; pasek „Online” | zaczyna od miejsca, w którym stoi, i wie, na jakich danych działa |
+| 2:30–2:50 | 1. Start: lokalizacja i połączenie | przycisk „Tutaj” w pasku (adresy i paczka zapisane przed pitchem), potem czekamy | „Sprawdzam połączenie…” → „Jest połączenie. Dane na żywo włączone. Trasy na offline zapisuję w tle.”, potem mapa z punktem „Tutaj” i karty; pasek „Online” | zaczyna od miejsca, w którym stoi, i wie, na jakich danych działa |
 | 2:50–3:10 | 2. Syreny | karta Syreny | okręgi najbliższych syren na mapie, tekst o zasięgu i o blackoucie (z „jeśli”) | wie, czy usłyszy alarm, i zna kroki |
-| 3:10–3:30 | 3. Miejsce schronienia | karta Najbliższe miejsce schronienia (PSP) | trasa piesza po chodnikach, odległość i czas, przycisk do aplikacji PSP | nie szuka w panice |
+| 3:10–3:30 | 3. Miejsce schronienia | karta Najbliższe miejsce schronienia (PSP) | trasa piesza po ulicach, odległość i czas, przycisk do aplikacji PSP | nie szuka w panice |
 | 3:30–3:40 | 4. Pozostałe karty | przewinięcie listy: Pomoc medyczna, Powietrze i wiatr, Dotarcie do bliskich | trzy karty z poziomem (zielony, pomarańczowy, czerwony, szary); w bliskich trasa do domu Kasi i najbliższe Veturilo | rekomendacja, nie suche dane |
 | 3:40–4:05 | 5. Brak sieci | wyłączamy Wi-Fi, odświeżamy, klik w miejsce schronienia | pasek „Offline · paczka z 17.10, …”, karty dalej działają, ta sama trasa „zapisana w telefonie” | nie zostaje z pustym ekranem |
 
@@ -144,7 +144,7 @@ Jak przygotować telefon na slajdzie: `prezentacja/README.md`, sekcja „Telefon
 
 **Krok 1, start: lokalizacja i połączenie (20 s)**
 
-> Pokażę to na Kasi. Jest u mamy na Grochowie i otwiera aplikację z linku. Jedno dotknięcie: „Użyj mojej lokalizacji”. Aplikacja sprawdza połączenie. Jest sieć, więc pobiera paczkę z danymi do telefonu, a karty pokazują też dane na żywo.
+> Pokażę to na Kasi. Jest u mamy na Grochowie i otwiera aplikację. Jedno dotknięcie: „Tutaj”. Aplikacja sprawdza połączenie. Jest sieć, więc dane na żywo są włączone, a trasy na wypadek braku sieci zapisują się w tle.
 
 **Krok 2, karta Syreny (20 s)**
 
@@ -163,7 +163,7 @@ Jak przygotować telefon na slajdzie: `prezentacja/README.md`, sekcja „Telefon
 > A teraz najgorsze: pada sieć. [wyłączamy Wi-Fi, odświeżamy] Aplikacja pokazuje „Offline” i datę paczki, a karty dalej działają. Klikamy miejsce schronienia i jest ta sama trasa, zapisana w telefonie. Działa, gdy wszystko pada.
 
 **Plan B (kolejność):**
-1. Jeśli Wi-Fi na laptopie sprawia kłopot: przełącznik „wyłącz sieć” w prezentacji albo klawisz O (telefon przeładowuje się z `?offline=1`). Działa tylko po wcześniejszym przejściu online, żeby paczka i trasy były zapisane.
+1. Jeśli Wi-Fi na laptopie sprawia kłopot: przełącznik „wyłącz sieć” w prezentacji albo klawisz O (telefon przeładowuje się z `?offline=1`, pasek pokaże „Offline (symulacja) · paczka z …”). Działa tylko po wcześniejszym przejściu online, żeby paczka i trasy były zapisane.
 2. Jeśli ekran z kartami się nie ładuje: nagranie wideo demo na pulpicie, a zrzuty kart w `docs/pitch/zrzuty/` (pliki `v3-*.png`, opis w `zrzuty.md`).
 3. Jeśli lokalizacja nie działa: link z `?lokalizacja=…` albo zapisany adres Kasi.
 
@@ -191,7 +191,7 @@ Jak przygotować telefon na slajdzie: `prezentacja/README.md`, sekcja „Telefon
 
 ## Zależności demo
 
-Stan na 17.10 ok. 21:00: ekran z kartami (V4) jest na `main` i na produkcji. Kroki 1–5 przeszliśmy na produkcji z linkiem demo (zrzuty w `zrzuty.md`). Kafelki warstw z pustą mapą na starcie (P4, #27) weszły na `main` po zrobieniu zrzutów, więc na próbie sprawdzamy start jeszcze raz.
+Stan na 17.10 ok. 21:00: ekran z kartami (V4) jest na `main` i na produkcji. Kroki 1–5 przeszliśmy na produkcji z linkiem demo (zrzuty w `zrzuty.md`). Zrzuty pokazują już kafelki warstw (P4).
 
 | Krok demo | Funkcja | Zadanie w PLAN-v3.md | Jeśli nie zdąży |
 |---|---|---|---|
@@ -207,15 +207,17 @@ Stan na 17.10 ok. 21:00: ekran z kartami (V4) jest na `main` i na produkcji. Kro
 
 Ryzyko techniczne iframe: przeglądarka trzyma pamięć strony w ramce osobno od zwykłej karty. Rozwiązanie w prezentacji: przed pitchem otwieramy ją z `?edycja=1` i w telefonie na slajdzie zapisujemy adresy Kasi oraz pobieramy paczkę (instrukcja w `prezentacja/README.md`). Podawanie prezentacji z adresu aplikacji (`/pitch/`) nie jest potrzebne.
 
-Karta Syreny dla Grochowskiej 200 mówi: „Jesteś w zasięgu syreny (75 dB i więcej). Jeśli zabraknie prądu (70–75 dB, szacunek), nadal powinna być słyszalna na zewnątrz.” Najbliższe miejsce schronienia według PSP jest w tym samym budynku (70 m), więc trasa na mapie jest krótka.
+Karta Syreny dla Grochowskiej 200 mówi: „Jesteś w zasięgu syreny (75 dB i więcej). Jeśli zabraknie prądu (70–75 dB, szacunek), nadal powinna być słyszalna na zewnątrz.” Najbliższe miejsce schronienia według PSP jest pod tym samym adresem (70 m), więc trasa na mapie jest krótka.
 
 **Znany błąd paczki offline (zgłoszony do O1).** Przy pierwszym wejściu `adresy.json` (pierwszy plik paczki, 5,4 MB) pobiera się, zanim service worker przejmie stronę, i nie trafia do zapisu. Bez sieci karta Syreny pokazuje wtedy „dane o syrenach nie są zapisane w telefonie”. Obejście: po pobraniu paczki odświeżyć aplikację raz z siecią (także w telefonie na slajdzie). Po drugim wejściu wszystkie karty działają bez sieci.
 
 ## Przygotowanie przed wejściem na scenę
 
+- [ ] Czysty profil przeglądarki albo „Wyczyść dane witryny” dla aplikacji (DECYZJE-v3 W9). Dopiero potem kroki poniżej i z `prezentacja/README.md`, w tym samym profilu.
 - [ ] Prezentacja otwarta na pełnym ekranie, telefon na slajdzie załadowany z linkiem `?lokalizacja=52.2457,21.0874`, paczka pobrana.
 - [ ] W „Adresy” wpisane dom (ul. Powstańców Śląskich 10) i praca (rondo Daszyńskiego 1). Bez domu przycisk „Zapisz” jest nieaktywny, a bez tych adresów karta Dotarcie do bliskich jest szara.
 - [ ] Po pobraniu paczki aplikacja odświeżona raz z siecią (obejście błędu paczki, sekcja „Zależności demo”). Sprawdzić: po wyłączeniu sieci karta Syreny jest zielona, nie szara.
+- [ ] Po kliknięciu „Tutaj” odczekać ok. 30 s z siecią (trasy na offline zapisują się w tle, 2 naraz), potem bez sieci klik w kartę schronienia: ma być „(trasa zapisana w telefonie)”. Jeśli widać „w linii prostej … Nie mamy teraz trasy po ulicach”, kliknąć „Tutaj” z siecią i odczekać jeszcze raz.
 - [ ] Próba na sucho: przełącznik „wyłącz prąd” na mapie, cały przepływ w telefonie (lokalizacja, karty, trasa), wyłączenie sieci i odświeżenie.
 - [ ] Zapas: druga karta z `?offline=1` (po wcześniejszym przejściu online), nagranie demo na pulpicie.
 - [ ] Wyłączone powiadomienia systemowe i komunikatory.
