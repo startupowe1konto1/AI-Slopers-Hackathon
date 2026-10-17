@@ -30,20 +30,42 @@ export const kluczTrasy = (od: Wsp, do_: Wsp, profil: Profil) => `trasa:${profil
 
 type OdpowiedzTrasy = Pick<Trasa, 'dystansM' | 'czasMin' | 'linia'>;
 
+const odpowiedzOk = (o: Partial<OdpowiedzTrasy> | null): o is OdpowiedzTrasy =>
+  Array.isArray(o?.linia) && o.linia.length >= 2 && Number.isFinite(o.dystansM) && Number.isFinite(o.czasMin);
+
+// idb-keyval rzuca od razu (nie odrzuca obietnicy), gdy nie ma IndexedDB (np. część trybów prywatnych): zapis jest tylko przyspieszeniem.
+async function odczytaj(klucz: string): Promise<Trasa | undefined> {
+  try {
+    return await get<Trasa>(klucz);
+  } catch {
+    return undefined;
+  }
+}
+async function zapisz(klucz: string, t: Trasa): Promise<void> {
+  try {
+    await set(klucz, t);
+  } catch {
+    // trasa i tak trafia do użytkownika
+  }
+}
+
 // Kolejność: zapis w telefonie → OSRM przez /api/live/trasa (gdy jest sieć) → linia prosta.
 export async function trasa(od: Wsp, do_: Wsp, profil: Profil): Promise<Trasa> {
   const klucz = kluczTrasy(od, do_, profil);
-  const zapis = await get<Trasa>(klucz).catch(() => undefined);
+  const zapis = await odczytaj(klucz);
   if (zapis) return { ...zapis, zrodlo: 'osrm-zapisana' };
   if (navigator.onLine && !wymuszonyOffline()) {
     try {
       const q = new URLSearchParams({ od: punkt(od), do: punkt(do_), profil });
       const r = await fetch(`/api/live/trasa?${q}`, { signal: AbortSignal.timeout(8000) });
       if (r.ok) {
-        const o = (await r.json()) as OdpowiedzTrasy;
-        const t: Trasa = { od, do: do_, profil, dystansM: o.dystansM, czasMin: o.czasMin, linia: o.linia, zrodlo: 'osrm' };
-        await set(klucz, t).catch(() => {});
-        return t;
+        const o = (await r.json()) as Partial<OdpowiedzTrasy> | null;
+        // Zepsuta odpowiedź 200 nie może trafić do zapisu: z zapisu wracałaby przy każdej wizycie, także offline.
+        if (odpowiedzOk(o)) {
+          const t: Trasa = { od, do: do_, profil, dystansM: o.dystansM, czasMin: o.czasMin, linia: o.linia, zrodlo: 'osrm' };
+          await zapisz(klucz, t);
+          return t;
+        }
       }
     } catch {
       // brak sieci albo OSRM nie odpowiada: linia prosta

@@ -8,7 +8,7 @@ const BRAK_PACZKI_PO_POBRANIU = ' Nie udało się pobrać paczki offline. Sprób
 
 export function opisPrzygotowania(p: Przygotowanie): string {
   if (p.siec) {
-    const online = p.api ? 'Jest połączenie. Dane na żywo włączone.' : 'Jest połączenie, ale dane miasta na żywo chwilowo nie odpowiadają.';
+    const online = p.api ? 'Jest połączenie. Dane na żywo włączone. Trasy na offline zapisuję w tle.' : 'Jest połączenie, ale dane miasta na żywo chwilowo nie odpowiadają.';
     // Sieć jest, a paczki nie ma: pobranie było próbowane i się nie udało.
     return p.paczka ? online : online + BRAK_PACZKI_PO_POBRANIU;
   }

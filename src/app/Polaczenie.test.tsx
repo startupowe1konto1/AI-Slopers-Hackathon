@@ -14,10 +14,10 @@ afterEach(() => {
 });
 
 it('opisuje każdy wynik sprawdzenia', () => {
-  expect(opisPrzygotowania({ siec: true, api: true, paczka })).toBe('Jest połączenie. Dane na żywo włączone.');
+  expect(opisPrzygotowania({ siec: true, api: true, paczka })).toBe('Jest połączenie. Dane na żywo włączone. Trasy na offline zapisuję w tle.');
   expect(opisPrzygotowania({ siec: true, api: false, paczka })).toMatch(/dane miasta na żywo chwilowo nie odpowiadają/);
   expect(opisPrzygotowania({ siec: true, api: true, paczka: null })).toBe(
-    'Jest połączenie. Dane na żywo włączone. Nie udało się pobrać paczki offline. Spróbuję przy następnym uruchomieniu.',
+    'Jest połączenie. Dane na żywo włączone. Trasy na offline zapisuję w tle. Nie udało się pobrać paczki offline. Spróbuję przy następnym uruchomieniu.',
   );
   expect(opisPrzygotowania({ siec: true, api: false, paczka: null })).toMatch(
     /dane miasta na żywo chwilowo nie odpowiadają\. Nie udało się pobrać paczki offline\. Spróbuję przy następnym uruchomieniu\.$/,
@@ -44,7 +44,7 @@ it('z siecią przechodzi dalej sam po 0,8 s i nie pokazuje „Dalej”', async (
   vi.mocked(przygotuj).mockResolvedValue(wynik);
   const gotowe = vi.fn();
   render(<Polaczenie onGotowe={gotowe} />);
-  expect(await screen.findByText('Jest połączenie. Dane na żywo włączone.')).toBeTruthy();
+  expect(await screen.findByText('Jest połączenie. Dane na żywo włączone. Trasy na offline zapisuję w tle.')).toBeTruthy();
   expect(screen.queryByRole('button', { name: 'Dalej' })).toBeNull();
   expect(gotowe).not.toHaveBeenCalled();
   await vi.waitFor(() => expect(gotowe).toHaveBeenCalledWith(wynik), { timeout: 2000 });

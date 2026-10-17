@@ -59,6 +59,38 @@ it('błąd proxy (502): linia prosta, nic nie zapisuje', async () => {
   expect((await trasa(A, B, 'pieszo')).zrodlo).toBe('osrm');
 });
 
+it('odpowiedź 200 z uszkodzonym ciałem (za krótka linia, brak liczb): linia prosta, nic nie zapisuje', async () => {
+  ustawSiec(true);
+  const zle = [
+    { ...OSRM, linia: [[21.0, 52.23]] },
+    { ...OSRM, linia: 'nie tablica' },
+    { ...OSRM, dystansM: null },
+    { ...OSRM, czasMin: 'siedem' },
+    {},
+  ];
+  for (const cialo of zle) {
+    vi.stubGlobal('fetch', vi.fn(async () => Response.json(cialo)));
+    expect((await trasa(A, B, 'pieszo')).zrodlo).toBe('prosta');
+  }
+  vi.stubGlobal('fetch', vi.fn(async () => Response.json(OSRM)));
+  expect((await trasa(A, B, 'pieszo')).zrodlo).toBe('osrm'); // gdyby coś się zapisało, byłoby „osrm-zapisana”
+});
+
+it('brak IndexedDB (get i set rzucają od razu): trasa nie odrzuca, online daje trasę z OSRM, offline linię prostą', async () => {
+  const brak = () => {
+    throw new ReferenceError('indexedDB is not defined');
+  };
+  vi.resetModules();
+  vi.doMock('idb-keyval', () => ({ get: brak, set: brak }));
+  const { trasa: bezBazy } = await import('./trasy');
+  ustawSiec(false);
+  expect((await bezBazy(A, B, 'pieszo')).zrodlo).toBe('prosta');
+  ustawSiec(true);
+  vi.stubGlobal('fetch', vi.fn(async () => Response.json(OSRM)));
+  expect(await bezBazy(A, B, 'pieszo')).toMatchObject({ zrodlo: 'osrm', dystansM: 536 });
+  vi.doUnmock('idb-keyval');
+});
+
 it('klucz zapisu: profil i współrzędne z dokładnością 5 miejsc', () => {
   expect(kluczTrasy(A, { lat: 52.2390001, lon: 21.0 }, 'rower')).toBe('trasa:rower:21.00000,52.23000;21.00000,52.23900');
 });
