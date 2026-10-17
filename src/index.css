@@ -56,6 +56,8 @@ input { font: inherit; }
 .podpowiedzi { position: absolute; z-index: 5; left: 0; right: 0; margin: 2px 0 0; padding: 0; list-style: none; background: #fff; border: 1px solid var(--linia); border-radius: 8px; box-shadow: 0 6px 16px rgb(0 0 0 / 0.08); }
 .podpowiedzi li { padding: 10px 12px; cursor: pointer; }
 .podpowiedzi li:hover, .podpowiedzi li[aria-selected='true'] { background: var(--akcent-tlo); }
+/* Podpowiedź zaznaczona strzałkami: samo jasne tło było prawie niewidoczne. */
+.podpowiedzi li[aria-selected='true'] { box-shadow: inset 3px 0 0 var(--akcent); font-weight: 600; }
 .przycisk { width: 100%; padding: 12px; border: 0; border-radius: 8px; background: var(--akcent); color: #fff; font-weight: 600; }
 .przycisk:disabled { opacity: 0.5; cursor: default; }
 .onboarding-lokalizacja { font-size: 13px; margin: 8px 0 0 !important; }
