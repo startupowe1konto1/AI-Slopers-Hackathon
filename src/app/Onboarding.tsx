@@ -1,4 +1,4 @@
-import { useEffect, useId, useState } from 'react';
+import { useEffect, useId, useState, type KeyboardEvent } from 'react';
 import type { Adres, MiejsceUzytkownika, RolaMiejsca } from '../contracts';
 import { znajdzAdres } from '../modules/adresy';
 import { zapiszMiejsca } from './miejsca';
@@ -17,11 +17,17 @@ function PoleAdresu({ etykieta, wartosc, onWybor }: { etykieta: string; wartosc?
   const [q, setQ] = useState(wartosc ? `${wartosc.ulica} ${wartosc.numer}` : '');
   const [lista, setLista] = useState<Adres[]>([]);
   const [otwarte, setOtwarte] = useState(false);
+  // Podpowiedź zaznaczona strzałkami (-1: żadna). Fokus zostaje w polu (wzorzec combobox z aria-activedescendant).
+  const [aktywna, setAktywna] = useState(-1);
 
   useEffect(() => {
     let aktualne = true;
     const t = setTimeout(() => {
-      znajdzAdres(q, 8).then((w) => aktualne && setLista(w));
+      znajdzAdres(q, 8).then((w) => {
+        if (!aktualne) return;
+        setLista(w);
+        setAktywna(-1);
+      });
     }, 120);
     return () => {
       aktualne = false;
@@ -29,14 +35,45 @@ function PoleAdresu({ etykieta, wartosc, onWybor }: { etykieta: string; wartosc?
     };
   }, [q]);
 
+  const widoczna = otwarte && lista.length > 0;
+  const idOpcji = (i: number) => `${id}-opcja-${i}`;
+  const zamknij = () => {
+    setOtwarte(false);
+    setAktywna(-1);
+  };
+  const wybierz = (a: Adres) => {
+    onWybor(a);
+    setQ(`${a.ulica} ${a.numer}`);
+    zamknij();
+  };
+
+  const klawisz = (e: KeyboardEvent<HTMLInputElement>) => {
+    const n = lista.length;
+    if ((e.key === 'ArrowDown' || e.key === 'ArrowUp') && n) {
+      e.preventDefault();
+      const dol = e.key === 'ArrowDown';
+      setOtwarte(true);
+      // Zamknięta lista otwiera się na pierwszej (strzałka w dół) albo ostatniej podpowiedzi; dalej w kółko.
+      setAktywna((i) => (!widoczna || i < 0 ? (dol ? 0 : n - 1) : (i + (dol ? 1 : n - 1)) % n));
+    } else if (e.key === 'Enter' && widoczna && aktywna >= 0) {
+      e.preventDefault();
+      wybierz(lista[aktywna]);
+    } else if (e.key === 'Escape' && widoczna) {
+      e.preventDefault();
+      zamknij();
+    }
+  };
+
   return (
     <div className="pole">
       <label htmlFor={id}>{etykieta}</label>
       <input
         id={id}
         role="combobox"
-        aria-expanded={otwarte && lista.length > 0}
+        aria-expanded={widoczna}
         aria-controls={`${id}-lista`}
+        aria-autocomplete="list"
+        aria-activedescendant={widoczna && aktywna >= 0 ? idOpcji(aktywna) : undefined}
         autoComplete="off"
         placeholder="np. Grochowska 200"
         value={q}
@@ -45,19 +82,20 @@ function PoleAdresu({ etykieta, wartosc, onWybor }: { etykieta: string; wartosc?
           setOtwarte(true);
           onWybor(undefined);
         }}
+        onKeyDown={klawisz}
+        onBlur={zamknij}
       />
-      {otwarte && lista.length > 0 && (
+      {widoczna && (
         <ul className="podpowiedzi" id={`${id}-lista`} role="listbox">
-          {lista.map((a) => (
+          {lista.map((a, i) => (
             <li
               key={a.id}
+              id={idOpcji(i)}
               role="option"
-              aria-selected={false}
-              onClick={() => {
-                onWybor(a);
-                setQ(`${a.ulica} ${a.numer}`);
-                setOtwarte(false);
-              }}
+              aria-selected={i === aktywna}
+              // Bez tego pole traci fokus przed kliknięciem i lista znika, zanim wybór dojdzie do skutku.
+              onMouseDown={(e) => e.preventDefault()}
+              onClick={() => wybierz(a)}
             >
               {a.ulica} {a.numer}, {a.dzielnica}
             </li>
