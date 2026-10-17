@@ -108,7 +108,7 @@ export type TrasaMin = {
 
 export type StanLive<T> = { dane: T; stanNa: string; zrodlo: string; zCache: boolean };
 export type Pojazd = Wsp & { linia: string; typ: 'autobus' | 'tramwaj'; czas: string };
-export type Wiatr = { stacja: string; kierunekDeg: number; predkoscMs: number; czas: string };
+export type Wiatr = Wsp & { stacja: string; kierunekDeg: number; predkoscMs: number; czas: string };
 
 export type Zrodlo = { nazwa: string; licencja: string; url: string; pobrano: string };
 export type Manifest = {
