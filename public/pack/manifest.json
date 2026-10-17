@@ -1,6 +1,6 @@
 {
- "wersja": "2026-10-17T13:36",
- "zbudowano": "2026-10-17T13:36:46+00:00",
+ "wersja": "2026-10-17T13:43",
+ "zbudowano": "2026-10-17T13:43:16+00:00",
  "pliki": [
   {
    "sciezka": "adresy/adresy.json",
@@ -11,6 +11,16 @@
    "sciezka": "adresy/meta.json",
    "bajty": 262,
    "modul": "adresy"
+  },
+  {
+   "sciezka": "syreny/meta.json",
+   "bajty": 330,
+   "modul": "syreny"
+  },
+  {
+   "sciezka": "syreny/syreny.json",
+   "bajty": 253864,
+   "modul": "syreny"
   }
  ],
  "zrodla": {
@@ -19,6 +29,12 @@
    "licencja": "CC BY",
    "url": "https://wfs.um.warszawa.pl/serwis",
    "pobrano": "2026-10-17T14:28:00+02:00"
+  },
+  "soia": {
+   "nazwa": "KG PSP, SOIA, wersja danych 2026.05 (Zenodo 10.5281/zenodo.21921103); przycięte do granic m.st. Warszawy",
+   "licencja": "CC BY 4.0",
+   "url": "https://doi.org/10.5281/zenodo.21921103",
+   "pobrano": "2026-10-17T13:02:00+02:00"
   }
  }
 }
