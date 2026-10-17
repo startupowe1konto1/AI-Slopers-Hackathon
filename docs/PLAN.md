@@ -116,7 +116,7 @@ Przed PR: `git fetch && git rebase origin/main && npm run typecheck && npm test 
   ```
 - [ ] **Krok 2: klucze API.** Każda osoba generuje swój klucz na dane.um.warszawa.pl/pl/key-api i zapisuje w swoim `.env` jako `WARSAW_API_TOKEN=...`. Klucza nie wklejamy w czat ani do repo.
 - [ ] **Krok 3: dane PSP.** Surowy `psp_punkty_schronienia_warszawa_bbox.csv` przekaż O3 poza gitem (dysk). Ląduje w `dane/psp-schronienia/` (ignorowane przez git).
-- [x] **Krok 4: Cloudflare Worker `warszawa-kryzys`** (zrobione). Ustawienia → Build: build command `npm run build`, deploy command `npx wrangler deploy`, buildy gałęzi innych niż produkcyjna: `npx wrangler versions upload` (daje link podglądu). Variables and Secrets: `WARSAW_API_TOKEN` jako Secret.
+- [x] **Krok 4: Cloudflare Worker `warszawa-kryzys`** (zrobione, https://warszawa-kryzys.startupaplikujmy.workers.dev). Każdy push na `main` wdraża się w około 35 s. Po wdrożeniu pierwsze otwarcie może pokazać starą wersję z service workera; drugie odświeżenie ładuje nową. Ustawienia → Build: build command `npm run build`, deploy command `npx wrangler deploy`, buildy gałęzi innych niż produkcyjna: `npx wrangler versions upload` (daje link podglądu). Variables and Secrets: `WARSAW_API_TOKEN` jako Secret.
 - [ ] **Krok 5: ochrona `main`.** Settings → Branches → reguła dla `main`: wymagany PR, wymagany status `ci`.
 
 Gotowe, gdy: 3 osoby mają dostęp, każdy ma działający klucz (`curl` z SPEC.md §6 zwraca dane), projekt Cloudflare istnieje.

@@ -49,7 +49,6 @@ export function MapView({ centrum, moduly }: { centrum: Wsp | null; moduly: Modu
       });
       m.addControl(new NavigationControl({ showCompass: false }), 'top-right');
       m.on('error', (e) => console.error('[mapa]', e.error?.message ?? e));
-      (window as unknown as { __mapa?: MapLibreMap }).__mapa = m; // DEBUG tymczasowo
       m.on('load', () => {
         for (const mod of moduly) {
           if (mod.dodajWarstwy) sprzatanie.push(mod.dodajWarstwy(m));

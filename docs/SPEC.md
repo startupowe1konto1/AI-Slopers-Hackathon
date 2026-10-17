@@ -18,8 +18,8 @@ Strona internetowa (PWA) dla mieszkańca Warszawy na czas ataku i blackoutu. Odp
 **Forma demo:** strona w przeglądarce na laptopie, w widoku telefonu. Nie budujemy i nie testujemy wersji na telefon.
 
 **Dwa linki w prezentacji (pptx):**
-- `https://warszawa-kryzys.<konto>.workers.dev/`: pełna wersja.
-- `https://warszawa-kryzys.<konto>.workers.dev/?offline=1`: ta sama aplikacja z wymuszonym trybem offline (tylko paczka, „stan na …”).
+- `https://warszawa-kryzys.startupaplikujmy.workers.dev/`: pełna wersja.
+- `https://warszawa-kryzys.startupaplikujmy.workers.dev/?offline=1`: ta sama aplikacja z wymuszonym trybem offline (tylko paczka, „stan na …”).
 
 ## 2. Zakres
 

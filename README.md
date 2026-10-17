@@ -4,6 +4,8 @@ Projekt zespołu AI Slopers na Warsaw Open Data Hackathon (42 Warsaw).
 
 Aplikacja dla mieszkańców Warszawy na czas ataku i blackoutu. Działa także bez sieci i korzysta z otwartych danych Warszawy i PSP.
 
+**Aplikacja:** [https://warszawa-kryzys.startupaplikujmy.workers.dev](https://warszawa-kryzys.startupaplikujmy.workers.dev/) · tryb offline: [https://warszawa-kryzys.startupaplikujmy.workers.dev/?offline=1](https://warszawa-kryzys.startupaplikujmy.workers.dev/?offline=1)
+
 Zacznij od [HANDOFF.md](HANDOFF.md): decyzje, koncepcja, dane, ryzyka, narracja i otwarte sprawy.
 
 | Ścieżka | Zawartość |
