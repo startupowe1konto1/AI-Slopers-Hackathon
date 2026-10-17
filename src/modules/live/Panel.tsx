@@ -2,11 +2,10 @@ import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import type { ModulProps, Pojazd, StanLive, Wiatr, Wsp } from '../../contracts';
 import type { Powietrze, StacjaRowerowa, Utrudnienie } from '../../../server/live/typy';
 import { fetchLive } from '../../offline/live-cache';
-import { stozekDymu } from './dym';
+import { stozekDymu, wczytajDym, zapiszDym } from './dym';
 import {
   dzien,
   godzina,
-  kierunekNazwa,
   liczba,
   najblizszaStacja,
   odleglosc,
@@ -16,6 +15,7 @@ import {
   terazWarszawa,
   utrudnieniaWOkolicy,
   wOkolicy,
+  zKierunku,
 } from './okolica';
 import { ustawDym, ustawPojazdy, ustawRowery, ustawUtrudnienia, wybierzNaMapie } from './warstwy';
 import './live.css';
@@ -23,22 +23,9 @@ import './live.css';
 const PROMIEN_M = 1000;
 const PROMIEN_UTRUDNIEN_M = 2000;
 const ODSWIEZANIE_MS = 20_000;
-const KLUCZ_DYMU = 'live:dym';
 
 // undefined = ładowanie, null = brak danych i brak zapisu (fetchLive)
 type Stan<T> = StanLive<T> | null | undefined;
-
-// z przyimkiem: „ze wschodu”, ale „z zachodu”
-const Z_KIERUNKU: Record<string, string> = {
-  N: 'z północy',
-  NE: 'z północnego wschodu',
-  E: 'ze wschodu',
-  SE: 'z południowego wschodu',
-  S: 'z południa',
-  SW: 'z południowego zachodu',
-  W: 'z zachodu',
-  NW: 'z północnego zachodu',
-};
 
 const rowerow = (n: number) => {
   if (n === 1) return 'rower';
@@ -47,24 +34,6 @@ const rowerow = (n: number) => {
   return d >= 2 && d <= 4 && (s < 12 || s > 14) ? 'rowery' : 'rowerów';
 };
 const pm = (v: number | null) => (v == null ? 'brak pomiaru' : `${liczba(v)} µg/m³`);
-
-// Punkt dymu zostaje tylko w tym urządzeniu.
-function wczytajDym(): Wsp | null {
-  try {
-    const v = JSON.parse(localStorage.getItem(KLUCZ_DYMU) ?? 'null');
-    return v && typeof v.lat === 'number' && typeof v.lon === 'number' ? { lat: v.lat, lon: v.lon } : null;
-  } catch {
-    return null;
-  }
-}
-function zapiszDym(p: Wsp | null) {
-  try {
-    if (p) localStorage.setItem(KLUCZ_DYMU, JSON.stringify(p));
-    else localStorage.removeItem(KLUCZ_DYMU);
-  } catch {
-    // brak dostępu do pamięci: punkt zostaje do zamknięcia strony
-  }
-}
 
 function useLive<T>(nazwa: string, online: boolean): Stan<T> {
   const [s, setS] = useState<Stan<T>>(undefined);
@@ -217,7 +186,7 @@ export function Panel({ miejsca, wybrane, online }: ModulProps) {
                   <div>
                     <p className="live-liczby">
                       {stacja.predkoscMs > 0
-                        ? `Wiatr ${Z_KIERUNKU[kierunekNazwa(stacja.kierunekDeg)]}, ${liczba(stacja.predkoscMs)} m/s`
+                        ? `Wiatr ${zKierunku(stacja.kierunekDeg)}, ${liczba(stacja.predkoscMs)} m/s`
                         : 'Bezwietrznie (0 m/s)'}
                     </p>
                     <p className="live-info">

@@ -64,6 +64,19 @@ export function utrudnieniaWOkolicy(lista: Utrudnienie[], wsp: Wsp, promienM: nu
 const KIERUNKI = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'];
 export const kierunekNazwa = (deg: number): string => KIERUNKI[Math.round((((deg % 360) + 360) % 360) / 45) % 8];
 
+// z przyimkiem: „ze wschodu”, ale „z zachodu”
+const Z_KIERUNKU: Record<string, string> = {
+  N: 'z północy',
+  NE: 'z północnego wschodu',
+  E: 'ze wschodu',
+  SE: 'z południowego wschodu',
+  S: 'z południa',
+  SW: 'z południowego zachodu',
+  W: 'z zachodu',
+  NW: 'z północnego zachodu',
+};
+export const zKierunku = (deg: number): string => Z_KIERUNKU[kierunekNazwa(deg)];
+
 const fmt = new Intl.DateTimeFormat('pl-PL', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Warsaw' });
 export const godzina = (iso: string): string => fmt.format(new Date(iso));
 
