@@ -43,6 +43,28 @@ it('bez sieci nie pyta o rowery (zapisany stan rowerów jest nieaktualny)', asyn
   expect(w.szczegoly?.some((s) => s.includes('Veturilo'))).toBe(false);
 });
 
+it('stacja Veturilo jest pobierana równolegle z trasami, nie po nich', async () => {
+  const domyslna = vi.mocked(trasa).getMockImplementation()!;
+  let zwolnij!: () => void;
+  const brama = new Promise<void>((r) => (zwolnij = r));
+  vi.mocked(trasa).mockImplementation(async (od, d, profil) => {
+    await brama;
+    return domyslna(od, d, profil);
+  });
+  const karta = wskazowkiBliskich(k([dom, bliska]));
+  try {
+    await vi.waitFor(() => expect(najblizszaStacjaZRowerami).toHaveBeenCalledTimes(1));
+    expect(trasa).toHaveBeenCalled();
+    zwolnij();
+    const [w] = await karta;
+    expect(w.szczegoly).toContain('Najbliższa stacja Veturilo z rowerami: Koneser, 450 m (wolne rowery: 20).');
+  } finally {
+    zwolnij();
+    await karta.catch(() => undefined);
+    vi.mocked(trasa).mockImplementation(domyslna);
+  }
+});
+
 it('trasa w linii prostej jest tak opisana, a źródłem jest szacunek z odległości', async () => {
   const prosta = async (od: Wsp, d: Wsp, profil: Profil) => ({ od, do: d, profil, dystansM: 7240, czasMin: 40, linia: [], zrodlo: 'prosta' as const });
   vi.mocked(trasa).mockImplementationOnce(prosta).mockImplementationOnce(prosta);
@@ -55,5 +77,6 @@ it('przy błędzie zwraca szarą kartę z nazwą źródła, nie pustą listę', 
   vi.mocked(trasa).mockRejectedValueOnce(new Error('boom'));
   const [w] = await wskazowkiBliskich(k([dom, bliska]));
   expect(w).toMatchObject({ id: 'bliscy', poziom: 'brak' });
+  expect(w.tekst).toMatch(/^Źródło chwilowo niedostępne/);
   expect(w.zrodlo).toMatch(/OSRM/);
 });

@@ -17,14 +17,16 @@ export async function wskazowkiBliskich(k: KontekstWskazowek): Promise<Wskazowka
     return [{ ...baza, poziom: 'brak', tekst, akcje: [], zrodlo: 'Twoje adresy' }];
   }
   try {
+    // Stan rowerów zmienia się co minutę: bez sieci nie pokazujemy zapisanego.
+    // Pobieranie rusza razem z trasami, a .catch dopięty od razu nie zostawia nieobsłużonego odrzucenia.
+    const stacjaObietnica = k.online ? najblizszaStacjaZRowerami(od).catch(() => null) : null;
     const trasy = await Promise.all(
       cele.map(async (m) => {
         const [pieszo, rower] = await Promise.all([trasa(od, m.adres, 'pieszo'), trasa(od, m.adres, 'rower')]);
         return { m, pieszo, rower };
       }),
     );
-    // Stan rowerów zmienia się co minutę: bez sieci nie pokazujemy zapisanego.
-    const stacja = k.online ? await najblizszaStacjaZRowerami(od).catch(() => null) : null;
+    const stacja = await stacjaObietnica;
     const wiersze = trasy.map(({ m, pieszo, rower }) => `${m.etykieta} (${m.adres.ulica} ${m.adres.numer}): pieszo ${czas(pieszo)}, rowerem ${czas(rower)}.`);
     const akcje: Akcja[] = trasy.flatMap(({ m }) => [
       { typ: 'trasa' as const, cel: m.adres, nazwa: m.etykieta, profil: 'pieszo' as const },
@@ -48,6 +50,6 @@ export async function wskazowkiBliskich(k: KontekstWskazowek): Promise<Wskazowka
       },
     ];
   } catch {
-    return [{ ...baza, poziom: 'brak', tekst: 'Nie udało się policzyć tras do bliskich.', akcje: [], zrodlo: ZRODLO_TRAS }];
+    return [{ ...baza, poziom: 'brak', tekst: 'Źródło chwilowo niedostępne: nie udało się policzyć tras do bliskich. Spróbuj za chwilę.', akcje: [], zrodlo: ZRODLO_TRAS }];
   }
 }
