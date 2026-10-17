@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pytest
 
-from punkty import zrodla  # pipeline/ jest w pythonpath (pipeline/pyproject.toml)
+from punkty import pobierz, zrodla  # pipeline/ jest w pythonpath (pipeline/pyproject.toml)
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -102,3 +102,24 @@ def test_przychodnie_z_osm(tmp_path):
     assert p[0] == {"id": "osm-node-1", "rodzaj": "przychodnia", "nazwa": "Przychodnia Lekarzy Rodzinnych", "adres": "Grochowska 200",
                     "dostepnosc": "Mo-Fr 08:00-18:00", "lat": 52.23, "lon": 21.01, "zrodlo": "osm-przychodnie"}
     assert (p[1]["nazwa"], p[1]["dostepnosc"], p[1]["lat"], "adres" in p[1]) == ("Szpital", "Całodobowa", 52.25, False)
+
+
+def test_pobierz_zapasowy_serwer_overpass(tmp_path, monkeypatch):
+    # Pierwszy serwer zrywa połączenie, drugi odpowiada; ucięty wynik („remark”) jest błędem.
+    adresy = []
+
+    def pobierz_atrapa(req, proby=3):
+        adresy.append(req.full_url)
+        if req.full_url == pobierz.OVERPASS[0]:
+            raise ConnectionResetError("reset")
+        return b'{"elements": []}'
+
+    monkeypatch.setattr(pobierz, "_pobierz", pobierz_atrapa)
+    monkeypatch.setattr(pobierz, "PROBKI", tmp_path)
+    monkeypatch.setattr(pobierz, "POBRANO", tmp_path / "pobrano.json")
+    pobierz.main(["osm-przychodnie"])
+    assert adresy == list(pobierz.OVERPASS)
+    assert json.loads((tmp_path / "osm-przychodnie.json").read_text()) == {"elements": []}
+    assert "osm-przychodnie" in json.loads((tmp_path / "pobrano.json").read_text())
+    with pytest.raises(ValueError):
+        pobierz._caly_wynik_overpass(b'{"elements": [], "remark": "runtime error: Query timed out"}')
