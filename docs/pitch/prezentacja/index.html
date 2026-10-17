@@ -1,0 +1,674 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Warszawa w trybie kryzysowym</title>
+<!--
+  Prezentacja pitchu (5 min). Scenariusz: docs/pitch/scenariusz.md.
+  Sterowanie: → / spacja / PageDown dalej, ← / PageUp wstecz, F pełny ekran, N notatki, O telefon offline.
+  Dane wykresów: dane.js (generuje build_dane.py).
+  Adres aplikacji w telefonie: parametr ?app=… (domyślnie wersja produkcyjna).
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap">
+<style>
+:root {
+  --papier: #ECEDE9;
+  --papier-2: #DFE0DB;
+  --tusz: #000000;
+  --tusz-2: #55574F;
+  --noc: #000000;
+  --noc-tekst: #F2F2EF;
+  --noc-2: #A5A79F;
+  --alarm: #EE7A00;
+  --siec: #2B55D6;
+  --siec-noc: #6E8FF0;
+  --brak: #9A9C97;
+  --ruch: cubic-bezier(.23, 1, .32, 1);
+  --font: 'Archivo', 'Arial Narrow', 'Segoe UI', system-ui, sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body {
+  background: var(--papier);
+  color: var(--tusz);
+  font-family: var(--font);
+  overflow: hidden;
+  transition: background-color .6s var(--ruch);
+  -webkit-font-smoothing: antialiased;
+}
+body.ciemno { background: var(--noc); }
+
+/* Scena 1600×900 skalowana do okna */
+.scena {
+  position: absolute; left: 50%; top: 50%;
+  width: 1600px; height: 900px;
+  transform-origin: 0 0;
+}
+.slajd {
+  position: absolute; inset: 0;
+  padding: 88px 112px;
+  background: var(--papier);
+  color: var(--tusz);
+  opacity: 0; visibility: hidden;
+  transition: opacity .26s var(--ruch), visibility 0s linear .26s, background-color .6s var(--ruch), color .6s var(--ruch);
+}
+.slajd.aktywny { opacity: 1; visibility: visible; transition: opacity .26s var(--ruch), background-color .6s var(--ruch), color .6s var(--ruch); }
+.slajd.noc { background: var(--noc); color: var(--noc-tekst); }
+
+/* Kroki: elementy pojawiające się na kolejne naciśnięcie */
+[data-krok] { opacity: 0; transform: translateY(10px); transition: opacity .32s var(--ruch), transform .32s var(--ruch); }
+[data-krok].widoczny { opacity: 1; transform: none; }
+
+/* Typografia */
+.haslo {
+  font-stretch: 72%;
+  font-weight: 800;
+  font-size: 132px;
+  line-height: .94;
+  letter-spacing: -.01em;
+}
+.tytul {
+  font-stretch: 78%;
+  font-weight: 750;
+  font-size: 72px;
+  line-height: 1;
+  letter-spacing: -.005em;
+  max-width: 1200px;
+}
+.lead { font-size: 34px; line-height: 1.3; font-weight: 400; max-width: 980px; }
+.drobny { font-size: 19px; line-height: 1.45; color: var(--tusz-2); }
+.noc .drobny { color: var(--noc-2); }
+.liczba { font-stretch: 62%; font-weight: 800; font-variant-numeric: tabular-nums; line-height: .86; }
+
+/* 1 i 10: ciemne otwarcie i zamknięcie */
+.linijki { position: absolute; left: 112px; bottom: 120px; display: grid; gap: 18px; }
+.linijki p { font-stretch: 72%; font-weight: 800; font-size: 104px; line-height: 1; }
+.linijki p.cicho { color: var(--noc-2); }
+.linki { position: absolute; left: 112px; right: 112px; bottom: 48px; display: flex; gap: 48px; font-size: 18px; color: var(--noc-2); }
+.linki a { color: inherit; text-decoration: none; border-bottom: 1px solid currentColor; }
+.linki a:hover { color: var(--noc-tekst); }
+
+/* 2: spokój */
+.srodek { position: absolute; left: 112px; right: 112px; top: 50%; transform: translateY(-50%); }
+.srodek .lead { margin-top: 40px; color: var(--tusz-2); }
+
+/* 3: domino */
+.domino { display: flex; align-items: flex-end; gap: 22px; margin-top: 170px; }
+.kostka {
+  font-stretch: 62%; font-weight: 800; font-size: 96px; line-height: .85;
+  transform-origin: 100% 100%;
+  transition: transform .55s cubic-bezier(.55, 0, .7, .2), color .4s ease;
+}
+.strzalka { font-size: 44px; color: var(--tusz-2); padding-bottom: 12px; transition: opacity .3s ease; }
+.domino.pada .kostka { color: var(--brak); transform: rotate(14deg) translateY(10px); }
+.domino.pada .strzalka { opacity: .25; }
+.domino .podpis { position: absolute; left: 112px; bottom: 88px; }
+
+/* 4: mapa syren */
+.syreny { display: grid; grid-template-columns: 640px 1fr; gap: 40px; height: 100%; }
+.syreny .lewa { display: flex; flex-direction: column; }
+.syreny .opis { font-size: 26px; line-height: 1.3; max-width: 520px; }
+.syreny .wynik { font-size: 260px; margin-top: 24px; transition: color .6s ease; }
+.syreny .roznica { font-size: 28px; line-height: 1.3; min-height: 80px; margin-top: 18px; color: var(--alarm); font-weight: 600; }
+.syreny .stopka { margin-top: auto; max-width: 560px; }
+.przelacznik {
+  align-self: flex-start;
+  margin-top: 28px;
+  display: inline-flex; align-items: center; gap: 14px;
+  font: 600 22px var(--font);
+  color: inherit; background: none;
+  border: 2px solid currentColor; border-radius: 999px;
+  padding: 12px 24px 12px 14px;
+  cursor: pointer;
+  transition: transform .16s var(--ruch);
+}
+.przelacznik:active { transform: scale(.97); }
+.przelacznik .gniazdo { width: 44px; height: 24px; border-radius: 12px; background: currentColor; position: relative; opacity: .9; }
+.przelacznik .gniazdo::after { content: ''; position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 50%; background: var(--papier); transition: transform .3s var(--ruch), background-color .3s; }
+.przelacznik[aria-pressed="true"] .gniazdo::after { transform: translateX(20px); background: var(--noc); }
+.przelacznik:focus-visible, .etap:focus-visible, .nawig button:focus-visible { outline: 3px solid var(--siec); outline-offset: 4px; }
+.mapa { width: 100%; height: 100%; }
+.mapa svg { width: 100%; height: 100%; display: block; overflow: visible; }
+.mapa .granica { fill: var(--papier-2); stroke: var(--tusz); stroke-width: 2; transition: fill .6s, stroke .6s; }
+.mapa .cyfrowe, .mapa .utracony { fill: var(--tusz); transition: fill .7s ease, opacity .7s ease; }
+.mapa .dz { opacity: 0; transition: opacity .5s ease; }
+.mapa .dz text { font: 600 24px var(--font); fill: var(--noc-tekst); }
+.mapa .dz rect { fill: var(--noc); }
+.mapa .dz .pp { fill: var(--alarm); font-weight: 800; }
+.mapa .dz circle { fill: var(--noc); stroke: var(--noc-tekst); stroke-width: 3; }
+.slajd.noc .mapa .granica { fill: #141414; stroke: var(--noc-2); }
+.slajd.noc .mapa .cyfrowe { fill: var(--noc-tekst); }
+.slajd.noc .mapa .utracony { fill: var(--alarm); }
+.slajd.noc .mapa .dz { opacity: 1; transition-delay: .9s; }
+.legenda-mapy { display: flex; gap: 28px; font-size: 19px; margin-top: 18px; }
+.legenda-mapy span { display: inline-flex; align-items: center; gap: 10px; }
+.legenda-mapy i { width: 18px; height: 18px; border-radius: 4px; background: var(--tusz); display: inline-block; }
+.noc .legenda-mapy i.z { background: var(--noc-tekst); }
+.legenda-mapy .u { display: none; }
+.noc .legenda-mapy .u { display: inline-flex; }
+.legenda-mapy i.u2 { background: var(--alarm); }
+
+/* 5: macierz JTBD */
+.macierz { margin-top: 44px; display: grid; grid-template-columns: 370px repeat(7, 1fr); column-gap: 8px; }
+.macierz .faza { font-size: 19px; color: var(--tusz-2); padding: 0 0 14px 4px; }
+.macierz .grupa { font-size: 22px; line-height: 1.2; display: flex; align-items: center; padding-right: 16px; min-height: 88px; border-top: 1px solid var(--papier-2); }
+.macierz .komorka { border-top: 1px solid var(--papier-2); display: flex; flex-wrap: wrap; align-content: center; gap: 7px; padding: 10px 4px; min-height: 88px; }
+.kropka { width: 16px; height: 16px; border-radius: 50%; background: var(--tusz); cursor: default; transition: transform .15s ease-out; }
+@media (hover: hover) and (pointer: fine) { .kropka:hover { transform: scale(1.35); } }
+.kropka.bez { background: none; box-shadow: inset 0 0 0 2px var(--brak); }
+.naglowek { display: flex; align-items: baseline; gap: 36px; }
+.naglowek .liczba { font-size: 150px; }
+
+/* 6: siatka */
+.siatka svg { display: block; overflow: visible; }
+.siatka .wezel text { font: 400 17px var(--font); fill: var(--tusz); }
+.siatka .wezel.bez text { fill: var(--brak); }
+.siatka .wezel circle { fill: var(--tusz); }
+.siatka .wezel.bez circle { fill: var(--papier); stroke: var(--brak); stroke-width: 2; }
+.siatka .wezel.live circle { fill: var(--siec); }
+.siatka .wezel.zbior text { font-weight: 600; }
+.siatka .wezel { cursor: default; transition: opacity .2s ease; }
+.siatka .lacze { fill: none; stroke: var(--tusz); stroke-width: 1.6; opacity: .38; transition: opacity .2s ease, stroke-width .2s ease; }
+.siatka .lacze.live { stroke: var(--siec); opacity: .55; }
+.siatka svg.wybor .lacze { opacity: .06; }
+.siatka svg.wybor .wezel { opacity: .28; }
+.siatka svg.wybor .lacze.on { opacity: 1; stroke-width: 2.6; }
+.siatka svg.wybor .wezel.on { opacity: 1; }
+.siatka-glowa { display: grid; gap: 18px; }
+.legenda { display: flex; gap: 32px; font-size: 19px; white-space: nowrap; }
+.legenda span { display: inline-flex; align-items: center; gap: 9px; }
+.legenda i { width: 14px; height: 14px; border-radius: 50%; display: inline-block; background: var(--tusz); }
+.legenda i.live { background: var(--siec); }
+.legenda i.bez { background: none; box-shadow: inset 0 0 0 2px var(--brak); }
+.wniosek { position: absolute; left: 112px; bottom: 56px; font-size: 26px; font-weight: 600; }
+
+/* 7: rozwiązanie */
+.funkcje { display: grid; grid-template-columns: repeat(3, 1fr); gap: 44px 56px; margin-top: 56px; }
+.funkcja h3 { font-stretch: 75%; font-weight: 750; font-size: 44px; line-height: 1.02; }
+.funkcja p { font-size: 22px; line-height: 1.35; color: var(--tusz-2); margin-top: 10px; max-width: 400px; }
+.przeplyw { position: absolute; left: 112px; right: 112px; bottom: 72px; display: grid; gap: 14px; font-size: 24px; }
+.przeplyw div { display: flex; align-items: center; gap: 18px; }
+.przeplyw b { font-weight: 650; }
+.przeplyw .kreska { flex: 0 0 80px; height: 3px; background: currentColor; position: relative; }
+.przeplyw .kreska::after { content: ''; position: absolute; right: -2px; top: -6px; border: 7.5px solid transparent; border-left: 11px solid currentColor; border-right: 0; }
+.przeplyw .live { color: var(--siec); }
+.przeplyw .etyk { color: var(--tusz-2); margin-left: 12px; font-size: 20px; }
+
+/* 8: dzień Kasi */
+#s-kasia { padding: 64px 112px; }
+.kasia { display: grid; grid-template-columns: 1fr 380px; gap: 72px; height: 100%; }
+.kasia .wstep { font-size: 22px; line-height: 1.4; color: var(--tusz-2); margin-top: 16px; max-width: 760px; }
+.etapy { list-style: none; margin-top: 34px; display: grid; gap: 4px; }
+.etap { display: grid; grid-template-columns: 190px 1fr; column-gap: 24px; padding: 12px 0 12px 20px; border-left: 4px solid var(--papier-2); cursor: pointer; transition: border-color .3s ease; }
+.etap .kiedy { font-size: 20px; color: var(--tusz-2); padding-top: 6px; }
+.etap .problem { font-stretch: 80%; font-weight: 700; font-size: 32px; line-height: 1.1; color: var(--tusz-2); transition: color .3s ease; }
+.etap .szczegol { grid-column: 2; display: grid; grid-template-rows: 0fr; transition: grid-template-rows .3s var(--ruch); }
+.etap .szczegol > .w { overflow: hidden; display: block; }
+.etap .szczegol p { font-size: 21px; line-height: 1.35; margin-top: 8px; max-width: 640px; }
+.etap .szczegol p.wartosc { color: var(--tusz-2); }
+.etap.aktywny { border-left-color: var(--tusz); }
+.etap.aktywny .problem { color: var(--tusz); }
+.etap.aktywny .szczegol { grid-template-rows: 1fr; }
+.etap.offline.aktywny { border-left-color: var(--alarm); }
+.telefon-kol { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; }
+.telefon { width: 336px; height: 680px; border-radius: 50px; background: var(--noc); padding: 12px; position: relative; box-shadow: 0 0 0 2px #2a2a2a inset; }
+.ekran { width: 100%; height: 100%; border-radius: 40px; overflow: hidden; background: #fff; position: relative; }
+.ekran iframe { width: 390px; height: 820px; border: 0; transform: scale(.8); transform-origin: 0 0; display: block; }
+.stan-sieci { font-size: 19px; color: var(--tusz-2); display: flex; gap: 14px; align-items: center; }
+.stan-sieci .przelacznik { margin: 0; font-size: 18px; padding: 8px 18px 8px 10px; }
+
+/* 9: wartość */
+.kolumny { display: grid; grid-template-columns: 1fr 1fr; gap: 72px; margin-top: 56px; }
+.kolumny h3 { font-stretch: 78%; font-weight: 750; font-size: 40px; }
+.kolumny p { font-size: 26px; line-height: 1.35; margin-top: 14px; max-width: 600px; }
+.kroki { list-style: none; margin-top: 64px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 48px; counter-reset: k; }
+.kroki li { font-size: 22px; line-height: 1.38; counter-increment: k; padding-top: 18px; border-top: 3px solid var(--tusz); }
+.kroki li::before { content: counter(k); display: block; font-stretch: 62%; font-weight: 800; font-size: 56px; line-height: 1; margin-bottom: 10px; }
+
+/* Nawigacja, notatki, podpowiedź */
+.nawig { position: fixed; right: 18px; bottom: 14px; display: flex; gap: 8px; align-items: center; font: 14px var(--font); color: var(--tusz-2); z-index: 20; opacity: .55; transition: opacity .2s; }
+.nawig:hover { opacity: 1; }
+body.ciemno .nawig { color: var(--noc-2); }
+.nawig button { font: inherit; color: inherit; background: none; border: 1px solid currentColor; border-radius: 6px; width: 34px; height: 30px; cursor: pointer; }
+.notatki { position: fixed; left: 0; right: 0; bottom: 0; max-height: 34vh; overflow: auto; background: rgba(0,0,0,.88); color: #fff; font: 18px/1.5 var(--font); padding: 18px 28px 48px; z-index: 30; }
+.notatki[hidden] { display: none; }
+.dymek { position: fixed; pointer-events: none; z-index: 40; background: var(--tusz); color: var(--papier); font: 16px/1.35 var(--font); padding: 8px 12px; border-radius: 6px; max-width: 320px; opacity: 0; transition: opacity .12s; }
+.dymek.on { opacity: 1; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition-duration: 0s !important; transition-delay: 0s !important; animation: none !important; }
+}
+</style>
+</head>
+<body>
+<div class="scena" id="scena">
+
+  <!-- 1. Napięcie -->
+  <section class="slajd noc" data-tlo="noc" data-kroki="2"
+    data-notatka="Od ponad czterech lat za naszą wschodnią granicą trwa wojna. Napięcie w regionie rośnie. Rząd wydał poradnik bezpieczeństwa. Nikt nie chce o tym myśleć, a jednak coraz więcej osób zadaje sobie pytanie: co zrobię, jeśli to się stanie tutaj?">
+    <div class="linijki">
+      <p class="cicho">Wojna za wschodnią granicą.</p>
+      <p class="cicho" data-krok="1">Rosnące napięcie.</p>
+      <p data-krok="2">Co zrobię, jeśli to się stanie tutaj?</p>
+    </div>
+  </section>
+
+  <!-- 2. Spokój -->
+  <section class="slajd" data-kroki="1"
+    data-notatka="Miasto takie jak Warszawa powinno dawać mieszkańcom spokój. Nie obietnicę, że nic się nie stanie, tylko pewność, że każdy wie, co zrobić. Także wtedy, gdy zawiedzie prąd i sieć.">
+    <div class="srodek">
+      <h1 class="haslo">Miasto ma dawać spokój.</h1>
+      <p class="lead" data-krok="1">Nie obietnicę, że nic się nie stanie. Pewność, że każdy wie, co zrobić, także gdy zawiedzie prąd i sieć.</p>
+    </div>
+  </section>
+
+  <!-- 3. Kijów -->
+  <section class="slajd" data-kroki="1" id="s-kijow"
+    data-notatka="Kijów pokazał, co pada najpierw. Rosja uderza w sieć energetyczną. Bez prądu znika zasięg komórkowy, a z nim alarmy w telefonie i mapy. Mapa punktów, gdzie można się ogrzać, bez internetu nie działała, więc ludziom radzono spisać adresy na kartce. Stanęły tramwaje.">
+    <h2 class="tytul">Kijów pokazał, co pada najpierw.</h2>
+    <div class="domino" id="domino">
+      <span class="kostka">prąd</span><span class="strzalka" aria-hidden="true">→</span>
+      <span class="kostka">sieć</span><span class="strzalka" aria-hidden="true">→</span>
+      <span class="kostka">alarmy</span><span class="strzalka" aria-hidden="true">→</span>
+      <span class="kostka">mapy</span><span class="strzalka" aria-hidden="true">→</span>
+      <span class="kostka">tramwaje</span>
+    </div>
+    <p class="drobny" style="position:absolute;left:112px;bottom:72px;max-width:900px">Adresy punktów, gdzie można się ogrzać i naładować telefon, bez internetu trzeba było spisywać na kartce.</p>
+  </section>
+
+  <!-- 4. Syreny -->
+  <section class="slajd" data-kroki="1" id="s-syreny"
+    data-notatka="A w Warszawie? Sprawdziliśmy syreny na danych Państwowej Straży Pożarnej. Dziś w zasięgu jest 92,5% adresów. [klik: wyłącz prąd] Jeśli syreny analogowe nie mają zasilania awaryjnego, zostaje 69,1%. Prawie co czwarty adres traci zasięg, a na Żoliborzu, Woli i Pradze ponad połowa. To model dźwięku na zewnątrz, dlatego mówimy „jeśli”.">
+    <div class="syreny">
+      <div class="lewa">
+        <h2 class="tytul" style="font-size:60px">A w Warszawie?</h2>
+        <p class="opis" style="margin-top:28px">Adresy w zasięgu syren, co najmniej 65 dB na zewnątrz</p>
+        <div class="liczba wynik" id="wynik-syren">92,5%</div>
+        <p class="roznica" id="roznica-syren" aria-live="polite"></p>
+        <button class="przelacznik" id="blackout" aria-pressed="false"><span class="gniazdo" aria-hidden="true"></span><span id="blackout-tekst">Wyłącz prąd</span></button>
+        <p class="drobny stopka">Model dźwięku na zewnątrz budynków. Wariant blackout zakłada, że działają tylko syreny cyfrowe, czyli że analogowe nie mają zasilania awaryjnego. Dane: KG PSP, SOIA 2026.05 (CC BY 4.0), 126 923 punkty adresowe m.st. Warszawy.</p>
+      </div>
+      <div>
+        <div class="mapa" id="mapa" style="height:640px"></div>
+        <div class="legenda-mapy"><span><i class="z"></i>zasięg syren</span><span class="u"><i class="u2"></i>zasięg tracony przy blackoucie</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. JTBD -->
+  <section class="slajd" data-kroki="0"
+    data-notatka="Nie zaczęliśmy od danych. Zaczęliśmy od ludzi. Rozpisaliśmy, co w kryzysie musi zrobić sześć grup mieszkańców: rodzic dojeżdżający do pracy, senior, osoba przewlekle chora, ktoś, kto nie zna polskiego, młody bez zapasów i ktoś w drodze. Od dni przed atakiem po powrót do normalności. Wyszły 24 zadania.">
+    <div class="naglowek">
+      <span class="liczba" id="ile-zadan">24</span>
+      <div>
+        <h2 class="tytul" style="font-size:56px">zadania mieszkańców w kryzysie</h2>
+        <p class="drobny" style="font-size:21px;margin-top:10px">Zaczęliśmy od ludzi, nie od danych: 6 grup mieszkańców, 7 faz kryzysu. Najedź na kropkę, żeby zobaczyć zadanie.</p>
+      </div>
+    </div>
+    <div class="macierz" id="macierz"></div>
+  </section>
+
+  <!-- 6. Siatka -->
+  <section class="slajd siatka" data-kroki="0"
+    data-notatka="Każde zadanie połączyliśmy z danymi: miejskimi, PSP i innymi otwartymi. Czarne działa bez sieci, niebieskie potrzebuje sieci. Szare to zadania, których żadne dane nie rozwiązują, na przykład gdzie naładować telefon. Tego nie udajemy. Zbudowaliśmy rozwiązanie tam, gdzie zadanie łączy się z danymi.">
+    <div class="siatka-glowa">
+      <h2 class="tytul" style="font-size:56px">Każde zadanie połączyliśmy z danymi</h2>
+      <div class="legenda">
+        <span><i></i>w telefonie, bez sieci</span>
+        <span><i class="live"></i>na żywo, przez sieć</span>
+        <span><i class="bez"></i>żadne dane nie pomagają</span>
+      </div>
+    </div>
+    <div id="siatka" style="margin-top:22px"></div>
+    <p class="wniosek" id="wniosek-siatki"></p>
+  </section>
+
+  <!-- 7. Rozwiązanie -->
+  <section class="slajd" data-kroki="1"
+    data-notatka="Tak powstała Warszawa w trybie kryzysowym. Sześć funkcji w jednej stronie internetowej: syrena pod twoim adresem, najbliższe punkty pomocy, dojazd, gdy stoją tramwaje i metro, dane na żywo, karta do wydruku i paczka offline. Wszystko, co da się policzyć z góry, jest w telefonie. Działa, gdy wszystko pada.">
+    <h2 class="tytul">Warszawa w trybie kryzysowym</h2>
+    <div class="funkcje">
+      <div class="funkcja"><h3>Syrena pod adresem</h3><p>Czy usłyszysz alarm normalnie i przy blackoucie. Co zrobić, jeśli nie.</p></div>
+      <div class="funkcja"><h3>Punkty pomocy</h3><p>Miejsca schronienia według PSP, metro, AED, apteki, SOR i toalety, ze źródłem i datą.</p></div>
+      <div class="funkcja"><h3>Dojazd przy blackoucie</h3><p>Pieszo, rowerem i autobusem do bliskich, gdy stoją tramwaje i metro.</p></div>
+      <div class="funkcja"><h3>Na żywo</h3><p>Co jeździ w okolicy, skąd wieje wiatr, jakie jest powietrze.</p></div>
+      <div class="funkcja"><h3>Karta do wydruku</h3><p>Adresy, wynik syreny i najbliższe miejsca na papierze.</p></div>
+      <div class="funkcja"><h3>Paczka offline</h3><p>Dane i mapa Warszawy zapisane w telefonie. Bez sieci widać ostatni stan i godzinę.</p></div>
+    </div>
+    <div class="przeplyw" data-krok="1">
+      <div><b>Dane miasta i PSP</b><span class="kreska"></span><b>paczka w telefonie</b><span class="etyk">działa bez sieci</span></div>
+      <div class="live"><b>API miasta</b><span class="kreska"></span><b>nasz serwer z kluczem</b><span class="kreska"></span><b>telefon</b><span class="etyk">gdy jest sieć</span></div>
+    </div>
+  </section>
+
+  <!-- 8. Dzień Kasi -->
+  <section class="slajd" data-kroki="6" id="s-kasia"
+    data-notatka="Pokażę to na Kasi. Mieszka na Bemowie, pracuje przy rondzie Daszyńskiego, syn chodzi do przedszkola, a mama mieszka sama na Grochowie. | PRZED: Kasia raz wpisuje cztery adresy i pobiera paczkę. Od razu widzi, że syrenę w domu słychać, ale przy blackoucie może jej nie usłyszeć. Dostaje kroki: włączyć Alert RCB, zainstalować RSO, umówić się z sąsiadem. I kartę do wydruku. | ALARM: Kasia jest w pracy. Telefon pokazuje najbliższe miejsca schronienia według PSP i wejścia do metra, z odległością. Jednym przyciskiem otwiera oficjalną aplikację PSP. | UDERZENIE: widzi, skąd wieje wiatr i w którą stronę może iść dym, a obok pomiar powietrza. Ma pod ręką najbliższy defibrylator i SOR. | POWRÓT: Tramwaje stoją, więc aplikacja pokazuje autobusy z przystanku przy pracy, które dojeżdżają w pobliże przedszkola. I to, co naprawdę jeździ teraz w okolicy. | BLACKOUT: Wieczorem pada sieć. [klik: wyłącz sieć] Aplikacja dalej działa: syrena, punkty pomocy, dojazd. Dane na żywo pokazują ostatni stan z godziną. Toalety i apteki są na mapie.">
+    <div class="kasia">
+      <div>
+        <h2 class="tytul" style="font-size:56px">Dzień Kasi</h2>
+        <p class="wstep">Mieszka na Bemowie, pracuje przy rondzie Daszyńskiego. Syn chodzi do przedszkola na Bemowie, mama mieszka sama na Grochowie.</p>
+        <ol class="etapy" id="etapy">
+          <li><div role="button" tabindex="0" class="etap" data-etap="1"><span class="kiedy">Przed kryzysem</span><span class="problem">Czy usłyszę alarm?</span><span class="szczegol"><span class="w"><p>Cztery adresy i paczka offline. Wynik syreny normalnie i przy blackoucie, kroki: Alert RCB, RSO, umowa z sąsiadem. Karta do wydruku.</p><p class="wartosc">Wie zawczasu i ma plan na papierze.</p></span></span></div></li>
+          <li><div role="button" tabindex="0" class="etap" data-etap="2"><span class="kiedy">Alarm, 0–15 min</span><span class="problem">Gdzie się schować?</span><span class="szczegol"><span class="w"><p>Najbliższe miejsca schronienia według PSP i wejścia do metra, z odległością. Przycisk „Otwórz w aplikacji PSP”.</p><p class="wartosc">Nie szuka w panice.</p></span></span></div></li>
+          <li><div role="button" tabindex="0" class="etap" data-etap="3"><span class="kiedy">Uderzenie, 15–60 min</span><span class="problem">Czy dym idzie na mnie?</span><span class="szczegol"><span class="w"><p>Kierunek wiatru i pomiar powietrza z najbliższej stacji. Najbliższy defibrylator i SOR.</p><p class="wartosc">Wie, gdzie jest pomoc medyczna.</p></span></span></div></li>
+          <li><div role="button" tabindex="0" class="etap" data-etap="4"><span class="kiedy">Powrót, 1–6 h</span><span class="problem">Jak dotrę do syna?</span><span class="szczegol"><span class="w"><p>Autobusy z przystanku przy pracy, które dojeżdżają w pobliże przedszkola. Co naprawdę jeździ teraz w okolicy.</p><p class="wartosc">Dociera do bliskich bez tramwaju i metra.</p></span></span></div></li>
+          <li><div role="button" tabindex="0" class="etap offline" data-etap="5"><span class="kiedy">Blackout, 1–3 dni</span><span class="problem">Nie ma sieci.</span><span class="szczegol"><span class="w"><p>Syrena, punkty pomocy i dojazd działają z paczki. Dane na żywo pokazują ostatni stan z godziną. Toalety i apteki na mapie.</p><p class="wartosc">Nie zostaje z pustym ekranem.</p></span></span></div></li>
+        </ol>
+      </div>
+      <div class="telefon-kol">
+        <div class="telefon">
+          <div class="ekran">
+            <iframe id="aplikacja" title="Aplikacja Warszawa w trybie kryzysowym" allow="geolocation"></iframe>
+          </div>
+        </div>
+        <div class="stan-sieci">
+          <button class="przelacznik" id="siec" aria-pressed="false"><span class="gniazdo" aria-hidden="true"></span><span id="siec-tekst">Wyłącz sieć</span></button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9. Wartość -->
+  <section class="slajd" data-kroki="1"
+    data-notatka="Kasia wie zawczasu, co zrobić, i to pod swoim adresem, a nie dla całej Polski. Miasto dostaje narzędzie na danych, które już publikuje, bez kont i bez sklepu z aplikacjami. Następne kroki: z PSP i Stołecznym Centrum Bezpieczeństwa sprawdzić zasilanie syren analogowych, porównać model ze zgłoszeniami z 19115 z ćwiczeń Syrena-26 i wpiąć tryb kryzysowy w aplikację, której warszawiacy używają na co dzień.">
+    <h2 class="tytul">Spokój dla mieszkańców, narzędzie dla miasta</h2>
+    <div class="kolumny">
+      <div><h3>Dla mieszkańca</h3><p>Wie zawczasu, co zrobić, pod swoim adresem, a nie dla całej Polski. Odpowiedzi działają także bez sieci.</p></div>
+      <div><h3>Dla miasta</h3><p>Stoi na danych, które Warszawa i PSP już publikują. Bez kont, bez sklepu z aplikacjami, na tanim hostingu.</p></div>
+    </div>
+    <ol class="kroki" data-krok="1">
+      <li>Z PSP i Stołecznym Centrum Bezpieczeństwa sprawdzić, które syreny analogowe mają zasilanie awaryjne.</li>
+      <li>Porównać model ze zgłoszeniami o słyszalności z 19115 z ćwiczeń Syrena-26.</li>
+      <li>Wpiąć tryb kryzysowy w aplikację, której warszawiacy używają na co dzień.</li>
+    </ol>
+  </section>
+
+  <!-- 10. Zamknięcie -->
+  <section class="slajd noc" data-tlo="noc" data-kroki="2"
+    data-notatka="Czasy są niepewne. Warszawa może dać mieszkańcom spokój. Taki, który działa, gdy wszystko pada. Dziękujemy.">
+    <div class="linijki" style="bottom:150px">
+      <p class="cicho">Czasy są niepewne.</p>
+      <p class="cicho" data-krok="1">Warszawa może dać spokój.</p>
+      <p data-krok="2">Działa, gdy wszystko pada.</p>
+    </div>
+    <div class="linki">
+      <a href="https://warszawa-kryzys.startupaplikujmy.workers.dev/">warszawa-kryzys.startupaplikujmy.workers.dev</a>
+      <a href="https://warszawa-kryzys.startupaplikujmy.workers.dev/?offline=1">wersja offline: ?offline=1</a>
+      <a href="https://github.com/startupowe1konto1/AI-Slopers-Hackathon">github.com/startupowe1konto1/AI-Slopers-Hackathon</a>
+      <span style="margin-left:auto">Zespół AI Slopers</span>
+    </div>
+  </section>
+</div>
+
+<nav class="nawig" aria-label="Nawigacja prezentacji">
+  <button id="wstecz" aria-label="Poprzedni krok">‹</button>
+  <span id="licznik">1 / 10</span>
+  <button id="dalej" aria-label="Następny krok">›</button>
+</nav>
+<div class="notatki" id="notatki" hidden></div>
+<div class="dymek" id="dymek" role="tooltip"></div>
+
+<script src="dane.js"></script>
+<script>
+(() => {
+  const D = window.DANE;
+  const SVG = 'http://www.w3.org/2000/svg';
+  const el = (tag, attrs = {}, parent) => {
+    const n = document.createElementNS(SVG, tag);
+    for (const [k, v] of Object.entries(attrs)) n.setAttribute(k, v);
+    if (parent) parent.appendChild(n);
+    return n;
+  };
+  const pct = (v) => v.toFixed(1).replace('.', ',') + '%';
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---------- Skalowanie sceny ---------- */
+  const scena = document.getElementById('scena');
+  function dopasuj() {
+    const s = Math.min(innerWidth / 1600, innerHeight / 900);
+    scena.style.transform = `translate(-50%, -50%) scale(${s})`;
+    scena.style.transformOrigin = '50% 50%';
+    scena.style.left = '50%'; scena.style.top = '50%';
+    scena.style.marginLeft = '0'; scena.style.marginTop = '0';
+  }
+  scena.style.transformOrigin = '50% 50%';
+  addEventListener('resize', dopasuj); dopasuj();
+
+  /* ---------- Dymek ---------- */
+  const dymek = document.getElementById('dymek');
+  function pokazDymek(e, tekst) {
+    dymek.textContent = tekst; dymek.classList.add('on');
+    dymek.style.left = (e.clientX + 14) + 'px'; dymek.style.top = (e.clientY + 14) + 'px';
+  }
+  const schowajDymek = () => dymek.classList.remove('on');
+
+  /* ---------- Mapa syren ---------- */
+  const M = D.mapa;
+  const svgM = el('svg', { viewBox: `-10 -10 ${M.w + 20} ${M.h + 20}`, role: 'img', 'aria-label': 'Mapa zasięgu syren w Warszawie' }, document.getElementById('mapa'));
+  el('path', { d: M.granica, class: 'granica' }, svgM);
+  el('path', { d: M.cyfrowe, class: 'cyfrowe' }, svgM);
+  el('path', { d: M.utracony, class: 'utracony' }, svgM);
+  const tabliczki = [];
+  for (const d of M.dzielnice) {
+    const g = el('g', { class: 'dz' }, svgM);
+    el('circle', { cx: d.x, cy: d.y, r: 5 }, g);
+    const tlo = el('rect', { rx: 4 }, g);
+    const t = el('text', { x: d.x + 16, y: d.y - 4 }, g);
+    t.textContent = d.nazwa;
+    const t2 = el('text', { x: d.x + 16, y: d.y + 24, class: 'pp' }, g);
+    t2.textContent = '−' + Math.round(d.spadek) + ' pp';
+    tabliczki.push([tlo, t, t2]);
+  }
+  // Tabliczki pod podpisami: wymiary znane dopiero po wczytaniu fontu.
+  document.fonts.ready.then(() => {
+    for (const [tlo, t, t2] of tabliczki) {
+      const a = t.getBBox(), b = t2.getBBox();
+      const x = Math.min(a.x, b.x) - 8, y = a.y - 5, w = Math.max(a.width, b.width) + 16, h = b.y + b.height - a.y + 10;
+      Object.entries({ x, y, width: w, height: h }).forEach(([k, v]) => tlo.setAttribute(k, v));
+    }
+  });
+  const wynik = document.getElementById('wynik-syren');
+  const roznica = document.getElementById('roznica-syren');
+  const btnBlackout = document.getElementById('blackout');
+  let animLiczby = null;
+  function liczDo(od, doo) {
+    cancelAnimationFrame(animLiczby);
+    if (reduce) { wynik.textContent = pct(doo); return; }
+    const t0 = performance.now(), dur = 1100;
+    const krok = (t) => {
+      const p = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - p, 3);
+      wynik.textContent = pct(od + (doo - od) * e);
+      if (p < 1) animLiczby = requestAnimationFrame(krok);
+    };
+    animLiczby = requestAnimationFrame(krok);
+  }
+  function blackout(wl) {
+    const s = document.getElementById('s-syreny');
+    document.body.classList.toggle('ciemno', wl);
+    if (s.classList.contains('noc') === wl) return;
+    s.classList.toggle('noc', wl);
+    document.body.classList.toggle('ciemno', wl);
+    btnBlackout.setAttribute('aria-pressed', String(wl));
+    document.getElementById('blackout-tekst').textContent = wl ? 'Włącz prąd' : 'Wyłącz prąd';
+    liczDo(wl ? M.przed : M.po, wl ? M.po : M.przed);
+    roznica.textContent = wl ? `${M.traci.toLocaleString('pl-PL')} adresów traci zasięg. Prawie co czwarty.` : '';
+  }
+  btnBlackout.addEventListener('click', () => { ustawKrok(btnBlackout.getAttribute('aria-pressed') === 'true' ? 0 : 1); });
+
+  /* ---------- Macierz JTBD ---------- */
+  const mac = document.getElementById('macierz');
+  mac.appendChild(document.createElement('div'));
+  for (const [, nazwa] of D.fazy) { const f = document.createElement('div'); f.className = 'faza'; f.textContent = nazwa; mac.appendChild(f); }
+  const bezDanych = new Set(D.zadania.filter((z) => !z.zbiory.length).map((z) => z.nr));
+  for (const [kod, nazwa] of D.grupy) {
+    const g = document.createElement('div'); g.className = 'grupa'; g.textContent = nazwa; mac.appendChild(g);
+    for (const [fk] of D.fazy) {
+      const k = document.createElement('div'); k.className = 'komorka';
+      for (const z of D.zadania) {
+        if (!z.grupy.includes(kod) || !z.fazy.includes(fk)) continue;
+        const kr = document.createElement('span'); kr.className = 'kropka';
+        kr.addEventListener('mousemove', (e) => pokazDymek(e, z.nazwa));
+        kr.addEventListener('mouseleave', schowajDymek);
+        k.appendChild(kr);
+      }
+      mac.appendChild(k);
+    }
+  }
+  document.getElementById('ile-zadan').textContent = D.zadania.length;
+
+  /* ---------- Siatka zadań i danych ---------- */
+  (function siatka() {
+    const W = 1376, H = 580, xZ = 470, xD = 930;
+    const fazaIdx = Object.fromEntries(D.fazy.map(([k], i) => [k, i]));
+    const zad = [...D.zadania].sort((a, b) => (fazaIdx[a.fazy[0]] - fazaIdx[b.fazy[0]]) || a.nr - b.nr);
+    const yZ = (i) => 10 + i * ((H - 20) / (zad.length - 1));
+    const pozZ = new Map(zad.map((z, i) => [z.nr, yZ(i)]));
+    const uzyte = D.zbiory.map((zb) => {
+      const ys = zad.filter((z) => z.zbiory.includes(zb.id)).map((z) => pozZ.get(z.nr));
+      return { ...zb, bary: ys.reduce((a, b) => a + b, 0) / ys.length };
+    }).sort((a, b) => a.bary - b.bary);
+    const yD = (i) => 30 + i * ((H - 60) / (uzyte.length - 1));
+    const pozD = new Map(uzyte.map((d, i) => [d.id, yD(i)]));
+    const rodz = Object.fromEntries(D.zbiory.map((z) => [z.id, z.rodzaj]));
+
+    const svg = el('svg', { width: W, height: H, viewBox: `0 0 ${W} ${H}`, role: 'img', 'aria-label': 'Siatka połączeń zadań mieszkańców ze zbiorami danych' }, document.getElementById('siatka'));
+    const gL = el('g', {}, svg), gN = el('g', {}, svg);
+    const lacza = [];
+    for (const z of zad) for (const id of z.zbiory) {
+      const y1 = pozZ.get(z.nr), y2 = pozD.get(id), mx = (xZ + xD) / 2;
+      const p = el('path', { d: `M${xZ},${y1} C${mx},${y1} ${mx},${y2} ${xD},${y2}`, class: 'lacze' + (rodz[id] === 'live' ? ' live' : '') }, gL);
+      lacza.push({ p, z: z.nr, d: id });
+    }
+    const wezly = [];
+    for (const z of zad) {
+      const g = el('g', { class: 'wezel' + (z.zbiory.length ? '' : ' bez'), transform: `translate(${xZ},${pozZ.get(z.nr)})` }, gN);
+      el('circle', { r: 6 }, g);
+      const t = el('text', { x: -16, y: 6, 'text-anchor': 'end' }, g); t.textContent = z.nazwa;
+      wezly.push({ g, z: z.nr });
+      g.addEventListener('mouseenter', () => wybierz({ z: z.nr }));
+      g.addEventListener('mouseleave', () => wybierz(null));
+    }
+    for (const d of uzyte) {
+      const g = el('g', { class: 'wezel zbior' + (d.rodzaj === 'live' ? ' live' : ''), transform: `translate(${xD},${pozD.get(d.id)})` }, gN);
+      el('circle', { r: 8 }, g);
+      const t = el('text', { x: 18, y: 6 }, g); t.textContent = d.nazwa;
+      wezly.push({ g, d: d.id });
+      g.addEventListener('mouseenter', () => wybierz({ d: d.id }));
+      g.addEventListener('mouseleave', () => wybierz(null));
+    }
+    function wybierz(w) {
+      svg.classList.toggle('wybor', !!w);
+      if (!w) return;
+      const on = lacza.filter((l) => (w.z && l.z === w.z) || (w.d && l.d === w.d));
+      const zOn = new Set(on.map((l) => l.z).concat(w.z ? [w.z] : []));
+      const dOn = new Set(on.map((l) => l.d).concat(w.d ? [w.d] : []));
+      for (const l of lacza) l.p.classList.toggle('on', on.includes(l));
+      for (const n of wezly) n.g.classList.toggle('on', n.z ? zOn.has(n.z) : dOn.has(n.d));
+    }
+    const zDanymi = zad.length - bezDanych.size;
+    document.getElementById('wniosek-siatki').textContent =
+      `${zDanymi} z ${zad.length} zadań łączy się z danymi. Tam budujemy. Pozostałe ${bezDanych.size} pokazujemy uczciwie na szaro.`;
+  })();
+
+  /* ---------- Telefon z aplikacją ---------- */
+  const APP = new URLSearchParams(location.search).get('app') || 'https://warszawa-kryzys.startupaplikujmy.workers.dev/';
+  const ifr = document.getElementById('aplikacja');
+  const btnSiec = document.getElementById('siec');
+  let offline = false;
+  function ustawSiec(off) {
+    if (offline === off && ifr.src) return;
+    offline = off;
+    const u = new URL(APP);
+    if (off) u.searchParams.set('offline', '1'); else u.searchParams.delete('offline');
+    ifr.src = u.toString();
+    btnSiec.setAttribute('aria-pressed', String(off));
+    document.getElementById('siec-tekst').textContent = off ? 'Włącz sieć' : 'Wyłącz sieć';
+  }
+  btnSiec.addEventListener('click', () => ustawSiec(!offline));
+  ustawSiec(false); // telefon ładuje się od startu prezentacji, żeby był gotowy na slajd 8
+  const etapy = [...document.querySelectorAll('.etap')];
+  function ustawEtap(n) {
+    etapy.forEach((e) => e.classList.toggle('aktywny', Number(e.dataset.etap) === n));
+  }
+  etapy.forEach((e) => e.addEventListener('click', () => ustawKrok(Number(e.dataset.etap))));
+
+  /* ---------- Silnik slajdów ---------- */
+  const slajdy = [...document.querySelectorAll('.slajd')];
+  const licznik = document.getElementById('licznik');
+  const notatki = document.getElementById('notatki');
+  let biezacy = 0, krok = 0;
+
+  const HAKI = {
+    's-kijow': (k) => document.getElementById('domino').classList.toggle('pada', k >= 1),
+    's-syreny': (k) => blackout(k >= 1),
+    's-kasia': (k) => {
+      if (!ifr.src) ustawSiec(false);
+      ustawEtap(Math.min(k, 5));
+      if (k >= 6 && !offline) ustawSiec(true);
+      if (k < 6 && offline) ustawSiec(false);
+    },
+  };
+  const kaskada = () => {
+    const kostki = [...document.querySelectorAll('#domino .kostka')];
+    kostki.forEach((k, i) => (k.style.transitionDelay = reduce ? '0s' : `${i * 0.22}s`));
+  };
+  kaskada();
+
+  function ustawKrok(k) {
+    const s = slajdy[biezacy];
+    krok = Math.max(0, Math.min(k, Number(s.dataset.kroki || 0)));
+    s.querySelectorAll('[data-krok]').forEach((n) => n.classList.toggle('widoczny', Number(n.dataset.krok) <= krok));
+    HAKI[s.id]?.(krok);
+    if (!s.id || s.id !== 's-syreny') document.body.classList.toggle('ciemno', s.dataset.tlo === 'noc');
+    licznik.textContent = `${biezacy + 1} / ${slajdy.length}`;
+    notatki.textContent = s.dataset.notatka || '';
+    history.replaceState(null, '', `#${biezacy + 1}.${krok}`);
+  }
+  function pokaz(i, k = 0) {
+    biezacy = Math.max(0, Math.min(i, slajdy.length - 1));
+    slajdy.forEach((s, j) => s.classList.toggle('aktywny', j === biezacy));
+    schowajDymek();
+    ustawKrok(k);
+  }
+  function dalej() {
+    const max = Number(slajdy[biezacy].dataset.kroki || 0);
+    if (krok < max) ustawKrok(krok + 1); else if (biezacy < slajdy.length - 1) pokaz(biezacy + 1, 0);
+  }
+  function wstecz() {
+    if (krok > 0) ustawKrok(krok - 1);
+    else if (biezacy > 0) pokaz(biezacy - 1, Number(slajdy[biezacy - 1].dataset.kroki || 0));
+  }
+  addEventListener('keydown', (e) => {
+    if (e.target.closest && e.target.closest('iframe')) return;
+    const k = e.key;
+    if (['ArrowRight', 'PageDown', ' ', 'Enter'].includes(k)) { e.preventDefault(); dalej(); }
+    else if (['ArrowLeft', 'PageUp', 'Backspace'].includes(k)) { e.preventDefault(); wstecz(); }
+    else if (k === 'Home') pokaz(0);
+    else if (k === 'End') pokaz(slajdy.length - 1);
+    else if (k === 'f' || k === 'F') { document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen(); }
+    else if (k === 'n' || k === 'N') notatki.hidden = !notatki.hidden;
+    else if (k === 'o' || k === 'O') ustawSiec(!offline);
+  });
+  document.getElementById('dalej').addEventListener('click', dalej);
+  document.getElementById('wstecz').addEventListener('click', wstecz);
+
+  // Pilot wysyła klawisze do okna z fokusem. Po kliknięciu w telefon fokus wraca do prezentacji po 3 s,
+  // chyba że prezentacja jest otwarta z ?edycja=1 (np. żeby wpisać adresy Kasi w telefonie przed pitchem).
+  const edycja = new URLSearchParams(location.search).has('edycja');
+  let zwrot = null;
+  addEventListener('blur', () => {
+    if (edycja) return;
+    clearTimeout(zwrot);
+    zwrot = setTimeout(() => { if (document.activeElement === ifr) { ifr.blur(); window.focus(); } }, 3000);
+  });
+
+  const [s0, k0] = (location.hash.slice(1) || '1.0').split('.').map(Number);
+  pokaz((s0 || 1) - 1, k0 || 0);
+})();
+</script>
+</body>
+</html>
