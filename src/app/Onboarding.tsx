@@ -2,6 +2,7 @@ import { useEffect, useId, useState } from 'react';
 import type { Adres, MiejsceUzytkownika, RolaMiejsca } from '../contracts';
 import { znajdzAdres } from '../modules/adresy';
 import { zapiszMiejsca } from './miejsca';
+import { pobierzPaczke, stanPaczki } from '../offline/paczka';
 
 const ROLE: { rola: RolaMiejsca; etykieta: string; wymagane: boolean }[] = [
   { rola: 'dom', etykieta: 'Dom', wymagane: true },
@@ -96,10 +97,48 @@ export function Onboarding({ poczatkowe, onGotowe }: { poczatkowe: MiejsceUzytko
       <button className="przycisk" disabled={!wybor.dom} onClick={zapisz}>
         Zapisz
       </button>
-      {/* O1-B1 podłącza tu pobieranie paczki offline */}
-      <button className="przycisk drugi" disabled>
-        Pobierz paczkę offline
+      <PaczkaOffline />
+    </div>
+  );
+}
+
+const formatDaty = (iso: string) =>
+  new Date(iso).toLocaleString('pl-PL', { day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' });
+
+function PaczkaOffline() {
+  const [stan, setStan] = useState<{ zbudowano: string } | null>(null);
+  const [postep, setPostep] = useState<string | null>(null);
+  const [blad, setBlad] = useState<string | null>(null);
+
+  useEffect(() => {
+    stanPaczki().then(setStan);
+  }, []);
+
+  const pobierz = async () => {
+    setBlad(null);
+    setPostep('Pobieranie…');
+    try {
+      await pobierzPaczke((z, w) => setPostep(`Pobieranie: ${z} z ${w}`));
+      setStan(await stanPaczki());
+    } catch (e) {
+      setBlad(e instanceof Error ? e.message : 'Nie udało się pobrać paczki');
+    } finally {
+      setPostep(null);
+    }
+  };
+
+  return (
+    <div style={{ marginTop: 10 }}>
+      <button className="przycisk drugi" onClick={pobierz} disabled={postep !== null}>
+        {postep ?? 'Pobierz paczkę offline'}
       </button>
+      <p role="status" style={{ fontSize: 13, marginTop: 6 }}>
+        {blad
+          ? `Błąd: ${blad}. Spróbuj ponownie, gdy będzie sieć.`
+          : stan
+            ? `Paczka offline z dnia ${formatDaty(stan.zbudowano)}. Aplikacja działa bez sieci.`
+            : 'Pobierz paczkę (mapa i dane, ok. 15 MB), żeby aplikacja działała bez sieci.'}
+      </p>
     </div>
   );
 }
