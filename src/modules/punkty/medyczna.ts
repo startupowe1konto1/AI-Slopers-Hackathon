@@ -22,16 +22,20 @@ export async function kartaMedyczna(k: KontekstWskazowek): Promise<Wskazowka> {
     return { ...baza, poziom: 'brak', tekst, akcje: [], zrodlo: ZRODLO };
   }
   const m = (p: Punkt) => formatujOdleglosc(odlegloscM(od, p));
+  // Wiele aptek i przychodni nazywa się po prostu „Apteka”, „Przychodnia”: bez „Apteka: Apteka”.
+  const nazwa = (w: (typeof z)[number]) => (w.p.nazwa.toLowerCase() === w.nazwa.toLowerCase() ? w.nazwa : `${w.nazwa}: ${w.p.nazwa}`);
   const aed = z.find((w) => w.rodzaj === 'aed');
+  const blisko = Boolean(aed && odlegloscM(od, aed.p) <= 1000);
   return {
     ...baza,
-    poziom: aed && odlegloscM(od, aed.p) <= 1000 ? 'ok' : 'uwaga',
+    poziom: blisko ? 'ok' : 'uwaga',
     tekst: `${z.map((w) => `${krotko(w.nazwa)} ${m(w.p)}`).join(' · ')}.`,
     szczegoly: [
       'W nagłym wypadku dzwoń 112.',
-      ...z.map((w) => `${w.nazwa}: ${w.p.nazwa}${w.p.adres ? `, ${w.p.adres}` : ''}, ${m(w.p)}.${w.p.dostepnosc ? ` ${w.p.dostepnosc}` : ''}`),
+      ...(blisko ? [] : ['Najbliższy AED jest dalej niż 1 km.']),
+      ...z.map((w) => `${nazwa(w)}${w.p.adres ? `, ${w.p.adres}` : ''}, ${m(w.p)}.${w.p.dostepnosc ? ` ${w.p.dostepnosc}` : ''}`),
     ],
-    akcje: z.map((w) => ({ typ: 'trasa' as const, cel: { lat: w.p.lat, lon: w.p.lon }, nazwa: `${w.nazwa}: ${w.p.nazwa}`, profil: 'pieszo' as const })),
+    akcje: z.map((w) => ({ typ: 'trasa' as const, cel: { lat: w.p.lat, lon: w.p.lon }, nazwa: nazwa(w), profil: 'pieszo' as const })),
     zrodlo: ZRODLO,
   };
 }
