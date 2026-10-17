@@ -1,0 +1,12 @@
+{
+ "modul": "punkty",
+ "rekordy": 12,
+ "zrodla": {
+  "rprm-sor": {
+   "nazwa": "Rejestr SOR (rprm.ezdrowie.gov.pl)",
+   "licencja": "CC BY 4.0",
+   "url": "https://rprm.ezdrowie.gov.pl/",
+   "pobrano": "2026-10-17"
+  }
+ }
+}
