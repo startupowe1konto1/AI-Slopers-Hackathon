@@ -1,7 +1,7 @@
 import type { Map as MapLibreMap } from 'maplibre-gl';
 
 // Strefy, w których według SOIA najgłośniejsza jest syrena analogowa (pipeline/syreny/strefy.py).
-// Przy blackoucie będzie tam ciszej. Panel włącza je przełącznikiem; mapa może załadować się później.
+// Jeśli zabraknie prądu, może tam być ciszej (założenie o syrenach analogowych). Panel włącza je przełącznikiem; mapa może załadować się później.
 const ZRODLO = 'syreny-strefy-analogowe';
 const WARSTWY = ['syreny-strefy-wypelnienie', 'syreny-strefy-kontur'];
 

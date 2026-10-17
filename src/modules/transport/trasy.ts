@@ -13,6 +13,7 @@ const PARY: [RolaMiejsca, RolaMiejsca][] = [
   ['dom', 'bliska_osoba'],
 ];
 const START_KM = 0.6;
+const MAKS_PRZYSTANKOW = 3;
 const CEL_KM = 0.5;
 const KRETOSC = 1.3; // droga jest dłuższa niż linia prosta
 const PIESZO_M_MIN = 83; // 5 km/h
@@ -32,10 +33,17 @@ function trasa(i: IndeksPrzystankow, z: MiejsceUzytkownika, cel: MiejsceUzytkown
   const b = cel.adres;
   const dystansM = metry(a, b);
   const linieCelu = new Set(around(i.idx, b.lon, b.lat, Infinity, CEL_KM).flatMap((id) => i.przystanki[id].linie));
-  const autobusy = around(i.idx, a.lon, a.lat, 3, START_KM)
+  // Wszystkie przystanki do 600 m (od najbliższego); każda linia tylko przy najbliższym przystanku, który ją ma.
+  const uzyte = new Set<string>();
+  const autobusy = around(i.idx, a.lon, a.lat, Infinity, START_KM)
     .map((id) => i.przystanki[id])
-    .map((p) => ({ przystanek: p.nazwa, odlegloscM: metry(a, p), linie: p.linie.filter((l) => linieCelu.has(l)) }))
-    .filter((x) => x.linie.length > 0);
+    .map((p) => {
+      const linie = p.linie.filter((l) => linieCelu.has(l) && !uzyte.has(l));
+      linie.forEach((l) => uzyte.add(l));
+      return { przystanek: p.nazwa, odlegloscM: metry(a, p), linie };
+    })
+    .filter((x) => x.linie.length > 0)
+    .slice(0, MAKS_PRZYSTANKOW);
   return {
     z: z.rola,
     do: cel.rola,
@@ -57,9 +65,10 @@ export function trasyZ(i: IndeksPrzystankow, miejsca: MiejsceUzytkownika[]): Tra
 
 export function opisTrasy(t: TrasaMin): string[] {
   const pieszo = `Pieszo ~${t.pieszoMin} min, rowerem ~${t.rowerMin} min`;
-  if (!t.autobusy.length) return [pieszo, `Brak bezpośredniego autobusu. Pieszo ~${t.pieszoMin} min.`];
+  const blackout = 'Przy blackoucie: tramwaje, metro i SKM stoją.';
+  if (!t.autobusy.length) return [pieszo, `${blackout} Brak bezpośredniego autobusu. Pieszo ~${t.pieszoMin} min.`];
   const autobusy = t.autobusy.map((a) => `Autobusy z przystanku ${a.przystanek} (${a.odlegloscM} m): linie ${a.linie.join(', ')}`);
-  return [pieszo, `Przy blackoucie: tramwaje, metro i SKM stoją. ${autobusy[0]}`, ...autobusy.slice(1)];
+  return [pieszo, `${blackout} ${autobusy[0]}`, ...autobusy.slice(1)];
 }
 
 let indeks: Promise<IndeksPrzystankow> | null = null;

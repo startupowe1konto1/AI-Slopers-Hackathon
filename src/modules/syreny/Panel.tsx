@@ -116,7 +116,7 @@ export function Panel({ miejsca, online }: ModulProps) {
             setStrefy(e.target.checked);
           }}
         />
-        Pokaż na mapie strefy, w których najgłośniejsza jest syrena analogowa (przy blackoucie będzie tam ciszej)
+        Pokaż na mapie strefy, w których najgłośniejsza jest syrena analogowa (jeśli zabraknie prądu, może tam być ciszej)
       </label>
       <button className="przycisk drugi" aria-expanded={karta} onClick={() => setKarta((k) => !k)}>
         Karta do wydruku

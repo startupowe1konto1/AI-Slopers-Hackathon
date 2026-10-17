@@ -91,7 +91,10 @@ describe('strefy syren analogowych', () => {
     const { strefyWidoczne } = await import('./warstwy');
     expect(modul.dodajWarstwy).toBeTypeOf('function');
     render(<modul.Panel miejsca={[dom]} wybrane={null} online />);
-    fireEvent.click(screen.getByRole('checkbox', { name: /strefy, w których najgłośniejsza jest syrena analogowa/ }));
+    const przelacznik = screen.getByRole('checkbox', { name: /strefy, w których najgłośniejsza jest syrena analogowa/ });
+    // założenie o blackoucie mówimy przez „jeśli” (docs/SPEC.md §7)
+    expect(przelacznik.closest('label')?.textContent).toMatch(/jeśli zabraknie prądu, może tam być ciszej/);
+    fireEvent.click(przelacznik);
     expect(strefyWidoczne()).toBe(true);
   });
 });
