@@ -32,8 +32,13 @@ function wczytaj(): Promise<{ n: string; b: string }> {
   return dane;
 }
 
+const KOD = /^[0-3]$/;
+
 export async function wynikSyreny(adresId: string): Promise<WynikSyreny | null> {
   const [s, i] = await Promise.all([wczytaj(), indeksAdresu(adresId)]);
-  if (i < 0) return null;
-  return { adresId, normalnie: klasa(s.n[i]), blackout: klasa(s.b[i]) };
+  const n = s.n[i] ?? '';
+  const b = s.b[i] ?? '';
+  // Paczki z różnych wersji (np. stara adresy.json w cache) nie mogą wysypać karty: wtedy brak danych.
+  if (i < 0 || !KOD.test(n) || !KOD.test(b)) return null;
+  return { adresId, normalnie: klasa(n), blackout: klasa(b) };
 }

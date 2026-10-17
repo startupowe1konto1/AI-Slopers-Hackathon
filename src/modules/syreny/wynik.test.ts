@@ -41,6 +41,16 @@ describe('wynikSyreny', () => {
     expect(await wynikSyreny('t1')).toBeNull();
   });
 
+  it('null, gdy syreny.json nie pasuje do adresy.json (za krótki albo zły znak)', async () => {
+    stubPaczki(() => Response.json({ n: '3', b: '0' }));
+    let { wynikSyreny } = await import('./wynik');
+    expect(await wynikSyreny('1441382')).toBeNull();
+    vi.resetModules();
+    stubPaczki(() => Response.json({ n: '3x', b: '00' }));
+    ({ wynikSyreny } = await import('./wynik'));
+    expect(await wynikSyreny('1441382')).toBeNull();
+  });
+
   it('błąd paczki odrzuca, a następne wywołanie próbuje znowu', async () => {
     stubPaczki(() => new Response('brak', { status: 404 }));
     const { wynikSyreny } = await import('./wynik');
