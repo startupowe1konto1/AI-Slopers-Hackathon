@@ -31,8 +31,15 @@ describe('wynikSyreny', () => {
   it('czyta klasy z wiersza adresu', async () => {
     stubPaczki();
     const { wynikSyreny } = await import('./wynik');
-    expect(await wynikSyreny('1441382')).toEqual({ adresId: '1441382', normalnie: '65-70', blackout: '65-70' });
-    expect(await wynikSyreny('1441381')).toEqual({ adresId: '1441381', normalnie: '75+', blackout: 'ponizej_65' });
+    expect(await wynikSyreny('1441382')).toEqual({ adresId: '1441382', normalnie: '65-70', blackout: '65-70', blackoutSzacunek: false });
+    expect(await wynikSyreny('1441381')).toEqual({ adresId: '1441381', normalnie: '75+', blackout: 'ponizej_65', blackoutSzacunek: false });
+  });
+
+  it('oznacza blackout jako szacunek tam, gdzie p = 1', async () => {
+    stubPaczki(() => Response.json({ ...syreny, p: '10' }));
+    const { wynikSyreny } = await import('./wynik');
+    expect((await wynikSyreny('1441381'))?.blackoutSzacunek).toBe(true);
+    expect((await wynikSyreny('1441382'))?.blackoutSzacunek).toBe(false);
   });
 
   it('null dla adresu spoza paczki', async () => {

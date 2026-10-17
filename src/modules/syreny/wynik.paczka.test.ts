@@ -8,7 +8,7 @@ afterEach(() => vi.unstubAllGlobals());
 
 it('klasy syren dla 3 znanych adresów z prawdziwej paczki', async () => {
   vi.stubGlobal('fetch', async (url: string) => new Response(readFileSync(`public${url}`)));
-  expect(await wynikSyreny('1270798')).toEqual({ adresId: '1270798', normalnie: '75+', blackout: '75+' }); // ul. Powstańców Śląskich 10
-  expect(await wynikSyreny('1315198')).toEqual({ adresId: '1315198', normalnie: '65-70', blackout: '65-70' }); // ul. Czwartaków 155
-  expect(await wynikSyreny('1441381')).toEqual({ adresId: '1441381', normalnie: '75+', blackout: 'ponizej_65' }); // ul. Grochowska 200
+  expect(await wynikSyreny('1270798')).toEqual({ adresId: '1270798', normalnie: '75+', blackout: '75+', blackoutSzacunek: false }); // ul. Powstańców Śląskich 10
+  expect(await wynikSyreny('1315198')).toEqual({ adresId: '1315198', normalnie: '65-70', blackout: '65-70', blackoutSzacunek: false }); // ul. Czwartaków 155
+  expect(await wynikSyreny('1441381')).toEqual({ adresId: '1441381', normalnie: '75+', blackout: '70-75', blackoutSzacunek: true }); // ul. Grochowska 200: syrena analogowa, szacunek
 });

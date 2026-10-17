@@ -6,7 +6,7 @@ const adresy = {
   ulice: ['ul. Grochowska'], dzielnice: ['Praga-Południe'],
   id: ['1441381', '1441382'], u: [0, 0], nr: ['200', '202'], dz: [0, 0], lat: [52.24, 52.241], lon: [21.09, 21.091],
 };
-const syreny = { n: '31', b: '01' };
+const syreny = { n: '31', b: '01', p: '10' }; // p = 1: blackout jako szacunek (SOIA pokazuje tu syrenę analogową)
 
 const adres = (id: string, numer: string): Adres =>
   ({ id, ulica: 'ul. Grochowska', numer, dzielnica: 'Praga-Południe', lat: 52.24, lon: 21.09 });
@@ -14,7 +14,9 @@ const dom: MiejsceUzytkownika = { rola: 'dom', etykieta: 'Dom', adres: adres('14
 const praca: MiejsceUzytkownika = { rola: 'praca', etykieta: 'Praca', adres: adres('1441382', '202') };
 
 const KROKI = ['Włącz Alert RCB w telefonie', 'Zainstaluj aplikację RSO', 'Umów się z sąsiadem, kto kogo budzi', 'Wydrukuj kartę z adresami'];
-const DOPISEK = 'Model dźwięku na zewnątrz budynków (KG PSP, SOIA 2026.05). Wariant blackout zakłada, że działają tylko syreny cyfrowe.';
+const DOPISEK =
+  'Model dźwięku na zewnątrz budynków (KG PSP, SOIA 2026.05). Wariant blackout zakłada, że syreny analogowe nie mają zasilania awaryjnego, a cyfrowe działają. ' +
+  '„Szacunek”: SOIA pokazuje tu syrenę analogową, więc poziom syren cyfrowych przybliżamy z odległości i mocy.';
 
 function stubFetch(f: (url: string) => Promise<Response>) {
   vi.stubGlobal('fetch', vi.fn(f));
@@ -54,7 +56,7 @@ describe('panel syren', () => {
     const kartaDom = await within(panel).findByRole('article', { name: 'Dom: ul. Grochowska 200' });
     await within(kartaDom).findByText('Jeśli syreny analogowe nie mają zasilania awaryjnego, przy blackoucie możesz jej nie usłyszeć.');
     expect(wiersz(kartaDom, 'Normalnie')).toBe('75 dB i więcej');
-    expect(wiersz(kartaDom, 'Przy blackoucie')).toBe('poniżej 65 dB');
+    expect(wiersz(kartaDom, 'Przy blackoucie')).toBe('poniżej 65 dB (szacunek)');
 
     const kartaPraca = within(panel).getByRole('article', { name: 'Praca: ul. Grochowska 202' });
     await within(kartaPraca).findByText('Syrena może być słabo słyszalna, zwłaszcza w mieszkaniu.');

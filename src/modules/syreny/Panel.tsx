@@ -1,6 +1,6 @@
 import { useEffect, useId, useState, type CSSProperties, type ReactElement } from 'react';
-import type { KlasaSyreny, MiejsceUzytkownika, ModulProps, WynikSyreny } from '../../contracts';
-import { ocena, wynikSyreny, type Poziom } from './wynik';
+import type { KlasaSyreny, MiejsceUzytkownika, ModulProps } from '../../contracts';
+import { ocena, wynikSyreny, type Poziom, type WynikSyrenyZSzacunkiem } from './wynik';
 
 const OPIS: Record<Poziom, string> = {
   slychac: 'Syrena powinna być słyszalna na zewnątrz.',
@@ -17,7 +17,9 @@ const KLASA: Record<KlasaSyreny, { tekst: string; kolor: string }> = {
 };
 
 const KROKI = ['Włącz Alert RCB w telefonie', 'Zainstaluj aplikację RSO', 'Umów się z sąsiadem, kto kogo budzi', 'Wydrukuj kartę z adresami'];
-const DOPISEK = 'Model dźwięku na zewnątrz budynków (KG PSP, SOIA 2026.05). Wariant blackout zakłada, że działają tylko syreny cyfrowe.';
+const DOPISEK =
+  'Model dźwięku na zewnątrz budynków (KG PSP, SOIA 2026.05). Wariant blackout zakłada, że syreny analogowe nie mają zasilania awaryjnego, a cyfrowe działają. ' +
+  '„Szacunek”: SOIA pokazuje tu syrenę analogową, więc poziom syren cyfrowych przybliżamy z odległości i mocy.';
 
 const s = {
   karta: { border: '1px solid var(--linia)', borderRadius: 8, padding: '10px 12px', marginBottom: 10 },
@@ -30,16 +32,18 @@ const s = {
   dopisek: { color: 'var(--przygaszony)', fontSize: 12, margin: '10px 0 0' },
 } satisfies Record<string, CSSProperties>;
 
-type Stan = { adresId: string; wynik: WynikSyreny | null } | { adresId: string; blad: true };
+type Stan = { adresId: string; wynik: WynikSyrenyZSzacunkiem | null } | { adresId: string; blad: true };
 
-function Wynik({ w }: { w: WynikSyreny }) {
+function Wynik({ w }: { w: WynikSyrenyZSzacunkiem }) {
   return (
     <>
       <dl style={s.wiersze}>
         <dt>Normalnie</dt>
         <dd style={{ ...s.klasa, background: KLASA[w.normalnie].kolor }}>{KLASA[w.normalnie].tekst}</dd>
         <dt>Przy blackoucie</dt>
-        <dd style={{ ...s.klasa, background: KLASA[w.blackout].kolor }}>{KLASA[w.blackout].tekst}</dd>
+        <dd style={{ ...s.klasa, background: KLASA[w.blackout].kolor }}>{KLASA[w.blackout].tekst}
+          {w.blackoutSzacunek && ' (szacunek)'}
+        </dd>
       </dl>
       <p style={s.opis}>{OPIS[ocena(w).poziom]}</p>
     </>
