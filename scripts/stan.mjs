@@ -69,6 +69,7 @@ export function stanZadan(zadania, prs, galezie, teraz = Date.now()) {
       number: otwarty.number,
       url: otwarty.url,
       title: otwarty.title,
+      headRefName: otwarty.headRefName,
       baseRefName: otwarty.baseRefName,
       isDraft: otwarty.isDraft,
     };

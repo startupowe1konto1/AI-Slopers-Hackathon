@@ -91,6 +91,7 @@ test('otwarty PR (także wersja robocza) nigdy nie jest porzucony, nawet ze star
   assert.equal(l3.stan, 'w_toku');
   assert.equal(l3.pr.isDraft, true);
   assert.equal(l3.pr.baseRefName, 'main');
+  assert.equal(l3.pr.headRefName, 'o4/l3-rowery');
 });
 
 test('stara gałąź zadania, które wciąż czeka na zależność, to czeka (nie porzucone)', () => {
