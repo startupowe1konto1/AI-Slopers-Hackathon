@@ -6,6 +6,8 @@ Stan na sobotę, 14:45. Wersja do budowy w 4 osoby, z subagentami Claude Code. K
 
 ## 1. Cel i warunek sukcesu
 
+**Ścieżka konkursowa:** wyzwanie 3 „Warszawa: Twój ruch!”.
+
 Strona internetowa (PWA) dla mieszkańca Warszawy na czas ataku i blackoutu. Odpowiada na pytania Kasi (persona z handoffu, sekcja 3) i działa także bez sieci.
 
 **Demo jest udane, gdy:**
