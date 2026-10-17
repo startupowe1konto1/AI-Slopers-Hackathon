@@ -6,7 +6,7 @@ vi.mock('../../offline/trasy', () => ({
   trasa: vi.fn(async (od: Wsp, d: Wsp) => ({ od, do: d, profil: 'pieszo', dystansM: 120, czasMin: 2, linia: [], zrodlo: 'osrm' })),
 }));
 import { najblizsze, zrodlaPaczki } from './najblizsze';
-import { kartaSchronienia } from './wskazowki';
+import { kartaSchronienia, wskazowkiPunktow } from './wskazowki';
 
 const adres = { id: '1', ulica: 'Grochowska', numer: '200', dzielnica: 'Praga-Południe', lat: 52.2457, lon: 21.0874 };
 const k = (online = true): KontekstWskazowek => ({ miejsce: { rola: 'dom', etykieta: 'Dom', adres }, miejsca: [], online });
@@ -35,4 +35,24 @@ it('dalej niż 1 km: poziom „uwaga”; bez paczki offline: karta „brak”', 
   const w = await kartaSchronienia(k(false));
   expect(w).toMatchObject({ poziom: 'brak', akcje: [] });
   expect(w.tekst).toMatch(/^Brak sieci/);
+});
+
+it('pusty wynik i błąd źródła przy sieci: karta „brak” z nazwą źródła', async () => {
+  vi.mocked(zrodlaPaczki).mockRejectedValue(new Error('brak'));
+  vi.mocked(najblizsze).mockResolvedValue([]);
+  expect(await kartaSchronienia(k())).toMatchObject({
+    poziom: 'brak',
+    tekst: 'Brak miejsc schronienia według PSP w promieniu 20 km.',
+    akcje: [],
+    zrodlo: 'Miejsca schronienia według PSP (gdziesieukryc.pl)',
+  });
+  vi.mocked(najblizsze).mockRejectedValue(new Error('HTTP 500'));
+  expect((await kartaSchronienia(k(true))).tekst).toMatch(/^Źródło chwilowo niedostępne/);
+});
+
+it('wskazowkiPunktow: karta schronienia i karta medyczna, w kolejności 20 i 30', async () => {
+  vi.mocked(zrodlaPaczki).mockResolvedValue({});
+  vi.mocked(najblizsze).mockResolvedValue([psp('9', 0.001, 'Na żądanie')]);
+  const karty = await wskazowkiPunktow(k());
+  expect(karty.map((w) => [w.id, w.kolejnosc])).toEqual([['schronienie', 20], ['medyczna', 30]]);
 });
