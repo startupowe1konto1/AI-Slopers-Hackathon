@@ -5,12 +5,14 @@ export type PaczkaAdresow = {
   ulice: string[]; dzielnice: string[]; id: string[]; u: number[]; nr: string[]; dz: number[]; lat: number[]; lon: number[];
 };
 
-const PRZEDROSTKI = /^(ul|al|pl|os|rondo|aleja|plac|osiedle|skwer)\.?\s+/;
+const PRZEDROSTKI = /^(ul|al|pl|os|rondo|aleja|aleje|ulica|plac|osiedle|skwer)\s+/;
+// Cudzysłowy, kropki, nawiasy i łączniki jak spacje: al. „Solidarności”, ul. A. Mickiewicza, Bora-Komorowskiego.
+const ZNAKI = /[„”“"'’.,()-]/g;
 // Jeden collator zamiast localeCompare z opcjami: ta sama kolejność, a krótkie zapytanie (np. „s”) nie blokuje ekranu.
 const porownajNumery = new Intl.Collator('pl', { numeric: true }).compare;
 export const normalizuj = (s: string) =>
   s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/ł/g, 'l')
-    .replace(PRZEDROSTKI, '').replace(/\s+/g, ' ').trim();
+    .replace(ZNAKI, ' ').replace(/\s+/g, ' ').trim().replace(PRZEDROSTKI, '');
 
 export const adres = (p: PaczkaAdresow, i: number): Adres => ({
   id: p.id[i], ulica: p.ulice[p.u[i]], numer: p.nr[i], dzielnica: p.dzielnice[p.dz[i]], lat: p.lat[i], lon: p.lon[i],
@@ -24,7 +26,11 @@ export function szukaj(p: PaczkaAdresow, q: string, limit: number): Adres[] {
   const ulice = new Set<number>();
   p.ulice.forEach((u, i) => {
     const w = normalizuj(u).split(' ');
-    if (slowa.every((s) => w.some((x) => x.startsWith(s)))) ulice.add(i);
+    // Jednoliterowe słowo w nazwie to inicjał: „A.” pasuje do „Adama”. Sam inicjał nie wystarcza,
+    // inaczej „Solidarności” trafiałoby w każdą ulicę z „S.” w nazwie.
+    const pelne = w.filter((x) => x.length > 1);
+    if (slowa.every((s) => w.some((x) => x.startsWith(s) || (x.length === 1 && s.startsWith(x))))
+      && slowa.some((s) => pelne.some((x) => x.startsWith(s)))) ulice.add(i);
   });
   const wynik: number[] = [];
   for (let i = 0; i < p.id.length; i++) {
