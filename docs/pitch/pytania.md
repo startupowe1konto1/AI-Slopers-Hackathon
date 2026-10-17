@@ -33,12 +33,19 @@ Oznaczenie ⚠️ znaczy, że odpowiedź opiera się na czymś, co trzeba potwie
 
 ## 2. Skąd założenie, że przy blackoucie działają tylko syreny cyfrowe?
 
-> To założenie i mówimy o nim wprost. Syreny analogowe są elektromechaniczne i bez prądu nie zawyją, chyba że mają zasilanie awaryjne. Zakładamy, że cyfrowe działają na akumulatorach. Nie wiemy, które analogowe mają zasilanie awaryjne, dlatego mówimy „jeśli”. W Warszawie jest 235 analogowych i 216 cyfrowych. Pierwszy krok wdrożenia to sprawdzić to z PSP i Stołecznym Centrum Bezpieczeństwa. Wtedy zamiast „jeśli” powiemy, jak jest.
+> To założenie, ale oparte na dokumentach. 233 z 235 syren analogowych w Warszawie należą do wojewody. W jego przetargu to syreny wirnikowe na silnikach trójfazowych 4–7,5 kW, bez słowa o zasilaniu rezerwowym. Dla syren cyfrowych przetargi wymagają akumulatorów. Nie wiemy, czy któraś syrena wirnikowa ma agregat, dlatego mówimy „jeśli”. Pierwszy krok to potwierdzić to u wojewody mazowieckiego.
 
 **Fakty w zanadrzu:**
 - 451 syren: 235 analogowych, 216 cyfrowych. Właściciele: wojewoda 234, Prezydent Miasta 197, KW PSP 18, OSP 2 (`dane/soia-warszawa/tabele/syreny_inwentaryzacja_warszawa.csv`).
 - Wszystkie syreny: 92,5% adresów w zasięgu. Tylko cyfrowe: 69,1%. Zasięg traci 29 676 ze 126 923 adresów (`dane/soia-warszawa/analiza/syreny_blackout_podsumowanie.csv`).
 - Największy spadek: Żoliborz −57,2 pp, Praga-Północ −53,9, Wola −51,8, Praga-Południe −50,3 (`syreny_blackout_dzielnice.csv`).
+- Właściciele a rodzaj (z inwentaryzacji): wojewoda ma 233 syreny analogowe i 1 cyfrową, OSP 2 analogowe, a wszystkie 197 syren Prezydenta Miasta i 18 syren KW PSP to cyfrowe. Pytanie o zasilanie syren analogowych idzie więc do wojewody (Mazowiecki Urząd Wojewódzki), nie do miasta.
+- Syreny wojewody: opis przedmiotu zamówienia z czerwca 2024, „Przegląd techniczny 235 oraz modernizacja 40 syren alarmowych… na terenie m. st. Warszawy”. Punkt alarmowy to „syrena wirnikowa napędzana silnikiem elektrycznym 3-fazowym o mocy 4–7,5 kW”, skrzynka ze stycznikiem i sterowanie radiowe. O zasilaniu rezerwowym dokument nie mówi nic ([bip.mazowieckie.pl](https://bip.mazowieckie.pl/attachments/download/44393)).
+- Nowa syrena elektroniczna dla Warszawy (wojewoda, lipiec 2022): zasilanie 230 V i „zasilanie rezerwowe… na bazie akumulatorów” AGM, co najmniej 10 trzyminutowych alarmów w ciągu 48 godzin od zaniku prądu, zgłaszanie zaniku zasilania do centrali ([bip.mazowieckie.pl](https://bip.mazowieckie.pl/attachments/download/33459)).
+- Program KG PSP w KPO wymienia w Polsce syreny analogowe na cyfrowe. Specyfikacja wymaga dwóch akumulatorów 12 V AGM po co najmniej 30 Ah i co najmniej 10 dni czuwania ([dokument przetargowy, gov.pl](https://www.gov.pl/attachment/9c13ea6f-5e72-416c-a007-e7bb54237ca8)).
+- Uwaga na długi blackout: akumulatory syren cyfrowych też się kiedyś kończą (wymóg z 2022 r. to 48 godzin alarmów). Nasz wariant blackout dotyczy pierwszych godzin i dni.
+- W inwentaryzacji SOIA nie ma pola o zasilaniu awaryjnym. Sama PSP pisze, że przed zakupem syren trzeba potwierdzić m.in. zasilanie, a wyłączenie energii to utrata kanału ostrzegania (repozytorium KGPSP/soia-analiza-zasiegu).
+- Szczegóły i metoda: `dane/soia-warszawa/zasilanie-syren.md`.
 - Wariant blackout to jedna kolumna w danych. Kiedy dostaniemy listę syren analogowych z zasilaniem awaryjnym, przeliczamy go jednym skryptem (`dane/soia-warszawa/analiza/syreny_blackout.py`).
 
 ---
