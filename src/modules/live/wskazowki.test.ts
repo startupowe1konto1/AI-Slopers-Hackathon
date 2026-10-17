@@ -5,8 +5,8 @@ import type { Powietrze } from '../../../server/live/typy';
 vi.mock('../../offline/live-cache', () => ({ fetchLive: vi.fn() }));
 vi.mock('./warstwy', () => ({ ustawDym: vi.fn(), wybierzNaMapie: vi.fn() }));
 import { fetchLive } from '../../offline/live-cache';
-import { wybierzNaMapie } from './warstwy';
-import { wczytajDym, zapiszDym } from './dym';
+import { ustawDym, wybierzNaMapie } from './warstwy';
+import { stozekDymu, wczytajDym, zapiszDym } from './dym';
 import { kartaPowietrza, ocenaPM25 } from './wskazowki';
 
 const adres = { id: '1', ulica: 'Grochowska', numer: '200', dzielnica: 'Praga-Południe', lat: 52.23, lon: 21.02 };
@@ -67,7 +67,44 @@ it('„Widzę dym” zapisuje punkt kliknięty na mapie', async () => {
 
 it('bez sieci i bez zapisu: „brak”; z zapisem: ostatni stan z godziną', async () => {
   dane(null, null);
-  expect(await kartaPowietrza(k(false))).toMatchObject({ poziom: 'brak', tekst: 'Brak sieci i brak zapisanego pomiaru powietrza.' });
+  const brak = await kartaPowietrza(k(false));
+  expect(brak).toMatchObject({ poziom: 'brak', tekst: 'Brak sieci i brak zapisanego pomiaru powietrza.' });
+  expect(brak.zrodlo).toContain('Monitoring jakości powietrza');
+  expect(brak.zrodlo).toContain('Stacje pogodowe');
   dane(pow(12), wiatr(270), true);
   expect((await kartaPowietrza(k(false))).szczegoly).toContain('Brak sieci: ostatni zapisany stan z 18:40.');
+});
+
+it('jest wiatr, brak PM2,5: „brak” z nazwą źródła pyłu, wiatr w szczegółach', async () => {
+  dane(null, wiatr(270));
+  const w = await kartaPowietrza(k());
+  expect(w.poziom).toBe('brak');
+  expect(w.tekst).toContain('PM2,5');
+  expect(w.tekst).toContain('Monitoring jakości powietrza m.st. Warszawy przez dane.um.warszawa.pl');
+  expect(w.szczegoly).toContain('Wiatr z zachodu, 3,2 m/s (Praga).');
+  expect(w.zrodlo).toBe('test');
+  // stacje odpowiedziały, ale żadna nie mierzy PM2,5: ta sama zasada
+  dane([{ stacja: 'Grochów', lat: 52.235, lon: 21.02, pm10: 30, pm25: null, czas: '2026-10-17 18:00:00' }], wiatr(270));
+  const w2 = await kartaPowietrza(k());
+  expect(w2.poziom).toBe('brak');
+  expect(w2.tekst).toContain('Monitoring jakości powietrza');
+});
+
+it('jest PM2,5, brak wiatru: rekomendacja z pomiaru i nazwa źródła wiatru w szczegółach', async () => {
+  dane(pow(12), null);
+  const w = await kartaPowietrza(k());
+  expect(w.poziom).toBe('ok');
+  expect(w.szczegoly).toContain('Brak danych o wietrze: Stacje pogodowe m.st. Warszawy przez dane.um.warszawa.pl.');
+});
+
+it('akcja „mapa”: pokazanie rysuje punkt dymu ze stożkiem wiatru, sprzątanie go usuwa', async () => {
+  const dym = { lat: 52.23, lon: 21.0 };
+  zapiszDym(dym);
+  dane(pow(12), wiatr(270));
+  const a = (await kartaPowietrza(k())).akcje[0];
+  if (a.typ !== 'mapa') throw new Error('oczekiwano akcji mapa');
+  const sprzatnij = a.pokaz({} as never);
+  expect(ustawDym).toHaveBeenLastCalledWith(dym, stozekDymu(dym, 270));
+  sprzatnij();
+  expect(ustawDym).toHaveBeenLastCalledWith(null, null);
 });

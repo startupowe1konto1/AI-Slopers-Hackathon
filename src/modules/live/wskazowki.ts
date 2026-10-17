@@ -12,6 +12,10 @@ export function ocenaPM25(pm25: number): { poziom: Poziom; tekst: string } {
   return { poziom: 'alarm', tekst: 'Powietrze złe. Zamknij okna, wyłącz wentylację, na zewnątrz maska FFP2.' };
 }
 
+// Nazwy źródeł jak w odpowiedziach handlerów server/live/{powietrze,wiatr}.ts; potrzebne, gdy źródło nie odpowiedziało i nie ma StanLive.
+const ZRODLO_PM = 'Monitoring jakości powietrza m.st. Warszawy przez dane.um.warszawa.pl';
+const ZRODLO_WIATR = 'Stacje pogodowe m.st. Warszawy przez dane.um.warszawa.pl';
+
 const DOPISEK_DYMU = 'To kierunek wiatru, nie model rozprzestrzeniania się dymu.';
 
 export async function kartaPowietrza(k: KontekstWskazowek): Promise<Wskazowka> {
@@ -37,18 +41,20 @@ export async function kartaPowietrza(k: KontekstWskazowek): Promise<Wskazowka> {
   const stacjaWiatru = wiatr ? najblizszaStacja(wiatr.dane, dym ?? tu) : null;
   if (!stacjaPM && !stacjaWiatru) {
     const tekst = k.online ? 'Źródła danych o powietrzu i wietrze chwilowo nie odpowiadają.' : 'Brak sieci i brak zapisanego pomiaru powietrza.';
-    return { ...baza, poziom: 'brak', tekst, akcje: [przyciskDymu], zrodlo: 'dane.um.warszawa.pl' };
+    return { ...baza, poziom: 'brak', tekst, akcje: [przyciskDymu], zrodlo: `${ZRODLO_PM}; ${ZRODLO_WIATR}` };
   }
 
   const kier = stacjaWiatru && stacjaWiatru.predkoscMs > 0 ? stacjaWiatru.kierunekDeg : null;
   const dymNaCiebie = dym != null && kier != null && wStozku(tu, dym, kier);
-  const ocena = stacjaPM ? ocenaPM25(stacjaPM.pm25!) : { poziom: 'brak' as const, tekst: 'Brak pomiaru pyłu PM2,5 w pobliżu.' };
+  const ocena = stacjaPM ? ocenaPM25(stacjaPM.pm25!) : { poziom: 'brak' as const, tekst: `Brak pomiaru pyłu PM2,5 w pobliżu (${ZRODLO_PM}).` };
   const stan = (pow ?? wiatr)!;
   const pokazDym = () => {
     ustawDym(dym, dym && kier != null ? stozekDymu(dym, kier) : null);
     return () => ustawDym(null, null);
   };
   const mapaDymu: Akcja[] = dym ? [{ typ: 'mapa', pokaz: pokazDym }] : [];
+  // źródło, które nie dało danych, wymieniamy z nazwy (zasada: „brak” zawsze z nazwą źródła)
+  const braki = [!stacjaPM && `Brak danych o pyle PM2,5: ${ZRODLO_PM}.`, !stacjaWiatru && `Brak danych o wietrze: ${ZRODLO_WIATR}.`];
   const ostatni = pow?.zCache || wiatr?.zCache ? `${k.online ? 'Źródło nie odpowiada' : 'Brak sieci'}: ostatni zapisany stan z ${godzina(stan.stanNa)}.` : null;
 
   return {
@@ -64,6 +70,7 @@ export async function kartaPowietrza(k: KontekstWskazowek): Promise<Wskazowka> {
         (stacjaWiatru.predkoscMs > 0
           ? `Wiatr ${zKierunku(stacjaWiatru.kierunekDeg)}, ${liczba(stacjaWiatru.predkoscMs)} m/s (${stacjaWiatru.stacja}).`
           : `Bezwietrznie (${stacjaWiatru.stacja}).`),
+      ...braki,
       dym && DOPISEK_DYMU,
       ostatni,
     ].filter((x): x is string => typeof x === 'string'),
