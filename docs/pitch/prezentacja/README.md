@@ -37,6 +37,7 @@ W ramce działa prawdziwa aplikacja: `https://warszawa-kryzys.startupaplikujmy.w
 
 Adresów Kasi nie da się wpisać do telefonu z prezentacji automatycznie. Aplikacja jest w ramce z innej domeny, a przeglądarka nie pozwala stronie zapisywać danych (IndexedDB) w ramce z innej domeny. Dlatego adresy wpisujemy raz, ręcznie, przed pitchem:
 
+0. Czysty profil przeglądarki albo „Wyczyść dane witryny” dla aplikacji (DECYZJE-v3 W9). Wszystkie kroki niżej rób w tym profilu.
 1. Otwórz prezentację z `?edycja=1`, np. http://127.0.0.1:8765/?edycja=1#8.0. Na slajdzie 8 pojawi się czarna ramka z instrukcją i adresami. Prezentacja nie zabiera wtedy fokusu z telefonu, więc da się wpisywać.
 2. W telefonie wpisz adresy Kasi (wyszukiwanie po ulicy) i zapisz:
 
@@ -46,13 +47,14 @@ Adresów Kasi nie da się wpisać do telefonu z prezentacji automatycznie. Aplik
    | praca | rondo Ignacego Daszyńskiego 1, Wola |
    | bliska osoba | ul. Grochowska 200, Praga-Południe |
 
-   To adresy testowe aplikacji. Dopóki O2 nie scali wyszukiwania w pełnej paczce, aplikacja zna tylko te trzy.
-3. Pobierz paczkę offline w telefonie.
+   Najpierw dom: bez niego przycisk „Zapisz” jest nieaktywny. Bez domu i pracy karta Dotarcie do bliskich jest szara.
+3. Pobierz paczkę offline w telefonie, a potem przeładuj ramkę raz z siecią (np. odśwież prezentację z `?edycja=1`). To obejście znanego błędu: przy pierwszym wejściu plik adresów nie zapisuje się w paczce i bez sieci karta Syreny jest szara. Sprawdź z wyłączonym Wi-Fi, że karta Syreny jest zielona.
+   Potem z siecią kliknij „Tutaj” i odczekaj ok. 30 s (trasy na offline zapisują się w tle). Bez sieci karta schronienia ma pokazać „(trasa zapisana w telefonie)”.
 4. Otwórz prezentację jeszcze raz pod tym samym adresem, ale bez `?edycja=1`. Po kliknięciu w telefon fokus wraca do prezentacji po 3 s, więc pilot dalej działa.
 
 Przeglądarka zapamiętuje dane ramki osobno dla każdego adresu prezentacji. Na pitchu otwieraj ją zawsze tak samo (ten sam laptop, ta sama przeglądarka, ten sam adres, np. http://127.0.0.1:8765/). Adresy wpisane w zwykłej karcie aplikacji nie pojawią się w telefonie na slajdzie, i odwrotnie.
 
-Jeśli telefon nie zadziała na sali: zrzuty ekranu aplikacji są w `docs/pitch/zrzuty/`, a druga karta z `?offline=1` to zapas.
+Jeśli telefon nie zadziała na sali: zrzuty ekranu aplikacji są w `docs/pitch/zrzuty/v3-*.png` (opis w `docs/pitch/zrzuty.md`), a druga karta z `?offline=1` to zapas.
 
 ## Dane wykresów
 
