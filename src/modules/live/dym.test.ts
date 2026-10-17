@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { odlegloscM } from './okolica';
-import { stozekDymu } from './dym';
+import { stozekDymu, wStozku } from './dym';
 
 const P = { lat: 52.2317, lon: 21.0064 };
 
@@ -26,5 +26,15 @@ describe('stozekDymu', () => {
     expect(prawy[1]).toBeGreaterThan(P.lat);
     // rozstaw końców łuku: 2 · 3 km · sin(15°) ≈ 1553 m
     expect(odlegloscM({ lon: lewy[0], lat: lewy[1] }, { lon: prawy[0], lat: prawy[1] })).toBeCloseTo(1553, -1);
+  });
+});
+
+describe('wStozku', () => {
+  it('punkt z wiatrem od dymu do 3 km i ±15°', () => {
+    const dym = { lat: 52.23, lon: 21.0 };
+    expect(wStozku({ lat: 52.23, lon: 21.02 }, dym, 270)).toBe(true); // 1,4 km na wschód, wiatr z zachodu
+    expect(wStozku({ lat: 52.25, lon: 21.02 }, dym, 270)).toBe(false); // ok. 32° od osi
+    expect(wStozku({ lat: 52.23, lon: 21.06 }, dym, 270)).toBe(false); // 4 km
+    expect(wStozku({ lat: 52.23, lon: 21.02 }, dym, 90)).toBe(false); // wiatr ze wschodu: dym idzie na zachód
   });
 });
