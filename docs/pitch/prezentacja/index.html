@@ -110,9 +110,9 @@ body.ciemno { background: var(--noc); }
 /* 4: mapa syren */
 .syreny { display: grid; grid-template-columns: 640px 1fr; gap: 40px; height: 100%; }
 .syreny .lewa { display: flex; flex-direction: column; }
-.syreny .opis { font-size: 26px; line-height: 1.3; max-width: 520px; }
-.syreny .wynik { font-size: 260px; margin-top: 24px; transition: color .6s ease; }
-.syreny .roznica { font-size: 28px; line-height: 1.3; min-height: 80px; margin-top: 18px; color: var(--alarm); font-weight: 600; }
+.syreny .opis { font-size: 24px; line-height: 1.3; max-width: 560px; }
+.syreny .wynik { font-size: 230px; margin-top: 24px; transition: color .6s ease; }
+.syreny .roznica { font-size: 25px; line-height: 1.3; min-height: 100px; margin-top: 18px; color: var(--alarm); font-weight: 600; }
 .syreny .stopka { margin-top: auto; max-width: 560px; }
 .przelacznik {
   align-self: flex-start;
@@ -290,19 +290,19 @@ body.ciemno .nawig { color: var(--noc-2); }
 
   <!-- 4. Syreny -->
   <section class="slajd" data-kroki="1" id="s-syreny"
-    data-notatka="A w Warszawie? Sprawdziliśmy syreny na danych Państwowej Straży Pożarnej. Dziś w zasięgu jest 92,5% adresów. [klik: wyłącz prąd] Jeśli syreny analogowe nie mają zasilania awaryjnego, zostaje 69,1%. Prawie co czwarty adres traci zasięg, a na Żoliborzu, Woli i Pradze ponad połowa. To model dźwięku na zewnątrz, dlatego mówimy „jeśli”.">
+    data-notatka="A w Warszawie? Sprawdziliśmy syreny na danych Państwowej Straży Pożarnej. Dziś syrenę słychać przy 92,5% adresów. [klik: wyłącz prąd] Jeśli zabraknie prądu, a syreny analogowe nie mają zasilania awaryjnego, głośnej syreny, 75 decybeli i więcej, ubywa z 48,3% do 36,6% adresów. Najbardziej na Pradze-Południe. To model dźwięku na zewnątrz i przybliżenie, dlatego mówimy „jeśli”. [Tylko gdy ktoś zapyta: najgorszy wariant to 69,1% adresów w zasięgu 65 dB, a mapa pokazuje właśnie ten wariant.]">
     <div class="syreny">
       <div class="lewa">
         <h2 class="tytul" style="font-size:60px">A w Warszawie?</h2>
-        <p class="opis" style="margin-top:28px">Adresy w zasięgu syren, co najmniej 65 dB na zewnątrz</p>
-        <div class="liczba wynik" id="wynik-syren">92,5%</div>
+        <p class="opis" style="margin-top:24px">Dziś syrenę słychać (65 dB i więcej na zewnątrz) przy <b id="dzis-65">92,5%</b> adresów. Głośną, 75 dB i więcej, przy:</p>
+        <div class="liczba wynik" id="wynik-syren">48,3%</div>
         <p class="roznica" id="roznica-syren" aria-live="polite"></p>
         <button class="przelacznik" id="blackout" aria-pressed="false"><span class="gniazdo" aria-hidden="true"></span><span id="blackout-tekst">Wyłącz prąd</span></button>
-        <p class="drobny stopka">Model dźwięku na zewnątrz budynków. Wariant blackout zakłada, że działają tylko syreny cyfrowe, czyli że analogowe nie mają zasilania awaryjnego. Dane: KG PSP, SOIA 2026.05 (CC BY 4.0), 126 923 punkty adresowe m.st. Warszawy.</p>
+        <p class="drobny stopka">Model dźwięku na zewnątrz budynków, wynik przybliżony. Blackout: jeśli syreny analogowe nie mają zasilania awaryjnego, a cyfrowe działają. Podpisy dzielnic: adresy ≥ 75 dB, normalnie → jeśli zabraknie prądu. Dane: KG PSP, SOIA 2026.05 (CC BY 4.0), 126 923 punkty adresowe m.st. Warszawy.</p>
       </div>
       <div>
         <div class="mapa" id="mapa" style="height:640px"></div>
-        <div class="legenda-mapy"><span><i class="z"></i>zasięg syren</span><span class="u"><i class="u2"></i>zasięg tracony przy blackoucie</span></div>
+        <div class="legenda-mapy"><span><i class="z"></i><em style="font-style:normal">mapa pokazuje najgorszy wariant: <b id="mapa-po">69,1%</b> adresów ≥ 65 dB, tylko strefy syren cyfrowych w SOIA</em></span><span class="u"><i class="u2"></i>zasięg tracony przy blackoucie</span></div>
       </div>
     </div>
   </section>
@@ -355,7 +355,7 @@ body.ciemno .nawig { color: var(--noc-2); }
 
   <!-- 8. Dzień Kasi -->
   <section class="slajd" data-kroki="6" id="s-kasia"
-    data-notatka="[PRZYGOTOWANIE przed pitchem: otwórz prezentację z ?edycja=1, na tym slajdzie wpisz w telefonie adresy Kasi i pobierz paczkę offline.] Pokażę to na Kasi. Mieszka na Bemowie, pracuje przy rondzie Daszyńskiego, syn chodzi do przedszkola, a mama mieszka sama na Grochowie. | PRZED: Kasia raz wpisuje adresy i pobiera paczkę. Od razu widzi, że w domu syrenę usłyszy nawet przy blackoucie, ale w pracy i u mamy na Grochowie może jej wtedy nie usłyszeć. Dostaje kroki: włączyć Alert RCB, zainstalować RSO, umówić się z sąsiadem. I kartę do wydruku. | ALARM: Kasia jest w pracy. Telefon pokazuje najbliższe miejsca schronienia według PSP i wejścia do metra, z odległością. Jednym przyciskiem otwiera oficjalną aplikację PSP. | UDERZENIE: widzi, skąd wieje wiatr i w którą stronę może iść dym, a obok pomiar powietrza. Ma pod ręką najbliższy defibrylator i SOR. | POWRÓT: Tramwaje stoją, więc aplikacja pokazuje autobusy z przystanku przy pracy, które dojeżdżają w pobliże przedszkola. I to, co naprawdę jeździ teraz w okolicy. | BLACKOUT: Wieczorem pada sieć. [klik: wyłącz sieć] Aplikacja dalej działa: syrena, punkty pomocy, dojazd. Dane na żywo pokazują ostatni stan z godziną. Toalety i apteki są na mapie.">
+    data-notatka="[PRZYGOTOWANIE przed pitchem: otwórz prezentację z ?edycja=1, w telefonie zapisz adresy Kasi i pobierz paczkę offline. Telefon otwieramy z linkiem ?lokalizacja=52.2457,21.0874.] Pokażę to na Kasi. Jest u mamy na Grochowie. | 1 LOKALIZACJA I POŁĄCZENIE: Kasia klika „Użyj mojej lokalizacji”. Aplikacja sprawdza połączenie: „Jest połączenie. Dane na żywo włączone.” | 2 SYRENY: Pierwsza karta to syreny. Klik pokazuje na mapie okręgi najbliższych syren. Karta mówi, czy usłyszy alarm i co zrobić, jeśli zabraknie prądu. | 3 MIEJSCE SCHRONIENIA: Druga karta to najbliższe miejsce schronienia według PSP. Klik pokazuje trasę pieszą po chodnikach i przycisk do aplikacji PSP. | 4 POZOSTAŁE KARTY: Dalej pomoc medyczna, powietrze i wiatr, dotarcie do bliskich. Każda mówi, co robić, a nie tylko pokazuje dane. | 5 BRAK SIECI: [klik: wyłącz sieć] Padła sieć. Odświeżamy: „Brak sieci. Działam na danych z paczki.” Klik w miejsce schronienia i ta sama trasa, zapisana w telefonie.">
     <div class="przygotowanie" id="przygotowanie" hidden>
       <h3>Przygotowanie telefonu przed pitchem</h3>
       <ol>
@@ -373,13 +373,13 @@ body.ciemno .nawig { color: var(--noc-2); }
     <div class="kasia">
       <div>
         <h2 class="tytul" style="font-size:56px">Dzień Kasi</h2>
-        <p class="wstep">Mieszka na Bemowie, pracuje przy rondzie Daszyńskiego. Syn chodzi do przedszkola na Bemowie, mama mieszka sama na Grochowie.</p>
+        <p class="wstep">Kasia jest u mamy na Grochowie. Telefon w ręku, kilka sekund, żadnych zakładek: aplikacja sama pokazuje, co jest ważne w tym miejscu.</p>
         <ol class="etapy" id="etapy">
-          <li><div role="button" tabindex="0" class="etap" data-etap="1"><span class="kiedy">Przed kryzysem</span><span class="problem">Czy usłyszę alarm?</span><span class="szczegol"><span class="w"><p>Adresy i paczka offline. W domu syrenę słychać także przy blackoucie, w pracy i u mamy już nie. Kroki: Alert RCB, RSO, umowa z sąsiadem. Karta do wydruku.</p><p class="wartosc">Wie zawczasu i ma plan na papierze.</p></span></span></div></li>
-          <li><div role="button" tabindex="0" class="etap" data-etap="2"><span class="kiedy">Alarm, 0–15 min</span><span class="problem">Gdzie się schować?</span><span class="szczegol"><span class="w"><p>Najbliższe miejsca schronienia według PSP i wejścia do metra, z odległością. Przycisk „Otwórz w aplikacji PSP”.</p><p class="wartosc">Nie szuka w panice.</p></span></span></div></li>
-          <li><div role="button" tabindex="0" class="etap" data-etap="3"><span class="kiedy">Uderzenie, 15–60 min</span><span class="problem">Czy dym idzie na mnie?</span><span class="szczegol"><span class="w"><p>Kierunek wiatru i pomiar powietrza z najbliższej stacji. Najbliższy defibrylator i SOR.</p><p class="wartosc">Wie, gdzie jest pomoc medyczna.</p></span></span></div></li>
-          <li><div role="button" tabindex="0" class="etap" data-etap="4"><span class="kiedy">Powrót, 1–6 h</span><span class="problem">Jak dotrę do syna?</span><span class="szczegol"><span class="w"><p>Autobusy z przystanku przy pracy, które dojeżdżają w pobliże przedszkola. Co naprawdę jeździ teraz w okolicy.</p><p class="wartosc">Dociera do bliskich bez tramwaju i metra.</p></span></span></div></li>
-          <li><div role="button" tabindex="0" class="etap offline" data-etap="5"><span class="kiedy">Blackout, 1–3 dni</span><span class="problem">Nie ma sieci.</span><span class="szczegol"><span class="w"><p>Syrena, punkty pomocy i dojazd działają z paczki. Dane na żywo pokazują ostatni stan z godziną. Toalety i apteki na mapie.</p><p class="wartosc">Nie zostaje z pustym ekranem.</p></span></span></div></li>
+          <li><div role="button" tabindex="0" class="etap" data-etap="1"><span class="kiedy">Start</span><span class="problem">Gdzie jestem?</span><span class="szczegol"><span class="w"><p>„Użyj mojej lokalizacji”, potem „Sprawdzam połączenie…”. Wynik: „Jest połączenie. Dane na żywo włączone.”</p><p class="wartosc">Od razu wie, na jakich danych działa.</p></span></span></div></li>
+          <li><div role="button" tabindex="0" class="etap" data-etap="2"><span class="kiedy">Karta 1</span><span class="problem">Czy usłyszę alarm?</span><span class="szczegol"><span class="w"><p>Karta Syreny. Klik pokazuje na mapie okręgi najbliższych syren. Jeśli zabraknie prądu, a syreny analogowe nie mają zasilania awaryjnego, może ich nie usłyszeć.</p><p class="wartosc">Wie zawczasu i zna kroki.</p></span></span></div></li>
+          <li><div role="button" tabindex="0" class="etap" data-etap="3"><span class="kiedy">Karta 2</span><span class="problem">Gdzie się schować?</span><span class="szczegol"><span class="w"><p>Najbliższe miejsce schronienia według PSP. Klik pokazuje trasę pieszą po chodnikach i przycisk do aplikacji PSP.</p><p class="wartosc">Nie szuka w panice.</p></span></span></div></li>
+          <li><div role="button" tabindex="0" class="etap" data-etap="4"><span class="kiedy">Karty 3–5</span><span class="problem">Co jeszcze?</span><span class="szczegol"><span class="w"><p>Pomoc medyczna (AED, SOR, apteka, przychodnia), powietrze i wiatr, dotarcie do bliskich. Każda karta mówi, co zrobić.</p><p class="wartosc">Dostaje rekomendacje, nie suche dane.</p></span></span></div></li>
+          <li><div role="button" tabindex="0" class="etap offline" data-etap="5"><span class="kiedy">Brak sieci</span><span class="problem">Nie ma sieci.</span><span class="szczegol"><span class="w"><p>Wyłączamy sieć i odświeżamy: „Brak sieci. Działam na danych z paczki.” Klik w miejsce schronienia i ta sama trasa, zapisana w telefonie.</p><p class="wartosc">Nie zostaje z pustym ekranem.</p></span></span></div></li>
         </ol>
       </div>
       <div class="telefon-kol">
@@ -480,10 +480,12 @@ body.ciemno .nawig { color: var(--noc-2); }
     const g = el('g', { class: 'dz' }, svgM);
     el('circle', { cx: d.x, cy: d.y, r: 5 }, g);
     const tlo = el('rect', { rx: 4 }, g);
-    const t = el('text', { x: d.x + 16, y: d.y - 4 }, g);
+    const lewa = d.strona === 'l';
+    const tx = lewa ? d.x - 16 : d.x + 16, kotwica = lewa ? 'end' : 'start';
+    const t = el('text', { x: tx, y: d.y - 4, 'text-anchor': kotwica }, g);
     t.textContent = d.nazwa;
-    const t2 = el('text', { x: d.x + 16, y: d.y + 24, class: 'pp' }, g);
-    t2.textContent = '−' + Math.round(d.spadek) + ' pp';
+    const t2 = el('text', { x: tx, y: d.y + 24, class: 'pp', 'text-anchor': kotwica }, g);
+    t2.textContent = pct(d.przed).replace('%', '') + ' → ' + pct(d.po);
     tabliczki.push([tlo, t, t2]);
   }
   // Tabliczki pod podpisami: wymiary znane dopiero po wczytaniu fontu.
@@ -495,6 +497,10 @@ body.ciemno .nawig { color: var(--noc-2); }
     }
   });
   const wynik = document.getElementById('wynik-syren');
+  const tys = (n) => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+  document.getElementById('dzis-65').textContent = pct(M.przed);
+  document.getElementById('mapa-po').textContent = pct(M.po); // najgorszy wariant, tylko podpis mapy
+  wynik.textContent = pct(M.glosne_przed);
   const roznica = document.getElementById('roznica-syren');
   const btnBlackout = document.getElementById('blackout');
   let animLiczby = null;
@@ -517,8 +523,10 @@ body.ciemno .nawig { color: var(--noc-2); }
     document.body.classList.toggle('ciemno', wl);
     btnBlackout.setAttribute('aria-pressed', String(wl));
     document.getElementById('blackout-tekst').textContent = wl ? 'Włącz prąd' : 'Wyłącz prąd';
-    liczDo(wl ? M.przed : M.po, wl ? M.po : M.przed);
-    roznica.textContent = wl ? `${M.traci.toLocaleString('pl-PL')} adresów traci zasięg. Prawie co czwarty.` : '';
+    liczDo(wl ? M.glosne_przed : M.glosne_po, wl ? M.glosne_po : M.glosne_przed);
+    roznica.textContent = wl
+      ? `Jeśli syreny analogowe nie mają zasilania awaryjnego. Przy 65 dB i więcej zostaje ${pct(M.po_przyblizenie)} adresów: zasięg traci ok. tysiąca (rząd wielkości, ${tys(M.traci_zakres[0])}–${tys(M.traci_zakres[1])}).`
+      : '';
   }
   btnBlackout.addEventListener('click', () => { ustawKrok(btnBlackout.getAttribute('aria-pressed') === 'true' ? 0 : 1); });
 

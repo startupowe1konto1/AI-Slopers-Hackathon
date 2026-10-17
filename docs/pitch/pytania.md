@@ -33,12 +33,14 @@ Oznaczenie ⚠️ znaczy, że odpowiedź opiera się na czymś, co trzeba potwie
 
 ## 2. Skąd założenie, że przy blackoucie działają tylko syreny cyfrowe?
 
-> To założenie, ale oparte na dokumentach. 233 z 235 syren analogowych w Warszawie należą do wojewody. W jego przetargu to syreny wirnikowe na silnikach trójfazowych 4–7,5 kW, bez słowa o zasilaniu rezerwowym. Dla syren cyfrowych przetargi wymagają akumulatorów. Nie wiemy, czy któraś syrena wirnikowa ma agregat, dlatego mówimy „jeśli”. Pierwszy krok to potwierdzić to u wojewody mazowieckiego.
+> To założenie, ale oparte na dokumentach. 233 z 235 syren analogowych w Warszawie należy do wojewody, a w jego przetargu to syreny wirnikowe na silnikach 4–7,5 kW, bez słowa o zasilaniu rezerwowym. Cyfrowe mają akumulatory. Nie wiemy, czy któraś analogowa ma agregat, dlatego mówimy „jeśli”. Gdyby nie miały, głośnej syreny (75 dB i więcej) ubyłoby z 48,3% do 36,6% adresów. Pierwszy krok to potwierdzić to u wojewody.
 
 **Fakty w zanadrzu:**
 - 451 syren: 235 analogowych, 216 cyfrowych. Właściciele: wojewoda 234, Prezydent Miasta 197, KW PSP 18, OSP 2 (`dane/soia-warszawa/tabele/syreny_inwentaryzacja_warszawa.csv`).
-- Wszystkie syreny: 92,5% adresów w zasięgu. Tylko cyfrowe: 69,1%. Zasięg traci 29 676 ze 126 923 adresów (`dane/soia-warszawa/analiza/syreny_blackout_podsumowanie.csv`).
-- Największy spadek: Żoliborz −57,2 pp, Praga-Północ −53,9, Wola −51,8, Praga-Południe −50,3 (`syreny_blackout_dzielnice.csv`).
+- Liczby z `pipeline/syreny/WYNIKI.md`. Wszystkie syreny: 92,5% adresów ≥ 65 dB i 48,3% adresów ≥ 75 dB. Jeśli zabraknie prądu (przybliżenie): 91,5% i 36,6%. Zasięg 65 dB traci 1 230 adresów (wrażliwość ±1 dB: 697–1 928), więc mówimy „ok. tysiąca”, rząd wielkości.
+- Najgorszy wariant (dolne oszacowanie: tylko strefy, gdzie SOIA pokazuje syrenę cyfrową): 69,1% adresów w zasięgu 65 dB, zasięg traci 29 676 ze 126 923 adresów. Jest skrajny, bo tam, gdzie SOIA pokazuje syrenę analogową, zakłada, że nie ma żadnej syreny. Nie jest naszą główną liczbą.
+- Dlaczego przybliżenie: SOIA dzieli miasto według syreny dominującej, czyli najgłośniejszej. Tam, gdzie dominuje analogowa, nie podaje poziomu syreny cyfrowej. Przybliżenie szacuje poziom najgłośniejszej syreny cyfrowej z odległości i mocy (`pipeline/syreny/przyblizenie.py`).
+- Największy spadek adresów ≥ 75 dB: Praga-Południe 81,7% → 45,2%, Praga-Północ 85,5% → 52,6%, Żoliborz 93,0% → 64,0%, Wola 88,2% → 60,4% (`WYNIKI.md`, tabela „Dzielnice”).
 - Właściciele a rodzaj (z inwentaryzacji): wojewoda ma 233 syreny analogowe i 1 cyfrową, OSP 2 analogowe, a wszystkie 197 syren Prezydenta Miasta i 18 syren KW PSP to cyfrowe. Pytanie o zasilanie syren analogowych idzie więc do wojewody (Mazowiecki Urząd Wojewódzki), nie do miasta.
 - Syreny wojewody: opis przedmiotu zamówienia z czerwca 2024, „Przegląd techniczny 235 oraz modernizacja 40 syren alarmowych… na terenie m. st. Warszawy”. Punkt alarmowy to „syrena wirnikowa napędzana silnikiem elektrycznym 3-fazowym o mocy 4–7,5 kW”, skrzynka ze stycznikiem i sterowanie radiowe. O zasilaniu rezerwowym dokument nie mówi nic ([bip.mazowieckie.pl](https://bip.mazowieckie.pl/attachments/download/44393)).
 - Nowa syrena elektroniczna dla Warszawy (wojewoda, lipiec 2022): zasilanie 230 V i „zasilanie rezerwowe… na bazie akumulatorów” AGM, co najmniej 10 trzyminutowych alarmów w ciągu 48 godzin od zaniku prądu, zgłaszanie zaniku zasilania do centrali ([bip.mazowieckie.pl](https://bip.mazowieckie.pl/attachments/download/33459)).
@@ -46,7 +48,7 @@ Oznaczenie ⚠️ znaczy, że odpowiedź opiera się na czymś, co trzeba potwie
 - Uwaga na długi blackout: akumulatory syren cyfrowych też się kiedyś kończą (wymóg z 2022 r. to 48 godzin alarmów). Nasz wariant blackout dotyczy pierwszych godzin i dni.
 - W inwentaryzacji SOIA nie ma pola o zasilaniu awaryjnym. Sama PSP pisze, że przed zakupem syren trzeba potwierdzić m.in. zasilanie, a wyłączenie energii to utrata kanału ostrzegania (repozytorium KGPSP/soia-analiza-zasiegu).
 - Szczegóły i metoda: `dane/soia-warszawa/zasilanie-syren.md`.
-- Wariant blackout to jedna kolumna w danych. Kiedy dostaniemy listę syren analogowych z zasilaniem awaryjnym, przeliczamy go jednym skryptem (`dane/soia-warszawa/analiza/syreny_blackout.py`).
+- Kiedy dostaniemy listę syren analogowych z zasilaniem awaryjnym, przeliczamy wariant blackout skryptami z `pipeline/syreny/` i `dane/soia-warszawa/analiza/syreny_blackout.py`.
 
 ---
 
@@ -87,23 +89,27 @@ Oznaczenie ⚠️ znaczy, że odpowiedź opiera się na czymś, co trzeba potwie
 
 ## 6. Na ile dokładny jest model syren?
 
-> To model Komendy Głównej PSP, nie nasz. Liczy, gdzie dźwięk syreny przekracza na zewnątrz 65 decybeli. Nie mówi, czy usłyszysz ją w mieszkaniu przy zamkniętych oknach, i tak to opisujemy w aplikacji. Liczymy punkty adresowe, nie mieszkańców. Model trzeba porównać ze zgłoszeniami mieszkańców o słyszalności z ćwiczeń. To nasz drugi krok wdrożenia.
+> To model Komendy Głównej PSP, nie nasz. Liczy, gdzie dźwięk syreny przekracza na zewnątrz 65 decybeli. Nie mówi, czy usłyszysz ją w mieszkaniu przy zamkniętych oknach. Wariant blackoutu to nasze przybliżenie, dopasowane do tego modelu, więc podajemy je jako rząd wielkości. Liczymy punkty adresowe, nie mieszkańców. Model porównamy ze zgłoszeniami mieszkańców z ćwiczeń.
 
 **Fakty w zanadrzu:**
 - SOIA modeluje zasięgi 65, 70 i 75 dB(A). Rastry w wycinku mają komórki 100 m (`dane/soia-warszawa/README.md`).
 - Według SOIA przy wszystkich syrenach co najmniej 65 dB(A) ma 96,8% mieszkańców Warszawy (GUS NSP 2021). Nasze 92,5% to adresy, nie mieszkańcy. Tych liczb nie mieszamy.
 - Klasy ryzyka w SOIA dotyczą ostrzegania przed powodzią. Nie używamy ich.
 - Model nie uwzględnia zasilania awaryjnego syren analogowych. Patrz pytanie 2.
+- Przybliżenie blackoutu (`WYNIKI.md`): zgadza się z SOIA co do progu 65 dB na 95,6% adresów, a co do klasy głośności na 76,3%. Błąd na progu 65 dB (około 4% adresów) jest większy niż różnica między wszystkimi syrenami a samymi cyfrowymi, dlatego liczbę adresów tracących zasięg traktujemy jako rząd wielkości.
+- Przybliżenie pomija syreny cyfrowe z gmin sąsiednich (inwentaryzacja nie ma ich współrzędnych), więc przy granicach miasta może zaniżać zasięg.
 
 ---
 
 ## 7. Co z prywatnością? Wpisuję tam adres domu i przedszkola dziecka.
 
-> Adresy zostają w telefonie. Nie ma kont ani logowania. Adres wyszukujemy w telefonie, w paczce 126 923 punktów adresowych, bez GPS i bez wysyłania zapytania. Dane na żywo pobieramy dla całego miasta, a to, co jest w twojej okolicy, telefon wybiera sam. Na serwer nie trafia więc ani twój adres, ani lokalizacja.
+> Adresy zostają w telefonie. Nie ma kont ani logowania. Adres wyszukujemy w telefonie, w paczce 126 923 punktów adresowych. Lokalizację z GPS bierzemy tylko wtedy, gdy sam klikniesz „Użyj mojej lokalizacji”, i zostaje w telefonie. Jedyny wyjątek to trasa po chodnikach: do jej policzenia współrzędne początku i końca idą przez nasz serwer do OSRM ⚠️, bez nazwy adresu i bez konta. Zapisane trasy są potem w telefonie, więc offline nic nie wychodzi.
 
 **Fakty w zanadrzu:**
 - Zapisane miejsca: IndexedDB w przeglądarce (`src/app/miejsca.ts`).
-- Dane na żywo: telefon pyta `/api/live/<źródło>` bez żadnych parametrów, a filtruje w przeglądarce (`src/offline/live-cache.ts`, `src/modules/live/Panel.tsx`).
+- Dane na żywo (wiatr, powietrze i inne): telefon pyta `/api/live/<źródło>` bez żadnych parametrów, a filtruje w przeglądarce (`src/offline/live-cache.ts`, `src/modules/live/Panel.tsx`).
+- Trasy (nowy przepływ, `HANDOFF-v3.md` §5): `GET /api/live/trasa?od=lon,lat&do=lon,lat&profil=…`. Współrzędne są w adresie zapytania, więc trafiają do naszego Workera, do OSRM (`routing.openstreetmap.de`) i do cache Workera (24 h). ⚠️ Przed próbą potwierdzić w kodzie (L1, V5), że proxy nie loguje zapytań i że wysyłamy tylko punkty tras, a nie ciągły ślad. Do tego czasu nie mówimy, że na serwer „nie trafia lokalizacja”.
+- Lokalizacja z przeglądarki (V2): zgoda użytkownika w oknie przeglądarki, potem najbliższy punkt adresowy z paczki, liczony w telefonie. Na demo jest też `?lokalizacja=lat,lon`.
 - Klucz API miasta jest tylko na serwerze, nigdy w przeglądarce.
 - ⚠️ Wyszukiwanie adresów offline (moduł `adresy`, O2) nie jest jeszcze na `main`. Przed pitchem sprawdzić, że działa bez zapytań do sieci.
 

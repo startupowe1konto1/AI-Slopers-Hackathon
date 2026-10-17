@@ -7,13 +7,13 @@
 | SCQA | Treść |
 |---|---|
 | Sytuacja | Napięcie geopolityczne rośnie. Miasto takie jak Warszawa powinno dawać mieszkańcom spokój. |
-| Komplikacja | Kijów pokazał, że przy ataku najpierw pada prąd, a z nim sieć, alarmy w telefonie, mapy i tramwaje. W Warszawie przy blackoucie prawie co czwarty adres może stracić zasięg syren. |
+| Komplikacja | Kijów pokazał, że przy ataku najpierw pada prąd, a z nim sieć, alarmy w telefonie, mapy i tramwaje. W Warszawie, jeśli zabraknie prądu, głośnej syreny (75 dB i więcej) może ubyć z 48,3% do 36,6% adresów. |
 | Pytanie | Jak dać mieszkańcowi odpowiedzi, które działają także wtedy, gdy wszystko pada? |
 | Odpowiedź | Rozpisaliśmy zadania mieszkańców, połączyliśmy je z otwartymi danymi i zbudowaliśmy aplikację, która odpowiada pod adresem i działa offline. |
 
 **Forma:** prezentacja w HTML, typograficzna i minimalistyczna, jak startupowy pitch deck. Dwa żywe elementy: przełącznik blackoutu na mapie syren i działająca aplikacja w makiecie telefonu na slajdzie. Plik: [prezentacja/index.html](prezentacja/index.html), obsługa w [prezentacja/README.md](prezentacja/README.md).
 
-Stan: wersja 2 (sobota, 17.10, wieczór), po rozmowie z Wojciechem o wizji. Zastępuje wersję 1 z PR #2. Po P4 (przejście na działającej stronie) poprawiamy czasy i teksty demo.
+Stan: wersja 3 (sobota, 17.10, wieczór). Liczby syren z `pipeline/syreny/WYNIKI.md` (przybliżenie, nie najgorszy wariant 69,1%) i demo na nowym przepływie: lokalizacja → „Sprawdzam połączenie…” → karty „Twoja sytuacja” → trasa → brak sieci (`HANDOFF-v3.md` §2). Próbę na działającym ekranie z kartami robimy po V4 (23:30) i wtedy poprawiamy czasy i teksty demo.
 
 ---
 
@@ -26,17 +26,17 @@ Same nagłówki czytane po kolei dają cały wywód.
 | 0:00–0:20 | 20 | Napięcie rośnie, a ludzie pytają: co zrobię, jeśli to się stanie tutaj? | związek z realiami Warszawy (15%) |
 | 0:20–0:35 | 15 | Miasto ma dawać spokój także wtedy, gdy zawiedzie prąd i sieć | związek z realiami Warszawy |
 | 0:35–0:55 | 20 | Kijów pokazał, co pada najpierw: prąd, sieć, alarmy, mapy, tramwaje | związek z realiami Warszawy |
-| 0:55–1:20 | 25 | W Warszawie przy blackoucie prawie co czwarty adres może nie usłyszeć syreny | innowacyjność (25%), otwarte dane (20%) |
+| 0:55–1:20 | 25 | Jeśli zabraknie prądu, głośnej syreny ubywa z 48,3% do 36,6% adresów | innowacyjność (25%), otwarte dane (20%) |
 | 1:20–1:40 | 20 | Zaczęliśmy od zadań mieszkańców, nie od danych | innowacyjność |
 | 1:40–2:05 | 25 | Każde zadanie połączyliśmy z danymi i widać, gdzie dane pomagają, a gdzie nie | otwarte dane Warszawy (20%) |
 | 2:05–2:30 | 25 | Sześć funkcji w jednej stronie, a to, co da się policzyć z góry, jest w telefonie | praktyczne zastosowanie (20%) |
-| 2:30–4:05 | 95 | Kasia przechodzi przez cały kryzys, a aplikacja pomaga na każdym etapie | praktyczne zastosowanie, innowacyjność |
+| 2:30–4:05 | 95 | Aplikacja sama pokazuje, co jest ważne w tym miejscu, także gdy padnie sieć | praktyczne zastosowanie, innowacyjność |
 | 4:05–4:40 | 35 | Mieszkaniec zyskuje spokój, a miasto narzędzie na danych, które już ma | potencjał wdrożeniowy (20%) |
 | 4:40–5:00 | 20 | Działa, gdy wszystko pada | jakość prezentacji (20%) |
 
 Prezenter: **DO USTALENIA**. Druga osoba klika w telefonie na slajdzie.
 
-Tempo: około 130 słów na minutę. Tekst ma około 530 słów, czyli około 4:10 mówienia. Reszta to kliknięcia, animacje i pauzy. Jeśli próba (P7) wyjdzie za długa, tniemy w tej kolejności: zdanie o mapie punktów w Kijowie, lista grup mieszkańców (zostaje sama liczba), drugi krok wdrożenia (Syrena-26).
+Tempo: około 130 słów na minutę. Tekst ma około 510 słów, czyli około 3:55 mówienia. Reszta to kliknięcia, animacje i pauzy. Jeśli próba (P7) wyjdzie za długa, tniemy w tej kolejności: zdanie o mapie punktów w Kijowie, lista grup mieszkańców (zostaje sama liczba), drugi krok wdrożenia (Syrena-26).
 
 Oznaczenie ⚠️ znaczy, że slajd pokazuje funkcję, której jeszcze nie ma na `main`. Szczegóły w sekcji „Zależności demo”.
 
@@ -72,15 +72,19 @@ Oznaczenie ⚠️ znaczy, że slajd pokazuje funkcję, której jeszcze nie ma na
 
 ---
 
-## 0:55–1:20 · W Warszawie przy blackoucie prawie co czwarty adres może nie usłyszeć syreny
+## 0:55–1:20 · Jeśli zabraknie prądu, głośnej syreny ubywa z 48,3% do 36,6% adresów
 
-**Na ekranie:** mapa Warszawy, zielony zasięg syren, duża liczba „92,5%”. Prezenter klika przełącznik „wyłącz prąd”: znika zasięg syren analogowych, liczba spada do „69,1%”, a cztery dzielnice z największym spadkiem podświetlają się. Na dole drobnym drukiem: „Model dźwięku na zewnątrz. Wariant blackout: działają tylko syreny cyfrowe. Dane: KG PSP, SOIA 2026.05.”
+**Na ekranie:** mapa Warszawy i duża liczba „48,3%” (adresy, gdzie syrena jest głośna, 75 dB i więcej), nad nią „Dziś syrenę słychać przy 92,5% adresów”. Prezenter klika przełącznik „wyłącz prąd”: liczba spada do „36,6%”, pod nią „Przy 65 dB i więcej zostaje 91,5% adresów: zasięg traci ok. tysiąca (rząd wielkości)”, a cztery dzielnice z największym spadkiem podświetlają się z podpisem „przed → po” (Praga-Południe 81,7 → 45,2%, Praga-Północ 85,5 → 52,6%, Żoliborz 93,0 → 64,0%, Wola 88,2 → 60,4%). Na dole drobnym drukiem: „Model dźwięku na zewnątrz, wynik przybliżony. Blackout: jeśli syreny analogowe nie mają zasilania awaryjnego, a cyfrowe działają. Dane: KG PSP, SOIA 2026.05.”
 
-Dane do slajdu: `dane/soia-warszawa/analiza/syreny_zasieg_tylko_cyfrowe.geojson`, `syreny_blackout_utracony_zasieg.geojson`, `granica_warszawy.geojson`.
+**Uwaga o mapie.** Kształt mapy pochodzi z najgorszego wariantu (dolne oszacowanie: tylko strefy, gdzie SOIA pokazuje syrenę cyfrową, 69,1% adresów w zasięgu 65 dB). Podpis pod mapą mówi to wprost. Nie mówimy ze sceny „mapa pokazuje spadek do 69,1%”. Gdy O2 doda okręgi z modelu (`okregi.json`, zadanie S2), można wymienić mapę na przybliżenie.
+
+Dane do slajdu: liczby z `pipeline/syreny/WYNIKI.md` (czyta je `prezentacja/build_dane.py` do `dane.js`), kształt mapy z `dane/soia-warszawa/analiza/syreny_zasieg_tylko_cyfrowe.geojson`, `syreny_blackout_utracony_zasieg.geojson`, `granica_warszawy.geojson`.
 
 **Mówimy:**
 
-> A w Warszawie? Sprawdziliśmy syreny na danych Państwowej Straży Pożarnej. Dziś w zasięgu jest 92,5% adresów. [klik: wyłącz prąd] Jeśli syreny analogowe nie mają zasilania awaryjnego, zostaje 69,1%. Prawie co czwarty adres traci zasięg, a na Żoliborzu, Woli i Pradze ponad połowa. To model dźwięku na zewnątrz, dlatego mówimy „jeśli”.
+> A w Warszawie? Sprawdziliśmy syreny na danych Państwowej Straży Pożarnej. Dziś syrenę słychać przy 92,5% adresów. [klik: wyłącz prąd] Jeśli zabraknie prądu, a syreny analogowe nie mają zasilania awaryjnego, głośnej syreny, 75 decybeli i więcej, ubywa z 48,3% do 36,6% adresów. Najbardziej na Pradze-Południe. To model dźwięku na zewnątrz i przybliżenie, dlatego mówimy „jeśli”.
+
+Jeśli ktoś dopyta o najgorszy wariant: „Gdybyśmy wyrzucili wszystkie strefy, w których SOIA nie pokazuje syreny cyfrowej, zostaje 69,1% adresów w zasięgu 65 dB. To wariant skrajny, dolne oszacowanie, nie nasza główna liczba.”
 
 ---
 
@@ -118,54 +122,55 @@ Liczby do slajdu (z części 6 pliku JTBD, dla 24 zadań mieszkańców): pokryci
 
 ---
 
-## 2:30–4:05 · Kasia przechodzi przez cały kryzys, a aplikacja pomaga na każdym etapie
+## 2:30–4:05 · Aplikacja sama pokazuje, co jest ważne w tym miejscu, także gdy padnie sieć
 
-**Na ekranie:** z lewej oś z pięcioma etapami. Przy każdym etapie trzy linijki: problem Kasi, co robi aplikacja, wartość. Z prawej makieta telefonu, a w niej działająca aplikacja (iframe z `https://warszawa-kryzys.startupaplikujmy.workers.dev/`). Kliknięcie etapu podświetla go na osi. Druga osoba przełącza moduł w telefonie (menu na dole aplikacji). Na ostatnim etapie przełącznik „wyłącz sieć” przeładowuje telefon z `?offline=1`.
+**Na ekranie:** z lewej oś z pięcioma krokami (start, karta Syreny, karta miejsca schronienia, pozostałe karty, brak sieci). Z prawej makieta telefonu z działającą aplikacją (iframe z `https://warszawa-kryzys.startupaplikujmy.workers.dev/`). Szóste naciśnięcie klawisza (albo przełącznik „wyłącz sieć”) przeładowuje telefon z `?offline=1`. Kliknięcie kroku podświetla go na osi.
 
-Adresy Kasi zapisane w telefonie przed pitchem. To adresy testowe z aplikacji (`src/modules/adresy`): dopóki O2 nie scali wyszukiwania w pełnej paczce adresów, aplikacja zna tylko te trzy. Wynik przy blackoucie sprawdzony na prawdziwych punktach adresowych i `syreny_blackout_utracony_zasieg.geojson`:
+Fabuła: Kasia jest u mamy na Grochowie (ul. Grochowska 200). Demo startuje z linku z lokalizacją, więc nie zależy od GPS na laptopie. Przepływ ekranów: `HANDOFF-v3.md` §2, karty: §3.
 
-| Rola | Adres | Dzielnica | Syrena normalnie | Przy blackoucie |
+**Link demo:** `https://warszawa-kryzys.startupaplikujmy.workers.dev/?lokalizacja=52.2457,21.0874` (Grochowska 200). Telefon na slajdzie ładuje ten sam adres, jeśli prezentację otworzymy z parametrem `app` (adres zakodowany): `?app=https%3A%2F%2Fwarszawa-kryzys.startupaplikujmy.workers.dev%2F%3Flokalizacja%3D52.2457%2C21.0874`.
+
+Jak przygotować telefon na slajdzie: `prezentacja/README.md`, sekcja „Telefon na slajdzie 8” (zapisane adresy Kasi i pobrana paczka, żeby tryb offline miał z czego działać).
+
+| Czas | Krok | Klikamy | Widać | Wartość |
 |---|---|---|---|---|
-| dom | ul. Powstańców Śląskich 10 | Bemowo | słychać | słychać (w zasięgu syren cyfrowych) |
-| praca | rondo Ignacego Daszyńskiego 1 | Wola | słychać | traci zasięg |
-| bliska osoba (mama) | ul. Grochowska 200 | Praga-Południe (Grochów) | słychać | traci zasięg |
-| przedszkole | **DO USTALENIA**: aplikacja nie ma jeszcze czwartego adresu testowego | Bemowo | | |
-
-Dlatego na etapie „Przed kryzysem” mówimy, że w domu Kasia syrenę usłyszy, ale w pracy i u mamy przy blackoucie może nie usłyszeć. Gdyby po scaleniu O2 zespół wolał dom, który traci zasięg, pasuje ul. Lazurowa 71 (Bemowo). Wtedy trzeba wrócić do poprzedniego zdania.
-
-Jak przygotować telefon na slajdzie: `prezentacja/README.md`, sekcja „Telefon na slajdzie 8”.
-
-| Etap | Problem | Co robi aplikacja | Wartość |
-|---|---|---|---|
-| Przed kryzysem | „Czy usłyszę alarm?” | wynik syreny pod adresem, kroki, karta do wydruku | wie zawczasu i ma plan na papierze |
-| Alarm, 0–15 min | „Gdzie się schować?” | miejsca schronienia według PSP, wejścia do metra, przycisk PSP | nie szuka w panice |
-| Uderzenie, 15–60 min | „Czy dym idzie na mnie?” | wiatr i pomiar powietrza, AED, SOR | wie, gdzie jest pomoc medyczna |
-| Powrót, 1–6 h | „Jak dotrę do syna?” | autobusy z przystanku, co jeździ w okolicy | dociera do bliskich bez tramwaju i metra |
-| Blackout, 1–3 dni | „Nie ma sieci” | wszystko z paczki działa, dane na żywo jako „stan na …”, toalety, apteki | nie zostaje z pustym ekranem |
+| 2:30–2:40 | 1. Lokalizacja | link `?lokalizacja=…`, „Użyj mojej lokalizacji” | punkt użytkownika na pustej mapie, bez ikonek | zaczyna od miejsca, w którym stoi |
+| 2:40–2:50 | 2. Połączenie | nic, czekamy | „Sprawdzam połączenie…” → „Jest połączenie. Dane na żywo włączone.” ⚠️ | wie, na jakich danych działa |
+| 2:50–3:10 | 3. Syreny | karta Syreny | okręgi najbliższych syren na mapie, tekst o zasięgu i o blackoucie (z „jeśli”) | wie, czy usłyszy alarm, i zna kroki |
+| 3:10–3:30 | 4. Miejsce schronienia | karta Najbliższe miejsce schronienia (PSP) | trasa piesza po chodnikach, odległość i czas, przycisk do aplikacji PSP | nie szuka w panice |
+| 3:30–3:40 | 5. Pozostałe karty | przewinięcie listy: Pomoc medyczna, Powietrze, Bliscy | trzy karty z poziomem (zielony, pomarańczowy, czerwony, szary) | rekomendacja, nie suche dane |
+| 3:40–4:05 | 6. Brak sieci | wyłączamy Wi-Fi, odświeżamy, klik w miejsce schronienia | „Brak sieci. Działam na danych z paczki z …” ⚠️, ta sama trasa „zapisana w telefonie” | nie zostaje z pustym ekranem |
 
 **Mówimy:**
 
-> Pokażę to na Kasi. Mieszka na Bemowie, pracuje przy rondzie Daszyńskiego, syn chodzi do przedszkola, a mama mieszka sama na Grochowie.
+**Krok 1, lokalizacja (10 s)**
 
-**Przed kryzysem (20 s)** ⚠️
+> Pokażę to na Kasi. Jest u mamy na Grochowie i otwiera aplikację z linku. Jedno dotknięcie: „Użyj mojej lokalizacji”.
 
-> Przed kryzysem Kasia raz wpisuje adresy i pobiera paczkę. Od razu widzi, że w domu syrenę usłyszy nawet przy blackoucie, ale w pracy i u mamy na Grochowie może jej wtedy nie usłyszeć. Dostaje kroki: włączyć Alert RCB, zainstalować RSO, umówić się z sąsiadem. I kartę do wydruku.
+**Krok 2, połączenie (10 s)** ⚠️
 
-**Alarm (15 s)**
+> Aplikacja sprawdza połączenie. Jest sieć, więc dane na żywo są włączone, a paczka z danymi zapisuje się w telefonie.
 
-> Alarm. Kasia jest w pracy. Telefon pokazuje najbliższe miejsca schronienia według PSP i wejścia do metra, z odległością. Jednym przyciskiem otwiera oficjalną aplikację PSP.
+**Krok 3, karta Syreny (20 s)** ⚠️
 
-**Uderzenie (15 s)** ⚠️
+> Pierwsza karta: syreny. Klik i na mapie widać okręgi najbliższych syren. Kasia dowiaduje się, czy usłyszy alarm i co zrobić, jeśli zabraknie prądu.
 
-> Po uderzeniu widzi, skąd wieje wiatr i w którą stronę może iść dym, a obok pomiar powietrza. Ma pod ręką najbliższy defibrylator i SOR.
+**Krok 4, miejsce schronienia (20 s)** ⚠️
 
-**Powrót (15 s)** ⚠️
+> Druga karta: najbliższe miejsce schronienia według PSP, z odległością i czasem. Klik i trasa piesza po chodnikach, a obok przycisk do oficjalnej aplikacji PSP.
 
-> Kasia chce dotrzeć do syna. Tramwaje stoją, więc aplikacja pokazuje autobusy z przystanku przy pracy, które dojeżdżają w pobliże przedszkola. I to, co naprawdę jeździ teraz w okolicy.
+**Krok 5, pozostałe karty (10 s)** ⚠️
 
-**Blackout (20 s)**
+> Dalej pomoc medyczna, powietrze i wiatr, dotarcie do bliskich. Każda karta mówi, co zrobić, a nie tylko pokazuje dane.
 
-> Wieczorem pada sieć. [klik: wyłącz sieć] Aplikacja dalej działa: syrena, punkty pomocy, dojazd. Dane na żywo pokazują ostatni stan z godziną. Toalety i apteki są na mapie.
+**Krok 6, brak sieci (25 s)** ⚠️
+
+> A teraz najgorsze: pada sieć. [wyłączamy Wi-Fi, odświeżamy] Aplikacja pisze: „Brak sieci. Działam na danych z paczki”. Klikamy miejsce schronienia i jest ta sama trasa, zapisana w telefonie. Działa, gdy wszystko pada.
+
+**Plan B (kolejność):**
+1. Jeśli Wi-Fi na laptopie sprawia kłopot: przełącznik „wyłącz sieć” w prezentacji albo klawisz O (telefon przeładowuje się z `?offline=1`). Działa tylko po wcześniejszym przejściu online, żeby paczka i trasy były zapisane.
+2. Jeśli ekran z kartami się nie ładuje: nagranie wideo demo na pulpicie, a zrzuty kart w `docs/pitch/zrzuty/` (dojdą po próbie).
+3. Jeśli lokalizacja nie działa: link z `?lokalizacja=…` albo zapisany adres Kasi.
 
 ---
 
@@ -191,49 +196,53 @@ Jak przygotować telefon na slajdzie: `prezentacja/README.md`, sekcja „Telefon
 
 ## Zależności demo
 
-Stan na 17.10 wieczorem. Na `main` są: szkielet (O1-A1), mapa offline (O1-A2, O1-B1), proxy na żywo (O4-B1), punkty pomocy (O3-A1) i test ścieżki Kasi (O1-C1). Później doszły moduł na żywo (O4-A1) i dobudowa: dym, powietrze, Veturilo, utrudnienia (O4-C1). W toku: dane punktów (#6). Na przejściu P4 odhaczamy, co działa.
+Stan na 17.10 wieczorem, po rozpisce v3 (`docs/PLAN-v3.md`). Ekran z kartami (V4) jeszcze nie jest na `main`, więc kroki 1–6 demo opisujemy według planu i sprawdzamy na próbie o 23:30. ⚠️ oznacza krok, który zależy od zadania jeszcze niescalonego.
 
-| Slajd lub etap | Funkcja | Zadanie w PLAN.md | Jeśli nie zdąży |
+| Krok demo | Funkcja | Zadanie w PLAN-v3.md | Jeśli nie zdąży |
 |---|---|---|---|
-| 0:55 Syreny | mapa z przełącznikiem w prezentacji | O4-P (prezentacja), dane w repo | gotowe dane, zależy tylko od prezentacji |
+| 0:55 Syreny | mapa z przełącznikiem w prezentacji, liczby z `WYNIKI.md` | L4 (to zadanie), dane w repo | gotowe, zależy tylko od prezentacji |
 | 1:40 Siatka | siatka zadań i danych w prezentacji | O4-P | statyczny obraz siatki |
-| 2:30 telefon | aplikacja w iframe z adresami Kasi | wdrożenie na Workerze (jest); O2-B1, O2-A1 (adresy) | zrzuty ekranu zamiast iframe |
-| Przed kryzysem | wynik syreny, kroki | O2-B2, O2-A2 | zrzut karty syren z danych testowych |
-| Przed kryzysem | karta do wydruku | O2-C2 (dobudowa) | pomijamy „i kartę do wydruku” |
-| Alarm | miejsca schronienia według PSP, metro, przycisk PSP | O3-A1 (jest), O3-B1 (#6), eksport PSP | przycisk PSP i wejścia do metra |
-| Uderzenie | wiatr | O4-B1, O4-A1 (są na `main`) | sam wiatr bez dymu |
-| Uderzenie | dym i pomiar powietrza | O4-C1 (jest na `main`) | mówimy tylko o wietrze |
-| Uderzenie | AED i SOR | O3-B1 (#6) | jw. |
-| Powrót | autobusy z przystanku | O2-C1 | pokazujemy „co jeździ w okolicy” z modułu na żywo |
-| Powrót | co jeździ w okolicy | O4-A1 (jest na `main`) | zrzut ekranu |
-| Blackout | `?offline=1` w telefonie | O1 (jest) | przejście na drugą kartę z `?offline=1` |
+| 1. Lokalizacja | „Użyj mojej lokalizacji”, `?lokalizacja=lat,lon` | V2 | zapisany adres Kasi zamiast lokalizacji |
+| 2. Połączenie | „Sprawdzam połączenie…”, automatyczne pobranie paczki | V3 | pomijamy krok, mówimy od razu o kartach |
+| 3. Syreny | karta Syreny i okręgi na mapie | S1, S2 | sama karta z tekstem, bez okręgów |
+| 4. Miejsce schronienia | karta, trasa piesza, przycisk PSP | P2, L1 (proxy tras), V5 (`trasa()`) | karta bez trasy, trasa jako linia prosta |
+| 5. Pozostałe karty | Pomoc medyczna, Powietrze, Bliscy | P3, L2, S3 | pokazujemy tylko karty, które są gotowe (bez atrap „Karta w budowie.”) |
+| 6. Brak sieci | tryb offline, trasa „zapisana w telefonie” | V3, V5 | `?offline=1`, potem nagranie wideo |
+| Telefon w prezentacji | aplikacja w iframe | wdrożenie na Workerze (jest) | zrzuty ekranu zamiast iframe |
 
-Ryzyko techniczne iframe: przeglądarka trzyma pamięć strony w ramce osobno od zwykłej karty. Rozwiązanie w prezentacji: przed pitchem otwieramy ją z `?edycja=1` i w telefonie na slajdzie wpisujemy adresy Kasi oraz pobieramy paczkę (instrukcja w `prezentacja/README.md`). Podawanie prezentacji z adresu aplikacji (`/pitch/`) nie jest potrzebne.
+Ryzyko techniczne iframe: przeglądarka trzyma pamięć strony w ramce osobno od zwykłej karty. Rozwiązanie w prezentacji: przed pitchem otwieramy ją z `?edycja=1` i w telefonie na slajdzie zapisujemy adresy Kasi oraz pobieramy paczkę (instrukcja w `prezentacja/README.md`). Podawanie prezentacji z adresu aplikacji (`/pitch/`) nie jest potrzebne.
 
-Przydałby się też link otwierający aplikację na konkretnym module (np. `?panel=punkty`). Dziś aplikacja tego nie ma, więc moduły przełączamy ręcznie w menu telefonu. To prośba do O1, nie warunek demo.
+Karta syreny po V4 może pokazać wynik dla Grochowskiej 200. Przed próbą sprawdzamy, co faktycznie mówi, i nie zapowiadamy ze sceny wyniku, którego karta nie pokazuje.
 
 ## Przygotowanie przed wejściem na scenę
 
-- [ ] Prezentacja otwarta na pełnym ekranie, telefon na slajdzie załadowany z adresami Kasi i pobraną paczką.
-- [ ] Próba na sucho: przełącznik blackoutu na mapie, przełączenie modułów w telefonie, „wyłącz sieć”.
-- [ ] Zapas: druga karta z `?offline=1`, nagranie demo na pulpicie.
+- [ ] Prezentacja otwarta na pełnym ekranie, telefon na slajdzie załadowany z linkiem `?lokalizacja=52.2457,21.0874`, adresy Kasi zapisane i paczka pobrana.
+- [ ] Próba na sucho: przełącznik „wyłącz prąd” na mapie, cały przepływ w telefonie (lokalizacja, karty, trasa), wyłączenie sieci i odświeżenie.
+- [ ] Zapas: druga karta z `?offline=1` (po wcześniejszym przejściu online), nagranie demo na pulpicie.
 - [ ] Wyłączone powiadomienia systemowe i komunikatory.
 
 ## Liczby w pitchu i skąd je mamy
 
-Sprawdzone 17.10 na plikach w repo.
+Sprawdzone 17.10 na `pipeline/syreny/WYNIKI.md`. Liczby na slajdzie czyta z niego `prezentacja/build_dane.py`, więc nie są wpisane ręcznie.
 
-| Liczba w pitchu | Dokładna wartość | Źródło |
+| Liczba w pitchu | Dokładna wartość | Źródło w `WYNIKI.md` |
 |---|---|---|
-| 92,5% adresów w zasięgu | 92,5 | `dane/soia-warszawa/analiza/syreny_blackout_podsumowanie.csv` |
-| 69,1% przy blackoucie | 69,1 | jw. |
-| prawie co czwarty adres traci zasięg | 29 676 / 126 923 = 23,4% | jw. |
-| Żoliborz, Wola, Praga: ponad połowa | spadek 57,2 / 51,8 / 53,9 (Północ) / 50,3 (Południe) pp | `syreny_blackout_dzielnice.csv` |
+| dziś syrenę słychać przy 92,5% adresów | 92,5% adresów ≥ 65 dB, wszystkie syreny (SOIA) | tabela „Miasto”, wiersz „Wszystkie syreny” |
+| głośnej syreny ubywa z 48,3% do 36,6% adresów (główna liczba) | ≥ 75 dB: 48,3% → 36,6% | tabela „Miasto”, kolumna „Adresy ≥ 75 dB”, wiersze „Wszystkie syreny” i „Blackout, przybliżenie” |
+| przy 65 dB i więcej zostaje 91,5%, ok. tysiąca adresów traci zasięg | 91,5%, 1 230 adresów (wrażliwość ±1 dB: 697–1 928) | tabela „Miasto” i „Wrażliwość” |
+| Praga-Południe 81,7% → 45,2% | ≥ 75 dB normalnie → blackout | tabela „Dzielnice” |
+| Praga-Północ 85,5% → 52,6%, Żoliborz 93,0% → 64,0%, Wola 88,2% → 60,4% | jw. | jw. |
+| 126 923 adresy | liczba punktów adresowych | „Adresów” pod tabelą „Miasto” |
+| najgorszy wariant: 69,1%, 29 676 adresów | dolne oszacowanie, tylko strefy, gdzie SOIA pokazuje syrenę cyfrową | tabela „Miasto”, wiersz „dolne oszacowanie”. Mówimy tylko, gdy ktoś zapyta, z nazwą „najgorszy wariant” |
 | 6 grup mieszkańców, 7 faz, 24 zadania | M1–M6, F0–F6, 24 z 31 zadań | `kontekst/jtbd-kryzys-warszawa.md` |
 | pokrycie danymi: 3 pełne, 13 częściowe, 7 brak, 1 n/d | jw. | jw., część 6 |
 | wojna od ponad czterech lat | pełnoskalowa inwazja od 24.02.2022 | wiedza ogólna |
 
-Uwaga: „ponad połowa” dotyczy spadku w punktach procentowych. Na Żoliborzu zasięg spada ze 100% do 42,8%, na Woli z 99,9% do 48,1%, na Pradze-Północ z 99,9% do 46,0%, na Pradze-Południe z 99,7% do 49,4%. W każdej z tych dzielnic przy blackoucie poza zasięgiem jest ponad połowa adresów.
+Uwagi:
+- Dzielnice dobiera `build_dane.py`: cztery z największym spadkiem udziału adresów ≥ 75 dB w punktach procentowych (Praga-Południe 36,5 pp, Praga-Północ 32,9, Żoliborz 29,0, Wola 27,8). Mokotów (72,6% → 46,1%) i Ochota (68,6% → 44,2%) mają spadek mniejszy (26,5 i 24,4 pp), więc nie są w czwórce. „Najbardziej na Pradze-Południe” zgadza się z tabelą.
+- Przybliżenie ma błąd na progu 65 dB około 4% adresów, większy niż różnica między wszystkimi syrenami a samymi cyfrowymi. Dlatego 1 230 podajemy jako rząd wielkości („ok. tysiąca”), nie jako dokładną liczbę.
+- Przybliżenie pomija syreny cyfrowe z gmin sąsiednich, więc przy granicach miasta zasięg może być zaniżony.
+- Poprzednia liczba (69,1%, „prawie co czwarty adres”, „na Żoliborzu, Woli i Pradze ponad połowa”) była wariantem skrajnym. Nie używamy jej jako głównej liczby ani zdania o „co czwartym adresie”.
 
 ## Fakty do potwierdzenia przed oddaniem
 
@@ -247,6 +256,7 @@ W repo nie ma linku do źródła tych stwierdzeń:
 
 - „Schrony”. Zawsze „miejsca schronienia według PSP”.
 - „Na pewno nie usłyszysz”. Zawsze „jeśli syreny analogowe nie mają zasilania awaryjnego” i „model dźwięku na zewnątrz”.
+- „Prawie co czwarty adres traci zasięg” i 69,1% jako głównej liczby. To najgorszy wariant. Główna liczba to 48,3% → 36,6% adresów ≥ 75 dB.
 - Że aplikacja ogłasza alarmy. Pomaga upewnić się, że alarm dotrze.
 - Że tunele metra są płytkie albo że miejsca schronienia są niebezpieczne.
 - Konkretnych zagrożeń i scenariuszy ataku na Warszawę. O geopolityce mówimy ogólnie.
