@@ -1,6 +1,24 @@
 {
- "wersja": "szkielet",
- "zbudowano": "2026-10-17T15:00:00+02:00",
- "pliki": [],
- "zrodla": {}
+ "wersja": "2026-10-17T13:36",
+ "zbudowano": "2026-10-17T13:36:46+00:00",
+ "pliki": [
+  {
+   "sciezka": "adresy/adresy.json",
+   "bajty": 5451129,
+   "modul": "adresy"
+  },
+  {
+   "sciezka": "adresy/meta.json",
+   "bajty": 262,
+   "modul": "adresy"
+  }
+ ],
+ "zrodla": {
+  "wfs-adresy": {
+   "nazwa": "m.st. Warszawa, WFS PUNKTY_ADRESOWE_WGS84",
+   "licencja": "CC BY",
+   "url": "https://wfs.um.warszawa.pl/serwis",
+   "pobrano": "2026-10-17T14:28:00+02:00"
+  }
+ }
 }
