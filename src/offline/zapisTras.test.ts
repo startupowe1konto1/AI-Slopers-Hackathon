@@ -28,6 +28,14 @@ it('cele: 3 PSP + AED + SOR + apteka + przychodnia pieszo z każdego miejsca, mi
   expect(c[0].do.lat).toBeCloseTo(52.231, 6); // 52.23 + 0.001 w liczbach zmiennoprzecinkowych
 });
 
+it('cele: „Tutaj” jest początkiem tras, ale nie celem (karta bliskich i tak go pomija)', async () => {
+  const tutaj: MiejsceUzytkownika = { rola: 'tutaj', etykieta: 'Tutaj', adres: adres('3', 52.25) };
+  const c = await celeTras([...miejsca, tutaj], szukaj);
+  expect(c.some((x) => x.do === tutaj.adres)).toBe(false);
+  // z „Tutaj”: 7 punktów + 2 miejsca × 2 profile = 11
+  expect(c.filter((x) => x.od === tutaj.adres)).toHaveLength(11);
+});
+
 it('cele: błąd wyszukiwania punktów (np. brak paczki) nie przerywa, zostają trasy między miejscami', async () => {
   const c = await celeTras(miejsca, async () => {
     throw new Error('brak paczki');

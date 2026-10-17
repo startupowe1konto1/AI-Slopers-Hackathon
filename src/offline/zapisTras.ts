@@ -21,7 +21,8 @@ export async function celeTras(miejsca: MiejsceUzytkownika[], szukaj: Szukaj = n
       for (const p of await szukaj(m.adres, rodzaj, n).catch(() => [])) cele.push({ od: m.adres, do: { lat: p.lat, lon: p.lon }, profil: 'pieszo' });
     }
     for (const inne of miejsca) {
-      if (inne !== m) for (const profil of ['pieszo', 'rower'] as const) cele.push({ od: m.adres, do: inne.adres, profil });
+      // Do „Tutaj” nie zapisujemy: karta bliskich nie liczy tras do bieżącej pozycji.
+      if (inne !== m && inne.rola !== 'tutaj') for (const profil of ['pieszo', 'rower'] as const) cele.push({ od: m.adres, do: inne.adres, profil });
     }
   }
   return cele;
