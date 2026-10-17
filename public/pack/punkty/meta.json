@@ -1,7 +1,13 @@
 {
  "modul": "punkty",
- "rekordy": 2249,
+ "rekordy": 10255,
  "zrodla": {
+  "psp": {
+   "nazwa": "Miejsca schronienia według PSP (gdziesieukryc.pl)",
+   "licencja": "za zgodą PSP",
+   "url": "https://gdziesieukryc.pl",
+   "pobrano": "2026-10-17"
+  },
   "gtfs-ztm": {
    "nazwa": "GTFS Warszawa (mkuran.pl, wersja 2026-10-17 00:15:22), źródło nieoficjalne, na podstawie danych ZTM",
    "licencja": "do weryfikacji (dane ZTM; GTFS: Mikołaj Kuranowski)",

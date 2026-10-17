@@ -1,19 +1,25 @@
 {
- "wersja": "2026-10-17T14:44",
- "zbudowano": "2026-10-17T14:44:21+00:00",
+ "wersja": "2026-10-17T15:37",
+ "zbudowano": "2026-10-17T15:37:29+00:00",
  "pliki": [
   {
    "sciezka": "punkty/meta.json",
-   "bajty": 1173,
+   "bajty": 1353,
    "modul": "punkty"
   },
   {
    "sciezka": "punkty/punkty.json",
-   "bajty": 538322,
+   "bajty": 1922677,
    "modul": "punkty"
   }
  ],
  "zrodla": {
+  "psp": {
+   "nazwa": "Miejsca schronienia według PSP (gdziesieukryc.pl)",
+   "licencja": "za zgodą PSP",
+   "url": "https://gdziesieukryc.pl",
+   "pobrano": "2026-10-17"
+  },
   "gtfs-ztm": {
    "nazwa": "GTFS Warszawa (mkuran.pl, wersja 2026-10-17 00:15:22), źródło nieoficjalne, na podstawie danych ZTM",
    "licencja": "do weryfikacji (dane ZTM; GTFS: Mikołaj Kuranowski)",

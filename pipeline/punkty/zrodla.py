@@ -14,6 +14,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 PROBKI = ROOT / "dane/probki"
 ADRESY = ROOT / "dane/adresy/punkty_adresowe_wgs84.csv"
+# Eksport z gdziesieukryc.pl (kontekst/TODO-schrony-eksport.md), poza gitem.
+PSP = ROOT / "dane/psp-schronienia/psp_punkty_schronienia_warszawa_bbox.csv"
 
 
 def _punkt(**pola) -> dict:
@@ -23,6 +25,19 @@ def _punkt(**pola) -> dict:
 
 def _tekst(t: str | None) -> str:
     return " ".join((t or "").split())
+
+
+def psp(plik: Path = PSP) -> list[dict]:
+    """Miejsca schronienia według PSP. Dane są zanonimizowane (bez nazw obiektów), więc nazwą jest adres."""
+    with open(plik, encoding="utf-8-sig") as f:
+        return [
+            _punkt(
+                id=f"psp-{x['id_publiczny']}", rodzaj="schronienie_psp",
+                nazwa=re.sub(r"^ulica ", "ul. ", _tekst(x["adres"])) or "Miejsce schronienia według PSP",
+                dostepnosc=x["dostepnosc"], lat=float(x["lat"]), lon=float(x["lon"]), zrodlo="psp",
+            )
+            for x in csv.DictReader(f)
+        ]
 
 
 def _klucz_ulicy(ulica: str) -> str:

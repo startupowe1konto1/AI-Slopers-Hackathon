@@ -18,6 +18,8 @@ BBOX = (20.85, 52.09, 21.28, 52.37)  # lon_min, lat_min, lon_max, lat_max
 WFS = "https://wfs.um.warszawa.pl/serwis?SERVICE=WFS&VERSION=1.1.0&REQUEST=GetFeature&TYPENAME=wfs:"
 KATALOG = "https://dane.um.warszawa.pl/pl/catalogue/"
 ZRODLA = {
+    # Nazwa jak w stałych atrybucjach stopki (src/app/zrodla.ts, O1), żeby się nie powtarzała.
+    "psp": (zrodla.psp, "Miejsca schronienia według PSP (gdziesieukryc.pl)", "za zgodą PSP", "https://gdziesieukryc.pl"),
     # Ten sam klucz i opis co public/pack/transport/meta.json (O2): stopka pokaże jedno źródło.
     "gtfs-ztm": (
         zrodla.metro,

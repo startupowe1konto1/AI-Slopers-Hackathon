@@ -2,9 +2,22 @@ import json
 from collections import Counter
 from pathlib import Path
 
+import pytest
+
 from punkty import zrodla  # pipeline/ jest w pythonpath (pipeline/pyproject.toml)
 
 ROOT = Path(__file__).resolve().parents[2]
+
+
+@pytest.mark.skipif(not zrodla.PSP.exists(), reason="surowy eksport PSP jest poza gitem (dane/psp-schronienia/)")
+def test_psp_z_eksportu():
+    s = zrodla.psp()
+    assert len(s) == 8006
+    assert Counter(p["dostepnosc"] for p in s) == {"Na żądanie": 6982, "Określone godziny": 890, "Całodobowa": 134}
+    p = next(p for p in s if p["id"] == "psp-OZO-016C2BE32783")
+    assert (p["nazwa"], p["lat"], p["lon"], p["zrodlo"]) == ("ul. Wilanowska 8H, Józefosław", 52.09778, 21.04373, "psp")
+    assert "adres" not in p  # adres jest nazwą: dane PSP nie mają nazw obiektów
+    assert not any(p["nazwa"].startswith("ulica ") for p in s)
 
 
 def test_sor_z_probki():
