@@ -191,7 +191,7 @@ Jak przygotować telefon na slajdzie: `prezentacja/README.md`, sekcja „Telefon
 
 ## Zależności demo
 
-Stan na 17.10 ok. 21:00: ekran z kartami (V4) jest na `main` i na produkcji. Kroki 1–5 przeszliśmy na produkcji z linkiem demo (zrzuty w `zrzuty.md`). Kafelki warstw z pustą mapą na starcie (P4) nie są jeszcze scalone, więc mapa na starcie pokazuje punkty.
+Stan na 17.10 ok. 21:00: ekran z kartami (V4) jest na `main` i na produkcji. Kroki 1–5 przeszliśmy na produkcji z linkiem demo (zrzuty w `zrzuty.md`). Kafelki warstw z pustą mapą na starcie (P4, #27) weszły na `main` po zrobieniu zrzutów, więc na próbie sprawdzamy start jeszcze raz.
 
 | Krok demo | Funkcja | Zadanie w PLAN-v3.md | Jeśli nie zdąży |
 |---|---|---|---|
