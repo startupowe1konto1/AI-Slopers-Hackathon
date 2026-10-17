@@ -14,6 +14,6 @@
 - TypeScript ma `erasableSyntaxOnly`: bez `enum`, `namespace` i właściwości w parametrach konstruktora.
 - Teksty: „miejsca schronienia według PSP”, nigdy „schrony”. Nie ogłaszamy alarmów. Nie pokazujemy miejsc uderzeń. Przy wyniku syren dopisek o modelu na zewnątrz i o założeniu blackoutu.
 - Każdy panel ma stany: ładowanie, brak sieci, brak danych, błąd źródła. Nigdy pusty ekran.
-- Test ścieżki Kasi: `npm run test:e2e` (Playwright, wersja produkcyjna + tryb offline; na macOS używa zainstalowanego Chrome). Testy modułów same się włączają, gdy moduł nie jest już atrapą. Umówione `data-testid`: `wynik-syreny`, `lista-punktow`.
+- Test ścieżki Kasi: `npm run test:e2e` (Playwright, wersja produkcyjna + tryb offline; na macOS używa zainstalowanego Chrome). Testy kart same się włączają, gdy karta nie jest już atrapą. Umówione `data-testid`: `karta-<id>` (`syreny`, `schronienie`, `medyczna`, `powietrze`, `bliscy`); atrapa karty ma tekst `Karta w budowie.`. Ścieżka demo w teście: `?lokalizacja=lat,lon` → „Użyj mojej lokalizacji” → „Sprawdzam połączenie…” → 5 kart → klik karty (okręgi syren, trasa) → odświeżenie bez sieci.
 - TDD: test → czerwony → kod → zielony. Przed PR: `git fetch && git rebase origin/main && npm run typecheck && npm test && npm run build`.
 - Najmniejsza zmiana, która spełnia „Gotowe, gdy” z zadania. Bez kodu na zapas.
