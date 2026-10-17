@@ -1,5 +1,8 @@
 import { useEffect, useId, useState, type CSSProperties, type ReactElement } from 'react';
-import type { KlasaSyreny, MiejsceUzytkownika, ModulProps } from '../../contracts';
+import type { MiejsceUzytkownika, ModulProps } from '../../contracts';
+import { KartaDoDruku } from './Karta';
+import { DOPISEK, KLASA, KROKI } from './teksty';
+import { pokazStrefy, strefyWidoczne } from './warstwy';
 import { ocena, wynikSyreny, type Poziom, type WynikSyrenyZSzacunkiem } from './wynik';
 
 const OPIS: Record<Poziom, string> = {
@@ -8,18 +11,6 @@ const OPIS: Record<Poziom, string> = {
   ryzyko_blackout: 'Jeśli syreny analogowe nie mają zasilania awaryjnego, przy blackoucie możesz jej nie usłyszeć.',
   nie_slychac: 'W tym miejscu syrena prawdopodobnie nie jest słyszalna.',
 };
-
-const KLASA: Record<KlasaSyreny, { tekst: string; kolor: string }> = {
-  '75+': { tekst: '75 dB i więcej', kolor: '#15803d' },
-  '70-75': { tekst: '70–75 dB', kolor: '#4d7c0f' },
-  '65-70': { tekst: '65–70 dB', kolor: '#b45309' },
-  ponizej_65: { tekst: 'poniżej 65 dB', kolor: '#b91c1c' },
-};
-
-const KROKI = ['Włącz Alert RCB w telefonie', 'Zainstaluj aplikację RSO', 'Umów się z sąsiadem, kto kogo budzi', 'Wydrukuj kartę z adresami'];
-const DOPISEK =
-  'Model dźwięku na zewnątrz budynków (KG PSP, SOIA 2026.05). Wariant blackout zakłada, że syreny analogowe nie mają zasilania awaryjnego, a cyfrowe działają. ' +
-  '„Szacunek”: SOIA pokazuje tu syrenę analogową, więc poziom syren cyfrowych przybliżamy z odległości i mocy.';
 
 const s = {
   karta: { border: '1px solid var(--linia)', borderRadius: 8, padding: '10px 12px', marginBottom: 10 },
@@ -30,6 +21,7 @@ const s = {
   szkielet: { height: 22, borderRadius: 6, background: 'var(--linia)', marginTop: 6 },
   przygaszony: { color: 'var(--przygaszony)', fontSize: 13, margin: '0 0 10px' },
   dopisek: { color: 'var(--przygaszony)', fontSize: 12, margin: '10px 0 0' },
+  przelacznik: { display: 'flex', gap: 8, alignItems: 'flex-start', fontSize: 14, margin: '12px 0 0' },
 } satisfies Record<string, CSSProperties>;
 
 type Stan = { adresId: string; wynik: WynikSyrenyZSzacunkiem | null } | { adresId: string; blad: true };
@@ -100,6 +92,8 @@ function KartaMiejsca({ miejsce, online }: { miejsce: MiejsceUzytkownika; online
 }
 
 export function Panel({ miejsca, online }: ModulProps) {
+  const [karta, setKarta] = useState(false);
+  const [strefy, setStrefy] = useState(strefyWidoczne);
   return (
     <div data-testid="wynik-syreny">
       {!online && <p style={s.przygaszony}>Bez sieci: wynik z paczki offline.</p>}
@@ -113,6 +107,21 @@ export function Panel({ miejsca, online }: ModulProps) {
         ))}
       </ol>
       <p style={s.dopisek}>{DOPISEK}</p>
+      <label style={s.przelacznik}>
+        <input
+          type="checkbox"
+          checked={strefy}
+          onChange={(e) => {
+            pokazStrefy(e.target.checked);
+            setStrefy(e.target.checked);
+          }}
+        />
+        Pokaż na mapie strefy, w których najgłośniejsza jest syrena analogowa (przy blackoucie będzie tam ciszej)
+      </label>
+      <button className="przycisk drugi" aria-expanded={karta} onClick={() => setKarta((k) => !k)}>
+        Karta do wydruku
+      </button>
+      {karta && <KartaDoDruku miejsca={miejsca} />}
     </div>
   );
 }

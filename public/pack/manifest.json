@@ -1,6 +1,6 @@
 {
- "wersja": "2026-10-17T15:28",
- "zbudowano": "2026-10-17T15:28:05+00:00",
+ "wersja": "2026-10-17T16:06",
+ "zbudowano": "2026-10-17T16:06:12+00:00",
  "pliki": [
   {
    "sciezka": "adresy/adresy.json",
@@ -15,6 +15,11 @@
   {
    "sciezka": "syreny/meta.json",
    "bajty": 1387,
+   "modul": "syreny"
+  },
+  {
+   "sciezka": "syreny/strefy-analogowe.json",
+   "bajty": 60529,
    "modul": "syreny"
   },
   {
