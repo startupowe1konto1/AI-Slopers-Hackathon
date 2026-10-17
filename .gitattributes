@@ -1,0 +1,3 @@
+# Pliki paczki offline bez zamiany końców linii: manifest.json zapisuje ich rozmiar w bajtach,
+# a git z core.autocrlf (Windows) dawał CRLF w kopii roboczej i inne rozmiary niż w repo.
+public/pack/** -text
