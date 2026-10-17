@@ -19,7 +19,7 @@ input { font: inherit; }
 
 .aplikacja {
   max-width: 480px; height: 100dvh; margin: 0 auto; background: var(--tlo);
-  display: grid; grid-template-rows: auto minmax(180px, 1fr) auto auto;
+  display: grid; grid-template-rows: auto minmax(180px, 1fr) auto auto auto;
   box-shadow: 0 0 24px rgb(0 0 0 / 0.08);
 }
 .pasek { display: flex; align-items: center; gap: 8px; padding: 10px 14px; border-bottom: 1px solid var(--linia); }
@@ -48,5 +48,9 @@ input { font: inherit; }
 .przycisk { width: 100%; padding: 12px; border: 0; border-radius: 8px; background: var(--akcent); color: #fff; font-weight: 600; }
 .przycisk:disabled { opacity: 0.5; cursor: default; }
 .przycisk.drugi { background: #fff; color: var(--akcent); border: 1px solid var(--akcent); margin-top: 10px; }
-.stopka { font-size: 11px; color: var(--przygaszony); padding: 6px 14px; border-top: 1px solid var(--linia); }
+.stopka { font-size: 11px; color: var(--przygaszony); padding: 6px 14px; border-top: 1px solid var(--linia); max-height: 30dvh; overflow: auto; }
+.stopka summary { cursor: pointer; min-height: 24px; }
+.stopka ul { margin: 6px 0; padding-left: 16px; }
+.stopka li { margin-bottom: 4px; }
+.stopka a { color: inherit; }
 .mapa-stan { position: absolute; inset: 0; display: grid; place-items: center; padding: 24px; text-align: center; color: var(--przygaszony); font-size: 14px; pointer-events: none; }
