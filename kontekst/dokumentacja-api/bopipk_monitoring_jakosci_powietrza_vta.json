@@ -1,0 +1,30 @@
+{
+    "title": "Pomiary zanieczyszczenia PM10, 23 września 2025 r, godzina 12",
+    "description": "Pomiary zanieczyszczenia PM10, 23 września 2025 r, godzina 12",
+    "data": [
+        {                   
+            "stacja": "Warszawa ul. Grochowska",
+            "Zanieczyszczenie PM10 (\u00b5g/m3)": "15.872"
+        },
+        {                   
+            "stacja": "Warszawa, al. Solidarno\u015bci",
+            "Zanieczyszczenie PM10 (\u00b5g/m3)": "8.07861"
+        },
+        {                   
+            "stacja": "Warszawa, al. Niepodleg\u0142o\u015bci",
+            "Zanieczyszczenie PM10 (\u00b5g/m3)": "21.0"
+        },
+        {                   
+            "stacja": "Warszawa, ul. Wokalna",
+            "Zanieczyszczenie PM10 (\u00b5g/m3)": "11.0"
+        },
+        {                   
+            "stacja": "Warszawa, ul. Chro\u015bcickiego",
+            "Zanieczyszczenie PM10 (\u00b5g/m3)": "5.5"
+        },
+        {                   
+            "stacja": "Warszawa, ul. Bajkowa",
+            "Zanieczyszczenie PM10 (\u00b5g/m3)": "12.6"
+        }
+    ]
+}

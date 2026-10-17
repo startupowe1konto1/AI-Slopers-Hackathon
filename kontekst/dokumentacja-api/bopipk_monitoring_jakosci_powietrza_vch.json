@@ -1,0 +1,25 @@
+{
+  "type": "bar",
+  "title": "Wykres pyłu zawieszonego PM10, 23 września 2025 r,  godzina 12",
+  "description": "Wykres pyłu zawieszonego PM10, 23 września 2025 r, godzina 12",
+  "options": {
+    "plugins": {
+      "title": {
+        "display": false,
+        "text": "Wykres pyłu zawieszonego PM10, 23 września 2025 r, godzina 12"
+      }
+    }
+  },
+  "data": {
+    "labels": [
+      "Warszawa ul. Grochowska", "Warszawa, al. Solidarno\u015bci", "Warszawa, al. Niepodleg\u0142o\u015bci", "Warszawa, ul. Wokalna", "Warszawa, ul. Chro\u015bcickiego", "Warszawa, ul. Bajkowa"
+    ],
+    "datasets": [
+      {
+        "label": "Zanieczyszczenie PM10 (\u00b5g/m3)",
+        "data": [15.872, 8.07861, 21.0, 11.0, 5.5, 12.6]
+      }
+    ]
+  }
+}
+

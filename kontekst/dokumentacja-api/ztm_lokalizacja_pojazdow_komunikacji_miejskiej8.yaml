@@ -1,0 +1,46 @@
+openapi: 3.0.0
+info:
+  title: Example API
+  version: 1.0.0
+
+components:
+  securitySchemes:
+    apiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+
+servers:
+  - url: https://dane.um.warszawa.pl
+
+paths:
+  /api/action/get_ztm_lokalizacja_pojazdow:
+    post:
+      summary: Przetwarza dane na podstawie typu
+      security:
+        - apiKeyAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                type:
+                  type: integer
+                  example: 1
+              required:
+                - type
+      responses:
+        "200":
+          description: Sukces
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    example: "Przetworzono poprawnie" 
+        "401":
+          description: Brak autoryzacji

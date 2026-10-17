@@ -1,0 +1,3 @@
+teryt_woj,wojewodztwo,teryt_pow,powiat,teryt_gmi,gmina,risk_class,pop_night_total,pop_day_total,pop_night_ge65,pop_day_ge65,pop_night_outside,pop_day_outside,pct_ge65_of_total,pct_outside_ge65_of_total
+14,MAZOWIECKIE,1465,Warszawa,1465011,Warszawa,niskie ryzyko,100609.02001852888,99116.40242339592,97728.26874284126,96290.01364634876,2880.7512756876367,2826.388777047161,97.14,2.86
+14,MAZOWIECKIE,1465,Warszawa,1465011,Warszawa,wysokie ryzyko,311591.58370751794,310511.00563066977,309241.67661395954,308164.3999454881,2349.9070935584477,2346.6056851816493,99.25,0.75

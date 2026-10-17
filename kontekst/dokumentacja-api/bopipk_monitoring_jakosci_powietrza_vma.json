@@ -1,0 +1,1729 @@
+{
+    "title": "Pomiary jakości powietrza, 23 września 2025 r,  godzina 12",
+    "points": [
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 21.080555,
+                "latitude": 52.245703
+            },
+            "properties": {
+                "Nazwa stacji": "Warszawa-Grochowska",
+                "Stacja": "ul. Grochowska",
+                "Typ stacji": "Stacja monitoringu",
+                "W\u0142a\u015bciciel stacji": "Urz\u0105d m.st. Warszawy",
+                "Py\u0142 zawieszony PM 10": 42.6081
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 20.999843,
+                "latitude": 52.243775
+            },
+            "properties": {
+                "Nazwa stacji": "Warszawa-Solidarno\u015bci",
+                "Stacja": "al. Solidarno\u015bci",
+                "Typ stacji": "Stacja monitoringu",
+                "W\u0142a\u015bciciel stacji": "Urz\u0105d m.st. Warszawy",
+                "Py\u0142 zawieszony PM 10": 22.5183
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": "21.004724",
+                "latitude": "52.219298"
+            },
+            "properties": {
+                "Nazwa stacji": "Warszawa, al. Niepodleg\u0142o\u015bci",
+                "Stacja": "al. Niepodleg\u0142o\u015bci 227/233",
+                "Typ stacji": "Stacja monitoringu",
+                "W\u0142a\u015bciciel stacji": "G\u0142\u00f3wny Inspektorat Ochrony \u015arodowiska",
+                "Py\u0142 zawieszony PM 10": 33.1,
+                "Py\u0142 zawieszony PM 2.5": 10.5
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": "21.033819",
+                "latitude": "52.160772"
+            },
+            "properties": {
+                "Nazwa stacji": "Warszawa, ul. Wokalna",
+                "Stacja": "ul. Wokalna 1",
+                "Typ stacji": "Stacja monitoringu",
+                "W\u0142a\u015bciciel stacji": "G\u0142\u00f3wny Inspektorat Ochrony \u015arodowiska",
+                "Py\u0142 zawieszony PM 10": 24.8,
+                "Py\u0142 zawieszony PM 2.5": 5.9
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": "21.042458",
+                "latitude": "52.290864"
+            },
+            "properties": {
+                "Nazwa stacji": "Warszawa, ul. Kondratowicza",
+                "Stacja": "ul. Kondratowicza 8",
+                "Typ stacji": "Stacja monitoringu",
+                "W\u0142a\u015bciciel stacji": "G\u0142\u00f3wny Inspektorat Ochrony \u015arodowiska"
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": "20.906073",
+                "latitude": "52.207742"
+            },
+            "properties": {
+                "Nazwa stacji": "Warszawa, ul. Chro\u015bcickiego",
+                "Stacja": "ul. Chro\u015bcickiego 16/18",
+                "Typ stacji": "Stacja monitoringu",
+                "W\u0142a\u015bciciel stacji": "G\u0142\u00f3wny Inspektorat Ochrony \u015arodowiska",
+                "Py\u0142 zawieszony PM 10": 39.0,
+                "Py\u0142 zawieszony PM 2.5": 8.5
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": "21.176233",
+                "latitude": "52.188474"
+            },
+            "properties": {
+                "Nazwa stacji": "Warszawa, ul. Bajkowa",
+                "Stacja": "ul. Bajkowa 17/21",
+                "Typ stacji": "Stacja monitoringu",
+                "W\u0142a\u015bciciel stacji": "G\u0142\u00f3wny Inspektorat Ochrony \u015arodowiska",
+                "Py\u0142 zawieszony PM 2.5": 6.2,
+                "Py\u0142 zawieszony PM 10": 26.9
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 21.0330225,
+                "latitude": 52.3161554
+            },
+            "properties": {
+                "Nazwa stacji": "Warszawa-12899",
+                "Stacja": "Juranda ze Spychowa 10",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Urz\u0105d m.st. Warszawy",
+                "Py\u0142 zawieszony PM 10": 5.45,
+                "Py\u0142 zawieszony PM 2.5": 2.43
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 21.0474026,
+                "latitude": 52.3271433
+            },
+            "properties": {
+                "Nazwa stacji": "Warszawa-12922",
+                "Stacja": "Ul. Ostr\u00f3dzka 175",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Urz\u0105d m.st. Warszawy",
+                "Py\u0142 zawieszony PM 10": 6.45,
+                "Py\u0142 zawieszony PM 2.5": 5.39
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 20.7411673,
+                "latitude": 52.4153101
+            },
+            "properties": {
+                "Nazwa stacji": "Nowy Dw\u00f3r Mazowiecki-12793",
+                "Stacja": "M\u0142odzie\u017cowa 1",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Nowy Dw\u00f3r Mazowiecki",
+                "Py\u0142 zawieszony PM 10": 11.36,
+                "Py\u0142 zawieszony PM 2.5": 10.25
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 21.1275512,
+                "latitude": 52.248702
+            },
+            "properties": {
+                "Nazwa stacji": "Warszawa-12831",
+                "Stacja": "Koniecpolska 14",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Urz\u0105d m.st. Warszawy",
+                "Py\u0142 zawieszony PM 10": 1.28,
+                "Py\u0142 zawieszony PM 2.5": 0.28
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 21.0121461,
+                "latitude": 52.2558142
+            },
+            "properties": {
+                "Nazwa stacji": "Warszawa-12809",
+                "Stacja": "Bulwar Karskiego",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Urz\u0105d m.st. Warszawy",
+                "Py\u0142 zawieszony PM 10": 2.32,
+                "Py\u0142 zawieszony PM 2.5": 1.23
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 20.948705765795072,
+                "latitude": 52.277306024433315
+            },
+            "properties": {
+                "Nazwa stacji": "Warszawa-12789",
+                "Stacja": "Stefana \u017beromskiego 22/28",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Urz\u0105d m.st. Warszawy",
+                "Py\u0142 zawieszony PM 10": 8.12,
+                "Py\u0142 zawieszony PM 2.5": 6.75
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 21.042829,
+                "latitude": 52.2158122
+            },
+            "properties": {
+                "Nazwa stacji": "Warszawa-12860",
+                "Stacja": "Szwole\u017cer\u00f3w 5",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Urz\u0105d m.st. Warszawy",
+                "Py\u0142 zawieszony PM 10": 4.57,
+                "Py\u0142 zawieszony PM 2.5": 2.34
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 20.90175885803207,
+                "latitude": 52.235954103909066
+            },
+            "properties": {
+                "Nazwa stacji": "Warszawa-12916",
+                "Stacja": "Stanis\u0142awa Szobera 1/3",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Urz\u0105d m.st. Warszawy",
+                "Py\u0142 zawieszony PM 10": 2.54,
+                "Py\u0142 zawieszony PM 2.5": 2.14
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 20.979179,
+                "latitude": 52.288119
+            },
+            "properties": {
+                "Nazwa stacji": "Warszawa-12786",
+                "Stacja": "Latarnia nr 24603 - K\u0119pa Potocka",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Urz\u0105d m.st. Warszawy",
+                "Py\u0142 zawieszony PM 10": 9.27,
+                "Py\u0142 zawieszony PM 2.5": 7.92
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 21.032962328231218,
+                "latitude": 52.16060511704926
+            },
+            "properties": {
+                "Nazwa stacji": "Warszawa-12948",
+                "Stacja": "Wokalna 1",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Urz\u0105d m.st. Warszawy",
+                "Py\u0142 zawieszony PM 10": 1.81,
+                "Py\u0142 zawieszony PM 2.5": 1.1
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 21.0625692,
+                "latitude": 52.1594537
+            },
+            "properties": {
+                "Nazwa stacji": "Warszawa-12858",
+                "Stacja": "Beniamina Flatta 7",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Urz\u0105d m.st. Warszawy",
+                "Py\u0142 zawieszony PM 10": 2.18,
+                "Py\u0142 zawieszony PM 2.5": 1.58
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 21.2263831,
+                "latitude": 52.3691255
+            },
+            "properties": {
+                "Nazwa stacji": "Czarna-12927",
+                "Stacja": "Witosa 52",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Wo\u0142omin",
+                "Py\u0142 zawieszony PM 10": 1.91,
+                "Py\u0142 zawieszony PM 2.5": 1.41
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 21.0608353,
+                "latitude": 52.2578149
+            },
+            "properties": {
+                "Nazwa stacji": "Warszawa-12822",
+                "Stacja": "Objazdowa 3",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Urz\u0105d m.st. Warszawy",
+                "Py\u0142 zawieszony PM 10": 3.0,
+                "Py\u0142 zawieszony PM 2.5": 1.89
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 20.9343121,
+                "latitude": 52.2845476
+            },
+            "properties": {
+                "Nazwa stacji": "Warszawa-12884",
+                "Stacja": "Lwa To\u0142stoja 2",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Urz\u0105d m.st. Warszawy",
+                "Py\u0142 zawieszony PM 10": 3.47,
+                "Py\u0142 zawieszony PM 2.5": 2.27
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 20.9708956,
+                "latitude": 52.3210169
+            },
+            "properties": {
+                "Nazwa stacji": "Warszawa-12788",
+                "Stacja": "Milenijna 4",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Urz\u0105d m.st. Warszawy",
+                "Py\u0142 zawieszony PM 10": 1.22,
+                "Py\u0142 zawieszony PM 2.5": 0.53
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 20.8111808,
+                "latitude": 52.2974984
+            },
+            "properties": {
+                "Nazwa stacji": "Izabelin C-12878",
+                "Stacja": "Tadeusza Ko\u015bciuszki 17",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Izabelin",
+                "Py\u0142 zawieszony PM 10": 10.39,
+                "Py\u0142 zawieszony PM 2.5": 9.33
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 20.9241428,
+                "latitude": 52.2022112
+            },
+            "properties": {
+                "Nazwa stacji": "Warszawa-12889",
+                "Stacja": "Cietrzewia 22a",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Urz\u0105d m.st. Warszawy",
+                "Py\u0142 zawieszony PM 10": 2.87,
+                "Py\u0142 zawieszony PM 2.5": 2.13
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 20.9486072,
+                "latitude": 52.3218577
+            },
+            "properties": {
+                "Nazwa stacji": "Warszawa-12934",
+                "Stacja": "Erazma z Zakroczymia 15",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Urz\u0105d m.st. Warszawy",
+                "Py\u0142 zawieszony PM 10": 3.21,
+                "Py\u0142 zawieszony PM 2.5": 1.68
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 20.8816122,
+                "latitude": 52.2436149
+            },
+            "properties": {
+                "Nazwa stacji": "Blizne Jasi\u0144skiego-12914",
+                "Stacja": "Tadeusza Ko\u015bciuszki 1B",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Stare Babice",
+                "Py\u0142 zawieszony PM 10": 11.31,
+                "Py\u0142 zawieszony PM 2.5": 3.42
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 21.1335934,
+                "latitude": 52.1979753
+            },
+            "properties": {
+                "Nazwa stacji": "Warszawa-12839",
+                "Stacja": "Przygodna 2",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Urz\u0105d m.st. Warszawy",
+                "Py\u0142 zawieszony PM 10": 1.64,
+                "Py\u0142 zawieszony PM 2.5": 1.12
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 21.071293766824056,
+                "latitude": 52.18788801245114
+            },
+            "properties": {
+                "Nazwa stacji": "Warszawa-12940",
+                "Stacja": "Jeziorna 5/9",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Urz\u0105d m.st. Warszawy",
+                "Py\u0142 zawieszony PM 10": 2.53,
+                "Py\u0142 zawieszony PM 2.5": 1.9
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 20.8774411,
+                "latitude": 52.2876451
+            },
+            "properties": {
+                "Nazwa stacji": "Warszawa-12842",
+                "Stacja": "Arkuszowa 202",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Urz\u0105d m.st. Warszawy",
+                "Py\u0142 zawieszony PM 10": 8.48,
+                "Py\u0142 zawieszony PM 2.5": 6.14
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 21.31729445540991,
+                "latitude": 52.371105227336805
+            },
+            "properties": {
+                "Nazwa stacji": "Stare Grabie-12827",
+                "Stacja": "Cichorackiej 8",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Wo\u0142omin",
+                "Py\u0142 zawieszony PM 10": 4.75,
+                "Py\u0142 zawieszony PM 2.5": 2.73
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 20.8966899,
+                "latitude": 52.1932115
+            },
+            "properties": {
+                "Nazwa stacji": "Warszawa-12815",
+                "Stacja": "Walerego S\u0142awka 7",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Urz\u0105d m.st. Warszawy",
+                "Py\u0142 zawieszony PM 10": 7.42,
+                "Py\u0142 zawieszony PM 2.5": 5.81
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 21.0555152,
+                "latitude": 52.136712
+            },
+            "properties": {
+                "Nazwa stacji": "Warszawa-12883",
+                "Stacja": "Witolda Ma\u0142cu\u017cy\u0144skiego 4",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Urz\u0105d m.st. Warszawy",
+                "Py\u0142 zawieszony PM 10": 2.11,
+                "Py\u0142 zawieszony PM 2.5": 1.84
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 21.2870729,
+                "latitude": 52.2501607
+            },
+            "properties": {
+                "Nazwa stacji": "Sulej\u00f3wek-12925",
+                "Stacja": "Park Miejski Glinianki-Gda\u0144ska 31",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Sulej\u00f3wek",
+                "Py\u0142 zawieszony PM 10": 7.39,
+                "Py\u0142 zawieszony PM 2.5": 2.23
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 21.1632264,
+                "latitude": 52.2541866
+            },
+            "properties": {
+                "Nazwa stacji": "Warszawa-12795",
+                "Stacja": "Aleja Komandos\u00f3w 8",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Urz\u0105d m.st. Warszawy",
+                "Py\u0142 zawieszony PM 10": 6.92,
+                "Py\u0142 zawieszony PM 2.5": 5.58
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 20.982622,
+                "latitude": 52.3569373
+            },
+            "properties": {
+                "Nazwa stacji": "Warszawa-12778",
+                "Stacja": "Przytulna 3",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Urz\u0105d m.st. Warszawy",
+                "Py\u0142 zawieszony PM 10": 11.9,
+                "Py\u0142 zawieszony PM 2.5": 8.29
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 21.2305108,
+                "latitude": 52.2555496
+            },
+            "properties": {
+                "Nazwa stacji": "Warszawa-12843",
+                "Stacja": "Plac Wojska Polskiego 28",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Urz\u0105d m.st. Warszawy",
+                "Py\u0142 zawieszony PM 10": 5.95,
+                "Py\u0142 zawieszony PM 2.5": 4.64
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 20.8693778,
+                "latitude": 52.2009065
+            },
+            "properties": {
+                "Nazwa stacji": "Warszawa-12875",
+                "Stacja": "Or\u0142\u00f3w Piastowskich 47",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Urz\u0105d m.st. Warszawy",
+                "Py\u0142 zawieszony PM 10": 4.46,
+                "Py\u0142 zawieszony PM 2.5": 2.57
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 21.2366079,
+                "latitude": 52.0954521
+            },
+            "properties": {
+                "Nazwa stacji": "Otwock-12877",
+                "Stacja": "Kraszewskiego 1",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Otwock",
+                "Py\u0142 zawieszony PM 10": 1.68,
+                "Py\u0142 zawieszony PM 2.5": 1.21
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 20.9656996,
+                "latitude": 52.1133032
+            },
+            "properties": {
+                "Nazwa stacji": "Zamienie-12777",
+                "Stacja": "Waniliowa 7",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Lesznowola",
+                "Py\u0142 zawieszony PM 10": 5.35,
+                "Py\u0142 zawieszony PM 2.5": 3.38
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 21.2499412,
+                "latitude": 52.3337707
+            },
+            "properties": {
+                "Nazwa stacji": "Wo\u0142omin-12904",
+                "Stacja": "Gryczana 34",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Wo\u0142omin",
+                "Py\u0142 zawieszony PM 10": 3.07,
+                "Py\u0142 zawieszony PM 2.5": 2.44
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 20.9620275,
+                "latitude": 52.1563121
+            },
+            "properties": {
+                "Nazwa stacji": "Warszawa-12861",
+                "Stacja": "Paluch 2",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Urz\u0105d m.st. Warszawy",
+                "Py\u0142 zawieszony PM 10": 2.85,
+                "Py\u0142 zawieszony PM 2.5": 1.67
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 21.1735649,
+                "latitude": 52.2158384
+            },
+            "properties": {
+                "Nazwa stacji": "Warszawa-12855",
+                "Stacja": "Pazi\u0144skiego 11A",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Urz\u0105d m.st. Warszawy",
+                "Py\u0142 zawieszony PM 10": 4.22,
+                "Py\u0142 zawieszony PM 2.5": 1.38
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 21.04539619017602,
+                "latitude": 52.27456100871742
+            },
+            "properties": {
+                "Nazwa stacji": "Warszawa-12892",
+                "Stacja": "Go\u015bcieradowska 18/20",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Urz\u0105d m.st. Warszawy",
+                "Py\u0142 zawieszony PM 10": 7.86,
+                "Py\u0142 zawieszony PM 2.5": 3.4
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 21.176208,
+                "latitude": 52.431089
+            },
+            "properties": {
+                "Nazwa stacji": "Radzymin-12864",
+                "Stacja": "Wincentego Witosa 78",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Radzymin",
+                "Py\u0142 zawieszony PM 10": 10.55,
+                "Py\u0142 zawieszony PM 2.5": 6.75
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 21.2031635,
+                "latitude": 52.1706303
+            },
+            "properties": {
+                "Nazwa stacji": "Warszawa-12906",
+                "Stacja": "Patriot\u00f3w 90",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Urz\u0105d m.st. Warszawy",
+                "Py\u0142 zawieszony PM 10": 5.01,
+                "Py\u0142 zawieszony PM 2.5": 3.97
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 21.0952847,
+                "latitude": 52.2996726
+            },
+            "properties": {
+                "Nazwa stacji": "Z\u0105bki-12780",
+                "Stacja": "Syrena alarmowa Wolno\u015bci-Skargi dzia\u0142ka 3/1",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Z\u0105bki",
+                "Py\u0142 zawieszony PM 10": 8.1,
+                "Py\u0142 zawieszony PM 2.5": 6.8
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 21.1117169,
+                "latitude": 52.0902532
+            },
+            "properties": {
+                "Nazwa stacji": "Konstancin-Jeziorna-8585",
+                "Stacja": "Szkolna 7",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Konstancin-Jeziorna",
+                "Py\u0142 zawieszony PM 10": 4.85,
+                "Py\u0142 zawieszony PM 2.5": 4.05
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 21.1584523,
+                "latitude": 52.2922561
+            },
+            "properties": {
+                "Nazwa stacji": "Zielonka-12952",
+                "Stacja": "Wilsona 50c",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Zielonka",
+                "Py\u0142 zawieszony PM 10": 2.11,
+                "Py\u0142 zawieszony PM 2.5": 0.89
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 21.06441375431381,
+                "latitude": 52.149612801440036
+            },
+            "properties": {
+                "Nazwa stacji": "Warszawa-12847",
+                "Stacja": "Nowoursynowska 92/100",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Urz\u0105d m.st. Warszawy",
+                "Py\u0142 zawieszony PM 10": 4.16,
+                "Py\u0142 zawieszony PM 2.5": 2.14
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 21.0018912,
+                "latitude": 52.1010677
+            },
+            "properties": {
+                "Nazwa stacji": "Mysiad\u0142o-12869",
+                "Stacja": "Ogrodowa 13",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Lesznowola",
+                "Py\u0142 zawieszony PM 10": 5.65,
+                "Py\u0142 zawieszony PM 2.5": 5.01
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 20.8450359,
+                "latitude": 52.1875101
+            },
+            "properties": {
+                "Nazwa stacji": "Piast\u00f3w-12836",
+                "Stacja": "Aleja Krakowska 20",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Piast\u00f3w",
+                "Py\u0142 zawieszony PM 10": 3.35,
+                "Py\u0142 zawieszony PM 2.5": 1.68
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 21.2028352,
+                "latitude": 52.1558153
+            },
+            "properties": {
+                "Nazwa stacji": "Warszawa-12796",
+                "Stacja": "Poezji 5",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Urz\u0105d m.st. Warszawy",
+                "Py\u0142 zawieszony PM 10": 0.82,
+                "Py\u0142 zawieszony PM 2.5": 0.17
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 21.1574079,
+                "latitude": 52.3100773
+            },
+            "properties": {
+                "Nazwa stacji": "Zielonka-12938",
+                "Stacja": "\u0141ukasi\u0144skiego 1/3",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Zielonka",
+                "Py\u0142 zawieszony PM 10": 1.33,
+                "Py\u0142 zawieszony PM 2.5": 0.7
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 20.8605534,
+                "latitude": 52.0393517
+            },
+            "properties": {
+                "Nazwa stacji": "Mrok\u00f3w-12799",
+                "Stacja": "Marii \u015awi\u0105tkiewicz 2a",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Lesznowola",
+                "Py\u0142 zawieszony PM 10": 1.97,
+                "Py\u0142 zawieszony PM 2.5": 1.27
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 21.334486,
+                "latitude": 52.1125135
+            },
+            "properties": {
+                "Nazwa stacji": "Otwock-12933",
+                "Stacja": "Gabriela Narutowicza 275",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Otwock",
+                "Py\u0142 zawieszony PM 10": 4.13,
+                "Py\u0142 zawieszony PM 2.5": 2.9
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 21.0473208,
+                "latitude": 52.296313
+            },
+            "properties": {
+                "Nazwa stacji": "Warszawa-12867",
+                "Stacja": "Wac\u0142awa Tokarza 2",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Urz\u0105d m.st. Warszawy",
+                "Py\u0142 zawieszony PM 10": 7.8,
+                "Py\u0142 zawieszony PM 2.5": 4.51
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 21.2709237,
+                "latitude": 52.2448343
+            },
+            "properties": {
+                "Nazwa stacji": "Sulej\u00f3wek-8623",
+                "Stacja": "Paderewskiego 47",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Sulej\u00f3wek",
+                "Py\u0142 zawieszony PM 10": 2.51,
+                "Py\u0142 zawieszony PM 2.5": 1.8
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 21.231097397873324,
+                "latitude": 52.341380567188686
+            },
+            "properties": {
+                "Nazwa stacji": "Wo\u0142omin-12830",
+                "Stacja": "Korsaka 4",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Wo\u0142omin",
+                "Py\u0142 zawieszony PM 10": 7.11,
+                "Py\u0142 zawieszony PM 2.5": 5.4
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 21.4008176,
+                "latitude": 52.2193797
+            },
+            "properties": {
+                "Nazwa stacji": "Cisie-12874",
+                "Stacja": "Mostowa 61",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Halin\u00f3w",
+                "Py\u0142 zawieszony PM 10": 6.76,
+                "Py\u0142 zawieszony PM 2.5": 6.03
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 21.112789,
+                "latitude": 52.2948438
+            },
+            "properties": {
+                "Nazwa stacji": "Z\u0105bki-12939",
+                "Stacja": "Wojska Polskiego 10",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Z\u0105bki",
+                "Py\u0142 zawieszony PM 10": 3.87,
+                "Py\u0142 zawieszony PM 2.5": 2.09
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 21.0276139,
+                "latitude": 52.191429
+            },
+            "properties": {
+                "Nazwa stacji": "Warszawa-12957",
+                "Stacja": "Latarnia 46148 Park Arkadia",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Urz\u0105d m.st. Warszawy",
+                "Py\u0142 zawieszony PM 10": 2.95,
+                "Py\u0142 zawieszony PM 2.5": 1.56
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 20.91648587979818,
+                "latitude": 52.25980247532371
+            },
+            "properties": {
+                "Nazwa stacji": "Warszawa-12794",
+                "Stacja": "Zachodz\u0105cego S\u0142o\u0144ca 25",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Urz\u0105d m.st. Warszawy",
+                "Py\u0142 zawieszony PM 10": 4.27,
+                "Py\u0142 zawieszony PM 2.5": 3.52
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 20.9731315,
+                "latitude": 52.3262843
+            },
+            "properties": {
+                "Nazwa stacji": "Warszawa-9426",
+                "Stacja": "Podr\u00f3\u017cnicza 11",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Urz\u0105d m.st. Warszawy",
+                "Py\u0142 zawieszony PM 10": 10.47,
+                "Py\u0142 zawieszony PM 2.5": 7.72
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 20.9249311,
+                "latitude": 52.2591974
+            },
+            "properties": {
+                "Nazwa stacji": "Warszawa-12823",
+                "Stacja": "O\u0142awska 3",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Urz\u0105d m.st. Warszawy",
+                "Py\u0142 zawieszony PM 10": 2.87,
+                "Py\u0142 zawieszony PM 2.5": 1.63
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 21.0914688,
+                "latitude": 52.1174411
+            },
+            "properties": {
+                "Nazwa stacji": "Warszawa-12898",
+                "Stacja": "Rydzowa 1A",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Urz\u0105d m.st. Warszawy",
+                "Py\u0142 zawieszony PM 10": 1.86,
+                "Py\u0142 zawieszony PM 2.5": 1.28
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 20.9040016,
+                "latitude": 52.2099499
+            },
+            "properties": {
+                "Nazwa stacji": "Warszawa-12840",
+                "Stacja": "Promienista 12a",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Urz\u0105d m.st. Warszawy",
+                "Py\u0142 zawieszony PM 10": 1.98,
+                "Py\u0142 zawieszony PM 2.5": 1.13
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 21.1129479,
+                "latitude": 52.3018426
+            },
+            "properties": {
+                "Nazwa stacji": "Z\u0105bki-12797",
+                "Stacja": "Hubalczyk\u00f3w 1",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Z\u0105bki",
+                "Py\u0142 zawieszony PM 10": 0.86,
+                "Py\u0142 zawieszony PM 2.5": 0.17
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 21.268153,
+                "latitude": 52.1036615
+            },
+            "properties": {
+                "Nazwa stacji": "Otwock-12901",
+                "Stacja": "Armii Krajowej 5",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Otwock",
+                "Py\u0142 zawieszony PM 10": 1.16,
+                "Py\u0142 zawieszony PM 2.5": 0.68
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 20.959207,
+                "latitude": 52.1921977
+            },
+            "properties": {
+                "Nazwa stacji": "Warszawa-12775",
+                "Stacja": "Aleja Krakowska 257",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Urz\u0105d m.st. Warszawy",
+                "Py\u0142 zawieszony PM 10": 3.88,
+                "Py\u0142 zawieszony PM 2.5": 3.0
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 20.6665628,
+                "latitude": 52.4375086
+            },
+            "properties": {
+                "Nazwa stacji": "Nowy Dw\u00f3r Mazowiecki-8609",
+                "Stacja": "Bema 312",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Nowy Dw\u00f3r Mazowiecki",
+                "Py\u0142 zawieszony PM 10": 12.28,
+                "Py\u0142 zawieszony PM 2.5": 10.99
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 21.2184919,
+                "latitude": 52.3088454
+            },
+            "properties": {
+                "Nazwa stacji": "Oss\u00f3w-9283",
+                "Stacja": "Matarewicza 148",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Wo\u0142omin",
+                "Py\u0142 zawieszony PM 10": 2.19,
+                "Py\u0142 zawieszony PM 2.5": 0.96
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 21.06676578514428,
+                "latitude": 52.31165194128209
+            },
+            "properties": {
+                "Nazwa stacji": "Warszawa-12956",
+                "Stacja": "G\u0142\u0119bocka 66",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Urz\u0105d m.st. Warszawy",
+                "Py\u0142 zawieszony PM 10": 2.04,
+                "Py\u0142 zawieszony PM 2.5": 1.05
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 21.0574158,
+                "latitude": 52.2803031
+            },
+            "properties": {
+                "Nazwa stacji": "Warszawa-12495",
+                "Stacja": "Samarytanka 11A",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Urz\u0105d m.st. Warszawy",
+                "Py\u0142 zawieszony PM 10": 8.15,
+                "Py\u0142 zawieszony PM 2.5": 7.04
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 20.9730424,
+                "latitude": 52.184363
+            },
+            "properties": {
+                "Nazwa stacji": "Warszawa-12937",
+                "Stacja": "Astronaut\u00f3w 17",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Urz\u0105d m.st. Warszawy",
+                "Py\u0142 zawieszony PM 10": 1.01,
+                "Py\u0142 zawieszony PM 2.5": 0.26
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 20.9493905,
+                "latitude": 52.0877467
+            },
+            "properties": {
+                "Nazwa stacji": "Lesznowola-12873",
+                "Stacja": "Szkolna 6",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Lesznowola",
+                "Py\u0142 zawieszony PM 10": 5.14,
+                "Py\u0142 zawieszony PM 2.5": 4.17
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 20.8778324,
+                "latitude": 52.0823418
+            },
+            "properties": {
+                "Nazwa stacji": "\u0141azy-12819",
+                "Stacja": "\u0141\u0105czno\u015bci 56",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Lesznowola",
+                "Py\u0142 zawieszony PM 10": 4.06,
+                "Py\u0142 zawieszony PM 2.5": 2.96
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 20.8826212,
+                "latitude": 52.3003789
+            },
+            "properties": {
+                "Nazwa stacji": "Warszawa-12941",
+                "Stacja": "Estrady 112",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Urz\u0105d m.st. Warszawy",
+                "Py\u0142 zawieszony PM 10": 9.54,
+                "Py\u0142 zawieszony PM 2.5": 6.79
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 21.0575456,
+                "latitude": 52.1286096
+            },
+            "properties": {
+                "Nazwa stacji": "Warszawa-13067",
+                "Stacja": "Wilczy D\u00f3\u0142 4",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Urz\u0105d m.st. Warszawy",
+                "Py\u0142 zawieszony PM 10": 2.2,
+                "Py\u0142 zawieszony PM 2.5": 1.39
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 21.2387832,
+                "latitude": 52.2237574
+            },
+            "properties": {
+                "Nazwa stacji": "Warszawa-12849",
+                "Stacja": "Trakt Brzeski 85",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Urz\u0105d m.st. Warszawy",
+                "Py\u0142 zawieszony PM 10": 1.7,
+                "Py\u0142 zawieszony PM 2.5": 1.11
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 21.1448118,
+                "latitude": 52.2192323
+            },
+            "properties": {
+                "Nazwa stacji": "Warszawa-12712",
+                "Stacja": "Koryncka 33",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Urz\u0105d m.st. Warszawy",
+                "Py\u0142 zawieszony PM 10": 5.57,
+                "Py\u0142 zawieszony PM 2.5": 4.22
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 21.0290396,
+                "latitude": 52.2875924
+            },
+            "properties": {
+                "Nazwa stacji": "Warszawa-12811",
+                "Stacja": "Bartnicza 8",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Urz\u0105d m.st. Warszawy",
+                "Py\u0142 zawieszony PM 10": 8.1,
+                "Py\u0142 zawieszony PM 2.5": 6.6
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 21.0710064,
+                "latitude": 52.2845129
+            },
+            "properties": {
+                "Nazwa stacji": "Warszawa-12903",
+                "Stacja": "Radzymi\u0144ska 227",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Urz\u0105d m.st. Warszawy",
+                "Py\u0142 zawieszony PM 10": 11.94,
+                "Py\u0142 zawieszony PM 2.5": 4.27
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 20.7213241,
+                "latitude": 52.4206061
+            },
+            "properties": {
+                "Nazwa stacji": "Nowy Dw\u00f3r Mazowiecki-12821",
+                "Stacja": "D\u0142uga 10",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Nowy Dw\u00f3r Mazowiecki",
+                "Py\u0142 zawieszony PM 10": 9.3,
+                "Py\u0142 zawieszony PM 2.5": 7.39
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 20.932699,
+                "latitude": 52.2981238
+            },
+            "properties": {
+                "Nazwa stacji": "Warszawa-12896",
+                "Stacja": "Zgrupowania AK \"Kampinos\" 10",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Urz\u0105d m.st. Warszawy",
+                "Py\u0142 zawieszony PM 10": 3.03,
+                "Py\u0142 zawieszony PM 2.5": 1.96
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 20.98643926442008,
+                "latitude": 52.25173644720421
+            },
+            "properties": {
+                "Nazwa stacji": "Warszawa-12853",
+                "Stacja": "Stawki 14",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Urz\u0105d m.st. Warszawy",
+                "Py\u0142 zawieszony PM 10": 1.78,
+                "Py\u0142 zawieszony PM 2.5": 0.57
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 21.244043940466852,
+                "latitude": 52.07805202310357
+            },
+            "properties": {
+                "Nazwa stacji": "Karczew-12890",
+                "Stacja": "Warszawska 28",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Karczew",
+                "Py\u0142 zawieszony PM 10": 5.0,
+                "Py\u0142 zawieszony PM 2.5": 4.32
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 21.0466952,
+                "latitude": 52.3617829
+            },
+            "properties": {
+                "Nazwa stacji": "Warszawa-12862",
+                "Stacja": "Kobia\u0142ka 49",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Urz\u0105d m.st. Warszawy",
+                "Py\u0142 zawieszony PM 10": 11.69,
+                "Py\u0142 zawieszony PM 2.5": 8.61
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 21.1243526,
+                "latitude": 52.2816188
+            },
+            "properties": {
+                "Nazwa stacji": "Z\u0105bki-12854",
+                "Stacja": "Dzika 36",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Z\u0105bki",
+                "Py\u0142 zawieszony PM 10": 4.88,
+                "Py\u0142 zawieszony PM 2.5": 4.38
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 21.3504517,
+                "latitude": 52.2314475
+            },
+            "properties": {
+                "Nazwa stacji": "Halin\u00f3w-12908",
+                "Stacja": "Okuniewska 115",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Halin\u00f3w",
+                "Py\u0142 zawieszony PM 10": 5.46,
+                "Py\u0142 zawieszony PM 2.5": 4.22
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 20.9184457,
+                "latitude": 52.2773724
+            },
+            "properties": {
+                "Nazwa stacji": "Warszawa-12954",
+                "Stacja": "Bogus\u0142awskiego 8a",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Urz\u0105d m.st. Warszawy",
+                "Py\u0142 zawieszony PM 10": 3.25,
+                "Py\u0142 zawieszony PM 2.5": 2.42
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 20.708378857667483,
+                "latitude": 52.447872553849194
+            },
+            "properties": {
+                "Nazwa stacji": "Nowy Dw\u00f3r Mazowiecki-12814",
+                "Stacja": "Szkolna 3",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Nowy Dw\u00f3r Mazowiecki",
+                "Py\u0142 zawieszony PM 10": 10.5,
+                "Py\u0142 zawieszony PM 2.5": 8.72
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 20.992828,
+                "latitude": 52.2173858
+            },
+            "properties": {
+                "Nazwa stacji": "Warszawa-12931",
+                "Stacja": "Miko\u0142aja Reja 1",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Urz\u0105d m.st. Warszawy",
+                "Py\u0142 zawieszony PM 10": 2.13,
+                "Py\u0142 zawieszony PM 2.5": 1.32
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 20.6803294,
+                "latitude": 52.1214323
+            },
+            "properties": {
+                "Nazwa stacji": "Milan\u00f3wek-12773",
+                "Stacja": "Kr\u00f3lewska 69",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Milan\u00f3wek",
+                "Py\u0142 zawieszony PM 10": 3.02,
+                "Py\u0142 zawieszony PM 2.5": 1.8
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 20.8899501,
+                "latitude": 52.18946
+            },
+            "properties": {
+                "Nazwa stacji": "Warszawa-12837",
+                "Stacja": "Sosnkowskiego 10",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Urz\u0105d m.st. Warszawy",
+                "Py\u0142 zawieszony PM 10": 1.58,
+                "Py\u0142 zawieszony PM 2.5": 0.95
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 21.0645525,
+                "latitude": 52.2349152
+            },
+            "properties": {
+                "Nazwa stacji": "Warszawa-12949",
+                "Stacja": "Londy\u0144ska 10",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Urz\u0105d m.st. Warszawy",
+                "Py\u0142 zawieszony PM 10": 3.94,
+                "Py\u0142 zawieszony PM 2.5": 2.24
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 21.2694137,
+                "latitude": 52.3730027
+            },
+            "properties": {
+                "Nazwa stacji": "Zago\u015bciniec-12844",
+                "Stacja": "Szkolna 1",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Wo\u0142omin",
+                "Py\u0142 zawieszony PM 10": 1.77,
+                "Py\u0142 zawieszony PM 2.5": 1.11
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 20.6708447,
+                "latitude": 52.1254381
+            },
+            "properties": {
+                "Nazwa stacji": "Milan\u00f3wek-9226",
+                "Stacja": "Warszawska 18",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Milan\u00f3wek",
+                "Py\u0142 zawieszony PM 10": 5.13,
+                "Py\u0142 zawieszony PM 2.5": 4.08
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 20.8371253,
+                "latitude": 52.1892192
+            },
+            "properties": {
+                "Nazwa stacji": "Piast\u00f3w-8638",
+                "Stacja": "\u017bbikowska 5",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Piast\u00f3w",
+                "Py\u0142 zawieszony PM 10": 6.29,
+                "Py\u0142 zawieszony PM 2.5": 5.38
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 21.0211214,
+                "latitude": 52.1300395
+            },
+            "properties": {
+                "Nazwa stacji": "Warszawa-8007",
+                "Stacja": "Kajakowa 10",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Urz\u0105d m.st. Warszawy",
+                "Py\u0142 zawieszony PM 10": 5.04,
+                "Py\u0142 zawieszony PM 2.5": 3.84
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 21.2331839,
+                "latitude": 52.005378
+            },
+            "properties": {
+                "Nazwa stacji": "Glinki-12900",
+                "Stacja": "Glinki 50",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Karczew",
+                "Py\u0142 zawieszony PM 10": 1.72,
+                "Py\u0142 zawieszony PM 2.5": 1.07
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 21.0920791,
+                "latitude": 52.1569321
+            },
+            "properties": {
+                "Nazwa stacji": "Warszawa-12955",
+                "Stacja": "Uprawna 9/17",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Urz\u0105d m.st. Warszawy",
+                "Py\u0142 zawieszony PM 10": 1.59,
+                "Py\u0142 zawieszony PM 2.5": 0.88
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 21.2262573,
+                "latitude": 52.2507226
+            },
+            "properties": {
+                "Nazwa stacji": "Warszawa-12863",
+                "Stacja": "Armii Krajowej 39",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Urz\u0105d m.st. Warszawy",
+                "Py\u0142 zawieszony PM 10": 3.92,
+                "Py\u0142 zawieszony PM 2.5": 1.18
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 21.1519475,
+                "latitude": 52.3138768
+            },
+            "properties": {
+                "Nazwa stacji": "Zielonka-12798",
+                "Stacja": "Powsta\u0144c\u00f3w 3",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Zielonka",
+                "Py\u0142 zawieszony PM 10": 8.27,
+                "Py\u0142 zawieszony PM 2.5": 6.17
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 21.1908157,
+                "latitude": 52.2395063
+            },
+            "properties": {
+                "Nazwa stacji": "Warszawa-12841",
+                "Stacja": "Brata Alberta 46",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Urz\u0105d m.st. Warszawy",
+                "Py\u0142 zawieszony PM 10": 2.45,
+                "Py\u0142 zawieszony PM 2.5": 1.81
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 20.9475359,
+                "latitude": 52.2432143
+            },
+            "properties": {
+                "Nazwa stacji": "Warszawa-12866",
+                "Stacja": "Deotymy 37",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Urz\u0105d m.st. Warszawy",
+                "Py\u0142 zawieszony PM 10": 8.55,
+                "Py\u0142 zawieszony PM 2.5": 7.05
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 21.0452581,
+                "latitude": 52.1470917
+            },
+            "properties": {
+                "Nazwa stacji": "Warszawa-12820",
+                "Stacja": "Warcha\u0142owskiego 8",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Urz\u0105d m.st. Warszawy",
+                "Py\u0142 zawieszony PM 10": 1.84,
+                "Py\u0142 zawieszony PM 2.5": 1.14
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 20.955639,
+                "latitude": 52.205222
+            },
+            "properties": {
+                "Nazwa stacji": "Warszawa-12915",
+                "Stacja": "Latarnia 151832 Park Szcz\u0119\u015bliwicki",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Urz\u0105d m.st. Warszawy",
+                "Py\u0142 zawieszony PM 10": 6.2,
+                "Py\u0142 zawieszony PM 2.5": 5.13
+            }
+        },
+        {
+            "geometry": {
+                "type": "Point",
+                "icon_color": "#3399FF",
+                "longitude": 21.127464,
+                "latitude": 52.1320431
+            },
+            "properties": {
+                "Nazwa stacji": "Warszawa-12792",
+                "Stacja": "Latoszki 24",
+                "Typ stacji": "Punkt pomiaru",
+                "W\u0142a\u015bciciel stacji": "Urz\u0105d m.st. Warszawy",
+                "Py\u0142 zawieszony PM 10": 4.75,
+                "Py\u0142 zawieszony PM 2.5": 3.34
+            }
+        }
+    ]
+}

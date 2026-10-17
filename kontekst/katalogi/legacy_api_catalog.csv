@@ -1,0 +1,64 @@
+category,group,title,api_method,resource_id,format,license,description,file_url
+dane online,Autobusy i tramwaje online,Autobusy i tramwaje,api_info,f2e5503e-927d-4ad3-9500-4ab9e55deb59,JSON,Other (Public Domain) / 1.0,Brak danych,
+dane online,Roboty budowlane w pasie drogowym,Firmy,companies_api_info,2aa01577-9f24-4b8e-83f5-d3d15f6d094b,JSON,Other (Public Domain),Brak danych,
+dane online,Roboty budowlane w pasie drogowym,Kategorie,categories_api_info,e1c8fb95-9979-418d-bf5b-6bdfd586555b,JSON,Other (Public Domain),Brak danych,
+dane online,Roboty budowlane w pasie drogowym,Dzielnice,districts_api_info,f3469922-27e3-4d2f-811d-8efa2e448606,JSON,Other (Public Domain),Brak danych,
+dane online,Roboty budowlane w pasie drogowym,Inwestycje,invests_api_info,26b9ade1-f5d4-439e-84b4-9af37ab7ebf1,JSON,Other (Public Domain),Brak danych,
+dane online,Roboty budowlane w pasie drogowym,Inwestycje szczegóły,invest_details_api_info,25feb40c-f26a-428b-89ba-27ffefa795a5,JSON,Other (Public Domain),Brak danych,
+edukacja,Komputery i dostęp do internetu,Dostęp do internetu,api_info,0a131e16-ec7f-4502-9b62-8f8af58d8cfd,CSV,Other (Public Domain),Dostęp do internetu,
+edukacja,Komputery i dostęp do internetu,Przeznaczenie komputerów,api_info,e22be977-f15d-42e6-843a-55fd0a0d756e,CSV,Other (Public Domain),Przeznaczenie komputerów,
+edukacja,Informacja statystyczna o szkołach i placówkach,Zestawienie ogólne,api_info,f9f7ffd8-d268-417e-991a-1553bae5936d,CSV,Other (Public Domain) / 1.0,"Liczba szkól placówek, nauczycieli i uczniów wg stanu na 02/01/2015 - ogólem",
+edukacja,Informacja statystyczna o szkołach i placówkach,Dzieci i młodzież,api_info,aac73e9a-c6b3-4b7e-91dd-ebb00a8cdc33,CSV,Other (Public Domain) / 1.0,"Liczba szkół/placówek, nauczycieli i uczniów wg stanu na 02/01/2015 - Dzieci i młodzież",
+edukacja,Informacja statystyczna o szkołach i placówkach,Młodzież i dorośli,api_info,33d79302-9cd9-4aeb-8bbb-d4c8fc0cb8e7,CSV,Other (Public Domain) / 1.0,"Liczba szkół/placówek, nauczycieli i uczniów wg stanu na 02/01/2015 - Młodzież i dorośli",
+edukacja,Informacja statystyczna o szkołach i placówkach,Dorośli,api_info,0e91481e-f690-4cdf-b292-07b52beceb80,CSV,Other (Public Domain) / 1.0,"Liczba szkół/placówek, nauczycieli i uczniów wg stanu na 02/01/2015 - Dorośli",
+edukacja,Informacja statystyczna o szkołach i placówkach,Bez kategorii,api_info,ad083912-b8c7-44a4-bf7a-cd12ef84cff4,CSV,Other (Public Domain) / 1.0,"Liczba szkół/placówek, nauczycieli i uczniów wg stanu na 02/01/2015 - Bez kategorii",
+edukacja,Edukacja - pomieszczenia,pomieszczenia,api_info,ba9dd03c-72b9-488f-9fe5-3fa10052a07f,CSV,Other (Public Domain) / 1.0,Pomieszczenia wg stanu na 02/01/2015,
+edukacja,Edukacja - pomieszczenia,przedszkola-szkoly-i-placowki-oswiatowe_2015_2016.xls,file,,XLS,Creative Commons Attribution,Dane archiwalne 2015/2016,https://api.um.warszawa.pl/files/edukacja/przedszkola-szkoly-i-placowki-oswiatowe_2015_2016.xls
+edukacja,Edukacja - pomieszczenia,przedszkola-szkoly-i-placowki-oswiatowe_2016_2017.xls,file,,XLS,Creative Commons Attribution,Dane archiwalne 2016/2017,https://api.um.warszawa.pl/files/edukacja/przedszkola-szkoly-i-placowki-oswiatowe_2016_2017.xls
+edukacja,Edukacja - pomieszczenia,przedszkola-szkoly-i-placowki-oswiatowe_2017_2018.xls,file,,XLS,Creative Commons Attribution,Dane archiwalne 2017/2018,https://api.um.warszawa.pl/files/edukacja/przedszkola-szkoly-i-placowki-oswiatowe_2017_2018.xls
+edukacja,Edukacja - pomieszczenia,przedszkola-szkoly-i-placowki-oswiatowe_2018_2019.xls,file,,XLS,Creative Commons Attribution,Dane archiwalne 2018/2019,https://api.um.warszawa.pl/files/edukacja/przedszkola-szkoly-i-placowki-oswiatowe_2018_2019.xls
+edukacja,Edukacja - pomieszczenia,przedszkola-szkoly-i-placowki-oswiatowe_2019_2020.xls,file,,XLS,Creative Commons Attribution,Dane archiwalne 2019/2020,https://api.um.warszawa.pl/files/edukacja/przedszkola-szkoly-i-placowki-oswiatowe_2019_2020.xls
+edukacja,Edukacja - pomieszczenia,przedszkola-szkoly-i-placowki-oswiatowe_2020_2021.xlsx,file,,XLS,Creative Commons Attribution,Dane archiwalne 2020/2021,https://api.um.warszawa.pl/files/edukacja/przedszkola-szkoly-i-placowki-oswiatowe_2020_2021.xlsx
+edukacja,Edukacja - pomieszczenia,przedszkola-szkoly-i-placowki-oswiatowe_2021_2022.xlsx,file,,XLS,Creative Commons Attribution,Dane 2021/2022,https://api.um.warszawa.pl/files/edukacja/przedszkola-szkoly-i-placowki-oswiatowe_2021_2022.xlsx
+edukacja,Edukacja - pomieszczenia,jezyki-obce-nauczane-w-szkolach_2017_2018.xlsx,file,,XLSX,Creative Commons Attribution,Dane archiwalne 2017/2018,https://api.um.warszawa.pl/files/edukacja/jezyki-obce-nauczane-w-szkolach_2017_2018.xlsx
+edukacja,Edukacja - pomieszczenia,jezyki-obce-nauczane-w-szkolach_2018_2019.xlsx,file,,XLSX,Creative Commons Attribution,Dane archiwalne 2018/2019,https://api.um.warszawa.pl/files/edukacja/jezyki-obce-nauczane-w-szkolach_2018_2019.xlsx
+edukacja,Edukacja - pomieszczenia,jezyki-obce-nauczane-w-szkolach_2019_2020.xlsx,file,,XLSX,Creative Commons Attribution,Dane archiwalne 2019/2020,https://api.um.warszawa.pl/files/edukacja/jezyki-obce-nauczane-w-szkolach_2019_2020.xlsx
+edukacja,Edukacja - pomieszczenia,jezyki-obce-nauczane-w-szkolach_2020_2021.xlsx,file,,XLSX,Creative Commons Attribution,Dane 2020/2021,https://api.um.warszawa.pl/files/edukacja/jezyki-obce-nauczane-w-szkolach_2020_2021.xlsx
+edukacja,Edukacja - pomieszczenia,oddzialy-specjalistyczne-dyscypliny-sportu-zawody-jezyki-dwujezycznosci_2018_2019.xlsx,file,,XLSX,Creative Commons Attribution,Dane archiwalne 2018/2019,https://api.um.warszawa.pl/files/edukacja/oddzialy-specjalistyczne-dyscypliny-sportu-zawody-jezyki-dwujezycznosci_2018_2019.xlsx
+edukacja,Edukacja - pomieszczenia,oddzialy-specjalistyczne-dyscypliny-sportu-zawody-jezyki-dwujezycznosci_2019_2020.xlsx,file,,XLSX,Creative Commons Attribution,Dane archiwalne 2019/2020,https://api.um.warszawa.pl/files/edukacja/oddzialy-specjalistyczne-dyscypliny-sportu-zawody-jezyki-dwujezycznosci_2019_2020.xlsx
+edukacja,Edukacja - pomieszczenia,oddzialy-specjalistyczne-dyscypliny-sportu-zawody-jezyki-dwujezycznosci_2020_2021.xlsx,file,,XLSX,Creative Commons Attribution,Dane archiwalne 2020/2021,https://api.um.warszawa.pl/files/edukacja/oddzialy-specjalistyczne-dyscypliny-sportu-zawody-jezyki-dwujezycznosci_2020_2021.xlsx
+edukacja,Edukacja - pomieszczenia,oddzialy-specjalistyczne-dyscypliny-sportu-zawody-jezyki-dwujezycznosci_2021_2022.xlsx,file,,XLSX,Creative Commons Attribution,Dane 2021/2022,https://api.um.warszawa.pl/files/edukacja/oddzialy-specjalistyczne-dyscypliny-sportu-zawody-jezyki-dwujezycznosci_2021_2022.xlsx
+edukacja,Edukacja - pomieszczenia,pomieszczenia-w-przedszkolach-szkolach-i-placowkach-oswiatowych_2020_2021.xlsx,file,,XLSX,Other (Public Domain),Dane 2020/2021,https://api.um.warszawa.pl/files/edukacja/pomieszczenia-w-przedszkolach-szkolach-i-placowkach-oswiatowych_2020_2021.xlsx
+transport miejski,Rozkłady jazdy ZTM,przystanki,dbtimetable_api_info,b27f4c17-5c50-4a5b-89dd-236b282bc499,JSON,Other (Public Domain),Brak danych,
+transport miejski,Rozkłady jazdy ZTM,linie,dbtimetable_api_info,88cd555f-6f31-43ca-9de4-66c479ad5942,JSON,Other (Public Domain),Brak danych,
+transport miejski,Rozkłady jazdy ZTM,rozkłady,dbtimetable_api_info,e923fa0e-d96c-43f9-ae6e-60518c9f3238,JSON,Other (Public Domain),Brak danych,
+transport miejski,Pojazdy komunikacji miejskiej,public_transport_vehicles_vehicle_data,api_info,2c90544f-e4fc-4ee8-9feb-6cfd3f7e189d,JSON,Creative Commons Attribution,Brak danych,
+transport miejski,Trasy pojazdów transportu miejskiego,Trasy pojazdów transportu miejskiego,api_info,b61f1869-6f0a-4375-acdf-87ccffeecdf0,JSON,Creative Commons Attribution,Brak danych,
+transport miejski,Słowniki pojęć dla transportu miejskiego,Słownik pojęć,api_info,20d30ed7-fa28-478b-b2e3-17e4a5315e71,JSON,Creative Commons Attribution,Brak danych,
+bezpieczenstwo i interwencje,Urzadzenia AED,Urządzenia AED,api_info,fc421df8-ebb7-42bc-b198-741a1858e03e,JSON,Creative Commons Attribution,Urządzenia AED w Warszawie,
+bezpieczenstwo i interwencje,Bezpieczeństwo (mapy wektorowe),POLICJA,wfsstore_api_info,85f567f1-bb56-4657-a30e-afd80544fc7f,JSON,Other (Public Domain),Komisariaty Policji,
+dane urzedowe,Administracja (mapy wektorowe),BIURA URZĘDU,wfsstore_api_info,4e9a942e-2bf8-4c9d-ac1f-1ccc30c4f62d,JSON,Other (Public Domain),BIURA URZĘDU,
+dane urzedowe,Oferta sportowa,Oferta sportowa,api_info,f458bd1b-d545-407c-bf08-7315429b6fda,JSON,Creative Commons Attribution,Oferta sportowa opublikowana na stronie https://um.warszawa.pl,
+dane urzedowe,Wydarzenia kalendarz,Kalendarz wydarzeń,api_info,fbf95b7b-ff95-48bc-afda-a16e968cc9a6,JSON,Creative Commons Attribution,Kalendarzy wydarzeń znajdujący się na stronie um.warszawa.pl,
+dane urzedowe,Konsultacje społeczne,public_consultation,api_info,f5de32bb-d20f-4366-ae48-c0b5278f15d5,JSON,Creative Commons Attribution,API umożliwia pobranie danych na temat aktualnych konsultacji społecznych opublikowanych na stronie https://konsultacje.um.warszawa.pl,
+dane urzedowe,Obiekty z dostępną mikronawigacją i informacją kontekstową,Obiekty z dostępną mikronawigacją i informacją kontekstową,api_info,2d80fed8-17ad-473a-88b3-2960ad52bfbd,JSON,Creative Commons Attribution,Brak danych,
+ekologia,Krzewy,krzewy,api_info,0b1af81f-247d-4266-9823-693858ad5b5d,CSV,Other (Public Domain) / 1.0,lokalizacje krzewów,
+ekologia,Krzewy,grupy krzewów,api_info,4b792a76-5349-4aad-aa16-dadaf0a74be3,CSV,Other (Public Domain) / 1.0,grupy krzewów (obrysy),
+ekologia,Lasy,lasy,api_info,75bedfd5-6c83-426b-9ae5-f03651857a48,CSV,Other (Public Domain) / 1.0,obręby leśne,
+ekologia,Drzewa,Grupy drzew,api_info,913856f7-f71b-4638-abe2-12df14334e1a,CSV,Other (Public Domain) / Dane testowe na potrzeby konkursu,Grupy drzew (obrysy),
+ekologia,Drzewa,Drzewa,api_info,ed6217dd-c8d0-4f7b-8bed-3b7eb81a95ba,CSV,Other (Public Domain) / Dane testowe na potrzeby konkursu,lokalizacja drzew,
+ekologia,Jakość powietrza,Jakość powietrza w Warszawie oraz gminach ościennych,api_info,4d45dc0e-7415-4de7-aa83-83d18c712262,JSON,Creative Commons Attribution,Brak danych,
+kultura,Trasy Turystyczne,Trasy Turystyczne,api_info,66b55670-7990-4b64-bdc9-e1277aadcb74,JSON,License not specified,Brak danych,
+kultura,Atrakcje Turystyczne,Atrakcje Turystyczne,api_info,df6ed9af-3bc9-4a11-8e4b-0c408695cff3,JSON,License not specified,Brak danych,
+dane przestrzenne,Miejsca parkingowe dla osób z niepełnosprawnościami,Miejsca parkingowe dla osób z niepełnosprawnością,api_info,b3948223-1b1b-4dbf-8433-9ed389702d99,JSON,Creative Commons Attribution,Brak danych,
+dane przestrzenne,Ewidencja Nazw Obiektów Miejskich (mapy wektorowe),ENOM  Punkty adresowe,wfsstore_api_info,e30b724d-0bac-4a4e-8ea8-085c136fe345,JSON,Other (Public Domain),Ewidencja Nazw Obiektów Miejskich - Punkty adresowe,
+dane przestrzenne,Ewidencja Nazw Obiektów Miejskich (mapy wektorowe),ENOM - Ulice,wfsstore_api_info,8c05e43a-504d-4680-bb75-e240858aad5c,JSON,Other (Public Domain),Ewidencja Nazw Obiektów Miejskich - Ulice,
+dane przestrzenne,Ewidencja Nazw Obiektów Miejskich (mapy wektorowe),"ENOM - Place, Skwery",wfsstore_api_info,51ed1c43-6c3b-4c7c-9b1f-b5bd1b1dac0e,JSON,Other (Public Domain),"Ewidencja Nazw Obiektów Miejskich - Place, Skwery",
+dane przestrzenne,Opieka zdrowotna (mapa wektorowa),APTEKI,wfsstore_api_info,fd137190-3d65-4306-a85e-5e97e7f29a23,JSON,Other (Public Domain),APTEKI,
+dane przestrzenne,Sport (mapy wektorowe),PIŁKA NOŻNA,wfsstore_api_info,9317a2dc-d08a-41bc-874d-01cc2dc88006,JSON,Other (Public Domain),PIŁKA NOŻNA,
+dane przestrzenne,Sport (mapy wektorowe),Pływalnie odkryte,wfsstore_api_info,8c34025d-df36-4507-9eae-cf714f6fc414,JSON,Other (Public Domain),PŁYWALNIE,
+dane przestrzenne,Noclegi (mapy wektorowe),Akademiki,wfsstore_api_info,c789b05d-31b1-4b55-970a-4d3deb923f79,JSON,Other (Public Domain),Akademiki,
+dane przestrzenne,Noclegi (mapy wektorowe),Hotele,wfsstore_api_info,f019448f-951c-439e-bf37-c3268682752e,JSON,Other (Public Domain),Hotele,
+dane przestrzenne,Znaki Drogowe D-18a,Znaki drogowe D-18a w Strefie Płatnego Parkowania Niestrzeżonego w Warszawie,api_info,2eef06d6-c12c-48d9-b0ea-4c4d5a427589,JSON,Creative Commons Attribution,Brak danych,
+dane przestrzenne,Znaki Drogowe D-18,Znaki drogowe D-18 w Strefie Płatnego Parkowania Niestrzeżonego w Warszawie,api_info,241723b2-a7c1-42ce-a737-2bd84274dba5,JSON,Creative Commons Attribution,Brak danych,
+dane przestrzenne,Znaki Drogowe D-44 D45,Znaki drogowe D-18a w Strefie Płatnego Parkowania Niestrzeżonego w Warszawie,api_info,a8d3fd0c-df25-4f7e-80e4-cd7c9757eae7,JSON,Creative Commons Attribution,Brak danych,
