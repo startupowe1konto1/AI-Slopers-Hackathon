@@ -36,7 +36,7 @@ przystanki = [
      "lat": r.lat, "lon": r.lon, "linie": r.linie}
     for r in stops.itertuples()
 ]
-(OUT / "przystanki.json").write_text(json.dumps(przystanki, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+(OUT / "przystanki.json").write_text(json.dumps(przystanki, ensure_ascii=False, separators=(",", ":")), encoding="utf-8", newline="\n")
 
 wersja = czytaj("feed_info.txt")["feed_version"].iloc[0]
 pobrano = datetime.fromtimestamp(GTFS.stat().st_mtime, timezone.utc).astimezone().isoformat(timespec="seconds")
@@ -45,5 +45,5 @@ pobrano = datetime.fromtimestamp(GTFS.stat().st_mtime, timezone.utc).astimezone(
     "zrodla": {"gtfs-ztm": {"nazwa": f"GTFS Warszawa (mkuran.pl, wersja {wersja}), źródło nieoficjalne, na podstawie danych ZTM",
                             "licencja": "do weryfikacji (dane ZTM; GTFS: Mikołaj Kuranowski)",
                             "url": "https://mkuran.pl/gtfs/", "pobrano": pobrano}},
-}, ensure_ascii=False, indent=1), encoding="utf-8")
+}, ensure_ascii=False, indent=1), encoding="utf-8", newline="\n")
 print("przystanki:", len(przystanki))

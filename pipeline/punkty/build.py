@@ -50,11 +50,10 @@ def main() -> None:
         raise ValueError("powtórzone id punktów")
 
     WYJSCIE.mkdir(parents=True, exist_ok=True)
-    (WYJSCIE / "punkty.json").write_text(json.dumps(punkty, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+    (WYJSCIE / "punkty.json").write_text(json.dumps(punkty, ensure_ascii=False, separators=(",", ":")), encoding="utf-8", newline="\n")
     (WYJSCIE / "meta.json").write_text(
         json.dumps({"modul": "punkty", "rekordy": len(punkty), "zrodla": meta}, ensure_ascii=False, indent=1) + "\n",
-        encoding="utf-8",
-    )
+        encoding="utf-8", newline="\n")
 
 
 if __name__ == "__main__":

@@ -1,6 +1,6 @@
 {
- "wersja": "2026-10-17T13:52",
- "zbudowano": "2026-10-17T13:52:44+00:00",
+ "wersja": "2026-10-17T16:08",
+ "zbudowano": "2026-10-17T16:08:45+00:00",
  "pliki": [
   {
    "sciezka": "adresy/adresy.json",
@@ -9,12 +9,32 @@
   },
   {
    "sciezka": "adresy/meta.json",
-   "bajty": 262,
+   "bajty": 251,
    "modul": "adresy"
   },
   {
+   "sciezka": "punkty/meta.json",
+   "bajty": 1353,
+   "modul": "punkty"
+  },
+  {
+   "sciezka": "punkty/punkty.json",
+   "bajty": 1922677,
+   "modul": "punkty"
+  },
+  {
+   "sciezka": "syreny/meta.json",
+   "bajty": 1344,
+   "modul": "syreny"
+  },
+  {
+   "sciezka": "syreny/syreny.json",
+   "bajty": 380796,
+   "modul": "syreny"
+  },
+  {
    "sciezka": "transport/meta.json",
-   "bajty": 359,
+   "bajty": 348,
    "modul": "transport"
   },
   {
@@ -30,11 +50,47 @@
    "url": "https://wfs.um.warszawa.pl/serwis",
    "pobrano": "2026-10-17T14:28:00+02:00"
   },
+  "psp": {
+   "nazwa": "Miejsca schronienia według PSP (gdziesieukryc.pl)",
+   "licencja": "za zgodą PSP",
+   "url": "https://gdziesieukryc.pl",
+   "pobrano": "2026-10-17"
+  },
   "gtfs-ztm": {
    "nazwa": "GTFS Warszawa (mkuran.pl, wersja 2026-10-17 00:15:22), źródło nieoficjalne, na podstawie danych ZTM",
    "licencja": "do weryfikacji (dane ZTM; GTFS: Mikołaj Kuranowski)",
    "url": "https://mkuran.pl/gtfs/",
    "pobrano": "2026-10-17T15:50:31+02:00"
+  },
+  "wfs-apteki": {
+   "nazwa": "m.st. Warszawa, apteki (WFS, dane z marca 2017)",
+   "licencja": "CC BY",
+   "url": "https://wfs.um.warszawa.pl/serwis?SERVICE=WFS&VERSION=1.1.0&REQUEST=GetFeature&TYPENAME=wfs:APTEKI",
+   "pobrano": "2026-10-17"
+  },
+  "um-aed": {
+   "nazwa": "m.st. Warszawa, defibrylatory AED",
+   "licencja": "CC BY",
+   "url": "https://dane.um.warszawa.pl/pl/catalogue/7bc32ffc-c2ac-4d32-83c9-b6f7a0b38de8",
+   "pobrano": "2026-10-17"
+  },
+  "um-toalety": {
+   "nazwa": "m.st. Warszawa, toalety publiczne",
+   "licencja": "CC BY",
+   "url": "https://dane.um.warszawa.pl/pl/catalogue/59485767-5566-4cb6-9545-a9053efca4ff",
+   "pobrano": "2026-10-17"
+  },
+  "rprm-sor": {
+   "nazwa": "Rejestr SOR (rprm.ezdrowie.gov.pl)",
+   "licencja": "CC BY 4.0",
+   "url": "https://rprm.ezdrowie.gov.pl/",
+   "pobrano": "2026-10-17"
+  },
+  "soia": {
+   "nazwa": "KG PSP, SOIA, wersja danych 2026.05 (Zenodo 10.5281/zenodo.21921103); przycięte do granic m.st. Warszawy",
+   "licencja": "CC BY 4.0",
+   "url": "https://doi.org/10.5281/zenodo.21921103",
+   "pobrano": "2026-10-17T13:02:00+02:00"
   }
  }
 }
