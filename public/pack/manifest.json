@@ -1,6 +1,48 @@
 {
- "wersja": "szkielet",
- "zbudowano": "2026-10-17T15:00:00+02:00",
- "pliki": [],
- "zrodla": {}
+ "wersja": "2026-10-17T14:44",
+ "zbudowano": "2026-10-17T14:44:21+00:00",
+ "pliki": [
+  {
+   "sciezka": "punkty/meta.json",
+   "bajty": 1173,
+   "modul": "punkty"
+  },
+  {
+   "sciezka": "punkty/punkty.json",
+   "bajty": 538322,
+   "modul": "punkty"
+  }
+ ],
+ "zrodla": {
+  "gtfs-ztm": {
+   "nazwa": "GTFS Warszawa (mkuran.pl, wersja 2026-10-17 00:15:22), źródło nieoficjalne, na podstawie danych ZTM",
+   "licencja": "do weryfikacji (dane ZTM; GTFS: Mikołaj Kuranowski)",
+   "url": "https://mkuran.pl/gtfs/",
+   "pobrano": "2026-10-17"
+  },
+  "wfs-apteki": {
+   "nazwa": "m.st. Warszawa, apteki (WFS, dane z marca 2017)",
+   "licencja": "CC BY",
+   "url": "https://wfs.um.warszawa.pl/serwis?SERVICE=WFS&VERSION=1.1.0&REQUEST=GetFeature&TYPENAME=wfs:APTEKI",
+   "pobrano": "2026-10-17"
+  },
+  "um-aed": {
+   "nazwa": "m.st. Warszawa, defibrylatory AED",
+   "licencja": "CC BY",
+   "url": "https://dane.um.warszawa.pl/pl/catalogue/7bc32ffc-c2ac-4d32-83c9-b6f7a0b38de8",
+   "pobrano": "2026-10-17"
+  },
+  "um-toalety": {
+   "nazwa": "m.st. Warszawa, toalety publiczne",
+   "licencja": "CC BY",
+   "url": "https://dane.um.warszawa.pl/pl/catalogue/59485767-5566-4cb6-9545-a9053efca4ff",
+   "pobrano": "2026-10-17"
+  },
+  "rprm-sor": {
+   "nazwa": "Rejestr SOR (rprm.ezdrowie.gov.pl)",
+   "licencja": "CC BY 4.0",
+   "url": "https://rprm.ezdrowie.gov.pl/",
+   "pobrano": "2026-10-17"
+  }
+ }
 }
