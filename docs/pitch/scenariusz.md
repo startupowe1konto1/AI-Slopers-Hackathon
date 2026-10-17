@@ -122,14 +122,18 @@ Liczby do slajdu (z części 6 pliku JTBD, dla 24 zadań mieszkańców): pokryci
 
 **Na ekranie:** z lewej oś z pięcioma etapami. Przy każdym etapie trzy linijki: problem Kasi, co robi aplikacja, wartość. Z prawej makieta telefonu, a w niej działająca aplikacja (iframe z `https://warszawa-kryzys.startupaplikujmy.workers.dev/`). Kliknięcie etapu podświetla go na osi. Druga osoba przełącza moduł w telefonie (menu na dole aplikacji). Na ostatnim etapie przełącznik „wyłącz sieć” przeładowuje telefon z `?offline=1`.
 
-Adresy Kasi zapisane w telefonie przed pitchem (każdy dziś w zasięgu syren, przy blackoucie traci zasięg; sprawdzone na `syreny_blackout_utracony_zasieg.geojson`):
+Adresy Kasi zapisane w telefonie przed pitchem. To adresy testowe z aplikacji (`src/modules/adresy`): dopóki O2 nie scali wyszukiwania w pełnej paczce adresów, aplikacja zna tylko te trzy. Wynik przy blackoucie sprawdzony na prawdziwych punktach adresowych i `syreny_blackout_utracony_zasieg.geojson`:
 
-| Rola | Adres | Dzielnica |
-|---|---|---|
-| dom | ul. Lazurowa 71 | Bemowo |
-| praca | Rondo I. Daszyńskiego 2 | Wola |
-| bliska osoba (mama) | ul. Grochowska 327 | Praga-Południe (Grochów) |
-| przedszkole | **DO USTALENIA**: prawdziwe przedszkole na Bemowie, blisko domu | Bemowo |
+| Rola | Adres | Dzielnica | Syrena normalnie | Przy blackoucie |
+|---|---|---|---|---|
+| dom | ul. Powstańców Śląskich 10 | Bemowo | słychać | słychać (w zasięgu syren cyfrowych) |
+| praca | rondo Ignacego Daszyńskiego 1 | Wola | słychać | traci zasięg |
+| bliska osoba (mama) | ul. Grochowska 200 | Praga-Południe (Grochów) | słychać | traci zasięg |
+| przedszkole | **DO USTALENIA**: aplikacja nie ma jeszcze czwartego adresu testowego | Bemowo | | |
+
+Dlatego na etapie „Przed kryzysem” mówimy, że w domu Kasia syrenę usłyszy, ale w pracy i u mamy przy blackoucie może nie usłyszeć. Gdyby po scaleniu O2 zespół wolał dom, który traci zasięg, pasuje ul. Lazurowa 71 (Bemowo). Wtedy trzeba wrócić do poprzedniego zdania.
+
+Jak przygotować telefon na slajdzie: `prezentacja/README.md`, sekcja „Telefon na slajdzie 8”.
 
 | Etap | Problem | Co robi aplikacja | Wartość |
 |---|---|---|---|
@@ -145,7 +149,7 @@ Adresy Kasi zapisane w telefonie przed pitchem (każdy dziś w zasięgu syren, p
 
 **Przed kryzysem (20 s)** ⚠️
 
-> Przed kryzysem Kasia raz wpisuje cztery adresy i pobiera paczkę. Od razu widzi, że syrenę w domu słychać, ale przy blackoucie może jej nie usłyszeć. Dostaje kroki: włączyć Alert RCB, zainstalować RSO, umówić się z sąsiadem. I kartę do wydruku.
+> Przed kryzysem Kasia raz wpisuje adresy i pobiera paczkę. Od razu widzi, że w domu syrenę usłyszy nawet przy blackoucie, ale w pracy i u mamy na Grochowie może jej wtedy nie usłyszeć. Dostaje kroki: włączyć Alert RCB, zainstalować RSO, umówić się z sąsiadem. I kartę do wydruku.
 
 **Alarm (15 s)**
 
@@ -171,7 +175,7 @@ Adresy Kasi zapisane w telefonie przed pitchem (każdy dziś w zasięgu syren, p
 
 **Mówimy:**
 
-> Kasia wie zawczasu, co zrobić, i to pod swoim adresem, a nie dla całej Polski. Miasto dostaje narzędzie na danych, które już publikuje, bez kont i bez sklepu z aplikacjami. Następne kroki: z PSP i Stołecznym Centrum Bezpieczeństwa sprawdzić zasilanie syren analogowych, porównać model ze zgłoszeniami z 19115 z ćwiczeń Syrena-26 i wpiąć tryb kryzysowy w aplikację, której warszawiacy używają na co dzień.
+> Kasia wie zawczasu, co zrobić, i to pod swoim adresem, a nie dla całej Polski. Miasto dostaje narzędzie na danych, które już publikuje, bez kont i bez sklepu z aplikacjami. Następne kroki: z wojewodą mazowieckim, właścicielem syren analogowych, sprawdzić ich zasilanie, porównać model ze zgłoszeniami z 19115 z ćwiczeń Syrena-26 i wpiąć tryb kryzysowy w aplikację, której warszawiacy używają na co dzień.
 
 ---
 

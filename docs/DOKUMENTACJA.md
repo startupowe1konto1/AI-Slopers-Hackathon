@@ -11,7 +11,7 @@ Ten dokument spełnia wymóg regulaminu (§4 ust. 6): wykorzystane dane miejskie
 | Repozytorium | https://github.com/startupowe1konto1/AI-Slopers-Hackathon |
 | Pełna wersja | https://warszawa-kryzys.startupaplikujmy.workers.dev/ |
 | Wersja offline | https://warszawa-kryzys.startupaplikujmy.workers.dev/?offline=1 |
-| Prezentacja | **DO UZUPEŁNIENIA** (HTML w `docs/pitch/`) |
+| Prezentacja | [docs/pitch/prezentacja/index.html](pitch/prezentacja/index.html), otwierana w przeglądarce (strzałki, F: pełny ekran, N: notatki) |
 
 Szczegóły projektu: [SPEC.md](SPEC.md) (specyfikacja), [PLAN.md](PLAN.md) (plan prac), [HANDOFF.md](../HANDOFF.md) (koncepcja i uzasadnienia).
 
@@ -35,12 +35,14 @@ Zasady, których się trzymamy:
 | Apteki | WFS `wfs:APTEKI` | najbliższe punkty | **DO UZUPEŁNIENIA** | **DO UZUPEŁNIENIA** |
 | Lokalizacja defibrylatorów (AED) | portal, `get_scb_lokalizacja_defibrylatorow` | najbliższe punkty | 710 | **DO UZUPEŁNIENIA** |
 | Toalety | portal, `get_m_toalety` | najbliższe punkty (blackout) | 695 | **DO UZUPEŁNIENIA** |
-| Lokalizacja pojazdów komunikacji miejskiej | portal, `get_ztm_lokalizacja_pojazdow` (`type` 1 i 2) | co jeździ w okolicy, na żywo | na żywo | na żywo |
-| Pogoda (stacje ZOM) | portal, `get_zom_pogoda` | kierunek i prędkość wiatru, na żywo | na żywo | na żywo |
-| Monitoring jakości powietrza | portal, `get_bopipk_monitoring_jakosci_powietrza` | pomiary PM2.5 i PM10 przy zgłoszeniu dymu | na żywo | na żywo |
-| Utrudnienia w ruchu drogowym | portal, `get_bin_utrudnienia_drogowe` | zamknięte drogi, na żywo | na żywo | na żywo |
+| Lokalizacja pojazdów komunikacji miejskiej | portal, `get_ztm_lokalizacja_pojazdow` (`type` 1 i 2) | autobusy i tramwaje do 1 km od adresu, na mapie i w liście | ok. 1100 aktualnych pozycji | na żywo |
+| Pogoda (stacje ZOM) | portal, `get_zom_pogoda` | kierunek i prędkość wiatru z najbliższej stacji; kierunek stożka dymu | 16 stacji | na żywo |
+| Monitoring jakości powietrza | portal, `get_bopipk_monitoring_jakosci_powietrza` | PM2.5 i PM10 ze stacji najbliższej adresowi albo zgłoszonemu dymowi | 140 stacji z pomiarem pyłów (miejskie, GIOŚ, czujniki w gminach) | na żywo |
+| Utrudnienia w ruchu drogowym | portal, `get_bin_utrudnienia_drogowe` | utrudnienia do 2 km od adresu, linie na mapie | 61 aktywnych lub zaczynających się w ciągu 3 dni | na żywo |
 
-**DO UZUPEŁNIENIA** po scaleniu pasów O3 i O4: które zbiory faktycznie weszły do wersji końcowej (część z nich to dobudowa po 19:00).
+Liczby rekordów dla danych na żywo pochodzą z odpowiedzi API z 17.10.2026 ok. 16:40. Wszystkie cztery zbiory na żywo (pas O4) weszły do wersji końcowej: pojazdy i wiatr w panelu „Na żywo”, a powietrze i utrudnienia w dobudowie (PR #5 i #8). Proxy odrzuca pozycje pojazdów starsze niż 5 minut od najnowszej, bo API zwraca też pozycje sprzed dni, a nawet lat.
+
+**DO UZUPEŁNIENIA** (O3): które zbiory punktów pomocy weszły do wersji końcowej, liczby rekordów i daty pobrania.
 
 ### 1.2. Dane Państwowej Straży Pożarnej
 
@@ -55,7 +57,7 @@ Zasady, których się trzymamy:
 |---|---|---|---|
 | Szpitalne oddziały ratunkowe (SOR) | dane.gov.pl, zbiór 1642 (ewidencja RPRM) | najbliższe punkty | CC BY 4.0 |
 | Rozkład jazdy GTFS | [mkuran.pl/gtfs/warsaw.zip](https://mkuran.pl/gtfs/warsaw.zip), źródło nieoficjalne na podstawie danych ZTM | linie autobusowe na przystankach (dojazd przy blackoucie) | **DO UZUPEŁNIENIA** |
-| Stacje Veturilo | GBFS nextbike (`gbfs.nextbike.net/maps/gbfs/v2/nextbike_vw/gbfs.json`) | wolne rowery w okolicy, na żywo (dobudowa) | **DO UZUPEŁNIENIA** |
+| Stacje Veturilo | GBFS nextbike (`gbfs.nextbike.net/maps/gbfs/v2/nextbike_vw/gbfs.json`), bez klucza | do 3 stacji z wolnymi rowerami w promieniu 1 km, na żywo | CC0-1.0 (pole `license_id` w `system_information` feedu) |
 | Mapa | Protomaps, plik `20261017.pmtiles` wycięty do Warszawy, dane OpenStreetMap | mapa online i offline | ODbL |
 
 ---
@@ -72,8 +74,11 @@ Zasady, których się trzymamy:
 
 ### Dym i powietrze
 
-- Dym pokazujemy jako kierunek wiatru z najbliższej stacji i pomiary powietrza. To nie jest model rozprzestrzeniania się skażeń.
-- Stacji pomiarowych jest mało, więc najbliższa stacja może być daleko od miejsca zgłoszenia.
+- Dym pokazujemy jako kierunek wiatru z najbliższej stacji i pomiary powietrza. To nie jest model rozprzestrzeniania się skażeń. Aplikacja pisze to wprost: „To kierunek wiatru, nie model rozprzestrzeniania się dymu.”
+- Stożek ma 30° szerokości i 3 km długości. Kierunek bierzemy ze stacji pogodowej najbliższej zaznaczonemu punktowi. Przy 0 m/s stożka nie ma, a aplikacja wyjaśnia dlaczego.
+- Stacji wiatru jest 16, więc najbliższa stacja bywa kilka kilometrów od miejsca zgłoszenia. Aplikacja zawsze podaje jej nazwę i godzinę pomiaru.
+- Punkt dymu zostaje tylko w telefonie (`localStorage`). Nie wysyłamy go nigdzie.
+- Stacje powietrza w API mają dwa zapisy pyłu PM2.5 (`PM25` w stacjach miejskich, `PM2.5` w GIOŚ i gminach), a GIOŚ podaje współrzędne jako tekst. Parser obsługuje oba warianty; stacja bez pomiaru pyłów jest pomijana.
 
 ### Miejsca schronienia według PSP
 
@@ -88,8 +93,11 @@ Zasady, których się trzymamy:
 
 ### Dane na żywo
 
-- Proxy przechowuje odpowiedzi przez 15–30 s. Bez sieci aplikacja pokazuje ostatni zapisany stan z godziną.
+- Proxy pozwala buforować odpowiedzi: pojazdy 15 s, Veturilo 60 s, wiatr 5 min, powietrze i utrudnienia 10 min. Panel odświeża dane co 20 s, gdy jest sieć.
+- Bez sieci aplikacja pokazuje ostatni zapisany stan z godziną („Brak sieci. Ostatni stan z HH:MM.”). Gdy padnie tylko źródło, pokazuje ostatni stan z dopiskiem, że źródło nie odpowiada.
 - API ZTM obejmuje tylko autobusy i tramwaje, bez metra.
+- Utrudnienia: pokazujemy zgłoszenia trwające albo zaczynające się w ciągu 3 dni. Trzy zgłoszenia nie mają daty końca, więc pokazujemy je jako „do odwołania”.
+- Veturilo: stacja liczy się tylko wtedy, gdy ma wolne rowery i wypożycza.
 
 ### Bezpieczeństwo i prywatność
 
@@ -152,7 +160,9 @@ AI pomagało w:
 
 Kontrola po stronie ludzi: każda zmiana wchodzi na `main` przez pull request z CI (typy, testy, build, walidacja paczki). Liczby w pitchu i dokumentacji sprawdzaliśmy na plikach z danymi, nie z pamięci modelu.
 
-**DO UZUPEŁNIENIA:** po jednym zdaniu od każdej osoby, czego AI nie zrobiło dobrze i co trzeba było poprawić ręcznie.
+Czego AI nie zrobiło dobrze i co trzeba było poprawić:
+- **O4 (na żywo i prezentacja):** plan wygenerowany przez AI zakładał jeden zapis pyłu `PM25` i konstruktor, którego nie przepuszcza konfiguracja TypeScriptu. Parsery pisaliśmy więc od nowa na zapisanych próbkach odpowiedzi (`dane/probki/`). Błąd znikającego stożka dymu po przeładowaniu strony wyszedł dopiero przy zrzutach z produkcji, nie w testach.
+- **DO UZUPEŁNIENIA:** po jednym zdaniu od O1, O2 i O3.
 
 ---
 
@@ -161,12 +171,12 @@ Kontrola po stronie ludzi: każda zmiana wchodzi na `main` przez pull request z 
 Te same oznaczenia są w stopce aplikacji i w zakładce „O danych”.
 
 - **SOIA (syreny):** „Dane: KG PSP, SOIA, wersja danych 2026.05 (Zenodo 10.5281/zenodo.21921103); przycięte do granic m.st. Warszawy (TERYT 1465011) przez zespół hackathonowy”. Źródła składowe: OpenStreetMap contributors (ODbL), GUS, GUGiK. Licencja CC BY 4.0. Pełny opis: [dane/soia-warszawa/README.md](../dane/soia-warszawa/README.md).
-- **m.st. Warszawa:** dane z [dane.um.warszawa.pl](https://dane.um.warszawa.pl) i WFS m.st. Warszawy, licencja CC BY. **DO UZUPEŁNIENIA:** dokładna wersja licencji i wymagane brzmienie oznaczenia.
+- **m.st. Warszawa:** dane z [dane.um.warszawa.pl](https://dane.um.warszawa.pl) i WFS m.st. Warszawy. Katalog portalu podaje licencję „Creative Commons Attribution” bez numeru wersji. Dane na żywo oznaczamy w aplikacji nazwą źródła: ZTM (pojazdy), Zarząd Oczyszczania Miasta (pogoda), Biuro Ochrony Powietrza i Polityki Klimatycznej (powietrze), Biuro Infrastruktury (utrudnienia). **DO UZUPEŁNIENIA:** brzmienie oznaczenia dla warstw WFS.
 - **PSP, miejsca schronienia:** dane z [gdziesieukryc.pl](https://gdziesieukryc.pl), użyte za zgodą PSP.
 - **SOR:** Rejestr Państwowego Ratownictwa Medycznego z [dane.gov.pl](https://dane.gov.pl), CC BY 4.0.
 - **Mapa:** © OpenStreetMap contributors (ODbL), kafle Protomaps.
 - **Rozkład GTFS:** mkuran.pl na podstawie danych ZTM Warszawa. **DO UZUPEŁNIENIA:** licencja.
-- **Veturilo:** nextbike GBFS. **DO UZUPEŁNIENIA:** licencja (tylko jeśli dobudowa weszła).
+- **Veturilo:** Nextbike Polska, feed GBFS, licencja CC0-1.0 (deklaracja w feedzie). Dobudowa weszła do wersji końcowej.
 
 ---
 

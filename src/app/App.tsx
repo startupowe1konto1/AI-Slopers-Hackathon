@@ -5,6 +5,8 @@ import { useSiec } from '../offline/siec';
 import { useMiejsca } from './miejsca';
 import { Onboarding } from './Onboarding';
 import { MapView } from '../map/MapView';
+import { stanPaczki } from '../offline/paczka';
+import { Stopka } from './Stopka';
 
 export default function App() {
   const { miejsca, gotowe } = useMiejsca();
@@ -12,6 +14,13 @@ export default function App() {
   const [edycja, setEdycja] = useState(false);
   const [rola, setRola] = useState<RolaMiejsca>('dom');
   const [aktywny, setAktywny] = useState<Modul['id']>(moduly[0].id);
+  const [paczka, setPaczka] = useState<string | null>(null);
+
+  useEffect(() => {
+    stanPaczki().then((s) =>
+      setPaczka(s ? new Date(s.zbudowano).toLocaleString('pl-PL', { day: 'numeric', month: 'numeric', hour: '2-digit', minute: '2-digit' }) : null),
+    );
+  }, [edycja]);
 
   useEffect(() => {
     if (miejsca.length && !miejsca.some((m) => m.rola === rola)) setRola(miejsca[0].rola);
@@ -45,6 +54,7 @@ export default function App() {
         </button>
         <span className={`siec ${online ? 'online' : 'offline'}`} role="status">
           {online ? 'Online' : wymuszonyOffline ? 'Offline (symulacja)' : 'Offline'}
+          {!online && (paczka ? ` · paczka z ${paczka}` : ' · brak paczki')}
         </span>
       </header>
       <main className="mapa">
@@ -60,6 +70,7 @@ export default function App() {
           </button>
         ))}
       </nav>
+      <Stopka />
     </div>
   );
 }
