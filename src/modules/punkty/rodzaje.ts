@@ -8,4 +8,5 @@ export const RODZAJE: { rodzaj: RodzajPunktu; etykieta: string; zrodlo: string; 
   { rodzaj: 'apteka', etykieta: 'Apteka', zrodlo: 'wfs-apteki', kolor: '#0e7490' },
   { rodzaj: 'sor', etykieta: 'SOR', zrodlo: 'rprm-sor', kolor: '#7e22ce' },
   { rodzaj: 'toaleta', etykieta: 'Toaleta', zrodlo: 'um-toalety', kolor: '#6b7280' },
+  { rodzaj: 'przychodnia', etykieta: 'Przychodnia', zrodlo: 'osm-przychodnie', kolor: '#be185d' },
 ];

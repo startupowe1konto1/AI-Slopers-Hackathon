@@ -34,6 +34,14 @@ RPRM = "https://rprm.ezdrowie.gov.pl/Registry/PublicExport?" + urllib.parse.urle
     "ActionName": "Public",
     "FilterApplied": "True",
 })
+OVERPASS = "https://overpass-api.de/api/interpreter"
+# Przychodnie, gabinety i szpitale w bbox Warszawy (sprawdzone 17.10: 1044 obiekty).
+ZAPYTANIE_OSM = """[out:json][timeout:120];
+(
+  nwr["amenity"~"^(clinic|doctors|hospital)$"](52.09,20.85,52.37,21.28);
+  nwr["healthcare"~"^(clinic|doctor|hospital|centre)$"](52.09,20.85,52.37,21.28);
+);
+out center tags;"""
 
 
 def _token() -> str:
@@ -67,6 +75,10 @@ def _portal(zbior: str) -> urllib.request.Request:
                                   headers={"Authorization": _token(), "Content-Type": "application/json"})
 
 
+def _overpass() -> urllib.request.Request:
+    return urllib.request.Request(OVERPASS, data=urllib.parse.urlencode({"data": ZAPYTANIE_OSM}).encode(), method="POST")
+
+
 def _metro_z_gtfs(zip_gtfs: bytes) -> bytes:
     # Ze stops.txt tylko stacje metra (location_type 1) i ich wejścia (2); cały GTFS ma ok. 100 MB.
     with zipfile.ZipFile(io.BytesIO(zip_gtfs)) as z:
@@ -85,6 +97,7 @@ ZRODLA = {
     "um-aed": ("um-aed.json", lambda: _portal("get_scb_lokalizacja_defibrylatorow"), None),
     "um-toalety": ("um-toalety.json", lambda: _portal("get_m_toalety"), None),
     "rprm-sor": ("rprm-sor.csv", lambda: urllib.request.Request(RPRM), None),
+    "osm-przychodnie": ("osm-przychodnie.json", _overpass, None),
 }
 
 

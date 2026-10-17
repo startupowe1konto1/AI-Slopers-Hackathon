@@ -31,6 +31,12 @@ ZRODLA = {
     "um-aed": (zrodla.aed, "m.st. Warszawa, defibrylatory AED", "CC BY", KATALOG + "7bc32ffc-c2ac-4d32-83c9-b6f7a0b38de8"),
     "um-toalety": (zrodla.toalety, "m.st. Warszawa, toalety publiczne", "CC BY", KATALOG + "59485767-5566-4cb6-9545-a9053efca4ff"),
     "rprm-sor": (zrodla.sor, "Rejestr SOR (rprm.ezdrowie.gov.pl)", "CC BY 4.0", "https://rprm.ezdrowie.gov.pl/"),
+    "osm-przychodnie": (
+        zrodla.przychodnie,
+        "OpenStreetMap: przychodnie, gabinety i szpitale (Overpass API)",
+        "ODbL",
+        "https://www.openstreetmap.org/copyright",
+    ),
 }
 
 
