@@ -4,7 +4,7 @@ import type { Map as MapLibreMap } from 'maplibre-gl';
 import type { Punkt } from '../../contracts';
 import { wczytajPunkty, zrodlaPaczki } from './najblizsze';
 import { pokazOdcinek } from './trasa';
-import { dodajWarstwy } from './warstwy';
+import { dodajWarstweRodzaju, dodajWarstwy } from './warstwy';
 
 vi.mock('maplibre-gl', () => ({ Popup: class {} }));
 vi.mock('./najblizsze', () => ({ wczytajPunkty: vi.fn(), zrodlaPaczki: vi.fn() }));
@@ -106,4 +106,30 @@ it('bez paczki mapa zostaje bez punktów, bez wyjątku', async () => {
   await poczekaj();
   expect(zrodla.size).toBe(0);
   sprzatnij();
+});
+
+it('warstwa jednego rodzaju: tylko jego punkty; PSP w klastrach; sprzątanie usuwa wszystko', async () => {
+  vi.mocked(wczytajPunkty).mockResolvedValue(P);
+  vi.mocked(zrodlaPaczki).mockResolvedValue({});
+  const a = atrapa();
+  const sprzatnijAed = dodajWarstweRodzaju(a.map, 'aed');
+  const sprzatnijPsp = dodajWarstweRodzaju(a.map, 'schronienie_psp');
+  await poczekaj();
+  expect(a.zrodla.get('punkty-aed')!.data.features.map((f) => f.properties?.nazwa)).toEqual(['B']);
+  expect(a.zrodla.get('punkty-aed')!.cluster).toBeUndefined();
+  expect(a.zrodla.get('punkty-schronienie_psp')!.cluster).toBe(true);
+  sprzatnijAed();
+  sprzatnijPsp();
+  expect(a.zrodla.size).toBe(0);
+  expect(a.warstwy.size).toBe(0);
+  expect(a.subskrypcje.every((s) => s.unsubscribe.mock.calls.length === 1)).toBe(true);
+});
+
+it('wyłączenie kafelka przed wczytaniem danych nie dodaje warstwy', async () => {
+  vi.mocked(wczytajPunkty).mockResolvedValue(P);
+  vi.mocked(zrodlaPaczki).mockResolvedValue({});
+  const a = atrapa();
+  dodajWarstweRodzaju(a.map, 'aed')();
+  await poczekaj();
+  expect(a.zrodla.size).toBe(0);
 });

@@ -1,6 +1,6 @@
 import type { Modul } from '../../contracts';
 import { Panel } from './Panel';
-import { dodajWarstwy } from './warstwy';
+import { kafelki } from './kafelki';
 import { wskazowkiPunktow } from './wskazowki';
 
 // Interfejs dla innych modułów (SPEC.md §5), np. karta do wydruku O2.
@@ -10,8 +10,7 @@ export const modul: Modul = {
   id: 'punkty',
   nazwa: 'Pomoc',
   Panel,
-  dodajWarstwy,
   wskazowki: wskazowkiPunktow,
-  // Atrapa z V1. Kafelki: P4.
-  kafelki: [],
+  // Mapa pusta na starcie: punkty tylko z kafelków.
+  kafelki,
 };
