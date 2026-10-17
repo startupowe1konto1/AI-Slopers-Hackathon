@@ -27,5 +27,5 @@ OUT.write_text(json.dumps({"type": "FeatureCollection", "features": [{
     "type": "Feature",
     "geometry": {"type": g["type"], "coordinates": zaokraglij(g["coordinates"])},
     "properties": {"udzial_powierzchni_miasta": round(udzial, 4)},
-}]}, separators=(",", ":")), encoding="utf-8")
+}]}, separators=(",", ":")), encoding="utf-8", newline="\n")
 print("strefy syren analogowych:", f"{udzial:.1%} powierzchni miasta,", OUT.stat().st_size, "B")
