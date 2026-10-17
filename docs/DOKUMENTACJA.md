@@ -9,9 +9,9 @@ Ten dokument spełnia wymóg regulaminu (§4 ust. 6): wykorzystane dane miejskie
 | Link | Adres |
 |---|---|
 | Repozytorium | https://github.com/startupowe1konto1/AI-Slopers-Hackathon |
-| Pełna wersja | **DO UZUPEŁNIENIA** (`https://<app>.pages.dev/`) |
-| Wersja offline | **DO UZUPEŁNIENIA** (`https://<app>.pages.dev/?offline=1`) |
-| Prezentacja | **DO UZUPEŁNIENIA** (`docs/pitch/prezentacja.pptx`) |
+| Pełna wersja | https://warszawa-kryzys.startupaplikujmy.workers.dev/ |
+| Wersja offline | https://warszawa-kryzys.startupaplikujmy.workers.dev/?offline=1 |
+| Prezentacja | **DO UZUPEŁNIENIA** (HTML w `docs/pitch/`) |
 
 Szczegóły projektu: [SPEC.md](SPEC.md) (specyfikacja), [PLAN.md](PLAN.md) (plan prac), [HANDOFF.md](../HANDOFF.md) (koncepcja i uzasadnienia).
 
@@ -118,14 +118,14 @@ Wszystkie biblioteki są open source z licencją, która pozwala na użycie kome
 | Najbliższe punkty | `kdbush`, `geokdbush` (w przeglądarce) | ISC |
 | Przetwarzanie danych | Python, `uv`, skrypty w `pipeline/` | **DO UZUPEŁNIENIA** (biblioteki z `pipeline/pyproject.toml`) |
 | Analiza syren | Python, `geopandas`, `rasterio` (`dane/soia-warszawa/`) | BSD-3-Clause |
-| Proxy na żywo | TypeScript w `server/live/`, Cloudflare Pages Functions | — |
+| Proxy na żywo | TypeScript w `server/live/`, Cloudflare Worker | — |
 | Testy | Vitest, Playwright | MIT, Apache-2.0 |
 | Lint | oxlint | MIT |
-| Hosting | Cloudflare Pages (darmowy plan) | usługa |
+| Hosting | Cloudflare Workers ze statycznymi plikami (darmowy plan) | usługa |
 
 ### Architektura w jednym akapicie
 
-Skrypty w Pythonie liczą z góry wyniki dla każdego adresu (klasa syreny, najbliższe punkty, przystanki) i zapisują je jako paczkę JSON. Service worker trzyma aplikację i paczkę w pamięci przeglądarki, a mapa jest jednym plikiem `pmtiles` w OPFS. Telefon tylko odczytuje gotowe wyniki, więc działa bez sieci. Dane na żywo idą przez proxy na Cloudflare, które trzyma klucz API miasta. Schemat: [SPEC.md, sekcja 4](SPEC.md#4-architektura).
+Skrypty w Pythonie liczą z góry wyniki dla każdego adresu (klasa syreny, najbliższe punkty, przystanki) i zapisują je jako paczkę JSON. Service worker trzyma aplikację i paczkę w pamięci przeglądarki, a mapa jest jednym plikiem `pmtiles` w OPFS. Telefon tylko odczytuje gotowe wyniki, więc działa bez sieci. Dane na żywo idą przez proxy na Cloudflare Worker, który trzyma klucz API miasta. Schemat: [SPEC.md, sekcja 4](SPEC.md#4-architektura).
 
 ### Uruchomienie i testy
 
