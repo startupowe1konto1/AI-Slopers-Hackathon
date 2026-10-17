@@ -46,8 +46,8 @@ Adresów Kasi nie da się wpisać do telefonu z prezentacji automatycznie. Aplik
    | praca | rondo Ignacego Daszyńskiego 1, Wola |
    | bliska osoba | ul. Grochowska 200, Praga-Południe |
 
-   To adresy testowe aplikacji. Dopóki O2 nie scali wyszukiwania w pełnej paczce, aplikacja zna tylko te trzy.
-3. Pobierz paczkę offline w telefonie.
+   Najpierw dom: bez niego przycisk „Zapisz” jest nieaktywny. Bez domu i pracy karta Dotarcie do bliskich jest szara.
+3. Pobierz paczkę offline w telefonie, a potem przeładuj ramkę raz z siecią (np. odśwież prezentację z `?edycja=1`). To obejście znanego błędu: przy pierwszym wejściu plik adresów nie zapisuje się w paczce i bez sieci karta Syreny jest szara. Sprawdź z wyłączonym Wi-Fi, że karta Syreny jest zielona.
 4. Otwórz prezentację jeszcze raz pod tym samym adresem, ale bez `?edycja=1`. Po kliknięciu w telefon fokus wraca do prezentacji po 3 s, więc pilot dalej działa.
 
 Przeglądarka zapamiętuje dane ramki osobno dla każdego adresu prezentacji. Na pitchu otwieraj ją zawsze tak samo (ten sam laptop, ta sama przeglądarka, ten sam adres, np. http://127.0.0.1:8765/). Adresy wpisane w zwykłej karcie aplikacji nie pojawią się w telefonie na slajdzie, i odwrotnie.
