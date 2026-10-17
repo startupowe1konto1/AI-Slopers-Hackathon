@@ -1,0 +1,42 @@
+{
+  "name": "warszawa-tryb-kryzysowy",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc -b",
+    "test": "vitest run",
+    "test:e2e": "playwright test",
+    "lint": "oxlint"
+  },
+  "dependencies": {
+    "@protomaps/basemaps": "^5.7.2",
+    "geokdbush": "^2.1.0",
+    "idb-keyval": "^6.3.0",
+    "kdbush": "^4.1.0",
+    "maplibre-gl": "^6.14.0",
+    "pmtiles": "^4.5.0",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^5.20261016.1",
+    "@playwright/test": "^1.64.1",
+    "@testing-library/react": "^16.3.3",
+    "@types/geokdbush": "^1.1.5",
+    "@types/node": "^24.13.3",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.7",
+    "@vitejs/plugin-react": "^6.1.1",
+    "fake-indexeddb": "^6.2.6",
+    "jsdom": "^29.1.1",
+    "oxlint": "^1.81.0",
+    "typescript": "~6.0.2",
+    "vite": "^8.3.0",
+    "vite-plugin-pwa": "^2.0.0",
+    "vitest": "^5.0.5"
+  }
+}

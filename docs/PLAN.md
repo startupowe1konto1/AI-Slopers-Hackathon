@@ -129,7 +129,7 @@ Gotowe, gdy: 3 osoby mają dostęp, każdy ma działający klucz (`curl` z SPEC.
 **Pliki:** utwórz wszystkie pliki O1 z mapy plików poza `src/map/*`, `src/offline/paczka.ts`, `tests/e2e/`.
 
 **Interfejsy:**
-- Produkuje: `src/contracts.ts` (SPEC.md §5, dosłownie), `src/modules/index.ts` z `export const moduly: Modul[]`, `useSiec()`, `useMiejsca()`, `fetchLive` z `src/offline/live-cache.ts`, middleware `/api/live/:nazwa` w dev.
+- Produkuje: `src/contracts.ts` (SPEC.md §5, dosłownie), `src/modules/index.ts` z `export const moduly: Modul[]`, `useSiec()`, `useMiejsca(): { miejsca, gotowe }`, `fetchLive` z `src/offline/live-cache.ts`, middleware `/api/live/:nazwa` w dev.
 
 - [ ] **Krok 1: projekt i zależności (wszystkie od razu)**
   ```bash
@@ -915,7 +915,8 @@ Gotowe, gdy: po „Pobierz paczkę” i przełączeniu w Offline strona i mapa d
 - [ ] **Krok 2: `server/portal.ts`**
   ```ts
   export class BladPortalu extends Error {
-    constructor(public rodzaj: 'klucz_lub_usluga' | 'timeout' | 'schemat', msg: string) { super(msg); }
+    rodzaj: 'klucz_lub_usluga' | 'timeout' | 'schemat';
+    constructor(rodzaj: BladPortalu['rodzaj'], msg: string) { super(msg); this.rodzaj = rodzaj; }
   }
 
   export async function portal(zbior: string, body: object, token: string | undefined): Promise<unknown> {

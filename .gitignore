@@ -6,3 +6,13 @@ node_modules/
 *.pmtiles
 apiKey.txt*
 dane/psp-schronienia/
+
+# Vite
+node_modules/
+dist/
+dist-ssr/
+dev-dist/
+*.local
+*.log
+test-results/
+playwright-report/

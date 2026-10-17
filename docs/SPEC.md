@@ -132,7 +132,7 @@ export type Modul = {
 - `src/modules/syreny/index.ts`: `wynikSyreny(adresId: string): Promise<WynikSyreny | null>`.
 - `src/modules/punkty/index.ts`: `najblizsze(wsp: Wsp, rodzaj: RodzajPunktu, n: number): Promise<Punkt[]>`.
 - `src/offline/siec.ts`: `useSiec(): { online: boolean; wymuszonyOffline: boolean }`.
-- `src/app/miejsca.ts`: `useMiejsca(): MiejsceUzytkownika[]`.
+- `src/app/miejsca.ts`: `useMiejsca(): { miejsca: MiejsceUzytkownika[]; gotowe: boolean }` (`gotowe` = odczytano IndexedDB).
 
 Format plików w `public/pack/<moduł>/` ustala właściciel modułu. Każdy folder ma `meta.json`: `{ modul, rekordy, zrodla: Record<string, Zrodlo> }`.
 

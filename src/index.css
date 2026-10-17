@@ -1,0 +1,51 @@
+:root {
+  --tlo: #ffffff;
+  --tekst: #111827;
+  --przygaszony: #6b7280;
+  --linia: #e5e7eb;
+  --akcent: #b91c1c;
+  --akcent-tlo: #fef2f2;
+  --ok: #15803d;
+  --uwaga: #b45309;
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  color: var(--tekst);
+  background: #f3f4f6;
+  -webkit-font-smoothing: antialiased;
+}
+* { box-sizing: border-box; }
+body { margin: 0; }
+button { font: inherit; cursor: pointer; }
+input { font: inherit; }
+
+.aplikacja {
+  max-width: 480px; height: 100dvh; margin: 0 auto; background: var(--tlo);
+  display: grid; grid-template-rows: auto minmax(180px, 1fr) auto auto;
+  box-shadow: 0 0 24px rgb(0 0 0 / 0.08);
+}
+.pasek { display: flex; align-items: center; gap: 8px; padding: 10px 14px; border-bottom: 1px solid var(--linia); }
+.pasek select { flex: 1; min-width: 0; padding: 6px 8px; border: 1px solid var(--linia); border-radius: 8px; background: #fff; }
+.siec { font-size: 12px; padding: 4px 8px; border-radius: 999px; white-space: nowrap; }
+.siec.online { background: #ecfdf5; color: var(--ok); }
+.siec.offline { background: var(--akcent-tlo); color: var(--akcent); }
+.mapa { position: relative; min-height: 180px; background: #e8eef0; }
+.mapa > div { position: absolute; inset: 0; }
+.panel { max-height: 42dvh; overflow: auto; padding: 14px; border-top: 1px solid var(--linia); }
+.menu { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--linia); }
+.menu button { padding: 12px 4px; min-height: 48px; border: 0; background: #fff; color: var(--przygaszony); font-size: 14px; }
+.menu button[aria-pressed='true'] { color: var(--akcent); font-weight: 600; box-shadow: inset 0 3px 0 var(--akcent); }
+.w-budowie { color: var(--przygaszony); }
+
+.onboarding { padding: 20px 16px; overflow: auto; }
+.onboarding h1 { font-size: 22px; margin: 0 0 6px; }
+.onboarding p { color: var(--przygaszony); margin: 0 0 16px; }
+.pole { position: relative; margin-bottom: 14px; }
+.pole label { display: block; font-weight: 600; margin-bottom: 4px; }
+.pole input { width: 100%; padding: 10px 12px; border: 1px solid var(--linia); border-radius: 8px; }
+.pole .wybrany { font-size: 13px; color: var(--ok); margin-top: 4px; }
+.podpowiedzi { position: absolute; z-index: 5; left: 0; right: 0; margin: 2px 0 0; padding: 0; list-style: none; background: #fff; border: 1px solid var(--linia); border-radius: 8px; box-shadow: 0 6px 16px rgb(0 0 0 / 0.08); }
+.podpowiedzi li { padding: 10px 12px; cursor: pointer; }
+.podpowiedzi li:hover, .podpowiedzi li[aria-selected='true'] { background: var(--akcent-tlo); }
+.przycisk { width: 100%; padding: 12px; border: 0; border-radius: 8px; background: var(--akcent); color: #fff; font-weight: 600; }
+.przycisk:disabled { opacity: 0.5; cursor: default; }
+.przycisk.drugi { background: #fff; color: var(--akcent); border: 1px solid var(--akcent); margin-top: 10px; }
+.stopka { font-size: 11px; color: var(--przygaszony); padding: 6px 14px; border-top: 1px solid var(--linia); }
