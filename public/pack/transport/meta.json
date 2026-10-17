@@ -1,0 +1,12 @@
+{
+ "modul": "transport",
+ "rekordy": 4572,
+ "zrodla": {
+  "gtfs-ztm": {
+   "nazwa": "GTFS Warszawa (mkuran.pl, wersja 2026-10-17 00:15:22), źródło nieoficjalne, na podstawie danych ZTM",
+   "licencja": "do weryfikacji (dane ZTM; GTFS: Mikołaj Kuranowski)",
+   "url": "https://mkuran.pl/gtfs/",
+   "pobrano": "2026-10-17T15:50:31+02:00"
+  }
+ }
+}

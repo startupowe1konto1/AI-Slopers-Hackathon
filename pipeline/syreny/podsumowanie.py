@@ -89,5 +89,5 @@ if __name__ == "__main__":
         *[f"| {d} | {liczba(r.adresy)} | {proc(r.normalnie_65)} | {proc(r.blackout_65)} | {proc(r.blackout_65_dolne)} | {proc(r.normalnie_75)} | {proc(r.blackout_75)} |" for d, r in dz.iterrows()],
         "",
     ]
-    (Path(__file__).parent / "WYNIKI.md").write_text("\n".join(linie), encoding="utf-8")
+    (Path(__file__).parent / "WYNIKI.md").write_text("\n".join(linie), encoding="utf-8", newline="\n")
     print("\n".join(linie[:14]))

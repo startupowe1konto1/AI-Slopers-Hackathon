@@ -11,5 +11,5 @@ for meta in sorted(PACK.glob("*/meta.json")):
         pliki.append({"sciezka": f.relative_to(PACK).as_posix(), "bajty": f.stat().st_size, "modul": m["modul"]})
 teraz = datetime.now(timezone.utc).isoformat(timespec="seconds")
 (PACK / "manifest.json").write_text(json.dumps(
-    {"wersja": teraz[:16], "zbudowano": teraz, "pliki": pliki, "zrodla": zrodla}, ensure_ascii=False, indent=1), encoding="utf-8")
+    {"wersja": teraz[:16], "zbudowano": teraz, "pliki": pliki, "zrodla": zrodla}, ensure_ascii=False, indent=1), encoding="utf-8", newline="\n")
 print(len(pliki), "plików")

@@ -5,7 +5,7 @@ from validate import bledy
 def zapisz(pack, sciezka, dane):
     f = pack / sciezka
     f.parent.mkdir(parents=True, exist_ok=True)
-    f.write_text(json.dumps(dane, ensure_ascii=False), encoding="utf-8")
+    f.write_text(json.dumps(dane, ensure_ascii=False), encoding="utf-8", newline="\n")
 
 
 def manifest(pack):

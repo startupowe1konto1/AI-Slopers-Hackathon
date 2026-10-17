@@ -1,8 +1,10 @@
 import type { Modul } from '../../contracts';
+import { Panel } from './Panel';
 
-// Atrapa ze szkieletu. Właściciel modułu podmienia ją w swoim folderze.
+export { trasyMin } from './trasy';
+
 export const modul: Modul = {
   id: 'transport',
   nazwa: 'Dojazd',
-  Panel: () => <p className="w-budowie">Moduł w budowie</p>,
+  Panel,
 };

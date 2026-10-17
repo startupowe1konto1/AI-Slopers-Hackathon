@@ -3,12 +3,14 @@ import { cleanup, fireEvent, render, screen, within } from '@testing-library/rea
 import type { Punkt } from '../../contracts';
 import { najblizsze, zrodlaPaczki } from './najblizsze';
 import { Panel } from './Panel';
+import { pokazOdcinek } from './trasa';
 
 vi.mock('./najblizsze', async (oryginal) => ({
   ...(await oryginal<typeof import('./najblizsze')>()),
   najblizsze: vi.fn(),
   zrodlaPaczki: vi.fn(),
 }));
+vi.mock('./trasa', () => ({ pokazOdcinek: vi.fn() }));
 
 const DOM = { lat: 52.2385, lon: 20.9131 };
 const PSP: Punkt[] = [
@@ -32,7 +34,7 @@ it('pokazuje 3 najbliższe miejsca schronienia według PSP ze źródłem, datą 
   const lista = await screen.findByTestId('lista-punktow');
   const pozycje = within(lista).getAllByRole('listitem');
   expect(pozycje).toHaveLength(3);
-  expect(najblizsze).toHaveBeenCalledWith(DOM, 'schronienie_psp', 3);
+  expect(najblizsze).toHaveBeenCalledWith(DOM, 'schronienie_psp', 3, false);
   expect(pozycje[0].textContent).toContain('Garaż podziemny');
   expect(pozycje[0].textContent).toContain('ul. Powstańców Śląskich 12');
   expect(pozycje[0].textContent).toContain('Całodobowa');
@@ -49,8 +51,33 @@ it('zakładka zmienia rodzaj punktu', async () => {
   render(<Panel miejsca={[]} wybrane={DOM} online />);
   fireEvent.click(screen.getByRole('tab', { name: /AED/ }));
   const lista = await screen.findByTestId('lista-punktow');
-  expect(najblizsze).toHaveBeenLastCalledWith(DOM, 'aed', 3);
+  expect(najblizsze).toHaveBeenLastCalledWith(DOM, 'aed', 3, false);
   expect(within(lista).queryByRole('link')).toBeNull();
+});
+
+it('filtr „Tylko całodobowe” na zakładkach PSP i AED', async () => {
+  render(<Panel miejsca={[]} wybrane={DOM} online />);
+  await screen.findByTestId('lista-punktow');
+  fireEvent.click(screen.getByRole('checkbox', { name: 'Tylko całodobowe' }));
+  await screen.findByTestId('lista-punktow');
+  expect(najblizsze).toHaveBeenLastCalledWith(DOM, 'schronienie_psp', 3, true);
+  fireEvent.click(screen.getByRole('tab', { name: /AED/ }));
+  expect(najblizsze).toHaveBeenLastCalledWith(DOM, 'aed', 3, true);
+  fireEvent.click(screen.getByRole('tab', { name: /Metro/ }));
+  expect(screen.queryByRole('checkbox', { name: 'Tylko całodobowe' })).toBeNull();
+  expect(najblizsze).toHaveBeenLastCalledWith(DOM, 'metro', 3, false);
+});
+
+it('kierunek do punktu i odcinek na mapie', async () => {
+  const { unmount } = render(<Panel miejsca={[]} wybrane={DOM} online />);
+  const pozycje = within(await screen.findByTestId('lista-punktow')).getAllByRole('listitem');
+  expect(pozycje[0].textContent).toContain('Kierunek: północ');
+  // odcinek do najbliższego bez ruszania mapy, po kliknięciu: do wybranego z dopasowaniem widoku
+  expect(pokazOdcinek).toHaveBeenLastCalledWith({ od: DOM, do: PSP[0] }, false);
+  fireEvent.click(within(pozycje[1]).getByRole('button', { name: 'Pokaż na mapie' }));
+  expect(pokazOdcinek).toHaveBeenLastCalledWith({ od: DOM, do: PSP[1] }, true);
+  unmount();
+  expect(pokazOdcinek).toHaveBeenLastCalledWith(null, false);
 });
 
 it('brak danych: komunikat i sprawdzone źródło', async () => {

@@ -64,7 +64,7 @@ wrazliwosc = [wariant(poprawka + dp) for dp in (-1.0, 0.0, 1.0)]
 b = tylko_cyfrowe(poprawka)
 
 znaki = lambda v: "".join(map(str, v))
-(OUT / "syreny.json").write_text(json.dumps({"n": znaki(n), "b": znaki(b), "p": znaki(analog.astype(int))}), encoding="utf-8")
+(OUT / "syreny.json").write_text(json.dumps({"n": znaki(n), "b": znaki(b), "p": znaki(analog.astype(int))}), encoding="utf-8", newline="\n")
 (OUT / "meta.json").write_text(json.dumps({
     "modul": "syreny", "rekordy": len(n),
     "zrodla": {"soia": {"nazwa": "KG PSP, SOIA, wersja danych 2026.05 (Zenodo 10.5281/zenodo.21921103); przycięte do granic m.st. Warszawy",
@@ -83,5 +83,5 @@ znaki = lambda v: "".join(map(str, v))
         "adresy_przyblizone": int(analog.sum()),
         "wrazliwosc_tylko_cyfrowe": wrazliwosc,
     },
-}, ensure_ascii=False, indent=1), encoding="utf-8")
+}, ensure_ascii=False, indent=1), encoding="utf-8", newline="\n")
 print("syreny:", len(n), "przybliżone:", int(analog.sum()), "poprawka:", poprawka)

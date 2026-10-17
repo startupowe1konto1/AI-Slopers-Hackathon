@@ -16,10 +16,10 @@ pack = {
     "u": [ui[u] for u in a["ulica"]], "nr": a["numer"].tolist(), "dz": [di[d] for d in a["dzielnica"]],
     "lat": a["lat"].round(6).tolist(), "lon": a["lon"].round(6).tolist(),
 }
-(OUT / "adresy.json").write_text(json.dumps(pack, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+(OUT / "adresy.json").write_text(json.dumps(pack, ensure_ascii=False, separators=(",", ":")), encoding="utf-8", newline="\n")
 (OUT / "meta.json").write_text(json.dumps({
     "modul": "adresy", "rekordy": len(a),
     "zrodla": {"wfs-adresy": {"nazwa": "m.st. Warszawa, WFS PUNKTY_ADRESOWE_WGS84", "licencja": "CC BY",
                                "url": "https://wfs.um.warszawa.pl/serwis", "pobrano": "2026-10-17T14:28:00+02:00"}},
-}, ensure_ascii=False, indent=1), encoding="utf-8")
+}, ensure_ascii=False, indent=1), encoding="utf-8", newline="\n")
 print("adresy:", len(a))
