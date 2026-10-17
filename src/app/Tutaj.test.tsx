@@ -16,6 +16,16 @@ vi.mock('idb-keyval', () => ({
 vi.mock('../modules/adresy', () => ({ znajdzAdres: vi.fn(async () => []), najblizszyAdres: vi.fn() }));
 vi.mock('../offline/paczka', () => ({ stanPaczki: vi.fn(async () => null), pobierzPaczke: vi.fn() }));
 vi.mock('../map/MapView', () => ({ MapView: () => null }));
+// Ekran „Sprawdzam połączenie…” (V3) ma własny test; tu od razu przechodzi dalej, żeby testować pasek.
+vi.mock('./Polaczenie', async () => {
+  const { useEffect } = await import('react');
+  return {
+    Polaczenie: ({ onGotowe }: { onGotowe: (p: { siec: boolean; api: boolean; paczka: null }) => void }) => {
+      useEffect(() => onGotowe({ siec: true, api: true, paczka: null }), [onGotowe]);
+      return null;
+    },
+  };
+});
 vi.mock('../modules', () => ({ moduly: [{ id: 'syreny', nazwa: 'Syreny', Panel: () => <p>Panel</p> }] }));
 
 const grochowska: Adres = { id: '1', ulica: 'Grochowska', numer: '200', dzielnica: 'Praga-Południe', lat: 52.2457, lon: 21.0874 };
