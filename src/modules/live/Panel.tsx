@@ -28,15 +28,16 @@ const KLUCZ_DYMU = 'live:dym';
 // undefined = ładowanie, null = brak danych i brak zapisu (fetchLive)
 type Stan<T> = StanLive<T> | null | undefined;
 
+// z przyimkiem: „ze wschodu”, ale „z zachodu”
 const Z_KIERUNKU: Record<string, string> = {
-  N: 'północy',
-  NE: 'północnego wschodu',
-  E: 'wschodu',
-  SE: 'południowego wschodu',
-  S: 'południa',
-  SW: 'południowego zachodu',
-  W: 'zachodu',
-  NW: 'północnego zachodu',
+  N: 'z północy',
+  NE: 'z północnego wschodu',
+  E: 'ze wschodu',
+  SE: 'z południowego wschodu',
+  S: 'z południa',
+  SW: 'z południowego zachodu',
+  W: 'z zachodu',
+  NW: 'z północnego zachodu',
 };
 
 const rowerow = (n: number) => {
@@ -216,7 +217,7 @@ export function Panel({ miejsca, wybrane, online }: ModulProps) {
                   <div>
                     <p className="live-liczby">
                       {stacja.predkoscMs > 0
-                        ? `Wiatr z ${Z_KIERUNKU[kierunekNazwa(stacja.kierunekDeg)]}, ${liczba(stacja.predkoscMs)} m/s`
+                        ? `Wiatr ${Z_KIERUNKU[kierunekNazwa(stacja.kierunekDeg)]}, ${liczba(stacja.predkoscMs)} m/s`
                         : 'Bezwietrznie (0 m/s)'}
                     </p>
                     <p className="live-info">

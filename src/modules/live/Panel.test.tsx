@@ -177,3 +177,9 @@ it('dym przy bezwietrznej pogodzie: punkt bez stożka i wyjaśnienie', async () 
   expect(await screen.findByText('Bezwietrznie: nie da się wskazać, dokąd wiatr niesie dym.')).toBeTruthy();
   await waitFor(() => expect(vi.mocked(ustawDym).mock.calls.at(-1)?.[1]).toBeNull());
 });
+
+it('wiatr ze wschodu: poprawny przyimek przed „wschodu”', async () => {
+  odpowiedzi(stan([poj('9', 'tramwaj', 0.001)]), stan([{ ...WIATR[0], kierunekDeg: 90 }]));
+  panel();
+  expect(await screen.findByText('Wiatr ze wschodu, 1,3 m/s')).toBeTruthy();
+});
