@@ -4,9 +4,9 @@
 
 **Cel:** strona PWA dla mieszkańca Warszawy, która odpowiada na pytania o syreny, najbliższą pomoc, dojazd przy blackoucie i sytuację na żywo, i działa bez sieci.
 
-**Architektura:** Vite + React + TS z modułami w osobnych folderach. Dane liczone z góry w Pythonie trafiają do `public/pack/`. Proxy na żywo to czyste funkcje `(Request, env) => Response` w `server/`, podpięte jako Cloudflare Pages Functions i jako middleware w `vite dev`.
+**Architektura:** Vite + React + TS z modułami w osobnych folderach. Dane liczone z góry w Pythonie trafiają do `public/pack/`. Proxy na żywo to czyste funkcje `(Request, env) => Response` w `server/`, zarejestrowane w `server/live/index.ts`, obsługiwane przez Cloudflare Worker (`worker/index.ts`) i przez middleware w `vite dev`.
 
-**Stos:** Vite, React, TypeScript, vite-plugin-pwa, MapLibre GL JS, pmtiles, @protomaps/basemaps, kdbush + geokdbush, idb-keyval, Vitest, Playwright; Python 3.12 + uv + geopandas; Cloudflare Pages.
+**Stos:** Vite, React, TypeScript, vite-plugin-pwa, MapLibre GL JS, pmtiles, @protomaps/basemaps, kdbush + geokdbush, idb-keyval, Vitest, Playwright; Python 3.12 + uv + geopandas; Cloudflare Workers (statyczne pliki + `/api`).
 
 ## Ograniczenia globalne (obowiązują w każdym zadaniu)
 
@@ -19,9 +19,9 @@
 - Współrzędne w paczce mieszczą się w bbox Warszawy: lon 20.85–21.28, lat 52.09–52.37.
 - Aplikacja nie odpytuje WFS na żywo.
 
-## Zmiana względem rozmów: hosting na Cloudflare Pages
+## Zmiana względem rozmów: hosting na Cloudflare Workers
 
-Darmowy Vercel (Hobby) blokuje wdrożenia z commitów osób innych niż właściciel konta („Hobby teams do not support collaboration”). Przy 4 osobach i podglądach PR to blokada. Cloudflare Pages (darmowy) buduje każdą gałąź i każdy PR bez tego ograniczenia, a `functions/` daje proxy z kluczem. Ograniczenie: pojedynczy plik do 25 MiB, dlatego mapę wycinamy do zoomu 13 (sprawdzić rozmiar; jeśli przekroczy 25 MiB, plik idzie na Cloudflare R2). Kod proxy jest niezależny od hostingu (`server/`), więc powrót na Vercel to tylko inne adaptery.
+Darmowy Vercel (Hobby) blokuje wdrożenia z commitów osób innych niż właściciel konta („Hobby teams do not support collaboration”). Przy 4 osobach i podglądach PR to blokada. Cloudflare (darmowy) buduje każdy commit bez tego ograniczenia. Projekt jest **Workerem ze statycznymi plikami** (`wrangler.jsonc`): pliki z `dist/` serwuje Cloudflare, a `/api/*` trafia do `worker/index.ts`, który woła handlery z rejestru `server/live/index.ts`. Ograniczenie: pojedynczy plik do 25 MiB; mapa do zoomu 13 ma 12 MB. Kod proxy jest niezależny od hostingu (`server/`).
 
 ---
 
@@ -74,7 +74,8 @@ src/modules/punkty/                 O3  najblizsze(), Panel, warstwy
 src/modules/live/                   O4  Panel, warstwy, fetchLive()
 server/portal.ts                    O4  wywołanie API miasta
 server/live/*.ts                    O4  pojazdy, wiatr, powietrze, utrudnienia, rowery
-functions/api/live/[nazwa].ts       O4  adapter Cloudflare Pages
+server/live/index.ts                O4  rejestr handlerów /api/live/<nazwa>
+worker/index.ts, wrangler.jsonc     O1  Cloudflare Worker (statyczne pliki + /api)
 pipeline/pyproject.toml             O2  środowisko uv
 pipeline/adresy|syreny|transport/   O2
 pipeline/punkty/                    O3
@@ -115,7 +116,7 @@ Przed PR: `git fetch && git rebase origin/main && npm run typecheck && npm test 
   ```
 - [ ] **Krok 2: klucze API.** Każda osoba generuje swój klucz na dane.um.warszawa.pl/pl/key-api i zapisuje w swoim `.env` jako `WARSAW_API_TOKEN=...`. Klucza nie wklejamy w czat ani do repo.
 - [ ] **Krok 3: dane PSP.** Surowy `psp_punkty_schronienia_warszawa_bbox.csv` przekaż O3 poza gitem (dysk). Ląduje w `dane/psp-schronienia/` (ignorowane przez git).
-- [ ] **Krok 4: Cloudflare Pages.** Dashboard → Workers & Pages → Create → Pages → Connect to Git → `AI-Slopers-Hackathon`. Build command: `npm run build`, output: `dist`, zmienna środowiskowa (Production i Preview): `WARSAW_API_TOKEN`, `NODE_VERSION=22`. Wdrożenie ruszy po scaleniu szkieletu.
+- [x] **Krok 4: Cloudflare Worker `warszawa-kryzys`** (zrobione). Ustawienia → Build: build command `npm run build`, deploy command `npx wrangler deploy`, buildy gałęzi innych niż produkcyjna: `npx wrangler versions upload` (daje link podglądu). Variables and Secrets: `WARSAW_API_TOKEN` jako Secret.
 - [ ] **Krok 5: ochrona `main`.** Settings → Branches → reguła dla `main`: wymagany PR, wymagany status `ci`.
 
 Gotowe, gdy: 3 osoby mają dostęp, każdy ma działający klucz (`curl` z SPEC.md §6 zwraca dane), projekt Cloudflare istnieje.
@@ -343,7 +344,7 @@ Gotowe, gdy: 3 osoby mają dostęp, każdy ma działający klucz (`curl` z SPEC.
   Expected: strona na `localhost:5173` pokazuje onboarding; po zapisaniu adresu testowego widać dolne menu z 4 modułami „Moduł w budowie”.
   PR `O1-A1: szkielet`, scal od razu po zielonym CI. Ogłoś zespołowi: „szkielet na main, róbcie rebase”.
 
-Gotowe, gdy: `main` jest zielony, wdrożony na Cloudflare Pages, a podgląd PR innej osoby buduje się automatycznie (sprawdź na pierwszym PR O2/O3/O4).
+Gotowe, gdy: `main` jest zielony, wdrożony na Cloudflare, a podgląd PR innej osoby buduje się automatycznie (sprawdź na pierwszym PR O2/O3/O4).
 
 ### O1-A2. Mapa Warszawy online (15:45–16:45)
 
@@ -356,7 +357,7 @@ Gotowe, gdy: `main` jest zielony, wdrożony na Cloudflare Pages, a podgląd PR i
   pmtiles extract https://build.protomaps.com/20261017.pmtiles public/map/warszawa.pmtiles --bbox=20.85,52.09,21.28,52.37 --maxzoom=13
   ls -lh public/map/warszawa.pmtiles
   ```
-  Expected: plik poniżej 25 MiB (limit Cloudflare Pages). Jeśli większy: zawęź bbox o 0.01° z każdej strony. Usuń `*.pmtiles` z `.gitignore` i dodaj plik do repo.
+  Expected: plik poniżej 25 MiB (limit Cloudflare na plik). Jeśli większy: zawęź bbox o 0.01° z każdej strony. Usuń `*.pmtiles` z `.gitignore` i dodaj plik do repo.
 - [ ] **Krok 2: fonty i sprite lokalnie** (mapa offline nie może ich pobierać z sieci):
   ```bash
   B=https://protomaps.github.io/basemaps-assets
@@ -907,7 +908,7 @@ Gotowe, gdy: po „Pobierz paczkę” i przełączeniu w Offline strona i mapa d
 
 ### O4-B1. Proxy na żywo (15:00–17:00)
 
-**Pliki:** `server/portal.ts`, `server/portal.test.ts`, `server/live/{pojazdy,wiatr}.ts`, `server/live/pojazdy.test.ts`, `functions/api/live/[nazwa].ts`, `dane/probki/`.
+**Pliki:** `server/portal.ts`, `server/portal.test.ts`, `server/live/{pojazdy,wiatr}.ts`, `server/live/pojazdy.test.ts`, `server/live/index.ts`, `dane/probki/`.
 
 **Interfejsy:** `GET /api/live/pojazdy` → `StanLive<Pojazd[]>`; `GET /api/live/wiatr` → `StanLive<Wiatr[]>`. Każdy `server/live/<nazwa>.ts` eksportuje `handler(req: Request, env: { WARSAW_API_TOKEN?: string }): Promise<Response>`.
 
@@ -972,17 +973,12 @@ Gotowe, gdy: po „Pobierz paczkę” i przełączeniu w Offline strona i mapa d
   }
   ```
 - [ ] **Krok 4: `server/live/wiatr.ts`** — `get_zom_pogoda` (pola: `lokalizacja, lat, lon, czas, pred_wiatru, kier_wiatru`) → `Wiatr[]` (`kierunekDeg` = `kier_wiatru`, kierunek, Z KTÓREGO wieje), `s-maxage=300`. Test na próbce.
-- [ ] **Krok 5: adapter Cloudflare** `functions/api/live/[nazwa].ts`
+- [ ] **Krok 5: rejestracja** w `server/live/index.ts` (plik istnieje od szkieletu; Worker i `vite dev` czytają ten sam rejestr):
   ```ts
-  import * as pojazdy from '../../../server/live/pojazdy';
-  import * as wiatr from '../../../server/live/wiatr';
+  import { handler as pojazdy } from './pojazdy';
+  import { handler as wiatr } from './wiatr';
 
-  const handlery: Record<string, typeof pojazdy> = { pojazdy, wiatr };
-
-  export const onRequestGet = async (ctx: { request: Request; params: { nazwa: string }; env: { WARSAW_API_TOKEN?: string } }) => {
-    const h = handlery[ctx.params.nazwa];
-    return h ? h.handler(ctx.request, ctx.env) : new Response('nie znaleziono', { status: 404 });
-  };
+  export const handlery: Record<string, Handler> = { pojazdy, wiatr };
   ```
   Każdy nowy handler (O4-C1) dopisujesz do `handlery`.
 - [ ] **Krok 6: sprawdzenie** `npm run dev` → `curl -s localhost:5173/api/live/pojazdy | head -c 300` → JSON z `dane` i `stanNa`. Na podglądzie Cloudflare to samo pod `/api/live/pojazdy`.

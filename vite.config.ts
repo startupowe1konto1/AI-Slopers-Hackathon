@@ -3,7 +3,7 @@ import { defineConfig, loadEnv, type Plugin } from 'vite';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
 
-// W `npm run dev` obsługuje /api/live/<nazwa> tymi samymi handlerami co Cloudflare (server/live/<nazwa>.ts).
+// W `npm run dev` obsługuje /api/live/<nazwa> tymi samymi handlerami co Worker (rejestr server/live/index.ts).
 function apiDev(env: Record<string, string>): Plugin {
   return {
     name: 'api-dev',
@@ -12,8 +12,10 @@ function apiDev(env: Record<string, string>): Plugin {
         const m = req.url?.match(/^\/api\/live\/([a-z]+)/);
         if (!m) return next();
         try {
-          const mod = await server.ssrLoadModule(`/server/live/${m[1]}.ts`);
-          const r: Response = await mod.handler(new Request(`http://localhost${req.url}`), env);
+          const { handlery } = await server.ssrLoadModule('/server/live/index.ts');
+          const handler = handlery[m[1]];
+          if (!handler) throw new Error('brak handlera');
+          const r: Response = await handler(new Request(`http://localhost${req.url}`), env);
           res.statusCode = r.status;
           r.headers.forEach((v, k) => res.setHeader(k, v));
           res.end(Buffer.from(await r.arrayBuffer()));

@@ -18,8 +18,8 @@ Strona internetowa (PWA) dla mieszkańca Warszawy na czas ataku i blackoutu. Odp
 **Forma demo:** strona w przeglądarce na laptopie, w widoku telefonu. Nie budujemy i nie testujemy wersji na telefon.
 
 **Dwa linki w prezentacji (pptx):**
-- `https://<app>.pages.dev/`: pełna wersja.
-- `https://<app>.pages.dev/?offline=1`: ta sama aplikacja z wymuszonym trybem offline (tylko paczka, „stan na …”).
+- `https://warszawa-kryzys.<konto>.workers.dev/`: pełna wersja.
+- `https://warszawa-kryzys.<konto>.workers.dev/?offline=1`: ta sama aplikacja z wymuszonym trybem offline (tylko paczka, „stan na …”).
 
 ## 2. Zakres
 
@@ -45,9 +45,9 @@ Strona internetowa (PWA) dla mieszkańca Warszawy na czas ataku i blackoutu. Odp
 | Przechowywanie | paczka danych: Cache Storage przez service worker; mapa: plik `warszawa.pmtiles` w OPFS, czytany przez `FileSource`; adresy użytkownika: IndexedDB (`idb-keyval`) |
 | Najbliższe punkty | liczone w przeglądarce (`kdbush` + `geokdbush`) |
 | Dane | Python, `uv`, skrypty w `pipeline/`, wynik w `public/pack/` |
-| Proxy na żywo | czyste funkcje w `server/live/` (TypeScript), adapter Cloudflare Pages Functions w `functions/`, w `vite dev` middleware; klucz w zmiennej `WARSAW_API_TOKEN` |
+| Proxy na żywo | czyste funkcje w `server/live/` (TypeScript), rejestr `server/live/index.ts`, obsługa przez Cloudflare Worker (`worker/index.ts`) i middleware w `vite dev`; klucz w zmiennej `WARSAW_API_TOKEN` |
 | Testy | Vitest (logika i walidacja paczki), Playwright (ścieżka Kasi z trybem offline) |
-| Hosting | Cloudflare Pages, podgląd dla każdego PR, wdrożenie z `main`. Vercel odpada: darmowy plan blokuje wdrożenia z commitów współpracowników |
+| Hosting | Cloudflare Worker ze statycznymi plikami (`wrangler.jsonc`), wdrożenie z `main`, link podglądu dla innych gałęzi. Vercel odpada: darmowy plan blokuje wdrożenia z commitów współpracowników |
 
 Wszystkie zależności npm instaluje O1 w szkielecie. Nowa zależność wchodzi tylko PR-em „kontrakt”.
 
@@ -64,7 +64,7 @@ Przeglądarka:
   „Pobierz paczkę”: pobiera wszystkie pliki z manifestu + pmtiles do OPFS
   moduły czytają dane tylko przez funkcje z własnego modułu i typy z contracts.ts
 
-functions/api/live/[nazwa].ts (Cloudflare) → server/live/*.ts ─> dane.um.warszawa.pl (POST, nagłówek Authorization), Veturilo GBFS
+worker/index.ts (Cloudflare, tylko /api/*) → server/live/index.ts → server/live/*.ts ─> dane.um.warszawa.pl (POST, nagłówek Authorization), Veturilo GBFS
    cache odpowiedzi 15–30 s; klucz nigdy nie trafia do przeglądarki
 ```
 
@@ -145,7 +145,7 @@ Format plików w `public/pack/<moduł>/` ustala właściciel modułu. Każdy fol
 | punkty | PSP (CSV, 8006, poza gitem), WFS `wfs:METRO_WEJSCIA`, `wfs:APTEKI`, portal: `get_scb_lokalizacja_defibrylatorow` (710), `get_m_toalety` (695), SOR z dane.gov.pl (zbiór 1642) | PSP lokalnie; reszta do pobrania |
 | transport | GTFS `mkuran.pl/gtfs/warsaw.zip` (autobusy, `route_type` 3) | do pobrania |
 | live | portal: `get_ztm_lokalizacja_pojazdow` (`type` 1 i 2), `get_zom_pogoda`, `get_bopipk_monitoring_jakosci_powietrza`, `get_bin_utrudnienia_drogowe`; Veturilo `gbfs.nextbike.net/maps/gbfs/v2/nextbike_vw/gbfs.json` | API działa (sprawdzone 14:20) |
-| mapa | `build.protomaps.com/20261017.pmtiles`, wycięty do bbox Warszawy, zoom do 13 (limit 25 MiB na plik w Cloudflare Pages) | do wycięcia |
+| mapa | `build.protomaps.com/20261017.pmtiles`, wycięty do bbox Warszawy, zoom do 13 (12 MB; limit Cloudflare 25 MiB na plik) | w repo: `public/map/` |
 
 **Zasady danych:**
 - Aplikacja nigdy nie pyta WFS na żywo. Wszystkie warstwy WFS pobieramy raz do `dane/`.
@@ -184,12 +184,12 @@ Proxy rozróżnia timeout, błąd schematu oraz „zły klucz lub usługa niedos
 | O1 Szkielet i offline | `src/app/`, `src/map/`, `src/offline/`, `src/contracts.ts`, `src/modules/index.ts`, `public/map/`, `vite.config.ts`, `package.json`, `.github/`, `CLAUDE.md`, `tests/e2e/` |
 | O2 Syreny, adresy, transport | `src/modules/{syreny,adresy,transport}/`, `pipeline/{syreny,adresy,transport}/`, `public/pack/{syreny,adresy,transport}/`, `pipeline/pyproject.toml` |
 | O3 Punkty pomocy | `src/modules/punkty/`, `pipeline/punkty/`, `public/pack/punkty/` |
-| O4 Na żywo i prezentacja | `src/modules/live/`, `server/`, `functions/`, `docs/pitch/`, `docs/DOKUMENTACJA.md`, prezentacja `.pptx` |
+| O4 Na żywo i prezentacja | `src/modules/live/`, `server/`, `docs/pitch/`, `docs/DOKUMENTACJA.md`, prezentacja `.pptx` |
 
 `pipeline/build_manifest.py` i `pipeline/validate.py` należą do O2. `docs/AI_USAGE.md` uzupełnia każdy.
 
 **Gałęzie:**
-- `main` jest zawsze do pokazania. Wdraża się automatycznie na Cloudflare Pages.
+- `main` jest zawsze do pokazania. Wdraża się automatycznie na Cloudflare.
 - Każdy pas to gałąź `<osoba>/<pas>-<temat>`, np. `o2/b-syreny-pipeline`, w osobnym `git worktree`.
 - PR do `main`: rebase na aktualny `main`, zielone CI, sprawdzony podgląd Cloudflare, scalenie przez squash.
 - PR „kontrakt” (zmiana pliku spoza własnych folderów) jest mały, osobny, oznaczony w tytule `[kontrakt]` i przeglądany przez O1.
@@ -216,7 +216,7 @@ Proxy rozróżnia timeout, błąd schematu oraz „zły klucz lub usługa niedos
 | Ryzyko | Sygnał | Plan B |
 |---|---|---|
 | Mapa offline (`pmtiles` w OPFS) | spike nie działa do 16:30 | offline: prosty podkład z WFS (granice dzielnic, ulice) + punkty; mapa wektorowa tylko online |
-| Plik `pmtiles` powyżej 25 MiB | błąd wdrożenia Cloudflare Pages | węższy bbox albo plik na Cloudflare R2 |
+| Plik `pmtiles` powyżej 25 MiB | błąd wdrożenia Cloudflare | węższy bbox albo plik na Cloudflare R2 |
 | WFS niestabilny | timeout | jedna kopia danych na starcie, aplikacja nie zależy od WFS |
 | Konflikty `package.json` przy 10 strumieniach | czerwone CI po scaleniu | zależności tylko w szkielecie i PR „kontrakt” |
 | API na żywo na sali | 500 lub brak sieci | cache proxy, „stan na …”, nagrane wideo |

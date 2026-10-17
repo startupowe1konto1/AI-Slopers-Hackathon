@@ -1,0 +1,13 @@
+{
+  // Cloudflare Worker: statyczna strona z dist/ + /api/live/* (proxy z kluczem API).
+  "name": "warszawa-kryzys",
+  "main": "./worker/index.ts",
+  "compatibility_date": "2026-10-07",
+  "assets": {
+    "directory": "./dist/",
+    "not_found_handling": "single-page-application",
+    "run_worker_first": ["/api/*"]
+  },
+  // WARSAW_API_TOKEN ustawiony w panelu jako Secret; deploy go nie nadpisuje.
+  "keep_vars": true
+}

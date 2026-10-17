@@ -5,7 +5,7 @@
 - Typy wspólne tylko z `src/contracts.ts`. Nie dodawaj zależności npm bez PR `[kontrakt]`.
 - Moduł UI = folder `src/modules/<moduł>/` z `index.tsx` eksportującym `modul: Modul`. Nie edytuj `src/modules/index.ts`.
 - Dane offline: skrypty w `pipeline/<moduł>/` (Python, `uv run --project pipeline ...`), wynik w `public/pack/<moduł>/` + `meta.json`. Na końcu `uv run --project pipeline python pipeline/build_manifest.py`.
-- Na żywo: handler `server/live/<nazwa>.ts` eksportuje `handler(req: Request, env: { WARSAW_API_TOKEN?: string }): Promise<Response>`. W `npm run dev` działa pod `/api/live/<nazwa>`.
+- Na żywo: handler `server/live/<nazwa>.ts` eksportuje `handler(req: Request, env: Env): Promise<Response>` i jest dopisany do rejestru `server/live/index.ts`. Działa pod `/api/live/<nazwa>` w `npm run dev` i na Cloudflare (Worker `worker/index.ts`).
 - Klucz API tylko w `.env` jako `WARSAW_API_TOKEN`. Nigdy w `src/`, logach, testach, commitach ani w czacie.
 - API miasta: `POST https://dane.um.warszawa.pl/api/action/get_<zbiór>`, nagłówek `Authorization: <klucz>`, body JSON. Zły klucz daje 500 „Service unavailable”, nie 401.
 - Dokumentacja pól API: `kontekst/dokumentacja-api/*_pa.json` i `*_pw.json` (czytaj jako `utf-8-sig`). Parser pisz na podstawie zapisanej próbki w `dane/probki/`, nie z pamięci.
