@@ -19,7 +19,8 @@ async function zrodloMapy(): Promise<string> {
   return `pmtiles://${plik.name}`;
 }
 
-export function MapView({ centrum, moduly }: { centrum: Wsp | null; moduly: Modul[] }) {
+// onMapa: mapa po załadowaniu stylu (karty i kafelki rysują na niej), null tuż przed usunięciem.
+export function MapView({ centrum, moduly, onMapa }: { centrum: Wsp | null; moduly: Modul[]; onMapa?: (m: MapLibreMap | null) => void }) {
   const kontener = useRef<HTMLDivElement>(null);
   const mapa = useRef<MapLibreMap | null>(null);
   const znacznik = useRef<Marker | null>(null);
@@ -47,12 +48,14 @@ export function MapView({ centrum, moduly }: { centrum: Wsp | null; moduly: Modu
         ],
         attributionControl: { compact: true },
       });
-      m.addControl(new NavigationControl({ showCompass: false }), 'top-right');
+      // Górę mapy zajmują kafelki warstw, więc przybliżanie jest na dole.
+      m.addControl(new NavigationControl({ showCompass: false }), 'bottom-right');
       m.on('error', (e) => console.error('[mapa]', e.error?.message ?? e));
       m.on('load', () => {
         for (const mod of moduly) {
           if (mod.dodajWarstwy) sprzatanie.push(mod.dodajWarstwy(m));
         }
+        onMapa?.(m);
         setGotowa(true);
       });
       mapa.current = m;
@@ -60,6 +63,7 @@ export function MapView({ centrum, moduly }: { centrum: Wsp | null; moduly: Modu
     return () => {
       anulowano = true;
       sprzatanie.forEach((f) => f());
+      onMapa?.(null);
       mapa.current?.remove();
       mapa.current = null;
     };

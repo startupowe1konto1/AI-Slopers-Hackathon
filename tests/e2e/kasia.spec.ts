@@ -1,7 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
 
-// Ścieżka Kasi (docs/SPEC.md §1, §10). Test szkieletu działa zawsze; testy modułów same się
-// włączają, gdy moduł trafi na main (atrapa „Moduł w budowie” = pominięcie z adnotacją).
+// Ścieżka Kasi (docs/SPEC.md §1, §10). Ekran główny V4: mapa, kafelki warstw i karty „Twoja sytuacja”
+// (atrapa karty ma tekst „Karta w budowie.”, prawdziwe karty podmieniają ją bez zmiany testu).
 
 async function onboarding(page: Page) {
   await page.goto('/');
@@ -16,13 +16,6 @@ async function onboarding(page: Page) {
 async function mapaGotowa(page: Page) {
   await expect(page.locator('.maplibregl-canvas')).toBeVisible();
   await expect(page.locator('.mapa-stan')).toHaveCount(0, { timeout: 60_000 });
-}
-
-async function otworzModul(page: Page, nazwa: string) {
-  await page.getByRole('navigation', { name: 'Moduły' }).getByRole('button', { name: nazwa }).click();
-  const panel = page.getByRole('region', { name: nazwa });
-  test.skip(await panel.getByText('Moduł w budowie').isVisible(), `moduł „${nazwa}” jeszcze nie jest na main`);
-  return panel;
 }
 
 test('szkielet: onboarding, paczka offline, mapa działa po odświeżeniu bez sieci', async ({ page, context }) => {
@@ -43,37 +36,21 @@ test('?offline=1 pokazuje tryb offline mimo sieci', async ({ page }) => {
   await mapaGotowa(page);
 });
 
-test('Syreny: wynik dla adresu, także offline', async ({ page, context }) => {
+test('Twoja sytuacja: 5 kart w kolejności, bez menu modułów', async ({ page }) => {
   await onboarding(page);
-  const panel = await otworzModul(page, 'Syreny');
-  await expect(panel.getByTestId('wynik-syreny')).toBeVisible();
-  await context.setOffline(true);
-  await page.reload();
-  await expect((await otworzModul(page, 'Syreny')).getByTestId('wynik-syreny')).toBeVisible();
+  const karty = page.getByRole('region', { name: 'Twoja sytuacja' }).locator('[data-testid^="karta-"]');
+  await expect(karty).toHaveCount(5, { timeout: 30_000 });
+  await expect(karty.first()).toHaveAttribute('data-testid', 'karta-syreny');
+  await expect(page.getByRole('navigation', { name: 'Moduły' })).toHaveCount(0);
 });
 
-test('Pomoc: 3 najbliższe punkty, także offline', async ({ page, context }) => {
+test('klik w kartę z trasą pokazuje opis trasy, drugi klik go chowa', async ({ page }) => {
   await onboarding(page);
-  const panel = await otworzModul(page, 'Pomoc');
-  const lista = panel.getByTestId('lista-punktow');
-  test.skip(!(await lista.isVisible({ timeout: 10_000 }).catch(() => false)), 'brak paczki punktów (O3-B1) na main');
-  await expect(lista.getByRole('listitem')).toHaveCount(3);
-  await context.setOffline(true);
-  await page.reload();
-  await expect((await otworzModul(page, 'Pomoc')).getByTestId('lista-punktow').getByRole('listitem')).toHaveCount(3);
-});
-
-test('Dojazd: karta dla pary adresów', async ({ page }) => {
-  await onboarding(page);
-  const panel = await otworzModul(page, 'Dojazd');
-  await expect(panel).not.toBeEmpty();
-});
-
-test('Na żywo: bez sieci nigdy pusty panel', async ({ page, context }) => {
-  await onboarding(page);
-  await otworzModul(page, 'Na żywo');
-  await context.setOffline(true);
-  await page.reload();
-  const panel = await otworzModul(page, 'Na żywo');
-  await expect(panel.getByText(/stan na|brak sieci/i).first()).toBeVisible();
+  const karta = page.getByTestId('karta-schronienie');
+  const glowna = karta.getByRole('button', { name: /miejsce schronienia według PSP/ });
+  await expect(glowna).toBeVisible({ timeout: 30_000 });
+  await glowna.click();
+  await expect(karta.getByRole('status')).toHaveText(/po ulicach|w linii prostej/, { timeout: 15_000 });
+  await glowna.click();
+  await expect(karta.getByRole('status')).toHaveCount(0);
 });

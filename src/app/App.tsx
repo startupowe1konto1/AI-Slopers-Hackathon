@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react';
-import type { Modul, RolaMiejsca } from '../contracts';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import type { Map as MapLibreMap } from 'maplibre-gl';
+import type { KontekstWskazowek, RolaMiejsca } from '../contracts';
 import { moduly } from '../modules';
 import { useSiec } from '../offline/siec';
 import type { Przygotowanie } from '../offline/polaczenie';
@@ -9,7 +10,12 @@ import { Onboarding } from './Onboarding';
 import { Polaczenie } from './Polaczenie';
 import { MapView } from '../map/MapView';
 import { stanPaczki } from '../offline/paczka';
+import { Kafelki } from './Kafelki';
+import { Karty } from './Karty';
+import { useWskazowki } from './wskazowki';
 import { Stopka } from './Stopka';
+
+const KAFELKI = moduly.flatMap((m) => m.kafelki ?? []);
 
 export default function App() {
   const { miejsca, gotowe } = useMiejsca();
@@ -22,8 +28,9 @@ export default function App() {
   const online = siec.online && przygotowanie?.siec !== false;
   const [edycja, setEdycja] = useState(false);
   const [rola, setRola] = useState<RolaMiejsca>('dom');
-  const [aktywny, setAktywny] = useState<Modul['id']>(moduly[0].id);
   const [paczka, setPaczka] = useState<string | null>(null);
+  const [mapa, setMapa] = useState<MapLibreMap | null>(null);
+  const [proba, setProba] = useState(0);
 
   useEffect(() => {
     stanPaczki().then((s) =>
@@ -34,6 +41,12 @@ export default function App() {
   useEffect(() => {
     if (miejsca.length && !miejsca.some((m) => m.rola === rola)) setRola(miejsca[0].rola);
   }, [miejsca, rola]);
+
+  const miejsce = miejsca.find((m) => m.rola === rola) ?? miejsca[0] ?? null;
+  const kontekst = useMemo<KontekstWskazowek | null>(() => (miejsce ? { miejsce, miejsca, online } : null), [miejsce, miejsca, online]);
+  // Karty liczą się dopiero po ekranie „Sprawdzam połączenie” (V3), żeby wiedzieć, czy jest sieć.
+  const { karty, ladowanie } = useWskazowki(moduly, przygotowanie ? kontekst : null, proba);
+  const odswiez = useCallback(() => setProba((p) => p + 1), []);
 
   const [bladLokalizacji, setBladLokalizacji] = useState<string | null>(null);
   const [ustalam, setUstalam] = useState(false);
@@ -59,7 +72,7 @@ export default function App() {
     );
   }
 
-  if (!przygotowanie) {
+  if (!przygotowanie || !miejsce) {
     return (
       <div className="aplikacja" style={{ display: 'block' }}>
         <Polaczenie onGotowe={setPrzygotowanie} />
@@ -67,14 +80,10 @@ export default function App() {
     );
   }
 
-  const wybrane = miejsca.find((m) => m.rola === rola)?.adres ?? null;
-  const modul = moduly.find((m) => m.id === aktywny) ?? moduly[0];
-  const Panel = modul.Panel;
-
   return (
     <div className="aplikacja">
       <header className="pasek">
-        <select aria-label="Wybrane miejsce" value={rola} onChange={(e) => setRola(e.target.value as RolaMiejsca)}>
+        <select aria-label="Wybrane miejsce" value={miejsce.rola} onChange={(e) => setRola(e.target.value as RolaMiejsca)}>
           {miejsca.map((m) => (
             <option key={m.rola} value={m.rola}>
               {m.etykieta}: {m.adres.ulica} {m.adres.numer}
@@ -94,18 +103,10 @@ export default function App() {
         {bladLokalizacji && <p className="pasek-blad" role="alert">{bladLokalizacji}</p>}
       </header>
       <main className="mapa">
-        <MapView centrum={wybrane} moduly={moduly} />
+        <MapView centrum={miejsce.adres} moduly={moduly} onMapa={setMapa} />
+        <Kafelki kafelki={KAFELKI} mapa={mapa} />
       </main>
-      <section className="panel" aria-label={modul.nazwa}>
-        <Panel miejsca={miejsca} wybrane={wybrane} online={online} />
-      </section>
-      <nav className="menu" aria-label="Moduły">
-        {moduly.map((m) => (
-          <button key={m.id} aria-pressed={m.id === aktywny} onClick={() => setAktywny(m.id)}>
-            {m.nazwa}
-          </button>
-        ))}
-      </nav>
+      <Karty karty={karty} ladowanie={ladowanie} mapa={mapa} od={miejsce.adres} onOdswiez={odswiez} />
       <Stopka />
     </div>
   );
