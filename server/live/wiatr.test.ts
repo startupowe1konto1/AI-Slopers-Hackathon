@@ -10,15 +10,15 @@ describe('mapujWiatr', () => {
   it('zamienia stacje pogodowe na Wiatr', () => {
     const wynik = mapujWiatr(pogoda);
     expect(wynik).toHaveLength(16);
-    expect(wynik[0]).toEqual({ stacja: 'Stacja Bielany', kierunekDeg: 237, predkoscMs: 1, czas: '2026-10-17 14:40:00' });
+    expect(wynik[0]).toEqual({ stacja: 'Stacja Bielany', lat: 52.29241, lon: 20.97288, kierunekDeg: 237, predkoscMs: 1, czas: '2026-10-17 14:40:00' });
     expect(wynik.map((w) => w.stacja)).toContain('Stacja Most Północny');
   });
 
   it('pomija stację bez pomiaru wiatru', () => {
     const wynik = mapujWiatr([
-      { lokalizacja: 'A', czas: '2026-10-17 14:40:00', pred_wiatru: null, kier_wiatru: 90 },
-      { lokalizacja: 'B', czas: '2026-10-17 14:40:00', pred_wiatru: 2, kier_wiatru: null },
-      { lokalizacja: 'C', czas: '2026-10-17 14:40:00', pred_wiatru: 2, kier_wiatru: 90 },
+      { lokalizacja: 'A', lat: 52.2, lon: 21, czas: '2026-10-17 14:40:00', pred_wiatru: null, kier_wiatru: 90 },
+      { lokalizacja: 'B', lat: 52.2, lon: 21, czas: '2026-10-17 14:40:00', pred_wiatru: 2, kier_wiatru: null },
+      { lokalizacja: 'C', lat: 52.2, lon: 21, czas: '2026-10-17 14:40:00', pred_wiatru: 2, kier_wiatru: 90 },
     ]);
     expect(wynik.map((w) => w.stacja)).toEqual(['C']);
   });
