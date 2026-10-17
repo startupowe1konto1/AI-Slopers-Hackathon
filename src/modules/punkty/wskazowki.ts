@@ -1,5 +1,6 @@
 import type { KontekstWskazowek, Punkt, Wskazowka } from '../../contracts';
 import { trasa } from '../../offline/trasy';
+import { kartaMedyczna } from './medyczna';
 import { formatujOdleglosc, linkPSP, najblizsze, odlegloscM, zrodlaPaczki } from './najblizsze';
 
 const malaLitera = (s: string) => s.charAt(0).toLowerCase() + s.slice(1);
@@ -37,11 +38,6 @@ export async function kartaSchronienia(k: KontekstWskazowek): Promise<Wskazowka>
   };
 }
 
-// Atrapa do P3 (karta Pomoc medyczna).
-async function kartaMedyczna(): Promise<Wskazowka> {
-  return { id: 'medyczna', kolejnosc: 30, tytul: 'Pomoc medyczna', poziom: 'brak', tekst: 'Karta w budowie.', akcje: [], zrodlo: 'atrapa' };
-}
-
 export async function wskazowkiPunktow(k: KontekstWskazowek): Promise<Wskazowka[]> {
-  return Promise.all([kartaSchronienia(k), kartaMedyczna()]);
+  return Promise.all([kartaSchronienia(k), kartaMedyczna(k)]);
 }
