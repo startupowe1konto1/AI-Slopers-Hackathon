@@ -36,6 +36,7 @@
 
 ## Zastrzeżenia
 
+- Założenie, że przy blackoucie działają tylko syreny cyfrowe, i jego źródła: [zasilanie-syren.md](zasilanie-syren.md).
 - To model poziomu dźwięku **na zewnątrz** budynków. Nie mówi, czy syrenę słychać w mieszkaniu przy zamkniętych oknach.
 - Luki priorytetowe i klasy ryzyka (`risk_class`) wynikają z map ryzyka **powodziowego** ISOK. To analiza pod kątem ostrzegania powodziowego, nie ataków.
 - Obiekty wrażliwe to budynki z OSM sklasyfikowane heurystycznie (pewność „medium” albo „low”). To nie jest rejestr szpitali ani szkół. W tym wycinku pole `pop_night` sumuje się do 0, `pop_day` do około 230 tys.

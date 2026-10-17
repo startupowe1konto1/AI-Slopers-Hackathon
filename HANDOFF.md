@@ -10,7 +10,7 @@ Szczegóły i źródła są w folderze `kontekst/`, mapa plików na końcu.
 
 Warsaw Open Data Hackathon, 42 Warsaw. Regulamin: `kontekst/regulamin.txt`.
 
-- **Ścieżka:** wyzwanie 3 („Warszawa: Twój ruch!”, dowolna forma) albo 1 („Warszawa 2076”). Kwalifikację potwierdzić u organizatora.
+- **Ścieżka:** **wyzwanie 3 („Warszawa: Twój ruch!”, dowolna forma)**. Decyzja zespołu z 17.10, 16:25.
 - **Warunek oceny (§4 ust. 9):** co najmniej jeden zbiór otwartych danych m.st. Warszawy z dane.um.warszawa.pl lub z miejskiego API. Mamy ich z zapasem.
 - **Wszystko powstaje w trakcie wydarzenia (§4 ust. 3).** Wolno używać darmowych bibliotek open source z licencją dopuszczającą użycie komercyjne.
 - **AI dozwolone (§4 ust. 4):** zakres użycia trzeba opisać w dokumentacji.
@@ -214,7 +214,7 @@ pmtiles extract https://build.protomaps.com/20261017.pmtiles warszawa.pmtiles --
 3. Weryfikacja: które syreny analogowe mają zasilanie awaryjne (pytanie do mentorów, Stołeczne Centrum Bezpieczeństwa lub PSP).
 4. Scenariusze transportu: źródło rozkładu (portal czy GTFS), sposób liczenia tras, zakres demo.
 5. Wycięcie mapy Warszawy (PMTiles) i test rozmiaru paczki offline na telefonie.
-6. Potwierdzenie ścieżki wyzwania u organizatora.
+6. ~~Potwierdzenie ścieżki wyzwania~~: zespół startuje w wyzwaniu 3.
 7. Plan budowy, specyfikacja, podział ról, prezentacja, dokumentacja z opisem użycia AI.
 
 ---

@@ -92,3 +92,21 @@ it('bez mapy wybierzNaMapie zwraca null; po sprzątaniu ustawianie nic nie robi'
   expect(() => ustawPojazdy(P)).not.toThrow();
   expect(await wybierzNaMapie()).toBeNull();
 });
+
+it('dane ustawione, zanim mapa się załaduje, pojawiają się po dodaniu warstw', () => {
+  const { map, dane } = atrapa();
+  ustawDym({ lat: 52.2, lon: 21 }, null); // np. punkt dymu z poprzedniej wizyty
+  sprzatnij = dodajWarstwy(map);
+  expect(dane('live-dym').features.map((f) => f.geometry.type)).toEqual(['Point']);
+});
+
+it('po sprzątaniu nowa mapa startuje bez starych danych', () => {
+  const pierwsza = atrapa();
+  dodajWarstwy(pierwsza.map);
+  ustawPojazdy(P);
+  dodajWarstwy(pierwsza.map)();
+  ustawPojazdy([]);
+  const druga = atrapa();
+  sprzatnij = dodajWarstwy(druga.map);
+  expect(druga.dane('live-pojazdy').features).toEqual([]);
+});
