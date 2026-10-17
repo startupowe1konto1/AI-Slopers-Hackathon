@@ -1,6 +1,6 @@
 {
  "modul": "punkty",
- "rekordy": 10255,
+ "rekordy": 11299,
  "zrodla": {
   "psp": {
    "nazwa": "Miejsca schronienia według PSP (gdziesieukryc.pl)",
@@ -36,6 +36,12 @@
    "nazwa": "Rejestr SOR (rprm.ezdrowie.gov.pl)",
    "licencja": "CC BY 4.0",
    "url": "https://rprm.ezdrowie.gov.pl/",
+   "pobrano": "2026-10-17"
+  },
+  "osm-przychodnie": {
+   "nazwa": "OpenStreetMap: przychodnie, gabinety i szpitale (Overpass API)",
+   "licencja": "ODbL",
+   "url": "https://www.openstreetmap.org/copyright",
    "pobrano": "2026-10-17"
   }
  }
