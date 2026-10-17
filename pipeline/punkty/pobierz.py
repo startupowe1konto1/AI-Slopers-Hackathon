@@ -121,17 +121,17 @@ def main(klucze: list[str]) -> None:
     for k in klucze or ZRODLA:
         plik, zadanie, przetworz = ZRODLA[k]
         zadania = zadanie()
-        # Lista zapytań = kolejne serwery tego samego źródła; pierwszy, który odpowie, wygrywa.
+        # Lista zapytań = kolejne serwery tego samego źródła; pierwszy, który da pełny wynik, wygrywa.
         # Główny dostaje 3 próby, zapasowe po jednej (W6).
         zadania = zadania if isinstance(zadania, list) else [zadania]
         for i, z in enumerate(zadania):
             try:
                 dane = _pobierz(z, 3 if i == 0 else 1)
+                dane = przetworz(dane) if przetworz else dane
                 break
-            except (OSError, http.client.HTTPException):
+            except (OSError, http.client.HTTPException, ValueError):  # ValueError: ucięty albo zepsuty wynik
                 if i == len(zadania) - 1:
                     raise
-        dane = przetworz(dane) if przetworz else dane
         (PROBKI / plik).write_bytes(dane)
         pobrano[k] = date.today().isoformat()
         print(f"{k}: {len(dane)} B → dane/probki/{plik}")
