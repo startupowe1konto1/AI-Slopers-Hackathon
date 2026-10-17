@@ -3,9 +3,16 @@ import { afterEach, expect, it, vi } from 'vitest';
 import type { Map as MapLibreMap } from 'maplibre-gl';
 import type { Trasa, Wskazowka } from '../contracts';
 import { trasa } from '../offline/trasy';
+import { planKomunikacji } from '../modules/transport/komunikacja';
 import { Karty } from './Karty';
 
 vi.mock('../offline/trasy', () => ({ trasa: vi.fn() }));
+vi.mock('../modules/transport/komunikacja', () => ({
+  planKomunikacji: vi.fn(),
+  najblizszyOdjazd: vi.fn(),
+  opisPrzejazdu: () => '',
+  opisPlanu: () => 'Brak połączenia.',
+}));
 
 afterEach(() => {
   cleanup();
@@ -96,4 +103,23 @@ it('„Wyznaczam trasę…” w trakcie, potem opis; przed mapą „Mapa jeszcze
   await oddaj();
   expect(screen.getByRole('status').textContent).toBe('1,8 km po ulicach, pieszo ok. 22 min.');
   expect(mapa.fitBounds).toHaveBeenCalledTimes(1);
+});
+
+it('pod trasą przełącznik „Pieszo | Komunikacja”; komunikacja i blackout liczą plan od nowa', async () => {
+  vi.mocked(trasa).mockResolvedValue(t);
+  vi.mocked(planKomunikacji).mockResolvedValue({ warianty: [], pieszoM: 1800, pieszoMin: 22, pieszoSzybciej: true, blackout: false });
+  const onBlackout = vi.fn();
+  render(<Karty karty={[schronienie]} ladowanie={0} mapa={atrapaMapy() as unknown as MapLibreMap} od={od} onOdswiez={() => {}} onBlackout={onBlackout} />);
+  fireEvent.click(screen.getByRole('button', { name: /miejsce schronienia/ }));
+  await waitFor(() => expect(screen.getByRole('status').textContent).toBe('1,8 km po ulicach, pieszo ok. 22 min.'));
+  expect(screen.getByRole('radio', { name: 'Pieszo' }).getAttribute('aria-checked')).toBe('true');
+  expect(screen.queryByRole('switch')).toBeNull();
+  fireEvent.click(screen.getByRole('radio', { name: 'Komunikacja' }));
+  await waitFor(() => expect(screen.getByRole('status').textContent).toBe('Brak połączenia.'));
+  expect(planKomunikacji).toHaveBeenCalledWith(od, t.do, { blackout: false });
+  fireEvent.click(screen.getByRole('switch', { name: 'Zakładam blackout' }));
+  expect(onBlackout).toHaveBeenCalledWith(true);
+  await waitFor(() => expect(planKomunikacji).toHaveBeenLastCalledWith(od, t.do, { blackout: true }));
+  fireEvent.click(screen.getByRole('radio', { name: 'Pieszo' }));
+  await waitFor(() => expect(screen.getByRole('status').textContent).toBe('1,8 km po ulicach, pieszo ok. 22 min.'));
 });

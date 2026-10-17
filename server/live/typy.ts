@@ -18,3 +18,6 @@ export type Utrudnienie = {
   linie: [number, number][][];
   punkty: [number, number][];
 };
+
+// /api/live/odjazdy: godziny odjazdów linii z przystanku na cały dzień, 'HH:MM' rosnąco (po północy 24:xx i więcej)
+export type Odjazdy = { przystanek: string; linia: string; odjazdy: string[] };

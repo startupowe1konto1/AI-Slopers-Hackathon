@@ -121,7 +121,7 @@ test('demo: lokalizacja → sprawdzanie połączenia → karty → okręgi syren
   // Ekran V3: „Sprawdzam połączenie…”, potem „Jest połączenie…” (z pobieraniem paczki na czystym profilu).
   await expect(page.getByRole('status').filter({ hasText: /Sprawdzam połączenie|Jest połączenie/ })).toBeVisible({ timeout: 30_000 });
   await mapaGotowa(page);
-  await expect(page.getByRole('combobox', { name: 'Wybrane miejsce' })).toContainText('Tutaj');
+  await expect(page.getByRole('combobox', { name: 'Wybrane miejsce' })).toContainText('Lokalizacja');
 
   const karty = page.getByRole('region', { name: 'Twoja sytuacja' }).locator('[data-testid^="karta-"]');
   await expect(karty).toHaveCount(5, { timeout: 30_000 });

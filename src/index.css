@@ -7,7 +7,12 @@
   --akcent-tlo: #fef2f2;
   --ok: #15803d;
   --uwaga: #b45309;
+  --wypelnienie: rgb(118 118 128 / 0.12); /* szare wypełnienie przycisków jak w iOS */
+  --wypelnienie-wcisniete: rgb(118 118 128 / 0.22);
+  --wlos: rgb(60 60 67 / 0.14); /* włosowa linia zamiast twardej ramki */
+  --tlo-grupy: #f2f2f7;
   font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  line-height: 1.4;
   color: var(--tekst);
   background: #f3f4f6;
   -webkit-font-smoothing: antialiased;
@@ -24,12 +29,16 @@ input { font: inherit; }
   grid-template-columns: minmax(0, 1fr);
   box-shadow: 0 0 24px rgb(0 0 0 / 0.08);
 }
-.pasek { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 10px 14px; border-bottom: 1px solid var(--linia); }
-.pasek-przycisk { font-size: 13px; padding: 6px 10px; min-height: 36px; border: 1px solid var(--linia); border-radius: 8px; background: #fff; }
+.pasek { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 10px 14px; border-bottom: 0.5px solid var(--wlos); }
+.pasek-przycisk {
+  font-size: 13px; font-weight: 500; padding: 6px 12px; min-height: 36px; border: 0; border-radius: 10px; background: var(--wypelnienie); color: var(--tekst);
+  transition: transform 100ms ease-out, background-color 150ms ease;
+}
+.pasek-przycisk:active:not(:disabled) { transform: scale(0.96); background: var(--wypelnienie-wcisniete); }
 .pasek-przycisk:disabled { opacity: 0.5; cursor: default; }
 .pasek-blad { flex-basis: 100%; margin: 0; font-size: 13px; color: var(--akcent); }
-.pasek select { flex: 1 1 7rem; min-width: 0; padding: 6px 8px; border: 1px solid var(--linia); border-radius: 8px; background: #fff; }
-.siec { font-size: 12px; padding: 4px 8px; border-radius: 999px; white-space: nowrap; }
+.pasek select { flex: 1 1 7rem; min-width: 0; min-height: 36px; padding: 6px 10px; border: 0; border-radius: 10px; background: var(--wypelnienie); color: var(--tekst); font-size: 14px; font-weight: 500; }
+.siec { font-size: 12px; font-weight: 600; padding: 4px 9px; border-radius: 999px; white-space: nowrap; }
 .siec.online { background: #ecfdf5; color: var(--ok); }
 .siec.offline { background: var(--akcent-tlo); color: var(--akcent); }
 .mapa { position: relative; min-height: 180px; background: #e8eef0; }
@@ -51,7 +60,7 @@ input { font: inherit; }
 .onboarding-lokalizacja { font-size: 13px; margin: 8px 0 0 !important; }
 .onboarding-albo { text-align: center; font-size: 13px; margin: 14px 0 10px !important; }
 .przycisk.drugi { background: #fff; color: var(--akcent); border: 1px solid var(--akcent); margin-top: 10px; }
-.stopka { font-size: 11px; color: var(--przygaszony); padding: 6px 14px; border-top: 1px solid var(--linia); max-height: 30dvh; overflow: auto; }
+.stopka { font-size: 11px; color: var(--przygaszony); padding: 6px 14px; border-top: 0.5px solid var(--wlos); max-height: 30dvh; overflow: auto; }
 .stopka summary { cursor: pointer; min-height: 24px; }
 .stopka ul { margin: 6px 0; padding-left: 16px; }
 .stopka li { margin-bottom: 4px; }
@@ -64,27 +73,61 @@ input { font: inherit; }
 @keyframes obrot { to { transform: rotate(360deg); } }
 @media (prefers-reduced-motion: reduce) { .polaczenie-kolko { animation: none; } }
 
-.karty { max-height: 48dvh; overflow: auto; padding: 10px 14px; border-top: 1px solid var(--linia); }
-.karty h2 { font-size: 16px; margin: 0 0 8px; }
+.karty { max-height: 48dvh; overflow: auto; padding: 12px 14px; background: var(--tlo-grupy); }
+.karty h2 { font-size: 17px; line-height: 1.2; letter-spacing: -0.02em; margin: 0 0 10px 2px; }
 .karty-pusto { margin: 0; font-size: 14px; color: var(--przygaszony); }
 .karty > ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
-.karta { border: 1px solid var(--linia); border-left: 5px solid #9ca3af; border-radius: 8px; background: #fff; }
+.karta { overflow: hidden; border: 0; border-left: 4px solid #9ca3af; border-radius: 12px; background: #fff; box-shadow: 0 1px 2px rgb(0 0 0 / 0.05), 0 0 0 0.5px rgb(0 0 0 / 0.06); }
 .karta-ok { border-left-color: var(--ok); }
 .karta-uwaga { border-left-color: var(--uwaga); }
 .karta-alarm { border-left-color: var(--akcent); }
-.karta-glowna { display: grid; gap: 2px; width: 100%; min-height: 48px; padding: 10px 12px; border: 0; background: none; text-align: left; color: inherit; }
-.karta-tytul { font-weight: 600; }
-.karta-poziom { font-size: 12px; color: var(--przygaszony); }
-.karta-szczegoly { padding: 0 12px 12px; font-size: 14px; }
+.karta-glowna { display: grid; gap: 2px; width: 100%; min-height: 48px; padding: 11px 13px; border: 0; background: none; text-align: left; color: inherit; transition: background-color 150ms ease; }
+.karta-glowna:active { background: rgb(0 0 0 / 0.035); }
+.karta-tytul { font-size: 15px; font-weight: 600; letter-spacing: -0.01em; }
+.karta-poziom { font-size: 12px; font-weight: 600; color: var(--przygaszony); }
+.karta-ok .karta-poziom { color: var(--ok); }
+.karta-uwaga .karta-poziom { color: var(--uwaga); }
+.karta-alarm .karta-poziom { color: var(--akcent); }
+.karta-tekst { font-size: 15px; line-height: 1.4; }
+.karta-szczegoly { padding: 0 13px 13px; font-size: 14px; font-variant-numeric: tabular-nums; }
 .karta-szczegoly p { margin: 0 0 8px; }
 .karta-szczegoly ul { margin: 0 0 8px; padding-left: 18px; }
 .karta-akcje { display: flex; flex-wrap: wrap; gap: 6px; }
-.karta-akcje .przycisk { width: auto; margin: 0; padding: 8px 12px; text-decoration: none; font-size: 14px; }
+.karta-akcje .przycisk { width: auto; margin: 0; padding: 8px 12px; border: 0; border-radius: 10px; background: var(--akcent-tlo); text-decoration: none; font-size: 14px; transition: transform 100ms ease-out, filter 150ms ease; }
+.karta-akcje .przycisk:active { transform: scale(0.97); filter: brightness(0.95); }
 .karta-zrodlo { font-size: 12px; color: var(--przygaszony); margin: 8px 0 0 !important; }
-.karta-szkielet { height: 64px; border: 0; background: var(--linia); animation: puls 1.2s ease-in-out infinite; }
+.karta-szkielet { height: 64px; border: 0; box-shadow: none; background: rgb(118 118 128 / 0.14); animation: puls 1.2s ease-in-out infinite; }
 @keyframes puls { 50% { opacity: 0.5; } }
 @media (prefers-reduced-motion: reduce) { .karta-szkielet { animation: none; } }
-.kafelki { position: absolute; top: 8px; left: 0; right: 0; z-index: 2; display: flex; gap: 6px; overflow-x: auto; padding: 0 10px 4px; scrollbar-width: none; }
-.kafelki button { flex: none; display: inline-flex; align-items: center; gap: 6px; min-height: 36px; padding: 6px 12px; border: 1px solid var(--linia); border-radius: 999px; background: #fff; box-shadow: 0 1px 4px rgb(0 0 0 / 0.12); font-size: 13px; color: var(--tekst); }
-.kafelki button[aria-pressed='true'] { background: var(--tekst); color: #fff; }
-.kafelki .kropka { width: 10px; height: 10px; border-radius: 50%; }
+.kafelki { position: absolute; top: 6px; left: 0; right: 0; z-index: 2; display: flex; gap: 6px; overflow-x: auto; padding: 2px 10px 8px; scrollbar-width: thin; scrollbar-color: rgb(17 24 39 / 0.22) transparent; }
+.kafelki::-webkit-scrollbar { height: 4px; }
+.kafelki::-webkit-scrollbar-track { background: transparent; }
+.kafelki::-webkit-scrollbar-thumb { background: rgb(17 24 39 / 0.22); border-radius: 999px; }
+.kafelki:hover::-webkit-scrollbar-thumb { background: rgb(17 24 39 / 0.38); }
+.kafelki[data-wiecej-prawo] { -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 28px), transparent); mask-image: linear-gradient(to right, #000 calc(100% - 28px), transparent); }
+.kafelki[data-wiecej-lewo] { -webkit-mask-image: linear-gradient(to left, #000 calc(100% - 28px), transparent); mask-image: linear-gradient(to left, #000 calc(100% - 28px), transparent); }
+.kafelki[data-wiecej-lewo][data-wiecej-prawo] { -webkit-mask-image: linear-gradient(to right, transparent, #000 28px, #000 calc(100% - 28px), transparent); mask-image: linear-gradient(to right, transparent, #000 28px, #000 calc(100% - 28px), transparent); }
+.kafelki:is([data-wiecej-lewo], [data-wiecej-prawo]) { cursor: grab; }
+.kafelki[data-przeciaganie], .kafelki[data-przeciaganie] button { cursor: grabbing; user-select: none; }
+.kafelki button {
+  flex: none; display: inline-flex; align-items: center; gap: 6px; min-height: 36px; padding: 6px 13px 6px 11px;
+  border: 0.5px solid rgb(0 0 0 / 0.06); border-radius: 999px; background: rgb(255 255 255 / 0.86);
+  -webkit-backdrop-filter: blur(16px) saturate(180%); backdrop-filter: blur(16px) saturate(180%);
+  box-shadow: 0 2px 8px rgb(0 0 0 / 0.12), 0 0.5px 1px rgb(0 0 0 / 0.08); font-size: 13px; font-weight: 500; color: var(--tekst);
+  transition: transform 100ms ease-out, background-color 180ms ease, color 180ms ease;
+}
+.kafelki button:active:not(:disabled) { transform: scale(0.95); }
+.kafelki button[aria-pressed='true'] { background: rgb(17 24 39 / 0.92); color: #fff; }
+.kafelki button:focus-visible { outline: 2px solid #2563eb; outline-offset: 2px; }
+.kafelki .ikona { flex: none; }
+
+/* Ograniczony ruch i przezroczystość (apple-design §14): bez skalowania i rozmycia, te same informacje. */
+@media (prefers-reduced-motion: reduce) {
+  .pasek-przycisk:active:not(:disabled), .kafelki button:active:not(:disabled), .karta-akcje .przycisk:active { transform: none; }
+}
+@media (prefers-reduced-transparency: reduce) {
+  .kafelki button { background: #fff; -webkit-backdrop-filter: none; backdrop-filter: none; }
+}
+@media (prefers-contrast: more) {
+  .kafelki button, .karta { border: 1px solid var(--tekst); }
+}

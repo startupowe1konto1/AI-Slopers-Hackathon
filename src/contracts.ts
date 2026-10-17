@@ -74,6 +74,9 @@ export type StanLive<T> = { dane: T; stanNa: string; zrodlo: string; zCache: boo
 export type Pojazd = Wsp & { linia: string; typ: 'autobus' | 'tramwaj'; czas: string };
 export type Wiatr = Wsp & { stacja: string; kierunekDeg: number; predkoscMs: number; czas: string };
 
+// Dymek punktu na mapie prosi aplikację o trasę: window.dispatchEvent(new CustomEvent<WyznaczTrase>('wyznacz-trase', { detail })).
+export type WyznaczTrase = { cel: Wsp; nazwa: string };
+
 export type Zrodlo = { nazwa: string; licencja: string; url: string; pobrano: string };
 export type Manifest = {
   wersja: string;
