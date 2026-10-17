@@ -3,13 +3,15 @@ import type { FeatureCollection } from 'geojson';
 import type { Manifest, Punkt } from '../../contracts';
 import { wczytajPunkty, zrodlaPaczki } from './najblizsze';
 import { RODZAJE } from './rodzaje';
+import { sluchajOdcinka, type Odcinek } from './trasa';
 
 // PSP (ok. 8 tys.) w klastrach, pozostałe rodzaje zawsze widoczne pojedynczo.
 const PSP = 'punkty-psp';
 const INNE = 'punkty-inne';
+const ODCINEK = 'punkty-odcinek';
 const KLASTRY = 'punkty-psp-klastry';
 const PUNKTY = ['punkty-psp-punkty', 'punkty-inne-punkty'];
-const WARSTWY = [KLASTRY, 'punkty-psp-liczba', ...PUNKTY];
+const WARSTWY = [ODCINEK, KLASTRY, 'punkty-psp-liczba', ...PUNKTY];
 
 const kolor = ['match', ['get', 'rodzaj'], ...RODZAJE.flatMap((r) => [r.rodzaj, r.kolor]), '#6b7280'] as unknown as ExpressionSpecification;
 
@@ -20,6 +22,13 @@ const kolekcja = (p: Punkt[]): FeatureCollection => ({
     geometry: { type: 'Point', coordinates: [x.lon, x.lat] },
     properties: { nazwa: x.nazwa, rodzaj: x.rodzaj, zrodlo: x.zrodlo },
   })),
+});
+
+const odcinek = (o: Odcinek): FeatureCollection => ({
+  type: 'FeatureCollection',
+  features: o
+    ? [{ type: 'Feature', properties: {}, geometry: { type: 'LineString', coordinates: [[o.od.lon, o.od.lat], [o.do.lon, o.do.lat]] } }]
+    : [],
 });
 
 function popup(map: MapLibreMap, e: MapLayerMouseEvent, zrodla: Manifest['zrodla']) {
@@ -37,10 +46,28 @@ function popup(map: MapLibreMap, e: MapLayerMouseEvent, zrodla: Manifest['zrodla
 export function dodajWarstwy(map: MapLibreMap): () => void {
   let aktywne = true;
   const subskrypcje: Subscription[] = [];
+  let przestanSluchac = () => {};
 
   Promise.all([wczytajPunkty(), zrodlaPaczki().catch(() => ({}))])
     .then(([punkty, zrodla]) => {
       if (!aktywne) return;
+      // Odcinek pod punktami: dodany przed ich warstwami.
+      map.addSource(ODCINEK, { type: 'geojson', data: odcinek(null) });
+      map.addLayer({
+        id: ODCINEK,
+        type: 'line',
+        source: ODCINEK,
+        layout: { 'line-cap': 'round' },
+        paint: { 'line-color': '#b91c1c', 'line-width': 3, 'line-dasharray': [2, 1.5] },
+      });
+      przestanSluchac = sluchajOdcinka((o, dopasuj) => {
+        map.getSource<GeoJSONSource>(ODCINEK)?.setData(odcinek(o));
+        if (o && dopasuj) {
+          const lon = [o.od.lon, o.do.lon].sort((a, b) => a - b);
+          const lat = [o.od.lat, o.do.lat].sort((a, b) => a - b);
+          map.fitBounds([[lon[0], lat[0]], [lon[1], lat[1]]], { padding: 60, maxZoom: 17 });
+        }
+      });
       map.addSource(PSP, { type: 'geojson', data: kolekcja(punkty.filter((p) => p.rodzaj === 'schronienie_psp')), cluster: true, clusterRadius: 40 });
       map.addSource(INNE, { type: 'geojson', data: kolekcja(punkty.filter((p) => p.rodzaj !== 'schronienie_psp')) });
       map.addLayer({
@@ -77,8 +104,9 @@ export function dodajWarstwy(map: MapLibreMap): () => void {
 
   return () => {
     aktywne = false;
+    przestanSluchac();
     subskrypcje.forEach((s) => s.unsubscribe());
     WARSTWY.forEach((id) => map.getLayer(id) && map.removeLayer(id));
-    [PSP, INNE].forEach((id) => map.getSource(id) && map.removeSource(id));
+    [ODCINEK, PSP, INNE].forEach((id) => map.getSource(id) && map.removeSource(id));
   };
 }

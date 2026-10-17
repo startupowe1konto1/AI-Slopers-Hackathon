@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import type { Manifest, ModulProps, Punkt, RodzajPunktu } from '../../contracts';
-import { formatujOdleglosc, linkPSP, najblizsze, odlegloscM, zrodlaPaczki } from './najblizsze';
+import { azymut, formatujOdleglosc, kierunek, linkPSP, najblizsze, odlegloscM, zrodlaPaczki } from './najblizsze';
 import { RODZAJE } from './rodzaje';
+import { pokazOdcinek } from './trasa';
 import './punkty.css';
 
 type Wynik = { klucz: string } & ({ typ: 'gotowe'; punkty: Punkt[] } | { typ: 'blad' });
@@ -11,6 +12,7 @@ const data = (iso?: string) => iso?.match(/^(\d{4})-(\d{2})-(\d{2})/)?.slice(1).
 
 export function Panel({ wybrane, online }: ModulProps) {
   const [rodzaj, setRodzaj] = useState<RodzajPunktu>('schronienie_psp');
+  const [calodobowe, setCalodobowe] = useState(false);
   const [wynik, setWynik] = useState<Wynik | null>(null);
   const [proba, setProba] = useState(0);
   const [zrodla, setZrodla] = useState<Manifest['zrodla']>({});
@@ -19,20 +21,31 @@ export function Panel({ wybrane, online }: ModulProps) {
     zrodlaPaczki().then(setZrodla, () => {});
   }, []);
 
-  // Wynik dla innego klucza (miejsce, rodzaj, próba) oznacza ładowanie.
-  const klucz = wybrane && `${wybrane.lat},${wybrane.lon},${rodzaj},${proba}`;
+  // Filtr całodobowych tylko tam, gdzie dostępność się różni (PSP i AED).
+  const zFiltrem = rodzaj === 'schronienie_psp' || rodzaj === 'aed';
+  const tylkoCalodobowe = zFiltrem && calodobowe;
+
+  // Wynik dla innego klucza (miejsce, rodzaj, filtr, próba) oznacza ładowanie.
+  const klucz = wybrane && `${wybrane.lat},${wybrane.lon},${rodzaj},${tylkoCalodobowe},${proba}`;
   useEffect(() => {
     if (!wybrane || !klucz) return;
     let aktualne = true;
-    najblizsze(wybrane, rodzaj, 3).then(
+    najblizsze(wybrane, rodzaj, 3, tylkoCalodobowe).then(
       (punkty) => aktualne && setWynik({ klucz, typ: 'gotowe', punkty }),
       () => aktualne && setWynik({ klucz, typ: 'blad' }),
     );
     return () => {
       aktualne = false;
     };
-  }, [wybrane, rodzaj, klucz]);
+  }, [wybrane, rodzaj, tylkoCalodobowe, klucz]);
   const stan = wynik?.klucz === klucz ? wynik : { typ: 'ladowanie' as const };
+
+  // Na mapie odcinek do najbliższego punktu; znika razem z panelem.
+  const najblizszy = stan.typ === 'gotowe' ? stan.punkty[0] : undefined;
+  useEffect(() => {
+    pokazOdcinek(wybrane && najblizszy ? { od: wybrane, do: najblizszy } : null, false);
+  }, [wybrane, najblizszy]);
+  useEffect(() => () => pokazOdcinek(null, false), []);
 
   const r = RODZAJE.find((x) => x.rodzaj === rodzaj)!;
   const opisZrodla = (klucz: string) => {
@@ -62,7 +75,11 @@ export function Panel({ wybrane, online }: ModulProps) {
       </div>
     );
   } else if (!stan.punkty.length) {
-    tresc = <p className="punkty-info">Brak danych dla tego miejsca. Sprawdziliśmy: {zrodlo.nazwa}.</p>;
+    tresc = (
+      <p className="punkty-info">
+        {tylkoCalodobowe ? 'Brak całodobowych punktów w promieniu 20 km.' : 'Brak danych dla tego miejsca.'} Sprawdziliśmy: {zrodlo.nazwa}.
+      </p>
+    );
   } else {
     tresc = (
       <>
@@ -70,23 +87,35 @@ export function Panel({ wybrane, online }: ModulProps) {
         <ul className="punkty-lista" data-testid="lista-punktow">
           {stan.punkty.map((p) => {
             const z = opisZrodla(p.zrodlo);
+            const az = azymut(wybrane, p);
             return (
               <li key={p.id}>
                 <div className="punkt-naglowek">
                   <strong>{p.nazwa}</strong>
-                  <span>{formatujOdleglosc(odlegloscM(wybrane, p))}</span>
+                  <span>
+                    <span className="strzalka" style={{ transform: `rotate(${Math.round(az)}deg)` }} aria-hidden="true">
+                      ↑
+                    </span>{' '}
+                    {formatujOdleglosc(odlegloscM(wybrane, p))}
+                  </span>
                 </div>
                 {p.adres && <div>{p.adres}</div>}
                 {p.dostepnosc && <div>Dostępność: {p.dostepnosc}</div>}
+                <div>Kierunek: {kierunek(az)}</div>
                 <div className="punkt-zrodlo">
                   Źródło: {z.nazwa}
                   {z.data && `, stan na ${z.data}`}
                 </div>
-                {p.rodzaj === 'schronienie_psp' && (
-                  <a className="przycisk drugi" href={linkPSP(p)} target="_blank" rel="noreferrer">
-                    Otwórz w aplikacji PSP
-                  </a>
-                )}
+                <div className="punkt-akcje">
+                  <button className="przycisk drugi" onClick={() => pokazOdcinek({ od: wybrane, do: p }, true)}>
+                    Pokaż na mapie
+                  </button>
+                  {p.rodzaj === 'schronienie_psp' && (
+                    <a className="przycisk drugi" href={linkPSP(p)} target="_blank" rel="noreferrer">
+                      Otwórz w aplikacji PSP
+                    </a>
+                  )}
+                </div>
               </li>
             );
           })}
@@ -105,6 +134,12 @@ export function Panel({ wybrane, online }: ModulProps) {
           </button>
         ))}
       </div>
+      {zFiltrem && (
+        <label className="punkty-filtr">
+          <input type="checkbox" checked={calodobowe} onChange={(e) => setCalodobowe(e.target.checked)} />
+          Tylko całodobowe
+        </label>
+      )}
       {tresc}
       <p className="punkty-dane">
         Dane: {zrodlo.nazwa}
