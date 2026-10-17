@@ -5,6 +5,7 @@
 node_modules/
 apiKey.txt*
 dane/psp-schronienia/
+dane/psp-schronienia
 dane/gtfs/
 
 # Vite
