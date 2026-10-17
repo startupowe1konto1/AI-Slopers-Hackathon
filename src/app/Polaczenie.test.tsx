@@ -1,5 +1,5 @@
 import { afterEach, expect, it, vi } from 'vitest';
-import { act, cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { act, cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
 
 vi.mock('../offline/polaczenie', () => ({ przygotuj: vi.fn() }));
 import { przygotuj } from '../offline/polaczenie';
@@ -32,7 +32,8 @@ it('bez sieci i bez paczki czeka na „Dalej” i dopiero po kliknięciu idzie d
   const gotowe = vi.fn();
   render(<Polaczenie onGotowe={gotowe} />);
   expect(screen.getByRole('status').textContent).toBe('Sprawdzam połączenie…');
-  expect((await screen.findByRole('status')).textContent).toMatch(/^Brak sieci i brak paczki offline/);
+  // Kółko „Sprawdzam połączenie…” też ma role=status, więc czekamy na właściwy tekst, a nie na sam element.
+  await waitFor(() => expect(screen.getByRole('status').textContent).toMatch(/^Brak sieci i brak paczki offline/));
   expect(gotowe).not.toHaveBeenCalled();
   fireEvent.click(screen.getByRole('button', { name: 'Dalej' }));
   expect(gotowe).toHaveBeenCalledWith(wynik);
@@ -68,7 +69,8 @@ it('odrzucone przygotowanie nie zostawia kółka: pokazuje brak sieci i „Dalej
   vi.mocked(przygotuj).mockRejectedValue(new Error('boom'));
   const gotowe = vi.fn();
   render(<Polaczenie onGotowe={gotowe} />);
-  expect((await screen.findByRole('status')).textContent).toMatch(/^Brak sieci i brak paczki offline/);
+  // Kółko „Sprawdzam połączenie…” też ma role=status, więc czekamy na właściwy tekst, a nie na sam element.
+  await waitFor(() => expect(screen.getByRole('status').textContent).toMatch(/^Brak sieci i brak paczki offline/));
   fireEvent.click(screen.getByRole('button', { name: 'Dalej' }));
   expect(gotowe).toHaveBeenCalledWith({ siec: false, api: false, paczka: null });
 });
