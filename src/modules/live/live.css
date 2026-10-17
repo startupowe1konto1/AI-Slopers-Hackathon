@@ -10,3 +10,8 @@
 .live-zrodlo { font-size: 11px; color: var(--przygaszony); margin: 12px 0 0; }
 @keyframes live-puls { 50% { opacity: 0.5; } }
 @media (prefers-reduced-motion: reduce) { .live-szkielet { animation: none; } }
+.live-dym { margin-top: 12px; }
+.live-dym .przycisk { margin-top: 6px; }
+.live-lista { list-style: none; margin: 0; padding: 0; font-size: 14px; }
+.live-lista li { padding: 8px 0; border-bottom: 1px solid var(--linia); }
+.live-lista li:last-child { border-bottom: 0; }
