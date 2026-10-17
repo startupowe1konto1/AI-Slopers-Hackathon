@@ -12,7 +12,7 @@ afterEach(() => {
   vi.restoreAllMocks();
 });
 
-it('zbiera karty, sortuje po kolejności, błąd modułu zamienia na kartę „brak”', async () => {
+it('zbiera karty, sortuje po kolejności, błąd modułu zamienia na kartę „brak” na miejscu modułu', async () => {
   const moduly: Modul[] = [
     { id: 'live', nazwa: 'Na żywo', Panel, wskazowki: async () => [karta('powietrze', 40)] },
     { id: 'syreny', nazwa: 'Syreny', Panel, wskazowki: async () => [karta('syreny', 10)] },
@@ -20,19 +20,33 @@ it('zbiera karty, sortuje po kolejności, błąd modułu zamienia na kartę „b
     { id: 'transport', nazwa: 'Dojazd', Panel },
   ];
   const blad = vi.spyOn(console, 'error').mockImplementation(() => {});
-  const pierwszyRender: number[] = [];
+  const pierwszyRender: number[][] = [];
   const { result } = renderHook(() => {
     const r = useWskazowki(moduly, k, 0);
     pierwszyRender.push(r.ladowanie);
     return r;
   });
-  // już pierwszy render (przed efektem) pokazuje szkielety, a nie „Brak wskazówek”
-  expect(pierwszyRender[0]).toBe(3);
-  expect(result.current.ladowanie).toBe(3);
-  await waitFor(() => expect(result.current.ladowanie).toBe(0));
-  expect(result.current.karty.map((w) => w.id)).toEqual(['syreny', 'powietrze', 'blad-punkty']);
-  expect(result.current.karty[2]).toMatchObject({ poziom: 'brak', tytul: 'Pomoc' });
+  // już pierwszy render (przed efektem) pokazuje szkielety na miejscach kart (punkty mają dwie: 20 i 30), a nie „Brak wskazówek”
+  expect(pierwszyRender[0]).toEqual([10, 20, 30, 40]);
+  expect(result.current.ladowanie).toEqual([10, 20, 30, 40]);
+  await waitFor(() => expect(result.current.ladowanie).toEqual([]));
+  expect(result.current.karty.map((w) => w.id)).toEqual(['syreny', 'blad-punkty', 'powietrze']);
+  expect(result.current.karty[1]).toMatchObject({ poziom: 'brak', tytul: 'Pomoc', kolejnosc: 20 });
   expect(blad).toHaveBeenCalledWith('[karty]', 'punkty', expect.any(Error));
+});
+
+it('gotowy moduł zastępuje swoje szkielety, reszta czeka na swoich miejscach', async () => {
+  let oddajSyreny!: (w: Wskazowka[]) => void;
+  const moduly: Modul[] = [
+    { id: 'syreny', nazwa: 'Syreny', Panel, wskazowki: () => new Promise((r) => (oddajSyreny = r)) },
+    { id: 'punkty', nazwa: 'Pomoc', Panel, wskazowki: async () => [karta('schronienie', 20), karta('medyczna', 30)] },
+    { id: 'transport', nazwa: 'Dojazd', Panel, wskazowki: () => new Promise(() => {}) },
+  ];
+  const { result } = renderHook(() => useWskazowki(moduly, k, 0));
+  await waitFor(() => expect(result.current.karty.map((w) => w.id)).toEqual(['schronienie', 'medyczna']));
+  expect(result.current.ladowanie).toEqual([10, 50]);
+  await act(async () => oddajSyreny([karta('syreny', 10)]));
+  expect(result.current.ladowanie).toEqual([50]);
 });
 
 it('odświeżenie po akcji (tylko proba) zostawia stare karty do czasu nowych', async () => {
@@ -43,12 +57,12 @@ it('odświeżenie po akcji (tylko proba) zostawia stare karty do czasu nowych', 
   await waitFor(() => expect(result.current.karty).toHaveLength(1));
   wskazowki.mockReturnValueOnce(new Promise((r) => (oddaj = r)));
   rerender({ proba: 1 });
-  expect(result.current).toEqual({ karty: [karta('powietrze', 40)], ladowanie: 0 });
+  expect(result.current).toEqual({ karty: [karta('powietrze', 40)], ladowanie: [] });
   await act(async () => oddaj([{ ...karta('powietrze', 40), tekst: 'nowa' }]));
   expect(result.current.karty[0].tekst).toBe('nowa');
 });
 
 it('bez kontekstu nic nie ładuje', () => {
   const { result } = renderHook(() => useWskazowki([], null, 0));
-  expect(result.current).toEqual({ karty: [], ladowanie: 0 });
+  expect(result.current).toEqual({ karty: [], ladowanie: [] });
 });

@@ -38,7 +38,7 @@ it('klik w kartę wykonuje pierwszą akcję mapową, drugi klik sprząta; szkiel
   const pokaz = vi.fn((_m: MapLibreMap) => sprzatanie);
   const mapa = { isStyleLoaded: () => true } as unknown as MapLibreMap;
   const w: Wskazowka = { id: 'syreny', kolejnosc: 10, tytul: 'Syreny', poziom: 'ok', tekst: 'Jesteś w zasięgu syreny.', akcje: [{ typ: 'mapa', pokaz }], zrodlo: 'SOIA' };
-  render(<Karty karty={[w]} ladowanie={1} mapa={mapa} od={{ lat: 52.23, lon: 21 }} onOdswiez={() => {}} />);
+  render(<Karty karty={[w]} ladowanie={[20]} mapa={mapa} od={{ lat: 52.23, lon: 21 }} onOdswiez={() => {}} />);
   expect(screen.getByLabelText('Ładowanie wskazówki')).toBeTruthy();
   const przycisk = screen.getByRole('button', { name: /Syreny/ });
   fireEvent.click(przycisk);
@@ -48,11 +48,18 @@ it('klik w kartę wykonuje pierwszą akcję mapową, drugi klik sprząta; szkiel
   expect(sprzatanie).toHaveBeenCalled();
 });
 
+it('szkielety stoją na miejscach kart w docelowej kolejności, nie na końcu listy', () => {
+  const karta = (id: string, kolejnosc: number): Wskazowka => ({ id, kolejnosc, tytul: id, poziom: 'ok', tekst: id, akcje: [], zrodlo: 'x' });
+  render(<Karty karty={[karta('powietrze', 40), karta('syreny', 10)]} ladowanie={[50, 20, 30]} mapa={null} od={od} onOdswiez={() => {}} />);
+  const kolejnosc = screen.getAllByRole('listitem').map((li) => li.getAttribute('data-testid') ?? li.getAttribute('aria-label'));
+  expect(kolejnosc).toEqual(['karta-syreny', 'Ładowanie wskazówki', 'Ładowanie wskazówki', 'karta-powietrze', 'Ładowanie wskazówki']);
+});
+
 it('akcja „przycisk” wykonuje się i odświeża karty', async () => {
   const wykonaj = vi.fn();
   const onOdswiez = vi.fn();
   const w: Wskazowka = { id: 'powietrze', kolejnosc: 40, tytul: 'Powietrze i wiatr', poziom: 'ok', tekst: 'Możesz wietrzyć.', akcje: [{ typ: 'przycisk', etykieta: 'Widzę dym', wykonaj }], zrodlo: 'x' };
-  render(<Karty karty={[w]} ladowanie={0} mapa={null} od={{ lat: 52.23, lon: 21 }} onOdswiez={onOdswiez} />);
+  render(<Karty karty={[w]} ladowanie={[]} mapa={null} od={{ lat: 52.23, lon: 21 }} onOdswiez={onOdswiez} />);
   fireEvent.click(screen.getByRole('button', { name: /Powietrze/ }));
   fireEvent.click(screen.getByRole('button', { name: 'Widzę dym' }));
   await waitFor(() => expect(onOdswiez).toHaveBeenCalled());
@@ -63,7 +70,7 @@ it('akcja „przycisk”, która rzuci błędem, nie psuje kart i też je odświ
   const blad = vi.spyOn(console, 'error').mockImplementation(() => {});
   const onOdswiez = vi.fn();
   const w: Wskazowka = { id: 'bliscy', kolejnosc: 50, tytul: 'Dotarcie do bliskich', poziom: 'ok', tekst: 'x', akcje: [{ typ: 'przycisk', etykieta: 'Zapisz', wykonaj: async () => Promise.reject(new Error('x')) }], zrodlo: 'x' };
-  render(<Karty karty={[w]} ladowanie={0} mapa={null} od={{ lat: 52.23, lon: 21 }} onOdswiez={onOdswiez} />);
+  render(<Karty karty={[w]} ladowanie={[]} mapa={null} od={{ lat: 52.23, lon: 21 }} onOdswiez={onOdswiez} />);
   fireEvent.click(screen.getByRole('button', { name: /Dotarcie do bliskich/ }));
   fireEvent.click(screen.getByRole('button', { name: 'Zapisz' }));
   await waitFor(() => expect(onOdswiez).toHaveBeenCalled());
@@ -74,7 +81,7 @@ it('akcja „przycisk”, która rzuci błędem, nie psuje kart i też je odświ
 it('spóźniona trasa po zamknięciu karty albo po odmontowaniu nie rysuje i nie przesuwa mapy', async () => {
   const mapa = atrapaMapy();
   let oddaj = trasaWToku();
-  render(<Karty karty={[schronienie]} ladowanie={0} mapa={mapa as unknown as MapLibreMap} od={od} onOdswiez={() => {}} />);
+  render(<Karty karty={[schronienie]} ladowanie={[]} mapa={mapa as unknown as MapLibreMap} od={od} onOdswiez={() => {}} />);
   const przycisk = screen.getByRole('button', { name: /schronienia/ });
   fireEvent.click(przycisk);
   fireEvent.click(przycisk);
@@ -93,10 +100,10 @@ it('spóźniona trasa po zamknięciu karty albo po odmontowaniu nie rysuje i nie
 it('„Wyznaczam trasę…” w trakcie, potem opis; przed mapą „Mapa jeszcze się wczytuje.”', async () => {
   const mapa = atrapaMapy();
   const oddaj = trasaWToku();
-  const { rerender } = render(<Karty karty={[schronienie]} ladowanie={0} mapa={null} od={od} onOdswiez={() => {}} />);
+  const { rerender } = render(<Karty karty={[schronienie]} ladowanie={[]} mapa={null} od={od} onOdswiez={() => {}} />);
   fireEvent.click(screen.getByRole('button', { name: /schronienia/ }));
   expect(screen.getByRole('status').textContent).toBe('Mapa jeszcze się wczytuje.');
-  rerender(<Karty karty={[schronienie]} ladowanie={0} mapa={mapa as unknown as MapLibreMap} od={od} onOdswiez={() => {}} />);
+  rerender(<Karty karty={[schronienie]} ladowanie={[]} mapa={mapa as unknown as MapLibreMap} od={od} onOdswiez={() => {}} />);
   expect(screen.queryByRole('status')).toBeNull();
   fireEvent.click(screen.getByRole('button', { name: 'Trasa pieszo: Garwolińska 9' }));
   expect(screen.getByRole('status').textContent).toBe('Wyznaczam trasę…');
@@ -109,7 +116,7 @@ it('pod trasą przełącznik „Pieszo | Komunikacja”; komunikacja i blackout 
   vi.mocked(trasa).mockResolvedValue(t);
   vi.mocked(planKomunikacji).mockResolvedValue({ warianty: [], pieszoM: 1800, pieszoMin: 22, pieszoSzybciej: true, blackout: false });
   const onBlackout = vi.fn();
-  render(<Karty karty={[schronienie]} ladowanie={0} mapa={atrapaMapy() as unknown as MapLibreMap} od={od} onOdswiez={() => {}} onBlackout={onBlackout} />);
+  render(<Karty karty={[schronienie]} ladowanie={[]} mapa={atrapaMapy() as unknown as MapLibreMap} od={od} onOdswiez={() => {}} onBlackout={onBlackout} />);
   fireEvent.click(screen.getByRole('button', { name: /miejsce schronienia/ }));
   await waitFor(() => expect(screen.getByRole('status').textContent).toBe('1,8 km po ulicach, pieszo ok. 22 min.'));
   expect(screen.getByRole('radio', { name: 'Pieszo' }).getAttribute('aria-checked')).toBe('true');

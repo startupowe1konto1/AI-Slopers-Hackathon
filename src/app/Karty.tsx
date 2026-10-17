@@ -9,7 +9,7 @@ const BEZ_MAPY = 'Mapa jeszcze się wczytuje.';
 
 type Props = {
   karty: Wskazowka[];
-  ladowanie: number;
+  ladowanie: number[]; // miejsca (kolejnosc) kart, które jeszcze się liczą: tam stoją szkielety
   mapa: MapLibreMap | null;
   od: Wsp;
   onOdswiez: () => void;
@@ -99,6 +99,11 @@ export function Karty({ karty, ladowanie, mapa, od, onOdswiez, blackout = false,
     if (cel && tryb === 'komunikacja') void komunikacja(cel, b);
   };
 
+  // Karty i szkielety w jednej kolejności; przy tym samym miejscu karta przed szkieletem.
+  const lista = [...karty.map((w) => ({ miejsce: w.kolejnosc, w })), ...ladowanie.map((miejsce) => ({ miejsce, w: null }))].sort(
+    (a, b) => a.miejsce - b.miejsce,
+  );
+
   const kliknij = (w: Wskazowka) => {
     wyczysc();
     setCel(null);
@@ -111,67 +116,68 @@ export function Karty({ karty, ladowanie, mapa, od, onOdswiez, blackout = false,
   return (
     <section className="karty" aria-label="Twoja sytuacja">
       <h2>Twoja sytuacja</h2>
-      {!karty.length && !ladowanie && <p className="karty-pusto">Brak wskazówek dla tego miejsca.</p>}
+      {!lista.length && <p className="karty-pusto">Brak wskazówek dla tego miejsca.</p>}
       <ul>
-        {karty.map((w) => (
-          <li key={w.id} className={`karta karta-${w.poziom}`} data-testid={`karta-${w.id}`}>
-            <button className="karta-glowna" aria-expanded={otwarta === w.id} onClick={() => kliknij(w)}>
-              <span className="karta-tytul">{w.tytul}</span>
-              <span className="karta-poziom">{POZIOM[w.poziom]}</span>
-              <span className="karta-tekst">{w.tekst}</span>
-            </button>
-            {otwarta === w.id && (
-              <div className="karta-szczegoly">
-                {opis && !(mapa && opis === BEZ_MAPY) && <p role="status">{opis}</p>}
-                {cel && (
-                  <WyborTrybu
-                    tryb={tryb}
-                    pierwszy={cel.profil === 'rower' ? 'Rowerem' : 'Pieszo'}
-                    onTryb={zmienTryb}
-                    blackout={blackout}
-                    onBlackout={zmienBlackout}
-                  />
-                )}
-                {szczegolyTrasy && (
-                  <ul className="trasa-szczegoly">
-                    {szczegolyTrasy.map((s) => (
-                      <li key={s}>{s}</li>
-                    ))}
-                  </ul>
-                )}
-                {w.szczegoly && (
-                  <ul>
-                    {w.szczegoly.map((s) => (
-                      <li key={s}>{s}</li>
-                    ))}
-                  </ul>
-                )}
-                {w.akcje.length > 0 && (
-                  <div className="karta-akcje">
-                    {w.akcje.map((a, i) =>
-                      a.typ === 'link' ? (
-                        <a key={i} className="przycisk drugi" href={a.url} target="_blank" rel="noreferrer">
-                          {a.etykieta}
-                        </a>
-                      ) : (
-                        <button key={i} className="przycisk drugi" onClick={() => void uruchom(a)}>
-                          {etykietaAkcji(a)}
-                        </button>
-                      ),
-                    )}
-                  </div>
-                )}
-                <p className="karta-zrodlo">
-                  Źródło: {w.zrodlo}
-                  {w.stanNa && `, stan na ${w.stanNa}`}
-                </p>
-              </div>
-            )}
-          </li>
-        ))}
-        {Array.from({ length: ladowanie }, (_, i) => (
-          <li key={`ladowanie-${i}`} className="karta karta-szkielet" aria-busy="true" aria-label="Ładowanie wskazówki" />
-        ))}
+        {lista.map(({ miejsce, w }) =>
+          !w ? (
+            <li key={`ladowanie-${miejsce}`} className="karta karta-szkielet" aria-busy="true" aria-label="Ładowanie wskazówki" />
+          ) : (
+            <li key={w.id} className={`karta karta-${w.poziom}`} data-testid={`karta-${w.id}`}>
+              <button className="karta-glowna" aria-expanded={otwarta === w.id} onClick={() => kliknij(w)}>
+                <span className="karta-tytul">{w.tytul}</span>
+                <span className="karta-poziom">{POZIOM[w.poziom]}</span>
+                <span className="karta-tekst">{w.tekst}</span>
+              </button>
+              {otwarta === w.id && (
+                <div className="karta-szczegoly">
+                  {opis && !(mapa && opis === BEZ_MAPY) && <p role="status">{opis}</p>}
+                  {cel && (
+                    <WyborTrybu
+                      tryb={tryb}
+                      pierwszy={cel.profil === 'rower' ? 'Rowerem' : 'Pieszo'}
+                      onTryb={zmienTryb}
+                      blackout={blackout}
+                      onBlackout={zmienBlackout}
+                    />
+                  )}
+                  {szczegolyTrasy && (
+                    <ul className="trasa-szczegoly">
+                      {szczegolyTrasy.map((s) => (
+                        <li key={s}>{s}</li>
+                      ))}
+                    </ul>
+                  )}
+                  {w.szczegoly && (
+                    <ul>
+                      {w.szczegoly.map((s) => (
+                        <li key={s}>{s}</li>
+                      ))}
+                    </ul>
+                  )}
+                  {w.akcje.length > 0 && (
+                    <div className="karta-akcje">
+                      {w.akcje.map((a, i) =>
+                        a.typ === 'link' ? (
+                          <a key={i} className="przycisk drugi" href={a.url} target="_blank" rel="noreferrer">
+                            {a.etykieta}
+                          </a>
+                        ) : (
+                          <button key={i} className="przycisk drugi" onClick={() => void uruchom(a)}>
+                            {etykietaAkcji(a)}
+                          </button>
+                        ),
+                      )}
+                    </div>
+                  )}
+                  <p className="karta-zrodlo">
+                    Źródło: {w.zrodlo}
+                    {w.stanNa && `, stan na ${w.stanNa}`}
+                  </p>
+                </div>
+              )}
+            </li>
+          ),
+        )}
       </ul>
     </section>
   );
