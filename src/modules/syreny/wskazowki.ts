@@ -1,5 +1,6 @@
 import type { KontekstWskazowek, Poziom, Wskazowka } from '../../contracts';
 import { drukujKarte } from './druk';
+import { DOPISEK_OKREGOW, najblizszeOkregi, opisOkregow, pokazOkregi, wczytajOkregi } from './okregi';
 import { DOPISEK, KLASA } from './teksty';
 import { ocena, wynikSyreny, type Poziom as Ocena, type WynikSyrenyZSzacunkiem } from './wynik';
 
@@ -40,6 +41,11 @@ export async function wskazowkiSyren(k: KontekstWskazowek): Promise<Wskazowka[]>
     return [{ ...baza, poziom: 'brak', tekst, akcje: [] }];
   }
   if (!w) return [{ ...baza, poziom: 'brak', tekst: 'Brak danych o syrenach dla tego miejsca.', akcje: [] }];
+  // Bez pliku okręgów karta działa jak dotąd: bez akcji mapy i bez opisu okręgów.
+  const bliskie = await wczytajOkregi()
+    .then((o) => najblizszeOkregi(o, k.miejsce.adres, 5))
+    .catch(() => []);
+  const okregi = bliskie.length ? [{ typ: 'mapa' as const, pokaz: pokazOkregi(bliskie, k.miejsce.adres) }] : [];
   return [
     {
       ...baza,
@@ -48,9 +54,11 @@ export async function wskazowkiSyren(k: KontekstWskazowek): Promise<Wskazowka[]>
       szczegoly: [
         `Normalnie: ${KLASA[w.normalnie].tekst}. Jeśli zabraknie prądu: ${KLASA[w.blackout].tekst}${w.blackoutSzacunek ? ' (szacunek)' : ''}.`,
         ...KROKI,
+        ...opisOkregow(bliskie),
+        ...(bliskie.length ? [DOPISEK_OKREGOW] : []),
         DOPISEK,
       ],
-      akcje: [druk],
+      akcje: [...okregi, druk],
     },
   ];
 }

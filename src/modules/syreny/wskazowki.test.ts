@@ -1,8 +1,10 @@
-import { afterEach, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, expect, it, vi } from 'vitest';
 import type { KontekstWskazowek } from '../../contracts';
 
 vi.mock('./wynik', async (oryginal) => ({ ...(await oryginal<typeof import('./wynik')>()), wynikSyreny: vi.fn() }));
 vi.mock('./druk', () => ({ drukujKarte: vi.fn() }));
+vi.mock('./okregi', async (o) => ({ ...(await o<typeof import('./okregi')>()), wczytajOkregi: vi.fn(async () => []) }));
+import { DOPISEK_OKREGOW, wczytajOkregi } from './okregi';
 import { wynikSyreny } from './wynik';
 import { DOPISEK } from './teksty';
 import { tekstSyren, wskazowkiSyren } from './wskazowki';
@@ -12,6 +14,10 @@ const k = (online = true): KontekstWskazowek => ({ miejsce: { rola: 'dom', etyki
 const w = (normalnie: string, blackout: string, blackoutSzacunek = false) =>
   ({ adresId: '1', normalnie, blackout, blackoutSzacunek }) as Parameters<typeof tekstSyren>[0];
 
+// Domyślnie brak okręgów, więc testy karty z S1 nie zależą od tego pliku.
+beforeEach(() => {
+  vi.mocked(wczytajOkregi).mockResolvedValue([]);
+});
 afterEach(() => vi.clearAllMocks());
 
 it('tekst: najpierw zasięg normalnie, potem „jeśli zabraknie prądu”', () => {
@@ -45,4 +51,21 @@ it('brak danych dla adresu i brak paczki bez sieci: karta „brak” z wyjaśnie
   vi.mocked(wynikSyreny).mockRejectedValue(new Error('Nie pobrano'));
   expect((await wskazowkiSyren(k(false)))[0].tekst).toMatch(/^Brak sieci/);
   expect((await wskazowkiSyren(k(true)))[0].tekst).toMatch(/^Źródło chwilowo niedostępne/);
+});
+
+it('akcja „mapa” z okręgami najbliższych syren i opis okręgów w szczegółach', async () => {
+  vi.mocked(wynikSyreny).mockResolvedValue(w('75+', '75+'));
+  vi.mocked(wczytajOkregi).mockResolvedValue([{ nr: 'a', typ: 'cyfrowa', lat: 52.2459, lon: 21.0874, r75: 345, r70: 641, r65: 1191 }]);
+  const [karta] = await wskazowkiSyren(k());
+  expect(karta.akcje.map((a) => a.typ)).toEqual(['mapa', 'przycisk']);
+  expect(karta.szczegoly).toContain('Syrena cyfrowa, 20 m od Ciebie: mieścisz się w okręgu 75 dB.');
+  expect(karta.szczegoly).toContain(DOPISEK_OKREGOW);
+});
+
+it('bez pliku okręgów karta działa dalej, bez akcji mapy', async () => {
+  vi.mocked(wynikSyreny).mockResolvedValue(w('75+', '75+'));
+  vi.mocked(wczytajOkregi).mockRejectedValue(new Error('brak'));
+  const [karta] = await wskazowkiSyren(k());
+  expect(karta.akcje.map((a) => a.typ)).toEqual(['przycisk']);
+  expect(karta.szczegoly).not.toContain(DOPISEK_OKREGOW);
 });
