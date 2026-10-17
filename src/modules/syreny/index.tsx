@@ -9,4 +9,8 @@ export const modul: Modul = {
   nazwa: 'Syreny',
   Panel,
   dodajWarstwy,
+  // Atrapa z V1. Prawdziwa karta: S1.
+  wskazowki: async () => [
+    { id: 'syreny', kolejnosc: 10, tytul: 'Syreny', poziom: 'brak', tekst: 'Karta w budowie.', akcje: [], zrodlo: 'atrapa' },
+  ],
 };
