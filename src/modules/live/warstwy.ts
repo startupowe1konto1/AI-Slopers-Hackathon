@@ -10,7 +10,9 @@ const ROWERY = 'live-rowery';
 const ZRODLA = [POJAZDY, DYM, UTRUDNIENIA, ROWERY];
 
 // dodajWarstwy wywołuje mapa raz przy starcie; dane podaje panel przez ustaw*().
+// Panel może ustawić dane, zanim mapa się załaduje (np. zapisany punkt dymu), więc je pamiętamy.
 let mapa: MapLibreMap | null = null;
+const ostatnie = new Map<string, Feature[]>();
 
 const kolekcja = (features: Feature[]): FeatureCollection => ({ type: 'FeatureCollection', features });
 const punkt = (lon: number, lat: number, properties: Record<string, unknown> = {}): Feature => ({
@@ -20,12 +22,13 @@ const punkt = (lon: number, lat: number, properties: Record<string, unknown> = {
 });
 
 function ustaw(id: string, features: Feature[]) {
+  ostatnie.set(id, features);
   (mapa?.getSource(id) as GeoJSONSource | undefined)?.setData(kolekcja(features));
 }
 
 export function dodajWarstwy(map: MapLibreMap): () => void {
   mapa = map;
-  for (const id of ZRODLA) map.addSource(id, { type: 'geojson', data: kolekcja([]) });
+  for (const id of ZRODLA) map.addSource(id, { type: 'geojson', data: kolekcja(ostatnie.get(id) ?? []) });
   const warstwy = [
     {
       id: 'live-utrudnienia-linie',
