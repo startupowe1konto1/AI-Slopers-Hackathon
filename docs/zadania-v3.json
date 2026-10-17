@@ -1,0 +1,406 @@
+[
+  {
+    "id": "V1",
+    "osoba": "O1",
+    "galaz": "o1/v1-kontrakt",
+    "po": [],
+    "tytul": "Kontrakt v3 i atrapy kart",
+    "pliki": [
+      "src/contracts.ts",
+      "src/offline/trasy.ts",
+      "src/offline/trasy.test.ts",
+      "src/modules/syreny/index.tsx",
+      "src/modules/punkty/index.tsx",
+      "src/modules/live/index.tsx",
+      "src/modules/transport/index.tsx"
+    ],
+    "czlowiek": null,
+    "konflikty": []
+  },
+  {
+    "id": "V2a",
+    "osoba": "O1",
+    "galaz": "o1/v2a-najblizszy-adres",
+    "po": [
+      "V1"
+    ],
+    "tytul": "najblizszyAdres() w module adresy ([kontrakt], folder O2)",
+    "pliki": [
+      "src/modules/adresy/szukaj.ts",
+      "src/modules/adresy/index.ts",
+      "src/modules/adresy/najblizszy.test.ts"
+    ],
+    "czlowiek": null,
+    "konflikty": []
+  },
+  {
+    "id": "V2b",
+    "osoba": "O1",
+    "galaz": "o1/v2b-lokalizacja",
+    "po": [
+      "V1",
+      "V2a"
+    ],
+    "tytul": "Przycisk „Użyj mojej lokalizacji” (GPS i ?lokalizacja=lat,lon)",
+    "pliki": [
+      "src/app/lokalizacja.ts",
+      "src/app/lokalizacja.test.ts",
+      "src/app/Onboarding.tsx",
+      "src/app/App.tsx",
+      "src/index.css"
+    ],
+    "czlowiek": "Prawdziwy GPS sprawdzić ręcznie na telefonie (zgoda przeglądarki, HTTPS, np. workers.dev). Agent testuje tylko ?lokalizacja=lat,lon i atrapę geolocation.",
+    "konflikty": []
+  },
+  {
+    "id": "V3",
+    "osoba": "O1",
+    "galaz": "o1/v3-polaczenie",
+    "po": [
+      "V2b"
+    ],
+    "tytul": "Ekran „Sprawdzam połączenie…”",
+    "pliki": [
+      "src/offline/polaczenie.ts",
+      "src/offline/polaczenie.test.ts",
+      "src/app/Polaczenie.tsx",
+      "src/app/Polaczenie.test.tsx",
+      "src/app/App.tsx",
+      "src/index.css"
+    ],
+    "czlowiek": null,
+    "konflikty": []
+  },
+  {
+    "id": "V4",
+    "osoba": "O1",
+    "galaz": "o1/v4-ekran-glowny",
+    "po": [
+      "V1",
+      "V3"
+    ],
+    "tytul": "Ekran główny: pusta mapa, kafelki, karty",
+    "pliki": [
+      "src/app/wskazowki.ts",
+      "src/app/wskazowki.test.tsx",
+      "src/app/akcje.ts",
+      "src/app/akcje.test.ts",
+      "src/app/Karty.tsx",
+      "src/app/Karty.test.tsx",
+      "src/app/Kafelki.tsx",
+      "src/map/trasaNaMapie.ts",
+      "src/map/trasaNaMapie.test.ts",
+      "src/app/App.tsx",
+      "src/map/MapView.tsx",
+      "src/index.css",
+      "tests/e2e/kasia.spec.ts",
+      "docs/pitch/zrzuty/ (nowy zrzut)",
+      "docs/pitch/zrzuty.md"
+    ],
+    "czlowiek": "O1 o pełnych godzinach uruchamia npm run test:e2e na main i zgłasza błędy (proponowane: GitHub issue zamiast kanału). Po scaleniu obejrzeć wygląd ekranu na telefonie.",
+    "konflikty": [
+      "L4b (docs/pitch/zrzuty.md, docs/pitch/zrzuty/)"
+    ]
+  },
+  {
+    "id": "V5a",
+    "osoba": "O1",
+    "galaz": "o1/v5a-trasy-osrm",
+    "po": [
+      "V1"
+    ],
+    "tytul": "trasa(): OSRM przez /api/live/trasa, zapis w IndexedDB, atrybucja OSRM (kroki 1–4)",
+    "pliki": [
+      "src/offline/trasy.ts",
+      "src/offline/trasy.test.ts",
+      "src/app/zrodla.ts",
+      "src/app/zrodla.test.ts"
+    ],
+    "czlowiek": null,
+    "konflikty": []
+  },
+  {
+    "id": "V5b",
+    "osoba": "O1",
+    "galaz": "o1/v5b-zapis-tras",
+    "po": [
+      "V4",
+      "V5a"
+    ],
+    "tytul": "Zapis tras na offline w tle (kroki 5–11)",
+    "pliki": [
+      "src/offline/zapisTras.ts",
+      "src/offline/zapisTras.test.ts",
+      "src/app/App.tsx",
+      "src/app/Polaczenie.tsx",
+      "src/app/Polaczenie.test.tsx"
+    ],
+    "czlowiek": null,
+    "konflikty": []
+  },
+  {
+    "id": "V6",
+    "osoba": "O1",
+    "galaz": "o1/v6-sciezka-kasi",
+    "po": [
+      "V4",
+      "V5b",
+      "S1",
+      "P2",
+      "P3",
+      "L2",
+      "S3"
+    ],
+    "tytul": "Ścieżka Kasi pod nowy przepływ, aktualizacja CLAUDE.md",
+    "pliki": [
+      "tests/e2e/kasia.spec.ts",
+      "CLAUDE.md"
+    ],
+    "czlowiek": "Test pominięty po 22:30 z adnotacją „jest jeszcze atrapą” = zgłoszenie do właściciela karty; człowiek decyduje, czy ktoś ją przejmuje.",
+    "konflikty": []
+  },
+  {
+    "id": "S1",
+    "osoba": "O2",
+    "galaz": "o2/s1-karta-syreny",
+    "po": [
+      "V1"
+    ],
+    "tytul": "Karta Syreny",
+    "pliki": [
+      "src/modules/syreny/wskazowki.ts",
+      "src/modules/syreny/wskazowki.test.ts",
+      "src/modules/syreny/druk.tsx",
+      "src/modules/syreny/Karta.tsx (tylko export Tresc i wczytaj)",
+      "src/modules/syreny/index.tsx"
+    ],
+    "czlowiek": "Wydruk karty (window.print) sprawdzić ręcznie w przeglądarce albo jako PDF; agent druku nie zweryfikuje.",
+    "konflikty": []
+  },
+  {
+    "id": "S2a",
+    "osoba": "O2",
+    "galaz": "o2/s2a-okregi-pipeline",
+    "po": [],
+    "tytul": "Okręgi syren 75/70/65 dB: pipeline i okregi.json (kroki 1–5)",
+    "pliki": [
+      "pipeline/syreny/okregi.py",
+      "pipeline/syreny/test_okregi.py",
+      "public/pack/syreny/okregi.json",
+      "public/pack/manifest.json"
+    ],
+    "czlowiek": null,
+    "konflikty": [
+      "P1 (public/pack/manifest.json)"
+    ]
+  },
+  {
+    "id": "S2b",
+    "osoba": "O2",
+    "galaz": "o2/s2b-okregi-mapa",
+    "po": [
+      "S1",
+      "S2a"
+    ],
+    "tytul": "Okręgi syren na mapie: akcja „mapa” karty Syreny (kroki 6–10)",
+    "pliki": [
+      "src/modules/syreny/okregi.ts",
+      "src/modules/syreny/okregi.test.ts",
+      "src/modules/syreny/wskazowki.ts",
+      "src/modules/syreny/wskazowki.test.ts"
+    ],
+    "czlowiek": null,
+    "konflikty": []
+  },
+  {
+    "id": "S3",
+    "osoba": "O2",
+    "galaz": "o2/s3-karta-bliskich",
+    "po": [
+      "V1"
+    ],
+    "tytul": "Karta Dotarcie do bliskich",
+    "pliki": [
+      "src/modules/transport/wskazowki.ts",
+      "src/modules/transport/wskazowki.test.ts",
+      "src/modules/transport/index.tsx"
+    ],
+    "czlowiek": null,
+    "konflikty": []
+  },
+  {
+    "id": "P1",
+    "osoba": "O3",
+    "galaz": "o3/p1-przychodnie",
+    "po": [
+      "V1"
+    ],
+    "tytul": "Przychodnie z OpenStreetMap w paczce punktów",
+    "pliki": [
+      "pipeline/punkty/pobierz.py",
+      "pipeline/punkty/zrodla.py",
+      "pipeline/punkty/build.py",
+      "pipeline/punkty/test_build.py",
+      "src/modules/punkty/rodzaje.ts",
+      "dane/probki/osm-przychodnie.json",
+      "dane/probki/punkty_pobrano.json",
+      "public/pack/punkty/punkty.json",
+      "public/pack/punkty/meta.json",
+      "public/pack/manifest.json"
+    ],
+    "czlowiek": "Człowiek lokalnie (sieć z dostępem do Overpass; katalog z dane/psp-schronienia/): uv run --project pipeline python pipeline/punkty/pobierz.py osm-przychodnie; potem pipeline/punkty/build.py, pipeline/build_manifest.py, pipeline/validate.py; commit dane/probki/osm-przychodnie.json i public/pack/*. Agent w chmurze tego nie zrobi: Overpass go nie obsługuje, a surowy CSV z PSP jest poza gitem.",
+    "konflikty": [
+      "S2a (public/pack/manifest.json)"
+    ]
+  },
+  {
+    "id": "P2",
+    "osoba": "O3",
+    "galaz": "o3/p2-karta-schronienia",
+    "po": [
+      "V1"
+    ],
+    "tytul": "Karta Najbliższe miejsce schronienia według PSP",
+    "pliki": [
+      "src/modules/punkty/wskazowki.ts",
+      "src/modules/punkty/wskazowki.test.ts",
+      "src/modules/punkty/index.tsx"
+    ],
+    "czlowiek": null,
+    "konflikty": [
+      "P4 (src/modules/punkty/index.tsx)"
+    ]
+  },
+  {
+    "id": "P3",
+    "osoba": "O3",
+    "galaz": "o3/p3-karta-medyczna",
+    "po": [
+      "V1",
+      "P2"
+    ],
+    "tytul": "Karta Pomoc medyczna",
+    "pliki": [
+      "src/modules/punkty/medyczna.ts",
+      "src/modules/punkty/medyczna.test.ts",
+      "src/modules/punkty/wskazowki.ts"
+    ],
+    "czlowiek": null,
+    "konflikty": []
+  },
+  {
+    "id": "P4",
+    "osoba": "O3",
+    "galaz": "o3/p4-kafelki",
+    "po": [
+      "V1",
+      "V4"
+    ],
+    "tytul": "Kafelki: 7 warstw punktów włączanych pojedynczo, pusta mapa na starcie",
+    "pliki": [
+      "src/modules/punkty/kafelki.ts",
+      "src/modules/punkty/kafelki.test.ts",
+      "src/modules/punkty/warstwy.ts",
+      "src/modules/punkty/warstwy.test.ts",
+      "src/modules/punkty/index.tsx"
+    ],
+    "czlowiek": null,
+    "konflikty": [
+      "P2 (src/modules/punkty/index.tsx)"
+    ]
+  },
+  {
+    "id": "L1",
+    "osoba": "O4",
+    "galaz": "o4/l1-proxy-tras",
+    "po": [
+      "V1"
+    ],
+    "tytul": "Proxy tras OSRM /api/live/trasa",
+    "pliki": [
+      "server/live/trasa.ts",
+      "server/live/trasa.test.ts",
+      "dane/probki/osrm-pieszo.json",
+      "server/live/index.ts"
+    ],
+    "czlowiek": null,
+    "konflikty": []
+  },
+  {
+    "id": "L2",
+    "osoba": "O4",
+    "galaz": "o4/l2-karta-powietrza",
+    "po": [
+      "V1"
+    ],
+    "tytul": "Karta Powietrze i wiatr",
+    "pliki": [
+      "src/modules/live/wskazowki.ts",
+      "src/modules/live/wskazowki.test.ts",
+      "src/modules/live/dym.ts",
+      "src/modules/live/dym.test.ts",
+      "src/modules/live/okolica.ts",
+      "src/modules/live/Panel.tsx",
+      "src/modules/live/index.tsx"
+    ],
+    "czlowiek": null,
+    "konflikty": [
+      "L3 (src/modules/live/index.tsx)"
+    ]
+  },
+  {
+    "id": "L3",
+    "osoba": "O4",
+    "galaz": "o4/l3-rowery",
+    "po": [
+      "V1"
+    ],
+    "tytul": "najblizszaStacjaZRowerami() dla karty bliskich",
+    "pliki": [
+      "src/modules/live/rowery.ts",
+      "src/modules/live/rowery.test.ts",
+      "src/modules/live/index.tsx"
+    ],
+    "czlowiek": null,
+    "konflikty": [
+      "L2 (src/modules/live/index.tsx)"
+    ]
+  },
+  {
+    "id": "L4a",
+    "osoba": "O4",
+    "galaz": "o4/l4-pitch-v3",
+    "po": [],
+    "tytul": "Pitch: liczby syren z WYNIKI.md i demo nowego przepływu (kroki 1–5, 7)",
+    "pliki": [
+      "docs/pitch/scenariusz.md",
+      "docs/pitch/pytania.md",
+      "docs/pitch/prezentacja/index.html",
+      "docs/pitch/prezentacja/build_dane.py",
+      "docs/pitch/prezentacja/dane.js",
+      "docs/pitch/prezentacja/README.md",
+      "docs/DOKUMENTACJA.md",
+      "HANDOFF.md (tylko liczby, za zgodą O1)"
+    ],
+    "czlowiek": "O1 decyduje o zmianie HANDOFF.md (tylko liczby, linie 105 i 202; propozycja jest w opisie PR #29). Jeśli prezentacja końcowa to .pptx poza repo, ktoś podmienia w niej liczby ręcznie.",
+    "konflikty": []
+  },
+  {
+    "id": "L4b",
+    "osoba": "O4",
+    "galaz": "o4/l4b-proba-zrzuty",
+    "po": [
+      "V4"
+    ],
+    "tytul": "Pitch: próba 23:30 na main, zrzuty kart, poprawki scenariusza (krok 6)",
+    "pliki": [
+      "docs/pitch/zrzuty/",
+      "docs/pitch/zrzuty.md",
+      "docs/pitch/scenariusz.md"
+    ],
+    "czlowiek": "Próba pitchu o 23:30 z zespołem na main (po V4); poprawki scenariusza po próbie; zrzuty z prawdziwego ekranu.",
+    "konflikty": [
+      "V4 (docs/pitch/zrzuty.md, docs/pitch/zrzuty/)"
+    ]
+  }
+]
