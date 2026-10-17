@@ -1,6 +1,7 @@
 # Zasady repo (czytaj przed każdą zmianą)
 
 - Specyfikacja: `docs/SPEC.md`. Plan i zadania: `docs/PLAN.md`. Pracujesz nad jednym zadaniem z PLAN.md (np. `O3-A1`).
+- Iteracja v3 (ekran „Twoja sytuacja”, od 17.10 wieczorem): `HANDOFF-v3.md` i zadania w `docs/PLAN-v3.md` (np. `V1`, `S2`, `P3`, `L1`). Gdzie różni się od PLAN.md, wygrywa PLAN-v3.
 - Piszesz tylko w folderach swojej osoby (SPEC.md §9). Inny plik: osobny, mały PR z tytułem `[kontrakt] ...`, przegląda O1.
 - Typy wspólne tylko z `src/contracts.ts`. Nie dodawaj zależności npm bez PR `[kontrakt]`.
 - Moduł UI = folder `src/modules/<moduł>/` z `index.tsx` eksportującym `modul: Modul`. Nie edytuj `src/modules/index.ts`.

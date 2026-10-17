@@ -2,6 +2,8 @@
 
 > **Dla agentów:** wykonuj zadania po kolei w swoim pasie, z TDD (najpierw test, potem kod). Zalecany skill: `superpowers:subagent-driven-development` albo `superpowers:executing-plans`. Kroki mają pola `- [ ]` do odhaczania. Specyfikacja: [SPEC.md](SPEC.md). Kontekst: [HANDOFF.md](../HANDOFF.md).
 
+> **Iteracja v3 (od 17.10, 19:15):** ekran „Twoja sytuacja” z kartami. Zadania V1–V6, S1–S3, P1–P4, L1–L4 są w [PLAN-v3.md](PLAN-v3.md); gdzie różni się od tego planu, wygrywa PLAN-v3. Harmonogram nocny i sekcja F stąd obowiązują dalej.
+
 **Cel:** strona PWA dla mieszkańca Warszawy, która odpowiada na pytania o syreny, najbliższą pomoc, dojazd przy blackoucie i sytuację na żywo, i działa bez sieci.
 
 **Architektura:** Vite + React + TS z modułami w osobnych folderach. Dane liczone z góry w Pythonie trafiają do `public/pack/`. Proxy na żywo to czyste funkcje `(Request, env) => Response` w `server/`, zarejestrowane w `server/live/index.ts`, obsługiwane przez Cloudflare Worker (`worker/index.ts`) i przez middleware w `vite dev`.
