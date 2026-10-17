@@ -8,5 +8,37 @@
    "url": "https://doi.org/10.5281/zenodo.21921103",
    "pobrano": "2026-10-17T13:02:00+02:00"
   }
+ },
+ "przyblizenie": {
+  "opis": "p = 1: w SOIA dominuje tu syrena analogowa, więc poziom przy blackoucie to szacunek. Najgłośniejsza syrena cyfrowa wg odległości i mocy: L = A[spl30] + B*log10(d) - poprawka, dopasowane do rastra poziomu dźwięku SOIA 50-600 m od syren; poprawka wyrównuje udział adresów >= 65 dB dla wszystkich syren z wynikiem SOIA. Bez syren spoza Warszawy (brak współrzędnych).",
+  "spadek_db_na_dekade_odleglosci": -18.58,
+  "poziom_A_wg_spl30": {
+   "103": 118.0,
+   "109": 122.7,
+   "112": 126.0,
+   "115": 128.3
+  },
+  "poprawka_db": 3.85,
+  "udzial_65_wszystkie_syreny": 0.9248,
+  "zgodnosc_65_wszystkie_syreny": 0.9563,
+  "zgodnosc_klasy_wszystkie_syreny": 0.7627,
+  "adresy_przyblizone": 29676,
+  "wrazliwosc_tylko_cyfrowe": [
+   {
+    "poprawka_db": 2.85,
+    "udzial_65": 0.9197,
+    "traci_zasieg": 697
+   },
+   {
+    "poprawka_db": 3.85,
+    "udzial_65": 0.9155,
+    "traci_zasieg": 1230
+   },
+   {
+    "poprawka_db": 4.85,
+    "udzial_65": 0.91,
+    "traci_zasieg": 1928
+   }
+  ]
  }
 }
