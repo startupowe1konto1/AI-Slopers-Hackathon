@@ -4,3 +4,5 @@
 .DS_Store
 node_modules/
 *.pmtiles
+apiKey.txt*
+dane/psp-schronienia/
