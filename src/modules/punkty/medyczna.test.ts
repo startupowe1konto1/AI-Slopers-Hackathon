@@ -22,6 +22,19 @@ it('najbliższy AED, SOR, apteka i przychodnia z odległością i trasą do każ
   expect(w.akcje.map((a) => a.typ === 'trasa' && a.nazwa)).toEqual(['AED: Nazwa aed', 'SOR: Nazwa sor', 'Apteka: Nazwa apteka', 'Przychodnia: Nazwa przychodnia']);
 });
 
+it('godziny przychodni z OSM po polsku; adres z kropką na końcu bez „., 110 m”', async () => {
+  vi.mocked(najblizsze).mockImplementation(async (_w: Wsp, r: RodzajPunktu) => [
+    r === 'aed'
+      ? { ...punkt(r), adres: 'Hol główny, po lewej stronie od wejścia.' }
+      : r === 'przychodnia'
+        ? { ...punkt(r), dostepnosc: 'Mo-Fr 08:00-20:00; Sa-Su off' }
+        : punkt(r),
+  ]);
+  const w = await kartaMedyczna(k());
+  expect(w.szczegoly).toContain('AED: Nazwa aed, Hol główny, po lewej stronie od wejścia, 110 m. Całodobowa');
+  expect(w.szczegoly).toContain('Przychodnia: Nazwa przychodnia, Grochowska 1, 440 m. Godziny: pn–pt 08:00–20:00; sob–nd nieczynne');
+});
+
 it('AED dalej niż 1 km albo brak AED: „uwaga”; brak wszystkiego bez sieci: „brak”', async () => {
   vi.mocked(najblizsze).mockImplementation(async (_w: Wsp, r: RodzajPunktu) => (r === 'aed' ? [] : [punkt(r)]));
   expect((await kartaMedyczna(k())).poziom).toBe('uwaga');

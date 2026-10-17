@@ -1,4 +1,5 @@
 import type { KontekstWskazowek, Punkt, RodzajPunktu, Wskazowka } from '../../contracts';
+import { godzinyPoPolsku } from './godziny';
 import { formatujOdleglosc, najblizsze, odlegloscM } from './najblizsze';
 
 const RODZAJE: { rodzaj: RodzajPunktu; nazwa: string }[] = [
@@ -24,6 +25,11 @@ export async function kartaMedyczna(k: KontekstWskazowek): Promise<Wskazowka> {
   const m = (p: Punkt) => formatujOdleglosc(odlegloscM(od, p));
   // Wiele aptek i przychodni nazywa się po prostu „Apteka”, „Przychodnia”: bez „Apteka: Apteka”.
   const nazwa = (w: (typeof z)[number]) => (w.p.nazwa.toLowerCase() === w.nazwa.toLowerCase() ? w.nazwa : `${w.nazwa}: ${w.p.nazwa}`);
+  // Opis położenia AED bywa zdaniem z kropką: bez „…od wejścia., 110 m”.
+  const adres = (p: Punkt) => (p.adres ? `, ${p.adres.replace(/[\s.,;:]+$/, '')}` : '');
+  // Przychodnie mają godziny z OSM („Mo-Fr 08:00-20:00”); pozostałe źródła piszą dostępność po polsku.
+  const dostepnosc = (w: (typeof z)[number]) =>
+    !w.p.dostepnosc ? '' : w.rodzaj === 'przychodnia' && w.p.dostepnosc !== 'Całodobowa' ? ` Godziny: ${godzinyPoPolsku(w.p.dostepnosc)}` : ` ${w.p.dostepnosc}`;
   const aed = z.find((w) => w.rodzaj === 'aed');
   const blisko = Boolean(aed && odlegloscM(od, aed.p) <= 1000);
   return {
@@ -33,7 +39,7 @@ export async function kartaMedyczna(k: KontekstWskazowek): Promise<Wskazowka> {
     szczegoly: [
       'W nagłym wypadku dzwoń 112.',
       ...(blisko ? [] : ['Najbliższy AED jest dalej niż 1 km.']),
-      ...z.map((w) => `${nazwa(w)}${w.p.adres ? `, ${w.p.adres}` : ''}, ${m(w.p)}.${w.p.dostepnosc ? ` ${w.p.dostepnosc}` : ''}`),
+      ...z.map((w) => `${nazwa(w)}${adres(w.p)}, ${m(w.p)}.${dostepnosc(w)}`),
     ],
     akcje: z.map((w) => ({ typ: 'trasa' as const, cel: { lat: w.p.lat, lon: w.p.lon }, nazwa: nazwa(w), profil: 'pieszo' as const })),
     zrodlo: ZRODLO,
