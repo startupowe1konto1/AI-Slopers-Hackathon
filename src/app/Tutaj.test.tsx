@@ -91,6 +91,14 @@ describe('pasek', () => {
     expect(wybor.textContent).toContain('Lokalizacja: Marszałkowska 1');
   });
 
+  it('pole wyboru miejsca ma id i name (autouzupełnianie, etykiety formularza)', async () => {
+    zapisane = [dom];
+    render(<App />);
+    const wybor = await screen.findByRole<HTMLSelectElement>('combobox', { name: 'Wybrane miejsce' });
+    expect(wybor.id).toBe('wybrane-miejsce');
+    expect(wybor.name).toBe('miejsce');
+  });
+
   it('przycisk „Lokalizacja” dodaje miejsce na początek listy i je wybiera', async () => {
     zapisane = [dom];
     vi.mocked(najblizszyAdres).mockResolvedValue(marszalkowska);

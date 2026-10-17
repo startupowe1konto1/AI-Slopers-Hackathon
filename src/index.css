@@ -37,7 +37,8 @@ input { font: inherit; }
 .pasek-przycisk:active:not(:disabled) { transform: scale(0.96); background: var(--wypelnienie-wcisniete); }
 .pasek-przycisk:disabled { opacity: 0.5; cursor: default; }
 .pasek-blad { flex-basis: 100%; margin: 0; font-size: 13px; color: var(--akcent); }
-.pasek select { flex: 1 1 7rem; min-width: 0; min-height: 36px; padding: 6px 10px; border: 0; border-radius: 10px; background: var(--wypelnienie); color: var(--tekst); font-size: 14px; font-weight: 500; }
+/* Wybrane miejsce w osobnym wierszu: obok przycisków i stanu sieci adres się ucinał (QA, 400 px). */
+.pasek select { flex: 1 1 100%; min-width: 0; min-height: 36px; padding: 6px 10px; border: 0; border-radius: 10px; background: var(--wypelnienie); color: var(--tekst); font-size: 14px; font-weight: 500; }
 .siec { font-size: 12px; font-weight: 600; padding: 4px 9px; border-radius: 999px; white-space: nowrap; }
 .siec.online { background: #ecfdf5; color: var(--ok); }
 .siec.offline { background: var(--akcent-tlo); color: var(--akcent); }

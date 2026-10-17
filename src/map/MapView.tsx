@@ -7,6 +7,16 @@ import { zapewnijMape } from '../offline/paczka';
 import { styl } from './styl';
 
 const BBOX: [number, number, number, number] = [20.85, 52.09, 21.28, 52.37];
+// Podpisy kontrolek MapLibre po polsku (klucze jak w maplibre-gl, src/ui/default_locale).
+const JEZYK_MAPY: Record<string, string> = {
+  'AttributionControl.ToggleAttribution': 'Pokaż lub ukryj źródła mapy',
+  'AttributionControl.MapFeedback': 'Zgłoś błąd na mapie',
+  'Map.Title': 'Mapa',
+  'Marker.Title': 'Znacznik na mapie',
+  'NavigationControl.ZoomIn': 'Przybliż',
+  'NavigationControl.ZoomOut': 'Oddal',
+  'Popup.Close': 'Zamknij dymek',
+};
 // Vite: worker MapLibre musi przejść przez ?worker&url (dokumentacja MapLibre 6).
 setWorkerUrl(workerUrl);
 const protocol = new Protocol();
@@ -47,6 +57,7 @@ export function MapView({ centrum, moduly, onMapa }: { centrum: Wsp | null; modu
           [BBOX[2] + 0.05, BBOX[3] + 0.05],
         ],
         attributionControl: { compact: true },
+        locale: JEZYK_MAPY,
       });
       // Górę mapy zajmują kafelki warstw, więc przybliżanie jest na dole.
       m.addControl(new NavigationControl({ showCompass: false }), 'bottom-right');

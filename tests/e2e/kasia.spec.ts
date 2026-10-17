@@ -26,9 +26,25 @@ async function karta(page: Page, id: string) {
   return k;
 }
 
+// Czy tekst wybranej opcji mieści się w polu (bez strzałki listy), czyli nie jest ucięty.
+const tekstWybranegoMiejscaSieMiesci = (page: Page) =>
+  page.getByRole('combobox', { name: 'Wybrane miejsce' }).evaluate((el: HTMLSelectElement) => {
+    const s = getComputedStyle(el);
+    const ctx = document.createElement('canvas').getContext('2d')!;
+    ctx.font = `${s.fontWeight} ${s.fontSize} ${s.fontFamily}`;
+    const tekst = ctx.measureText(el.selectedOptions[0].text).width;
+    return tekst <= el.clientWidth - parseFloat(s.paddingLeft) - parseFloat(s.paddingRight) - 24;
+  });
+
 test('szkielet: onboarding, paczka offline, mapa działa po odświeżeniu bez sieci', async ({ page, context }) => {
   await onboarding(page);
   await expect(page.getByRole('combobox', { name: 'Wybrane miejsce' })).toContainText('Grochowska 200');
+  // Wąski ekran (390 px): widać, które miejsce jest wybrane.
+  expect(await tekstWybranegoMiejscaSieMiesci(page)).toBe(true);
+  // Kontrolki MapLibre po polsku.
+  await expect(page.getByRole('button', { name: 'Przybliż' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Oddal' })).toBeVisible();
+  await expect(page.locator('.maplibregl-ctrl-attrib-button')).toHaveAttribute('aria-label', 'Pokaż lub ukryj źródła mapy');
 
   await context.setOffline(true);
   await page.reload();

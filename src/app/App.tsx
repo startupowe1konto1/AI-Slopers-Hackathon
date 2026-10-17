@@ -109,7 +109,7 @@ export default function App() {
   return (
     <div className="aplikacja">
       <header className="pasek">
-        <select aria-label="Wybrane miejsce" value={miejsce.rola} onChange={(e) => setRola(e.target.value as RolaMiejsca)}>
+        <select id="wybrane-miejsce" name="miejsce" aria-label="Wybrane miejsce" value={miejsce.rola} onChange={(e) => setRola(e.target.value as RolaMiejsca)}>
           {miejsca.map((m) => (
             <option key={m.rola} value={m.rola}>
               {m.rola === 'tutaj' ? 'Lokalizacja' : m.etykieta}: {m.adres.ulica} {m.adres.numer}
