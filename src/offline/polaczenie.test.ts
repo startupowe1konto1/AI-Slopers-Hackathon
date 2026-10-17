@@ -6,24 +6,50 @@ import { przygotuj, sprawdzPolaczenie } from './polaczenie';
 
 const PACZKA = { wersja: 'x', zbudowano: '2026-10-17T18:00:00Z' };
 
+// Podstawiony fetch odpowiada osobno na /api/live/trasa (czy nasz serwer żyje) i /api/live/wiatr (czy dane miasta działają).
+const odpowiedzi = (trasa: () => Promise<Response>, wiatr: () => Promise<Response>) =>
+  vi.fn(async (url: RequestInfo | URL) => (String(url).includes('/api/live/trasa') ? trasa() : wiatr()));
+const brakSieci = async (): Promise<Response> => {
+  throw new TypeError('fetch failed');
+};
+
 afterEach(() => {
   vi.unstubAllGlobals();
   vi.clearAllMocks();
   history.replaceState(null, '', '/');
 });
 
-it('200 z /api/live/wiatr: sieć i API działają', async () => {
-  expect(await sprawdzPolaczenie(async () => Response.json([]))).toEqual({ siec: true, api: true });
+it('serwer i /api/live/wiatr odpowiadają 200: sieć i API działają', async () => {
+  const f = odpowiedzi(async () => Response.json({}), async () => Response.json([]));
+  expect(await sprawdzPolaczenie(f)).toEqual({ siec: true, api: true });
 });
 
-it('502 z proxy: sieć jest, dane miasta nie', async () => {
-  expect(await sprawdzPolaczenie(async () => Response.json({ blad: 'timeout' }, { status: 502 }))).toEqual({ siec: true, api: false });
+it('serwer odpowiada (nawet 400), a wiatr 502: sieć jest, dane miasta nie', async () => {
+  const f = odpowiedzi(
+    async () => Response.json({ blad: 'brak parametrów' }, { status: 400 }),
+    async () => Response.json({ blad: 'timeout' }, { status: 502 }),
+  );
+  expect(await sprawdzPolaczenie(f)).toEqual({ siec: true, api: false });
 });
 
 it('błąd sieci albo limit czasu: offline', async () => {
-  const f = async () => {
-    throw new TypeError('fetch failed');
-  };
+  expect(await sprawdzPolaczenie(vi.fn(brakSieci))).toEqual({ siec: false, api: false });
+});
+
+it('serwer odpowiada od razu, a wolne API miasta przekracza limit: sieć jest, API nie', async () => {
+  const f = odpowiedzi(
+    async () => Response.json({ blad: 'brak parametrów' }, { status: 400 }),
+    async () => {
+      throw new DOMException('The operation timed out.', 'TimeoutError');
+    },
+  );
+  expect(await sprawdzPolaczenie(f)).toEqual({ siec: true, api: false });
+  expect(f).toHaveBeenCalledTimes(2);
+  for (const [, init] of f.mock.calls as unknown as [string, RequestInit][]) expect(init.signal).toBeInstanceOf(AbortSignal);
+});
+
+it('API nie liczy się bez sieci, nawet gdyby wiatr odpowiedział', async () => {
+  const f = odpowiedzi(brakSieci, async () => Response.json([]));
   expect(await sprawdzPolaczenie(f)).toEqual({ siec: false, api: false });
 });
 
@@ -55,12 +81,12 @@ it('offline z paczką: nie pobiera', async () => {
   expect(pobierzPaczke).not.toHaveBeenCalled();
 });
 
-it('dwa wywołania naraz (StrictMode): jedno sprawdzenie i jedno pobranie', async () => {
+it('dwa wywołania naraz (StrictMode): jedno sprawdzenie (trasa + wiatr) i jedno pobranie', async () => {
   const f = vi.fn(async () => Response.json([]));
   vi.stubGlobal('fetch', f);
   vi.mocked(stanPaczki).mockResolvedValue(null);
   vi.mocked(pobierzPaczke).mockResolvedValue(undefined);
   await Promise.all([przygotuj(() => {}), przygotuj(() => {})]);
-  expect(f).toHaveBeenCalledTimes(1);
+  expect(f).toHaveBeenCalledTimes(2);
   expect(pobierzPaczke).toHaveBeenCalledTimes(1);
 });
