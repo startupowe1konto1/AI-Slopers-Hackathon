@@ -75,12 +75,12 @@ test('zamknięty bez scalenia PR = porzucone (porzuconeOd = zamknięcie), a świ
   assert.equal(stan(ZADANIA, [V1_ZROBIONE, nowyPR, zamkniety]).L3.stan, 'w_toku');
 });
 
-test('gałąź bez PR: młodsza niż 45 minut = w toku, starsza = porzucone, nieznany czas = w toku', () => {
+test('gałąź bez PR: młodsza niż 90 minut = w toku, starsza = porzucone, nieznany czas = w toku', () => {
   const prs = [V1_ZROBIONE];
-  assert.equal(stan(ZADANIA, prs, { 'o4/l3-rowery': temu(44) }).L3.stan, 'w_toku');
-  const stara = stan(ZADANIA, prs, { 'o4/l3-rowery': temu(46) }).L3;
+  assert.equal(stan(ZADANIA, prs, { 'o4/l3-rowery': temu(89) }).L3.stan, 'w_toku');
+  const stara = stan(ZADANIA, prs, { 'o4/l3-rowery': temu(91) }).L3;
   assert.equal(stara.stan, 'porzucone');
-  assert.equal(stara.porzuconeOd, temu(46));
+  assert.equal(stara.porzuconeOd, temu(91));
   assert.equal(stara.zamkniety, null);
   assert.equal(stan(ZADANIA, prs, { 'o4/l3-rowery': null }).L3.stan, 'w_toku');
 });

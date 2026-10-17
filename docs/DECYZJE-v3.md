@@ -26,6 +26,7 @@ Przyjęte przez O1 17.10 ok. 20:15: wszędzie odpowiedź rekomendowana. Pętla c
   - Do 24:00 zadania ruszają w kolejności ważności z linii 59, w ID z `zadania-v3.json`: S1, P2, V4, V5a, V5b, L1, potem P1, P3, potem L2, potem S3, L3, potem P4, na końcu S2a, S2b. Zadania spoza tej listy (V1, V2a, V2b, V3, L4a, L4b) ruszają, gdy są `gotowe`.
   - V6 rusza, gdy zadania z jego `po` (V4, V5b) są zrobione i jest 22:30 albo później, albo wcześniej, gdy zrobione są też wszystkie zadania z pola `miekkie` (S1, P2, P3, L2, S3). Testy kart, które są jeszcze atrapami, e2e pomija, a dla właściciela każdej atrapy powstaje issue.
   - Po 00:00 nie startujemy zadań funkcjonalnych. Kończymy PR-y z zielonym `ci`, resztę zostawiamy jako wersje robocze (draft) z issue. V6 i L4b mogą ruszyć po 00:00.
+- **W10. Porzucone zadania.** Zadanie z PR zamkniętym bez scalenia albo z gałęzią bez PR, na której od 90 minut nie ma nowego commitu, jest `porzucone` i `wszyscy` może je przejąć (AUTOPILOT krok 6). Żeby własna praca nie wyglądała na porzuconą, pętla wypycha pusty commit `autopilot: heartbeat` co iterację (dopóki zadanie nie ma PR), a subagent robi commit i push po każdym zielonym kroku oraz otwiera PR jako wersję roboczą (draft) po pierwszym prawdziwym commicie. Człowiek zajmuje zadanie pustym commitem `zajmuję <ID> (<imię>)` i wypycha co najmniej raz na godzinę.
 - **W9. Demo z czystą paczką.** Przed próbą 23:30 i przed pitchem przeglądarka na czystym profilu (albo „Wyczyść dane witryny”). L4b dopisuje to do scenariusza.
 
 ## O1
@@ -33,10 +34,10 @@ Przyjęte przez O1 17.10 ok. 20:15: wszędzie odpowiedź rekomendowana. Pętla c
 - **O1-1. V4 a `App.tsx`.** Agent V4 nie wkleja całego pliku z planu. Zachowuje zmiany z V2b i V3 na `main` i wypisuje je w opisie PR.
 - **O1-2. GPS.** Agent testuje `?lokalizacja=lat,lon` i atrapę `navigator.geolocation`. Prawdziwy GPS sprawdza człowiek na telefonie na `workers.dev` przed 23:30. Demo opiera się na `?lokalizacja=`.
 - **O1-3. E2e tylko na maszynie O1,** jeden bieg naraz.
-  - Pętla `wszyscy` uruchamia je co najwyżej raz na godzinę (godzina ostatniego biegu jest w lokalnym dzienniku), tylko gdy port 4174 jest wolny (`lsof -i :4174 -sTCP:LISTEN`).
-  - Subagenci V3, V4 i V6 uruchamiają je tylko przy wolnym porcie 4174. Gdy jest zajęty, czekają raz 60 sekund, a potem pomijają e2e i piszą o tym w opisie PR. Agenci O2–O4 e2e nie uruchamiają.
-  - Czerwone e2e na `main` to issue „e2e czerwone na main”. Zamykamy je, gdy kolejny bieg jest zielony.
-  - Do czasu V4 czerwone e2e nie blokuje scalania. Po V4 wstrzymuje scalanie PR-ów UI (`src/app`, `src/map`, `src/modules`) do naprawy; PR z poprawką i PR-y tylko z docs albo pipeline scalamy dalej.
+  - Pętla `wszyscy` uruchamia je co najwyżej raz na godzinę (godzina ostatniego biegu jest w lokalnym dzienniku), tylko gdy port 4174 jest wolny (`lsof -i :4174 -sTCP:LISTEN`). Czerwony wynik powtarza od razu jeszcze raz.
+  - Subagenci V3, V4 i V6 oraz subagent naprawiający e2e uruchamiają je tylko przy wolnym porcie 4174. Gdy jest zajęty, czekają raz 60 sekund, a potem pomijają e2e i piszą o tym w opisie PR. Agenci O2–O4 e2e nie uruchamiają.
+  - Dopiero dwa czerwone biegi pod rząd to czerwone e2e na `main`: powstaje (albo dostaje komentarz) issue „e2e czerwone na main”, a pętla O1 uruchamia subagenta, którego PR ma w opisie `Fixes #<issue>`. Ten PR jest wyjątkiem od blokady. Kolejny zielony bieg zamyka issue.
+  - Do czasu V4 czerwone e2e nie blokuje scalania. Po V4 otwarte issue wstrzymuje scalanie PR-ów UI (`src/app`, `src/map`, `src/modules`), ale najwyżej 60 minut od jego utworzenia. Potem PR-y UI z zielonym `ci` scalają się znów (komentarz w issue). PR-y tylko z docs albo pipeline nie są wstrzymane.
 - **O1-4. Stan API w `vite preview`.** Kod z planu zostaje bez zmian. E2e nie sprawdza stanu API, a w opisie PR V3 trzeba zaznaczyć, że w podglądzie `api` jest zawsze prawdą.
 
 ## O2

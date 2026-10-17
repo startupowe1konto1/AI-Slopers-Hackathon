@@ -2,15 +2,15 @@
 // Stan zadań PLAN-v3 z GitHuba: co zrobione, w toku, porzucone, gotowe do startu i na co czeka.
 // Użycie: node scripts/stan.mjs <O1|O2|O3|O4|wszyscy> [--json]
 // Zrobione = PR scalony do main, z gałęzi zadania albo z tytułem „<ID>: …” / „[kontrakt] <ID>: …”.
-// W toku = otwarty PR (także wersja robocza) albo gałąź na origin z commitem młodszym niż 45 minut
+// W toku = otwarty PR (także wersja robocza) albo gałąź na origin z commitem młodszym niż 90 minut
 //   (pętla zajmuje zadanie, pushując pustą gałąź).
-// Porzucone = zamknięty PR bez scalenia albo gałąź bez PR, na której od 45 minut nic się nie zmieniło.
+// Porzucone = zamknięty PR bez scalenia albo gałąź bez PR, na której od 90 minut nic się nie zmieniło.
 // Gałąź zadania to `galaz` z zadania albo `o1/<id>-przejete` (tak nazywa się przejęcie przez autopilota).
 import { execFileSync } from 'node:child_process';
 import { readFileSync, realpathSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
-export const PROG_PORZUCENIA_MIN = 45;
+export const PROG_PORZUCENIA_MIN = 90;
 const PASY = ['O1', 'O2', 'O3', 'O4', 'wszyscy'];
 
 export const galazPrzejeta = (z) => `o1/${z.id.toLowerCase()}-przejete`;
