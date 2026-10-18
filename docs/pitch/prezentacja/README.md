@@ -14,6 +14,16 @@ Potem w przeglądarce: http://127.0.0.1:8765/ (pełny ekran: klawisz F).
 
 Sam plik `index.html` otwarty z dysku też działa. Jedyne, co prezentacja ściąga z internetu, to font Archivo z Google Fonts. Bez sieci przechodzi na font systemowy.
 
+### Plik do oddania
+
+`docs/pitch/3_AISlopers_przezornyObywatel.html` to cała prezentacja w jednym pliku (font, zrzuty, logotypy i kod QR w środku). Działa po otwarciu z dysku, bez sieci, na komputerze i telefonie. Nazwa według regulaminu: wyzwanie 3, zespół AI Slopers, projekt Przezorny Obywatel. Po każdej zmianie slajdów odśwież go skryptem i scommituj wynik:
+
+```bash
+python -I docs/pitch/prezentacja/build_standalone.py --bez-pdf
+```
+
+Bez `--bez-pdf` skrypt robi też PDF w `dist/` (podgląd na Slacku).
+
 ## Sterowanie
 
 | Klawisz | Działanie |
