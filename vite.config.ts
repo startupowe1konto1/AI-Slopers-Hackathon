@@ -36,6 +36,8 @@ export default defineConfig(({ mode }) => {
       react(),
       apiDev(env),
       VitePWA({
+        // Wersja tylko online (src/offline/tryb.ts): bez service workera i manifestu PWA.
+        disable: env.VITE_TYLKO_ONLINE === '1',
         registerType: 'autoUpdate',
         workbox: {
           globPatterns: ['**/*.{js,css,html,svg,png,ico,webmanifest}'],
