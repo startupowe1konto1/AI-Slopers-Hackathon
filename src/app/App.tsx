@@ -10,6 +10,7 @@ import { useMiejsca, zapiszMiejsca } from './miejsca';
 import { miejsceTutaj, zTutaj } from './lokalizacja';
 import { Onboarding } from './Onboarding';
 import { Polaczenie } from './Polaczenie';
+import { UchwytPanelu } from './UchwytPanelu';
 import { MapView } from '../map/MapView';
 import { stanPaczki } from '../offline/paczka';
 import { Kafelki } from './Kafelki';
@@ -139,6 +140,7 @@ export default function App() {
         <MapView centrum={miejsce.adres} moduly={moduly} onMapa={setMapa} />
         <Kafelki kafelki={KAFELKI} mapa={mapa} />
       </main>
+      <UchwytPanelu />
       {celMapy ? (
         <ArkuszTrasy mapa={mapa} od={miejsce.adres} cel={celMapy} blackout={blackout} onBlackout={setBlackout} onZamknij={() => setCelMapy(null)} />
       ) : (

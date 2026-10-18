@@ -24,7 +24,8 @@ input { font: inherit; }
 
 .aplikacja {
   max-width: 480px; height: 100dvh; margin: 0 auto; background: var(--tlo);
-  display: grid; grid-template-rows: auto minmax(200px, 1fr) auto auto; /* pasek, mapa, karty, stopka */
+  /* pasek, mapa, uchwyt, panel (karty albo trasa), stopka; panel ma wysokość z uchwytu (--panel), ale mapa nie spada poniżej 200px */
+  display: grid; grid-template-rows: auto minmax(200px, 1fr) auto minmax(0, var(--panel, 48dvh)) auto;
   /* kolumna nie rośnie ponad ekran: długi adres w <select> skraca się zamiast rozpychać stronę */
   grid-template-columns: minmax(0, 1fr);
   box-shadow: 0 0 24px rgb(0 0 0 / 0.08);
@@ -60,6 +61,12 @@ input { font: inherit; }
 .onboarding-lokalizacja { font-size: 13px; margin: 8px 0 0 !important; }
 .onboarding-albo { text-align: center; font-size: 13px; margin: 14px 0 10px !important; }
 .przycisk.drugi { background: #fff; color: var(--akcent); border: 1px solid var(--akcent); margin-top: 10px; }
+.uchwyt-panelu {
+  display: grid; place-items: center; height: 22px; background: var(--tlo-grupy); border-top: 0.5px solid var(--wlos);
+  cursor: row-resize; touch-action: none; user-select: none;
+}
+.uchwyt-panelu::after { content: ''; width: 36px; height: 5px; border-radius: 3px; background: rgb(60 60 67 / 0.3); }
+.uchwyt-panelu:focus-visible { outline: 2px solid var(--akcent); outline-offset: -2px; }
 .stopka { font-size: 11px; color: var(--przygaszony); padding: 6px 14px; border-top: 0.5px solid var(--wlos); max-height: 30dvh; overflow: auto; }
 .stopka summary { cursor: pointer; min-height: 24px; }
 .stopka ul { margin: 6px 0; padding-left: 16px; }
@@ -74,7 +81,7 @@ input { font: inherit; }
 @media (prefers-reduced-motion: reduce) { .polaczenie-kolko { animation: none; } }
 
 /* Stała wysokość dolnego panelu: mapa nie zmienia rozmiaru, gdy dochodzi treść, więc kadr trasy się nie ucina. */
-.karty { height: 48dvh; overflow: auto; padding: 12px 14px; background: var(--tlo-grupy); }
+.karty { min-height: 0; overflow: auto; padding: 12px 14px; background: var(--tlo-grupy); }
 .karty h2 { font-size: 17px; line-height: 1.2; letter-spacing: -0.02em; margin: 0 0 10px 2px; }
 .karty-pusto { margin: 0; font-size: 14px; color: var(--przygaszony); }
 .karty > ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }

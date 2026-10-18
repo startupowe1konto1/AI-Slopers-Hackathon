@@ -28,7 +28,7 @@
 .trasa-szczegoly { list-style: none; display: grid; gap: 6px; margin: 0 0 8px !important; padding: 0 !important; font-size: 13px; line-height: 1.4; color: var(--przygaszony); }
 
 .arkusz-trasy {
-  height: 48dvh; overflow: auto; padding: 14px 16px 12px; /* jak .karty: mapa zostaje tej samej wielkości */ border-top: 1px solid var(--linia); background: var(--tlo);
+  min-height: 0; overflow: auto; padding: 14px 16px 12px; /* jak .karty: wysokość z uchwytu (--panel w index.css) */ border-top: 1px solid var(--linia); background: var(--tlo);
   animation: arkusz-wjazd 300ms cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 @keyframes arkusz-wjazd { from { opacity: 0; transform: translateY(16px); } }
