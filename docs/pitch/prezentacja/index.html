@@ -510,19 +510,10 @@ mark { background: linear-gradient(transparent 62%, var(--zolty) 62%, var(--zolt
     <p class="drobny przypis" id="przypis-person"></p>
   </section>
 
-  <!-- 5. Zadania ↔ dane -->
-  <section class="slajd" data-kroki="0"
-    data-notatka="Zaczęliśmy od ludzi, nie od danych: rozpisaliśmy 24 zadania, które mieszkańcy mają do wykonania w kryzysie. Każde połączyliśmy z danymi. Zielone działa w telefonie bez sieci, żółte potrzebuje sieci. 18 z 24 zadań łączy się z danymi. Dla 6 zadań brakuje danych, na przykład gdzie naładować telefon. Tego nie udajemy.">
-    <h2 class="tytul" style="font-size:56px">Analizowaliśmy, jakim wyzwaniom będą musieli sprostać mieszkańcy</h2>
-    <div class="kratki" id="kratki" role="img"></div>
-    <div class="grupy-danych" id="grupy-danych"></div>
-    <p class="wniosek" id="wniosek-siatki"></p>
-  </section>
-
-  <!-- 6. Na jakich danych stoimy -->
+  <!-- 4. Na jakich danych stoimy -->
   <section class="slajd" data-kroki="0" id="s-dane"
     data-notatka="Aplikacja stoi na otwartych danych Warszawy z portalu dane.um.warszawa.pl. Przez API miasta bierzemy pięć zbiorów. Defibrylatory AED i toalety publiczne pobieramy z góry i zapisujemy w telefonie, więc działają bez sieci. Odjazdy ZTM, pogodę i wiatr oraz jakość powietrza bierzemy na żywo, gdy jest sieć. [Drobno na kafelkach: nazwy funkcji API miasta, dowód dla jury.]">
-    <h2 class="tytul" style="font-size:56px">Na otwartych danych Warszawy</h2>
+    <h2 class="tytul" style="font-size:56px">Otwarte dane Warszawy, które adresowały problem</h2>
     <div class="zrodlo-pas">
       <svg class="ik" aria-hidden="true"><use href="#i-landmark"/></svg><b>Otwarte dane m.st. Warszawy</b><span class="z-tag">5 zbiorów</span>
       <span class="z-adres">dane.um.warszawa.pl · API miasta</span>
@@ -534,6 +525,15 @@ mark { background: linear-gradient(transparent 62%, var(--zolty) 62%, var(--zolt
         <div class="zbior-kafel zywo" id="z-pogoda"><div class="zk-glowa"><span class="kolo"><svg class="ik" aria-hidden="true"><use href="#i-wind"/></svg></span><span class="tryb zywo">na żywo</span></div><h3>Pogoda i wiatr</h3><code>get_<wbr>zom_<wbr>pogoda</code></div>
         <div class="zbior-kafel zywo" id="z-powietrze"><div class="zk-glowa"><span class="kolo"><svg class="ik" aria-hidden="true"><use href="#i-cloud"/></svg></span><span class="tryb zywo">na żywo</span></div><h3>Jakość powietrza</h3><code>get_<wbr>bopipk_<wbr>monitoring_<wbr>jakosci_<wbr>powietrza</code></div>
     </div>
+  </section>
+
+  <!-- 5. Zadania ↔ dane -->
+  <section class="slajd" data-kroki="0"
+    data-notatka="Zaczęliśmy od ludzi, nie od danych: rozpisaliśmy 24 zadania, które mieszkańcy mają do wykonania w kryzysie. Każde połączyliśmy z danymi. Zielone działa w telefonie bez sieci, żółte potrzebuje sieci. 18 z 24 zadań łączy się z danymi. Dla 6 zadań brakuje danych, na przykład gdzie naładować telefon. Tego nie udajemy.">
+    <h2 class="tytul" style="font-size:56px">Analizowaliśmy, jakim wyzwaniom będą musieli sprostać mieszkańcy</h2>
+    <div class="kratki" id="kratki" role="img"></div>
+    <div class="grupy-danych" id="grupy-danych"></div>
+    <p class="wniosek" id="wniosek-siatki"></p>
   </section>
 
   <!-- 7. Rozwiązanie: Przezorny Obywatel -->
