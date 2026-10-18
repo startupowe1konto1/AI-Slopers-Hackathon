@@ -5,13 +5,18 @@ więc wysłany sam nie działa. Ten skrypt wpisuje wszystko do jednego pliku HTM
 z font/, obrazy jako data:), a potem robi z niego PDF: strona na slajd, demo „Dzień Kasi”
 krok po kroku. PDF podgląda Slack i każdy telefon, HTML zostaje z animacjami i strzałkami.
 
+Plik do oddania (regulamin: numerWyzwania_nazwaDrużyny_nazwaProjektu) to samodzielny HTML
+w docs/pitch/. Skrypt nadpisuje go przy każdym uruchomieniu, więc po zmianie slajdów wystarczy
+go puścić i scommitować wynik.
+
 Z katalogu repozytorium:
 
     python -I docs/pitch/prezentacja/build_standalone.py            # HTML + PDF
     python -I docs/pitch/prezentacja/build_standalone.py --bez-pdf  # tylko HTML
 
 PDF wymaga pakietu playwright dla Pythona i Chromium (`python -m playwright install chromium`).
-Wynik: docs/pitch/prezentacja/dist/ (w .gitignore).
+Wynik: docs/pitch/3_AISlopers_przezornyObywatel.html (w repo) oraz HTML i PDF w
+docs/pitch/prezentacja/dist/ (w .gitignore).
 """
 
 import argparse
@@ -22,7 +27,9 @@ from pathlib import Path
 
 KATALOG = Path(__file__).resolve().parent
 DIST = KATALOG / "dist"
-NAZWA = "Przezorny-Obywatel"
+# Wyzwanie 3, zespół AI Slopers, projekt Przezorny Obywatel
+NAZWA = "3_AISlopers_przezornyObywatel"
+ODDANIE = KATALOG.parent / f"{NAZWA}.html"
 
 TYPY = {".jpg": "image/jpeg", ".png": "image/png", ".svg": "image/svg+xml", ".woff2": "font/woff2"}
 
@@ -85,6 +92,7 @@ def zbuduj_html() -> Path:
     DIST.mkdir(exist_ok=True)
     wynik = DIST / f"{NAZWA}.html"
     wynik.write_text(html, encoding="utf-8")
+    ODDANIE.write_text(html, encoding="utf-8")
     return wynik
 
 
