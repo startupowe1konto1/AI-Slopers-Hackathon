@@ -26,3 +26,13 @@ it.each(['powietrze', 'rowery', 'utrudnienia'])('/api/live/%s jest w rejestrze',
 it('nieznana nazwa daje 404', async () => {
   expect((await zapytaj('/api/live/nieistnieje')).status).toBe(404);
 });
+
+// Wersja na Vercelu przekierowuje /api/live/* do Workera, więc przeglądarka czyta odpowiedzi z innej domeny.
+it.each([
+  ['dane', '/api/live/wiatr', () => Response.json([])],
+  ['błąd źródła', '/api/live/wiatr', () => new Response('x', { status: 500 })],
+  ['zła ścieżka', '/api/live/nieistnieje', () => Response.json([])],
+])('odpowiedź (%s) ma Access-Control-Allow-Origin: *', async (_, sciezka, odp) => {
+  vi.stubGlobal('fetch', vi.fn(async () => odp()));
+  expect((await zapytaj(sciezka)).headers.get('Access-Control-Allow-Origin')).toBe('*');
+});
