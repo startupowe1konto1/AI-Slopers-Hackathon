@@ -3,441 +3,669 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Warszawa w trybie kryzysowym</title>
+<title>Przezorny Obywatel</title>
+<link rel="icon" href="data:,">
 <!--
   Prezentacja pitchu (5 min). Scenariusz: docs/pitch/scenariusz.md.
-  Sterowanie: → / spacja / PageDown dalej, ← / PageUp wstecz, F pełny ekran, N notatki, O telefon offline.
+  Sterowanie: → / spacja / PageDown dalej, ← / PageUp wstecz, Home / End, F pełny ekran, N notatki.
+  Slajd z atrybutem data-pomin na <section> jest ukryty: nie ma go w nawigacji, liczniku ani w adresie #N.k.
+  Usunięcie atrybutu przywraca slajd.
   Dane wykresów: dane.js (generuje build_dane.py).
-  Adres aplikacji w telefonie: parametr ?app=… (domyślnie wersja produkcyjna).
+  Slajd z demo (s-kasia): telefon.js + telefon.css + ekrany/ (osobny autor); prezentacja woła tylko window.telefonDemo.
 -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap">
+<link rel="stylesheet" href="telefon.css">
 <style>
 :root {
-  --papier: #ECEDE9;
-  --papier-2: #DFE0DB;
-  --tusz: #000000;
-  --tusz-2: #55574F;
-  --noc: #000000;
-  --noc-tekst: #F2F2EF;
-  --noc-2: #A5A79F;
-  --alarm: #EE7A00;
-  --siec: #2B55D6;
-  --siec-noc: #6E8FF0;
-  --brak: #9A9C97;
+  /* Wspólne tokeny (używa ich też telefon.css) */
+  --tlo: #FBF9F5;
+  --tekst: #2E2A27;
+  --akcent: #C8372D;
+  --zolty: #E9B949;
+  --szary: #8A817A;
+  --ok: #4A8B5C;
+  --uwaga: #D98A2B;
+  --linia: #E7E1D8;
+  --kafel: #FFFFFF;
+  --font: 'Archivo', 'Segoe UI', system-ui, -apple-system, Arial, sans-serif;
+  /* Pochodne: dłuższy tekst pomocniczy musi mieć lepszy kontrast niż --szary */
+  --tekst-2: #5F5852;
+  --zolty-tlo: #F7EBCB;
+  --ok-tlo: #E4EEE6;
+  --akcent-tlo: #F7E3E0;
+  --font-waski: 'Archivo', 'Arial Narrow', 'Segoe UI', system-ui, sans-serif;
   --ruch: cubic-bezier(.23, 1, .32, 1);
-  --font: 'Archivo', 'Arial Narrow', 'Segoe UI', system-ui, sans-serif;
+  --cien: 0 1px 2px rgba(46, 42, 39, .04), 0 6px 20px rgba(46, 42, 39, .05);
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { height: 100%; }
 body {
-  background: var(--papier);
-  color: var(--tusz);
+  background: var(--tlo);
+  color: var(--tekst);
   font-family: var(--font);
   overflow: hidden;
-  transition: background-color .6s var(--ruch);
   -webkit-font-smoothing: antialiased;
 }
-body.ciemno { background: var(--noc); }
+b, strong { font-weight: 650; }
+p, li, h3 { text-wrap: pretty; }
+.tytul, .haslo { text-wrap: balance; }
 
 /* Scena 1600×900 skalowana do okna */
+/* fixed: na telefonie scena 1600 px nie rozpycha widoku (inaczej innerWidth rośnie i skala jest za duża) */
 .scena {
-  position: absolute; left: 50%; top: 50%;
+  position: fixed; left: 50%; top: 50%;
   width: 1600px; height: 900px;
   transform-origin: 0 0;
+  background: var(--tlo);
 }
 .slajd {
   position: absolute; inset: 0;
-  padding: 88px 112px;
-  background: var(--papier);
-  color: var(--tusz);
+  padding: 112px 112px 96px;
+  background: var(--tlo);
+  color: var(--tekst);
   opacity: 0; visibility: hidden;
-  transition: opacity .26s var(--ruch), visibility 0s linear .26s, background-color .6s var(--ruch), color .6s var(--ruch);
+  transition: opacity .22s var(--ruch), visibility 0s linear .22s;
 }
-.slajd.aktywny { opacity: 1; visibility: visible; transition: opacity .26s var(--ruch), background-color .6s var(--ruch), color .6s var(--ruch); }
-.slajd.noc { background: var(--noc); color: var(--noc-tekst); }
+.slajd.aktywny { opacity: 1; visibility: visible; transition: opacity .22s var(--ruch); }
+.slajd:not(.aktywny), .slajd:not(.aktywny) * { pointer-events: none !important; }
+.slajd[data-pomin] { display: none; }
+
+/* Rama: logotypy i licznik, te same na każdym slajdzie */
+/* multiply na całej ramie: biały prostokąt w pliku znaku Warszawy znika na tle slajdu */
+.rama { position: absolute; inset: 0; pointer-events: none; z-index: 10; mix-blend-mode: multiply; }
+/* Oba logotypy razem w lewym górnym rogu */
+.rama .logotypy {
+  position: absolute; left: 40px; top: 28px;
+  display: flex; align-items: center; gap: 18px;
+}
+.rama .znak {
+  display: block;
+  width: 104px; height: 62px; padding: 3px 4px;
+  border-radius: 8px;
+}
+.rama .logotypy .kreska-p { width: 1px; height: 34px; background: var(--linia); }
+.rama .logotypy .logo42 { height: 38px; width: auto; display: block; opacity: .85; border-radius: 6px; padding: 2px 3px; }
+.rama .stopka {
+  position: absolute; right: 40px; bottom: 26px;
+  display: flex; align-items: center; gap: 16px;
+  font: 500 20px var(--font); color: var(--szary);
+  font-variant-numeric: tabular-nums;
+}
+/* Ostatni slajd jest ciemny (telewizor): bez multiply, logotypy na jasnych plakietkach */
+.scena[data-slajd="s-slopers"] .rama { mix-blend-mode: normal; }
+.scena[data-slajd="s-slopers"] .rama .znak,
+.scena[data-slajd="s-slopers"] .rama .logo42 { background: #FBF9F5; }
+.scena[data-slajd="s-slopers"] .rama .stopka { color: rgba(255, 255, 255, .55); }
+.scena[data-slajd="s-slopers"] .rama .logo42 { opacity: 1; }
+.scena[data-slajd="s-slopers"] .rama .kreska-p { background: rgba(255, 255, 255, .18); }
 
 /* Kroki: elementy pojawiające się na kolejne naciśnięcie */
 [data-krok] { opacity: 0; transform: translateY(10px); transition: opacity .32s var(--ruch), transform .32s var(--ruch); }
 [data-krok].widoczny { opacity: 1; transform: none; }
 
+/* Ikony: inline SVG w stylu Lucide (sprite niżej) */
+.ik { width: 1em; height: 1em; fill: none; stroke: currentColor; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; flex: none; display: block; }
+.kolo { width: 60px; height: 60px; border-radius: 50%; background: var(--zolty-tlo); display: grid; place-items: center; font-size: 30px; color: var(--tekst); flex: none; }
+
 /* Typografia */
-.haslo {
-  font-stretch: 72%;
-  font-weight: 800;
-  font-size: 132px;
-  line-height: .94;
-  letter-spacing: -.01em;
-}
-.tytul {
-  font-stretch: 78%;
-  font-weight: 750;
-  font-size: 72px;
-  line-height: 1;
-  letter-spacing: -.005em;
-  max-width: 1200px;
-}
-.lead { font-size: 34px; line-height: 1.3; font-weight: 400; max-width: 980px; }
-.drobny { font-size: 19px; line-height: 1.45; color: var(--tusz-2); }
-.noc .drobny { color: var(--noc-2); }
-.liczba { font-stretch: 62%; font-weight: 800; font-variant-numeric: tabular-nums; line-height: .86; }
+.haslo { font-family: var(--font-waski); font-stretch: 72%; font-weight: 800; font-size: 136px; line-height: .94; letter-spacing: -.01em; }
+.tytul { font-family: var(--font-waski); font-stretch: 78%; font-weight: 750; font-size: 64px; line-height: 1.02; letter-spacing: -.005em; max-width: 1240px; }
+.lead { font-size: 34px; line-height: 1.32; font-weight: 400; max-width: 1000px; color: var(--tekst-2); }
+.drobny { font-size: 20px; line-height: 1.45; color: var(--tekst-2); }
+.liczba { font-family: var(--font-waski); font-stretch: 62%; font-weight: 800; font-variant-numeric: tabular-nums; line-height: .86; }
+.etykieta { font-size: 20px; font-weight: 600; color: var(--szary); letter-spacing: .01em; }
+mark { background: linear-gradient(transparent 62%, var(--zolty) 62%, var(--zolty) 92%, transparent 92%); color: inherit; padding: 0 .04em; }
 
-/* 1 i 10: ciemne otwarcie i zamknięcie */
-.linijki { position: absolute; left: 112px; bottom: 120px; display: grid; gap: 18px; }
-.linijki p { font-stretch: 72%; font-weight: 800; font-size: 104px; line-height: 1; }
-.linijki p.cicho { color: var(--noc-2); }
-.linki { position: absolute; left: 112px; right: 112px; bottom: 48px; display: flex; gap: 48px; font-size: 18px; color: var(--noc-2); }
-.linki a { color: inherit; text-decoration: none; border-bottom: 1px solid currentColor; }
-.linki a:hover { color: var(--noc-tekst); }
+/* Nowa nazwa projektu (s-nazwa) */
+.nazwa { display: grid; justify-items: center; text-align: center; }
+.nazwa .emblemat { width: 120px; height: 120px; border-radius: 50%; background: var(--zolty-tlo); color: var(--tekst); display: grid; place-items: center; font-size: 64px; }
+.nazwa .emblemat .ik { stroke-width: 1.5; }
+.nazwa .haslo { margin-top: 40px; font-size: 176px; }
+.nazwa .lead { margin-top: 36px; display: flex; align-items: center; gap: 24px; font-size: 46px; color: var(--tekst); font-weight: 450; max-width: none; }
+.nazwa .lead::before, .nazwa .lead::after { content: ''; width: 56px; height: 6px; border-radius: 3px; background: var(--zolty); flex: none; }
 
-/* 2: spokój */
+/* Otwarcie i zamknięcie */
+.linijki { position: absolute; left: 112px; bottom: 132px; display: grid; gap: 18px; }
+.linijki p { font-family: var(--font-waski); font-stretch: 72%; font-weight: 800; font-size: 104px; line-height: 1; }
+.linijki p.cicho { color: var(--szary); }
+.linijki.otwarcie p { font-size: 94px; } /* „Jak miasto zapewni bezpieczeństwo?” w jednej linii w szerokości slajdu */
+.pasek-akcent { position: absolute; left: 112px; top: 132px; width: 72px; height: 6px; border-radius: 3px; background: var(--zolty); }
+.linki { position: absolute; left: 112px; right: 340px; bottom: 34px; display: flex; flex-wrap: wrap; gap: 14px 36px; font-size: 20px; color: var(--tekst-2); }
+.linki a, .linki span { display: inline-flex; align-items: center; gap: 10px; color: inherit; text-decoration: none; }
+.linki a { border-bottom: 1px solid var(--linia); }
+.linki .ik { font-size: 22px; color: var(--szary); }
+.marka { position: absolute; left: 112px; top: 166px; display: flex; align-items: center; gap: 14px; font-size: 28px; color: var(--tekst-2); }
+.marka .ik { font-size: 34px; color: var(--tekst); }
+.marka b { color: var(--tekst); font-weight: 700; }
 .srodek { position: absolute; left: 112px; right: 112px; top: 50%; transform: translateY(-50%); }
-.srodek .lead { margin-top: 40px; color: var(--tusz-2); }
 
-/* 3: domino */
-.domino { display: flex; align-items: flex-end; gap: 22px; margin-top: 170px; }
+/* Kijów i inne miasta (s-kijow): domino z ikon */
+.domino { display: flex; align-items: center; gap: 18px; margin-top: 120px; }
+/* Slajd 3: sam łańcuch ikon, wyśrodkowany w miejscu pod tytułem */
+#s-kijow { display: flex; flex-direction: column; }
+#s-kijow .domino { flex: 1; margin-top: 0; justify-content: center; padding-bottom: 40px; }
 .kostka {
-  font-stretch: 62%; font-weight: 800; font-size: 96px; line-height: .85;
+  --d: 0s;
+  position: relative;
+  width: 214px; height: 244px; flex: none;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 22px;
+  background: var(--kafel); border: 1px solid var(--linia); border-radius: 22px; box-shadow: var(--cien);
   transform-origin: 100% 100%;
-  transition: transform .55s cubic-bezier(.55, 0, .7, .2), color .4s ease;
+  transition: transform .55s cubic-bezier(.55, 0, .7, .2) var(--d), color .4s ease var(--d), background-color .4s ease var(--d);
 }
-.strzalka { font-size: 44px; color: var(--tusz-2); padding-bottom: 12px; transition: opacity .3s ease; }
-.domino.pada .kostka { color: var(--brak); transform: rotate(14deg) translateY(10px); }
-.domino.pada .strzalka { opacity: .25; }
-.domino .podpis { position: absolute; left: 112px; bottom: 88px; }
+.kostka .ik { font-size: 84px; stroke-width: 1.4; }
+.kostka span { font-family: var(--font-waski); font-stretch: 70%; font-weight: 800; font-size: 46px; line-height: 1; }
+.kostka::after {
+  content: ''; position: absolute; left: 50%; top: 92px; width: 128px; height: 5px; margin-left: -64px;
+  border-radius: 3px; background: var(--akcent);
+  transform: rotate(-38deg) scaleX(0); transition: transform .3s var(--ruch) calc(var(--d) + .35s);
+}
+.strzalka { font-size: 40px; color: var(--szary); transition: opacity .3s ease; }
+.domino.pada .kostka { color: var(--szary); background: #F5F1EB; transform: rotate(12deg) translateY(8px); }
+.domino.pada .kostka::after { transform: rotate(-38deg) scaleX(1); }
+.domino.pada .strzalka { opacity: .3; }
+.notka { position: absolute; left: 112px; bottom: 96px; display: flex; align-items: center; gap: 16px; max-width: 1000px; font-size: 26px; line-height: 1.35; color: var(--tekst-2); }
+.notka .ik { font-size: 30px; color: var(--szary); }
 
-/* 4: mapa syren */
-.syreny { display: grid; grid-template-columns: 640px 1fr; gap: 40px; height: 100%; }
+/* Syreny (s-syreny): jedna miara, trzy klasy głośności na zewnątrz; te same kolory w paskach i na mapie */
+#s-syreny { --k0: var(--ok); --k1: var(--zolty); --k2: var(--szary); }
+.syreny { display: grid; grid-template-columns: 640px 1fr; column-gap: 40px; height: 100%; }
 .syreny .lewa { display: flex; flex-direction: column; }
-.syreny .opis { font-size: 24px; line-height: 1.3; max-width: 560px; }
-.syreny .wynik { font-size: 230px; margin-top: 24px; transition: color .6s ease; }
-.syreny .roznica { font-size: 25px; line-height: 1.3; min-height: 100px; margin-top: 18px; color: var(--alarm); font-weight: 600; }
-.syreny .stopka { margin-top: auto; max-width: 560px; }
+.syreny .tytul { font-size: 48px; }
+.syreny .miara { margin-top: 40px; font-size: 20px; font-weight: 600; color: var(--szary); }
+.paski { margin-top: 14px; display: grid; gap: 22px; }
+.p-wiersz { display: grid; gap: 10px; transition: opacity .5s ease; }
+.p-glowa { display: flex; align-items: center; justify-content: space-between; min-height: 36px; }
+.p-glowa > span { font-size: 25px; font-weight: 650; }
+.p-pasek { display: flex; align-items: center; gap: 14px; }
+.pasek { flex: 1; height: 66px; border-radius: 12px; overflow: hidden; background: #EFEBE5; }
+.pasek .wypelnienie { display: flex; height: 100%; }
+.seg { flex: none; display: flex; align-items: center; padding: 0 16px; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.seg.k0 { background: var(--k0); color: #fff; font-family: var(--font-waski); font-stretch: 72%; font-size: 40px; font-weight: 800; }
+.seg.k1 { background: var(--k1); color: var(--tekst); font-size: 23px; font-weight: 650; }
+.seg.k2 { background: var(--k2); }
+.p-pasek .poza { width: 62px; font-size: 23px; font-weight: 650; color: var(--tekst-2); font-variant-numeric: tabular-nums; }
+/* Drugi pasek odsłania się po „Wyłącz prąd”; pierwszy przygasa, żeby uwaga szła na zmianę */
+.p-wiersz.bez .wypelnienie { clip-path: inset(0 100% 0 0); transition: clip-path .25s var(--ruch); }
+.p-wiersz.bez .poza { opacity: 0; transition: opacity .3s ease; }
+#s-syreny.blackout .p-wiersz.dzis { opacity: .5; }
+#s-syreny.blackout .p-wiersz.bez .wypelnienie { clip-path: inset(0 0 0 0); transition: clip-path .8s var(--ruch) .1s; } /* wejście wolno, powrót szybko */
+#s-syreny.blackout .p-wiersz.bez .poza { opacity: 1; transition-delay: .6s; }
+.legenda-syr { list-style: none; margin-top: 30px; display: grid; gap: 8px; }
+.legenda-syr li { display: flex; align-items: baseline; gap: 10px; font-size: 20px; line-height: 1.3; color: var(--tekst-2); }
+.legenda-syr i { width: 16px; height: 16px; border-radius: 4px; flex: none; align-self: center; }
+.legenda-syr b { color: var(--tekst); font-weight: 650; white-space: nowrap; }
+.syreny .stopka { margin-top: auto; padding-top: 18px; max-width: 620px; font-size: 18px; line-height: 1.4; }
 .przelacznik {
-  align-self: flex-start;
-  margin-top: 28px;
   display: inline-flex; align-items: center; gap: 14px;
-  font: 600 22px var(--font);
-  color: inherit; background: none;
-  border: 2px solid currentColor; border-radius: 999px;
-  padding: 12px 24px 12px 14px;
-  cursor: pointer;
-  transition: transform .16s var(--ruch);
+  font: 600 22px var(--font); color: var(--tekst);
+  background: var(--kafel); border: 1px solid var(--linia); border-radius: 999px; box-shadow: var(--cien);
+  padding: 9px 20px 9px 11px; cursor: pointer;
+  transition: transform .16s var(--ruch), border-color .2s ease;
 }
 .przelacznik:active { transform: scale(.97); }
-.przelacznik .gniazdo { width: 44px; height: 24px; border-radius: 12px; background: currentColor; position: relative; opacity: .9; }
-.przelacznik .gniazdo::after { content: ''; position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 50%; background: var(--papier); transition: transform .3s var(--ruch), background-color .3s; }
-.przelacznik[aria-pressed="true"] .gniazdo::after { transform: translateX(20px); background: var(--noc); }
-.przelacznik:focus-visible, .etap:focus-visible, .nawig button:focus-visible { outline: 3px solid var(--siec); outline-offset: 4px; }
-.mapa { width: 100%; height: 100%; }
-.mapa svg { width: 100%; height: 100%; display: block; overflow: visible; }
-.mapa .granica { fill: var(--papier-2); stroke: var(--tusz); stroke-width: 2; transition: fill .6s, stroke .6s; }
-.mapa .cyfrowe, .mapa .utracony { fill: var(--tusz); transition: fill .7s ease, opacity .7s ease; }
-.mapa .dz { opacity: 0; transition: opacity .5s ease; }
-.mapa .dz text { font: 600 24px var(--font); fill: var(--noc-tekst); }
-.mapa .dz rect { fill: var(--noc); }
-.mapa .dz .pp { fill: var(--alarm); font-weight: 800; }
-.mapa .dz circle { fill: var(--noc); stroke: var(--noc-tekst); stroke-width: 3; }
-.slajd.noc .mapa .granica { fill: #141414; stroke: var(--noc-2); }
-.slajd.noc .mapa .cyfrowe { fill: var(--noc-tekst); }
-.slajd.noc .mapa .utracony { fill: var(--alarm); }
-.slajd.noc .mapa .dz { opacity: 1; transition-delay: .9s; }
-.legenda-mapy { display: flex; gap: 28px; font-size: 19px; margin-top: 18px; }
-.legenda-mapy span { display: inline-flex; align-items: center; gap: 10px; }
-.legenda-mapy i { width: 18px; height: 18px; border-radius: 4px; background: var(--tusz); display: inline-block; }
-.noc .legenda-mapy i.z { background: var(--noc-tekst); }
-.legenda-mapy .u, .legenda-mapy .n { display: none; }
-.noc .legenda-mapy .u, .noc .legenda-mapy .n { display: inline-flex; }
-.noc .legenda-mapy .d { display: none; }
-.legenda-mapy { flex-wrap: wrap; row-gap: 8px; }
-.legenda-mapy i.u2 { background: var(--alarm); }
+.przelacznik .gniazdo { width: 50px; height: 28px; border-radius: 14px; background: var(--ok); position: relative; transition: background-color .3s ease; }
+/* Suwak pokazuje stan prądu: włączony = w prawo, zielony; po blackoucie w lewo, czerwony */
+.przelacznik .gniazdo::after { content: ''; position: absolute; top: 4px; left: 4px; width: 20px; height: 20px; border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,.2); transform: translateX(22px); transition: transform .3s var(--ruch); }
+.przelacznik[aria-pressed="true"] .gniazdo { background: var(--akcent); }
+.przelacznik[aria-pressed="true"] .gniazdo::after { transform: none; }
+.przelacznik:focus-visible, .nawig button:focus-visible { outline: 3px solid var(--zolty); outline-offset: 4px; }
+.mapa-syr { position: relative; }
+.mapa-syr svg { position: absolute; right: -8px; top: -28px; width: 704px; height: 740px; display: block; overflow: visible; }
+.mapa-syr .granica { fill: #F2EDE5; stroke: var(--tekst); stroke-opacity: .45; stroke-width: 2; stroke-linejoin: round; }
+.mapa-syr .k0 { fill: var(--k0); }
+.mapa-syr .k1 { fill: var(--k1); }
+.mapa-syr .k2 { fill: var(--k2); }
+.mapa-syr .warstwa-b { opacity: 0; transition: opacity .3s ease; }
+#s-syreny.blackout .mapa-syr .warstwa-b { opacity: 1; transition: opacity .9s ease .1s; }
+.mapa-syr .dz text { font: 650 30px var(--font); fill: var(--tekst); paint-order: stroke; stroke: #FBF9F5; stroke-width: 7px; stroke-linejoin: round; }
+.mapa-syr .dz circle { fill: var(--tekst); stroke: #fff; stroke-width: 3; }
 
-/* 5: macierz JTBD */
-.macierz { margin-top: 44px; display: grid; grid-template-columns: 370px repeat(7, 1fr); column-gap: 8px; }
-.macierz .faza { font-size: 19px; color: var(--tusz-2); padding: 0 0 14px 4px; }
-.macierz .grupa { font-size: 22px; line-height: 1.2; display: flex; align-items: center; padding-right: 16px; min-height: 88px; border-top: 1px solid var(--papier-2); }
-.macierz .komorka { border-top: 1px solid var(--papier-2); display: flex; flex-wrap: wrap; align-content: center; gap: 7px; padding: 10px 4px; min-height: 88px; }
-.kropka { width: 16px; height: 16px; border-radius: 50%; background: var(--tusz); cursor: default; transition: transform .15s ease-out; }
-@media (hover: hover) and (pointer: fine) { .kropka:hover { transform: scale(1.35); } }
-.kropka.bez { background: none; box-shadow: inset 0 0 0 2px var(--brak); }
-.naglowek { display: flex; align-items: baseline; gap: 36px; }
-.naglowek .liczba { font-size: 150px; }
+/* 5: persony i zadania */
+.naglowek { display: flex; align-items: center; gap: 32px; }
+.naglowek .liczba { font-size: 150px; color: var(--akcent); }
+.fazy { list-style: none; display: grid; grid-template-columns: repeat(7, 1fr); margin-top: 22px; position: relative; }
+.fazy::before { content: ''; position: absolute; left: 7px; right: 7px; top: 7px; height: 2px; background: var(--linia); }
+.fazy li { position: relative; padding-top: 24px; font-size: 20px; color: var(--tekst-2); font-variant-numeric: tabular-nums; }
+.fazy li::before { content: ''; position: absolute; left: 0; top: 0; width: 16px; height: 16px; border-radius: 50%; background: var(--tlo); border: 2px solid var(--szary); }
+.fazy li:first-child::before { background: var(--zolty); border-color: var(--zolty); }
+.persony { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 28px; }
+.persona { background: var(--kafel); border: 1px solid var(--linia); border-radius: 20px; padding: 22px 26px 22px 24px; box-shadow: var(--cien); }
+.persona .p-glowa { display: flex; align-items: center; gap: 16px; }
+.persona h3 { flex: 1; font-family: var(--font-waski); font-stretch: 84%; font-size: 27px; line-height: 1.08; font-weight: 700; }
+.persona .p-ile { text-align: right; }
+.persona .p-ile .liczba { font-size: 88px; display: block; }
+.persona .p-ile small { font-size: 20px; color: var(--szary); font-weight: 600; }
+.persona ul { list-style: none; margin-top: 14px; display: grid; gap: 6px; }
+.persona li { font-size: 21px; line-height: 1.25; color: var(--tekst-2); padding-left: 22px; position: relative; }
+.persona li::before { content: ''; position: absolute; left: 2px; top: .55em; width: 9px; height: 9px; border-radius: 50%; background: var(--zolty); }
+.przypis { margin-top: 18px; }
 
-/* 6: siatka */
-.siatka svg { display: block; overflow: visible; }
-.siatka .wezel text { font: 400 17px var(--font); fill: var(--tusz); }
-.siatka .wezel.bez text { fill: var(--brak); }
-.siatka .wezel circle { fill: var(--tusz); }
-.siatka .wezel.bez circle { fill: var(--papier); stroke: var(--brak); stroke-width: 2; }
-.siatka .wezel.live circle { fill: var(--siec); }
-.siatka .wezel.zbior text { font-weight: 600; }
-.siatka .wezel { cursor: default; transition: opacity .2s ease; }
-.siatka .lacze { fill: none; stroke: var(--tusz); stroke-width: 1.6; opacity: .38; transition: opacity .2s ease, stroke-width .2s ease; }
-.siatka .lacze.live { stroke: var(--siec); opacity: .55; }
-.siatka svg.wybor .lacze { opacity: .06; }
-.siatka svg.wybor .wezel { opacity: .28; }
-.siatka svg.wybor .lacze.on { opacity: 1; stroke-width: 2.6; }
-.siatka svg.wybor .wezel.on { opacity: 1; }
-.siatka-glowa { display: grid; gap: 18px; }
-.legenda { display: flex; gap: 32px; font-size: 19px; white-space: nowrap; }
-.legenda span { display: inline-flex; align-items: center; gap: 9px; }
-.legenda i { width: 14px; height: 14px; border-radius: 50%; display: inline-block; background: var(--tusz); }
-.legenda i.live { background: var(--siec); }
-.legenda i.bez { background: none; box-shadow: inset 0 0 0 2px var(--brak); }
-.wniosek { position: absolute; left: 112px; bottom: 56px; font-size: 26px; font-weight: 600; }
+/* Zadania ↔ dane */
+.kratki { display: flex; align-items: center; gap: 8px; margin-top: 34px; }
+.kratka { width: 40px; height: 40px; border-radius: 8px; flex: none; }
+.kratka.offline { background: var(--ok); }
+.kratka.oba { background: linear-gradient(135deg, var(--ok) 0 55%, var(--zolty) 55%); }
+.kratka.live { background: var(--zolty); }
+.kratka.brak { background: transparent; border: 2px dashed var(--szary); }
+.kratka.przerwa { margin-left: 22px; }
+.kratki .suma { margin-left: 20px; font-size: 22px; color: var(--tekst-2); white-space: nowrap; }
+/* Subgrid: nagłówki, tytuły i listy trzech boksów w tych samych wierszach, więc dłuższy tytuł nie robi dziur */
+.grupy-danych { display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: auto auto auto; column-gap: 24px; margin-top: 34px; }
+.gd { display: grid; grid-row: span 3; grid-template-rows: subgrid; row-gap: 0; align-content: start; background: var(--kafel); border: 1px solid var(--linia); border-radius: 20px; padding: 30px 32px 34px; box-shadow: var(--cien); border-top: 7px solid var(--ok); }
+.gd.live { border-top-color: var(--zolty); }
+.gd.brak { border-top: 2px dashed var(--szary); background: transparent; box-shadow: none; padding-top: 35px; }
+.gd .g-glowa { display: flex; align-items: center; gap: 18px; }
+.gd .g-glowa .liczba { font-size: 120px; margin-left: auto; color: var(--ok); }
+.gd.live .g-glowa .liczba { color: var(--tekst); }
+.gd.brak .g-glowa .liczba { color: var(--szary); }
+.gd.offline .kolo { background: var(--ok-tlo); color: var(--ok); }
+.gd.brak .kolo { background: #EFEBE5; color: var(--szary); }
+.gd h3 { font-family: var(--font-waski); font-stretch: 80%; font-size: 34px; line-height: 1.06; font-weight: 750; margin-top: 18px; }
+.gd ul { list-style: none; margin-top: 20px; display: grid; gap: 12px; }
+.gd li { font-size: 25px; line-height: 1.25; display: flex; gap: 12px; align-items: baseline; }
+.gd li::before { content: '–'; color: var(--szary); }
+.gd.brak li { color: var(--tekst-2); }
+.wniosek { position: absolute; left: 112px; bottom: 98px; font-size: 28px; font-weight: 600; }
 
 /* 7: rozwiązanie */
-.funkcje { display: grid; grid-template-columns: repeat(3, 1fr); gap: 44px 56px; margin-top: 56px; }
-.funkcja h3 { font-stretch: 75%; font-weight: 750; font-size: 44px; line-height: 1.02; }
-.funkcja p { font-size: 22px; line-height: 1.35; color: var(--tusz-2); margin-top: 10px; max-width: 400px; }
-.przeplyw { position: absolute; left: 112px; right: 112px; bottom: 72px; display: grid; gap: 14px; font-size: 24px; }
-.przeplyw div { display: flex; align-items: center; gap: 18px; }
-.przeplyw b { font-weight: 650; }
-.przeplyw .kreska { flex: 0 0 80px; height: 3px; background: currentColor; position: relative; }
-.przeplyw .kreska::after { content: ''; position: absolute; right: -2px; top: -6px; border: 7.5px solid transparent; border-left: 11px solid currentColor; border-right: 0; }
-.przeplyw .live { color: var(--siec); }
-.przeplyw .etyk { color: var(--tusz-2); margin-left: 12px; font-size: 20px; }
+.kafle { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; margin-top: 44px; }
+.kafelek { position: relative; background: var(--kafel); border: 1px solid var(--linia); border-radius: 20px; padding: 28px 30px; min-height: 236px; box-shadow: var(--cien); }
+.kafelek .k-glowa { display: flex; align-items: center; justify-content: space-between; }
+.kafelek .nr { font-size: 20px; font-weight: 600; color: var(--szary); }
+.kafelek h3 { font-family: var(--font-waski); font-stretch: 80%; font-weight: 750; font-size: 38px; line-height: 1.04; margin-top: 18px; }
+.kafelek p { font-size: 23px; line-height: 1.32; color: var(--tekst-2); margin-top: 10px; }
+.kafelek.paczka { background: var(--ok-tlo); border: 2px dashed var(--ok); box-shadow: none; }
+.kafelek.paczka .kolo { background: #fff; color: var(--ok); }
+.kafelek.paczka .nr { color: var(--ok); }
 
-/* 8: dzień Kasi */
-#s-kasia { padding: 64px 112px; }
-.kasia { display: grid; grid-template-columns: 1fr 380px; gap: 72px; height: 100%; }
-.kasia .wstep { font-size: 22px; line-height: 1.4; color: var(--tusz-2); margin-top: 16px; max-width: 760px; }
-.etapy { list-style: none; margin-top: 34px; display: grid; gap: 4px; }
-.etap { display: grid; grid-template-columns: 190px 1fr; column-gap: 24px; padding: 12px 0 12px 20px; border-left: 4px solid var(--papier-2); cursor: pointer; transition: border-color .3s ease; }
-.etap .kiedy { font-size: 20px; color: var(--tusz-2); padding-top: 6px; }
-.etap .problem { font-stretch: 80%; font-weight: 700; font-size: 32px; line-height: 1.1; color: var(--tusz-2); transition: color .3s ease; }
-.etap .szczegol { grid-column: 2; display: grid; grid-template-rows: 0fr; transition: grid-template-rows .3s var(--ruch); }
-.etap .szczegol > .w { overflow: hidden; display: block; }
-.etap .szczegol p { font-size: 21px; line-height: 1.35; margin-top: 8px; max-width: 640px; }
-.etap .szczegol p.wartosc { color: var(--tusz-2); }
-.etap.aktywny { border-left-color: var(--tusz); }
-.etap.aktywny .problem { color: var(--tusz); }
-.etap.aktywny .szczegol { grid-template-rows: 1fr; }
-.etap.offline.aktywny { border-left-color: var(--alarm); }
-.telefon-kol { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; }
-.telefon { width: 336px; height: 680px; border-radius: 50px; background: var(--noc); padding: 12px; position: relative; box-shadow: 0 0 0 2px #2a2a2a inset; }
-.ekran { width: 100%; height: 100%; border-radius: 40px; overflow: hidden; background: #fff; position: relative; }
-.ekran iframe { width: 390px; height: 820px; border: 0; transform: scale(.8); transform-origin: 0 0; display: block; }
-.stan-sieci { font-size: 19px; color: var(--tusz-2); display: flex; gap: 14px; align-items: center; }
-.stan-sieci .przelacznik { margin: 0; font-size: 18px; padding: 8px 18px 8px 10px; }
+/* Na otwartych danych Warszawy (s-dane): 5 zbiorów z API miasta, 2 + 3 kafle na całą szerokość */
+.zrodlo-pas { display: flex; align-items: center; gap: 14px; margin-top: 26px; padding-bottom: 20px; border-bottom: 2px solid var(--akcent-tlo); }
+.zrodlo-pas .ik { font-size: 32px; color: var(--akcent); }
+.zrodlo-pas b { font-size: 30px; font-weight: 700; }
+.zrodlo-pas .z-adres { margin-left: auto; font-size: 24px; font-weight: 600; color: var(--akcent); }
+.zbiory-siatka { display: grid; grid-template-columns: repeat(6, 1fr); gap: 22px; margin-top: 26px; }
+.zbior-kafel { grid-column: span 2; display: flex; flex-direction: column; min-height: 222px; background: var(--kafel); border: 1px solid var(--linia); border-top: 6px solid var(--ok); border-radius: 20px; padding: 24px 28px 26px; box-shadow: var(--cien); }
+.zbior-kafel:nth-child(-n + 2) { grid-column: span 3; } /* rząd 1: w telefonie, rząd 2: na żywo */
+.zbior-kafel.zywo { border-top-color: var(--zolty); }
+.zk-glowa { display: flex; align-items: center; justify-content: space-between; gap: 14px; }
+.zbior-kafel .kolo { background: var(--ok-tlo); color: var(--ok); }
+.zbior-kafel.zywo .kolo { background: var(--zolty-tlo); color: var(--tekst); }
+.zbior-kafel h3 { margin-top: 18px; font-family: var(--font-waski); font-stretch: 80%; font-size: 40px; line-height: 1.04; font-weight: 750; }
+.zbior-kafel code { margin-top: auto; padding-top: 16px; font: 500 21px/1.3 ui-monospace, 'Cascadia Mono', Consolas, 'Courier New', monospace; color: var(--tekst-2); letter-spacing: -.01em; }
+.tryb { font-size: 20px; font-weight: 650; line-height: 30px; padding: 0 14px; border-radius: 999px; background: var(--ok-tlo); color: #2F6A40; white-space: nowrap; }
+.tryb.zywo { background: var(--zolty-tlo); color: #7A5A12; }
 
-.przygotowanie { position: absolute; left: 112px; top: 64px; width: 860px; background: var(--tusz); color: var(--papier); border-radius: 12px; padding: 28px 32px; font-size: 20px; line-height: 1.45; z-index: 5; }
-.przygotowanie[hidden] { display: none; }
-.przygotowanie h3 { font-stretch: 78%; font-weight: 750; font-size: 30px; margin-bottom: 10px; }
-.przygotowanie ol { margin: 10px 0 0 22px; display: grid; gap: 6px; }
-.przygotowanie table { border-collapse: collapse; margin-top: 12px; width: 100%; }
-.przygotowanie td { padding: 4px 12px 4px 0; vertical-align: top; }
-.przygotowanie td:first-child { color: var(--brak); width: 130px; }
-.przygotowanie .uwaga { color: var(--brak); font-size: 17px; margin-top: 12px; }
+/* 9: demo (zawartość: telefon.js / telefon.css) */
 
-/* 9: wartość */
-.kolumny { display: grid; grid-template-columns: 1fr 1fr; gap: 72px; margin-top: 56px; }
-.kolumny h3 { font-stretch: 78%; font-weight: 750; font-size: 40px; }
-.kolumny p { font-size: 26px; line-height: 1.35; margin-top: 14px; max-width: 600px; }
-.kroki { list-style: none; margin-top: 64px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 48px; counter-reset: k; }
-.kroki li { font-size: 22px; line-height: 1.38; counter-increment: k; padding-top: 18px; border-top: 3px solid var(--tusz); }
-.kroki li::before { content: counter(k); display: block; font-stretch: 62%; font-weight: 800; font-size: 56px; line-height: 1; margin-bottom: 10px; }
+/* Wartość (s-wartosc) */
+.kolumny { display: grid; grid-template-columns: 1.09fr 1fr; gap: 28px; margin-top: 52px; } /* lewa szersza: najdłuższy punkt mieszkańca w jednej linii */
+.kolumna { background: var(--kafel); border: 1px solid var(--linia); border-radius: 20px; padding: 36px 36px 44px; box-shadow: var(--cien); }
+.kolumna .c-glowa { display: flex; align-items: center; gap: 18px; }
+.kolumna h3 { font-family: var(--font-waski); font-stretch: 80%; font-weight: 750; font-size: 44px; }
+.kolumna ul { list-style: none; margin-top: 30px; display: grid; gap: 28px; }
+.kolumna li { display: flex; align-items: center; gap: 18px; font-size: 28px; line-height: 1.2; white-space: nowrap; }
+.kolumna li .ik { font-size: 32px; color: var(--szary); }
+/* Slajd wartości: kolumny wypełniają wysokość, bez pustego pasa pod paskiem mObywatela */
+#s-wartosc { display: flex; flex-direction: column; }
+#s-wartosc .kolumny { flex: 1; min-height: 0; margin-top: 44px; }
+#s-wartosc .kolumna { display: flex; flex-direction: column; }
+#s-wartosc .kolumna ul { flex: 1; align-content: space-evenly; gap: 0; margin-top: 16px; }
+#s-wartosc .kolumna li { font-size: 30px; }
+.docelowo { margin-top: 32px; display: grid; grid-template-columns: auto 1fr; align-items: center; column-gap: 28px; padding: 38px 44px 38px 40px; border-radius: 20px; background: var(--zolty-tlo); }
+.docelowo .kolo { width: 84px; height: 84px; font-size: 42px; background: var(--kafel); }
+.docelowo .mob-logo { width: 84px; height: 84px; border-radius: 20px; box-shadow: 0 2px 8px rgba(46,42,39,.12); }
+.docelowo .etykieta { color: #8A6A1E; }
+.docelowo h3 { font-family: var(--font-waski); font-stretch: 80%; font-weight: 750; font-size: 44px; line-height: 1.05; margin-top: 4px; white-space: nowrap; }
+.docelowo .d-opis { justify-self: end; max-width: 470px; font-size: 25px; line-height: 1.32; color: var(--tekst-2); }
 
-/* Nawigacja, notatki, podpowiedź */
-.nawig { position: fixed; right: 18px; bottom: 14px; display: flex; gap: 8px; align-items: center; font: 14px var(--font); color: var(--tusz-2); z-index: 20; opacity: .55; transition: opacity .2s; }
-.nawig:hover { opacity: 1; }
-body.ciemno .nawig { color: var(--noc-2); }
-.nawig button { font: inherit; color: inherit; background: none; border: 1px solid currentColor; border-radius: 6px; width: 34px; height: 30px; cursor: pointer; }
-.notatki { position: fixed; left: 0; right: 0; bottom: 0; max-height: 34vh; overflow: auto; background: rgba(0,0,0,.88); color: #fff; font: 18px/1.5 var(--font); padding: 18px 28px 48px; z-index: 30; }
+/* AI Slopers (s-slopers): stary telewizor, kaseta VHS. Celowo ciemny, wyjątek od jasnej palety.
+   Krok 1 wyłącza kineskop (WAAPI w skrypcie: obraz zapada się do linii, linia do kropki, kropka gaśnie). */
+#s-slopers { padding: 0; overflow: hidden; background: radial-gradient(ellipse at 50% 45%, #1C1B1A 0%, #0E0D0C 70%); color: #F2F2EE; }
+.tv-ekran { position: absolute; left: 168px; right: 168px; top: 100px; bottom: 104px; border-radius: 64px / 52px; overflow: hidden; background: #030404;
+  box-shadow: 0 0 0 12px #191817, 0 0 0 14px #2B2926, 0 30px 80px rgba(0, 0, 0, .6); }
+.tv-obraz { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 48%, #24302B 0%, #121916 55%, #070A09 100%); transform-origin: 50% 50%; }
+.tv-tresc { position: absolute; inset: 0; display: grid; place-content: center; text-align: center; }
+.tv-tytul { font-family: var(--font-waski); font-stretch: 72%; font-weight: 800; font-size: 240px; line-height: .9; letter-spacing: .005em; color: #F4F4EF;
+  /* rozszczepienie RGB i poświata luminoforu */
+  text-shadow: -5px 0 rgba(255, 40, 90, .7), 5px 0 rgba(30, 210, 255, .65), 0 0 46px rgba(220, 255, 240, .28); }
+.tv-pod { margin-top: 26px; font-size: 40px; font-weight: 600; letter-spacing: .32em; text-transform: uppercase; color: rgba(244, 244, 239, .78);
+  text-shadow: -2px 0 rgba(255, 40, 90, .55), 2px 0 rgba(30, 210, 255, .5); }
+.tv-osd { position: absolute; font: 700 36px/1 ui-monospace, 'Cascadia Mono', Consolas, 'Courier New', monospace; letter-spacing: .08em; color: #EAF2FF;
+  text-shadow: -2px 0 rgba(255, 40, 90, .6), 2px 0 rgba(30, 210, 255, .6), 0 0 14px rgba(200, 230, 255, .5); }
+.tv-osd-play { left: 64px; top: 52px; }
+.tv-osd-czas { right: 64px; bottom: 50px; font-variant-numeric: tabular-nums; }
+.tv-szum { position: absolute; inset: -50%; opacity: .13; pointer-events: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .6 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"); }
+.tv-linie { position: absolute; inset: 0; pointer-events: none; background: repeating-linear-gradient(to bottom, rgba(0, 0, 0, .3) 0 2px, transparent 2px 4px); }
+.tv-pasek { position: absolute; left: 0; right: 0; top: -120px; height: 120px; pointer-events: none;
+  background: linear-gradient(to bottom, transparent, rgba(220, 255, 240, .06) 45%, rgba(220, 255, 240, .1) 55%, transparent); }
+.tv-blysk { position: absolute; inset: 0; background: #F4FBFF; opacity: 0; pointer-events: none; }
+.tv-szklo { position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+  background: radial-gradient(ellipse at 28% 18%, rgba(255, 255, 255, .07), transparent 42%);
+  box-shadow: inset 0 0 140px 30px rgba(0, 0, 0, .8), inset 0 0 18px rgba(0, 0, 0, .9); }
+.tv-kropka { position: absolute; left: 50%; top: 50%; width: 16px; height: 16px; margin: -8px 0 0 -8px; border-radius: 50%; opacity: 0; pointer-events: none;
+  background: radial-gradient(circle, #FFFFFF 0 38%, rgba(214, 238, 255, .9) 52%, rgba(170, 215, 255, 0) 74%);
+  box-shadow: 0 0 26px 10px rgba(180, 222, 255, .55), 0 0 80px 24px rgba(140, 200, 255, .22); }
+/* Szum, przesuwający się pas i drganie śledzenia tylko na aktywnym slajdzie */
+#s-slopers.aktywny .tv-szum { animation: tv-szum .5s steps(5) infinite; }
+#s-slopers.aktywny .tv-pasek { animation: tv-pasek 7s linear infinite; }
+#s-slopers.aktywny .tv-tresc { animation: tv-sledzenie 4.2s steps(1, end) infinite; }
+@keyframes tv-szum { 0% { transform: translate(0, 0); } 20% { transform: translate(-7%, 4%); } 40% { transform: translate(5%, -6%); } 60% { transform: translate(-3%, -2%); } 80% { transform: translate(6%, 5%); } 100% { transform: translate(0, 0); } }
+@keyframes tv-pasek { to { transform: translateY(820px); } }
+@keyframes tv-sledzenie {
+  0%, 100% { transform: none; }
+  84% { transform: translateX(-9px) skewX(-5deg); }
+  85% { transform: translateX(7px); }
+  86% { transform: translateX(-3px) skewX(2deg); }
+  87% { transform: none; }
+  94% { transform: translateX(4px); }
+  95% { transform: none; }
+}
+
+/* Zaproszenie do testu (kod QR) */
+.test { position: absolute; left: 112px; right: 112px; top: 50%; transform: translateY(-50%); display: grid; grid-template-columns: 1fr auto; column-gap: 88px; align-items: center; }
+.test .tytul { font-size: 104px; }
+.t-lead { margin-top: 22px; font-size: 30px; line-height: 1.3; color: var(--tekst-2); }
+.t-kroki { list-style: none; margin-top: 40px; display: grid; gap: 18px; }
+.t-kroki li { display: flex; align-items: center; gap: 20px; font-size: 28px; font-weight: 500; }
+.t-kroki .kolo { width: 52px; height: 52px; font-size: 24px; font-weight: 700; }
+.t-qr { padding: 28px 28px 22px; border-radius: 28px; background: var(--kafel); box-shadow: var(--cien); border: 1px solid var(--linia); }
+.t-qr img { display: block; width: 420px; height: 420px; }
+.t-qr figcaption { margin-top: 10px; display: flex; justify-content: center; align-items: center; gap: 10px; font-size: 24px; font-weight: 600; }
+.t-qr figcaption .ik { font-size: 24px; color: var(--szary); }
+
+/* Nawigacja myszą, notatki */
+.nawig { position: fixed; left: 14px; bottom: 12px; display: flex; gap: 8px; z-index: 20; opacity: .18; transition: opacity .2s; }
+.nawig:hover, .nawig:focus-within { opacity: 1; }
+.nawig button { font: 16px var(--font); color: var(--tekst); background: var(--kafel); border: 1px solid var(--linia); border-radius: 8px; width: 36px; height: 32px; cursor: pointer; }
+.notatki { position: fixed; left: 0; right: 0; bottom: 0; max-height: 34vh; overflow: auto; background: rgba(46, 42, 39, .94); color: #fff; font: 18px/1.5 var(--font); padding: 18px 28px 48px; z-index: 30; }
 .notatki[hidden] { display: none; }
-.dymek { position: fixed; pointer-events: none; z-index: 40; background: var(--tusz); color: var(--papier); font: 16px/1.35 var(--font); padding: 8px 12px; border-radius: 6px; max-width: 320px; opacity: 0; transition: opacity .12s; }
-.dymek.on { opacity: 1; }
 
 @media (prefers-reduced-motion: reduce) {
+  /* Telewizor: bez szumu i drgań; wyłączenie to samo przyciemnienie (skrypt) */
   *, *::before, *::after { transition-duration: 0s !important; transition-delay: 0s !important; animation: none !important; }
 }
 </style>
 </head>
 <body>
+
+<!-- Ikony w stylu Lucide (linia 1.75, 24×24), rysowane inline -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="i-zap" viewBox="0 0 24 24"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></symbol>
+  <symbol id="i-zap-off" viewBox="0 0 24 24"><path d="M12.4 6.9 13 2l-2.6 3.1"/><path d="M15.6 10H21l-2.2 2.6"/><path d="M16.3 16.3 11 22l1-8H3l4.7-5.6"/><path d="m2 2 20 20"/></symbol>
+  <symbol id="i-signal" viewBox="0 0 24 24"><path d="M2 20h.01"/><path d="M7 20v-4"/><path d="M12 20v-8"/><path d="M17 20V8"/><path d="M22 4v16"/></symbol>
+  <symbol id="i-wifi" viewBox="0 0 24 24"><path d="M12 20h.01"/><path d="M2 8.82a15 15 0 0 1 20 0"/><path d="M5 12.86a10 10 0 0 1 14 0"/><path d="M8.5 16.43a5 5 0 0 1 7 0"/></symbol>
+  <symbol id="i-wifi-off" viewBox="0 0 24 24"><path d="M12 20h.01"/><path d="M8.5 16.43a5 5 0 0 1 7 0"/><path d="M5 12.86a10 10 0 0 1 5.17-2.69"/><path d="M19 12.86a10 10 0 0 0-2-1.52"/><path d="M2 8.82a15 15 0 0 1 4.18-2.64"/><path d="M22 8.82a15 15 0 0 0-11.29-3.76"/><path d="m2 2 20 20"/></symbol>
+  <symbol id="i-siren" viewBox="0 0 24 24"><path d="M7 18v-6a5 5 0 1 1 10 0v6"/><path d="M5 21a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-1a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2z"/><path d="M21 12h1"/><path d="M18.5 4.5 18 5"/><path d="M2 12h1"/><path d="M12 2v1"/><path d="m4.93 4.93.7.7"/><path d="M12 12v6"/></symbol>
+  <symbol id="i-map" viewBox="0 0 24 24"><path d="M3 6l6-3 6 3 6-3v15l-6 3-6-3-6 3z"/><path d="M9 3v15"/><path d="M15 6v15"/></symbol>
+  <symbol id="i-tram" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="16" rx="2"/><path d="M4 11h16"/><path d="M12 3v8"/><path d="m8 19-2 3"/><path d="m18 22-2-3"/><path d="M8 15h.01"/><path d="M16 15h.01"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></symbol>
+  <symbol id="i-shield-user" viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="M6.376 18.91a6 6 0 0 1 11.249.003"/><circle cx="12" cy="11" r="4"/></symbol>
+  <symbol id="i-heart-pulse" viewBox="0 0 24 24"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7z"/><path d="M3.22 12H9.5l.5-1 2 4.5 2-7 1.5 3.5h5.27"/></symbol>
+  <symbol id="i-wind" viewBox="0 0 24 24"><path d="M17.7 7.7a2.5 2.5 0 1 1 1.8 4.3H2"/><path d="M9.6 4.6A2 2 0 1 1 11 8H2"/><path d="M12.6 19.4A2 2 0 1 0 14 16H2"/></symbol>
+  <symbol id="i-cloud" viewBox="0 0 24 24"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9z"/></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></symbol>
+  <symbol id="i-package" viewBox="0 0 24 24"><path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z"/><path d="M12 22V12"/><path d="m3.3 7 7.7 4.73a2 2 0 0 0 2 0L20.7 7"/><path d="m7.5 4.27 9 5.15"/></symbol>
+  <symbol id="i-smartphone" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></symbol>
+  <symbol id="i-server" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><path d="M6 6h.01"/><path d="M6 18h.01"/></symbol>
+  <symbol id="i-database" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14a9 3 0 0 0 18 0V5"/><path d="M3 12a9 3 0 0 0 18 0"/></symbol>
+  <symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></symbol>
+  <symbol id="i-briefcase" viewBox="0 0 24 24"><path d="M16 20V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/><rect x="2" y="6" width="20" height="14" rx="2"/></symbol>
+  <symbol id="i-accessibility" viewBox="0 0 24 24"><circle cx="16" cy="4" r="1"/><path d="m18 19 1-7-6 1"/><path d="m5 8 3-3 5.5 3-2.36 3.5"/><path d="M4.24 14.5a5 5 0 0 0 6.88 6"/><path d="M13.76 17.5a5 5 0 0 0-6.88-6"/></symbol>
+  <symbol id="i-pill" viewBox="0 0 24 24"><path d="m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7z"/><path d="m8.5 8.5 7 7"/></symbol>
+  <symbol id="i-languages" viewBox="0 0 24 24"><path d="m5 8 6 6"/><path d="m4 14 6-6 2-3"/><path d="M2 5h12"/><path d="M7 2h1"/><path d="m22 22-5-10-5 10"/><path d="M14 18h6"/></symbol>
+  <symbol id="i-backpack" viewBox="0 0 24 24"><path d="M4 10a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/><path d="M8 10h8"/><path d="M8 18h8"/><path d="M8 22v-6a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v6"/><path d="M9 6V4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/></symbol>
+  <symbol id="i-route" viewBox="0 0 24 24"><circle cx="6" cy="19" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/><circle cx="18" cy="5" r="3"/></symbol>
+  <symbol id="i-map-pin" viewBox="0 0 24 24"><path d="M20 10c0 4.99-5.54 10.19-7.4 11.8a1 1 0 0 1-1.2 0C9.54 20.19 4 14.99 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></symbol>
+  <symbol id="i-landmark" viewBox="0 0 24 24"><path d="M3 22h18"/><path d="M6 18v-7"/><path d="M10 18v-7"/><path d="M14 18v-7"/><path d="M18 18v-7"/><path d="M12 2l8 5H4z"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol>
+  <symbol id="i-user-x" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="m17 8 5 5"/><path d="m22 8-5 5"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+  <symbol id="i-arrow-right" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></symbol>
+  <symbol id="i-bike" viewBox="0 0 24 24"><circle cx="18.5" cy="17.5" r="3.5"/><circle cx="5.5" cy="17.5" r="3.5"/><circle cx="15" cy="5" r="1"/><path d="M12 17.5V14l-3-3 4-3 2 3h2"/></symbol>
+  <symbol id="i-pencil" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.38 3.62a1 1 0 0 1 3 3L7.37 18.64a2 2 0 0 1-.86.5l-2.87.84a.5.5 0 0 1-.62-.62l.84-2.87a2 2 0 0 1 .5-.86z"/></symbol>
+  <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></symbol>
+  <symbol id="i-code" viewBox="0 0 24 24"><path d="m16 18 6-6-6-6"/><path d="m8 6-6 6 6 6"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></symbol>
+  <symbol id="i-cross" viewBox="0 0 24 24"><path d="M4 9a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h4a1 1 0 0 1 1 1v4a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2v-4a1 1 0 0 1 1-1h4a2 2 0 0 0 2-2v-2a2 2 0 0 0-2-2h-4a1 1 0 0 1-1-1V4a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v4a1 1 0 0 1-1 1z"/></symbol>
+  <symbol id="i-droplet" viewBox="0 0 24 24"><path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"/></symbol>
+  <symbol id="i-key" viewBox="0 0 24 24"><path d="m15.5 7.5 2.3 2.3a1 1 0 0 0 1.4 0l2.1-2.1a1 1 0 0 0 0-1.4L19 4"/><path d="m21 2-9.6 9.6"/><circle cx="7.5" cy="15.5" r="5.5"/></symbol>
+</svg>
+
 <div class="scena" id="scena">
 
-  <!-- 1. Napięcie -->
-  <section class="slajd noc" data-tlo="noc" data-kroki="2"
-    data-notatka="Od ponad czterech lat za naszą wschodnią granicą trwa wojna. Napięcie w regionie rośnie. Rząd wydał poradnik bezpieczeństwa. Nikt nie chce o tym myśleć, a jednak coraz więcej osób zadaje sobie pytanie: co zrobię, jeśli to się stanie tutaj?">
-    <div class="linijki">
+  <!-- 1. Nowa nazwa projektu -->
+  <section class="slajd" data-kroki="0" id="s-nazwa"
+    data-notatka="Zanim zaczniemy: zmieniamy nazwę projektu. Od teraz to Przezorny Obywatel, z hasłem: bezpieczny w swoim mieście. Przezorny, bo chodzi o to, żeby wiedzieć, co zrobić, zanim cokolwiek się stanie.">
+    <div class="srodek nazwa">
+      <span class="emblemat" aria-hidden="true"><svg class="ik"><use href="#i-shield-user"/></svg></span>
+      <h1 class="haslo">Przezorny Obywatel</h1>
+      <p class="lead">Bezpieczny w swoim mieście</p>
+    </div>
+  </section>
+
+  <!-- 2. Napięcie -->
+  <section class="slajd" data-kroki="2"
+    data-notatka="Od ponad czterech lat za naszą wschodnią granicą trwa wojna. Napięcie w regionie rośnie. Rząd wydał poradnik bezpieczeństwa. Nikt nie chce o tym myśleć, a jednak coraz więcej osób zadaje sobie pytanie: jak miasto zapewni nam bezpieczeństwo?">
+    <div class="pasek-akcent" aria-hidden="true"></div>
+    <div class="linijki otwarcie">
       <p class="cicho">Wojna za wschodnią granicą.</p>
       <p class="cicho" data-krok="1">Rosnące napięcie.</p>
-      <p data-krok="2">Co zrobię, jeśli to się stanie tutaj?</p>
+      <p data-krok="2">Jak miasto zapewni <mark>bezpieczeństwo</mark>?</p>
     </div>
   </section>
 
-  <!-- 2. Spokój -->
-  <section class="slajd" data-kroki="1"
-    data-notatka="Miasto takie jak Warszawa powinno dawać mieszkańcom spokój. Nie obietnicę, że nic się nie stanie, tylko pewność, że każdy wie, co zrobić. Także wtedy, gdy zawiedzie prąd i sieć.">
-    <div class="srodek">
-      <h1 class="haslo">Miasto ma dawać spokój.</h1>
-      <p class="lead" data-krok="1">Nie obietnicę, że nic się nie stanie. Pewność, że każdy wie, co zrobić, także gdy zawiedzie prąd i sieć.</p>
-    </div>
-  </section>
-
-  <!-- 3. Kijów -->
+  <!-- 3. Co pada najpierw (Kijów) -->
   <section class="slajd" data-kroki="1" id="s-kijow"
-    data-notatka="Kijów pokazał, co pada najpierw. Rosja uderza w sieć energetyczną. Bez prądu znika zasięg komórkowy, a z nim alarmy w telefonie i mapy. Mapa punktów, gdzie można się ogrzać, bez internetu nie działała, więc ludziom radzono spisać adresy na kartce. Stanęły tramwaje.">
-    <h2 class="tytul">Kijów pokazał, co pada najpierw.</h2>
+    data-notatka="W miastach dotkniętych konfliktami najpierw pada prąd. Widać to w Kijowie, gdzie Rosja uderza w sieć energetyczną. Bez prądu znika zasięg komórkowy, a z nim alarmy w telefonie i mapy. Mapa punktów, gdzie można się ogrzać, bez internetu nie działała, więc ludziom radzono spisać adresy na kartce. Stanęły tramwaje.">
+    <h2 class="tytul" style="font-size:60px;max-width:none">W miastach dotkniętych konfliktami pada najpierw</h2>
     <div class="domino" id="domino">
-      <span class="kostka">prąd</span><span class="strzalka" aria-hidden="true">→</span>
-      <span class="kostka">sieć</span><span class="strzalka" aria-hidden="true">→</span>
-      <span class="kostka">alarmy</span><span class="strzalka" aria-hidden="true">→</span>
-      <span class="kostka">mapy</span><span class="strzalka" aria-hidden="true">→</span>
-      <span class="kostka">tramwaje</span>
+      <div class="kostka"><svg class="ik" aria-hidden="true"><use href="#i-zap"/></svg><span>prąd</span></div>
+      <svg class="ik strzalka" aria-hidden="true"><use href="#i-arrow-right"/></svg>
+      <div class="kostka"><svg class="ik" aria-hidden="true"><use href="#i-signal"/></svg><span>sieć</span></div>
+      <svg class="ik strzalka" aria-hidden="true"><use href="#i-arrow-right"/></svg>
+      <div class="kostka"><svg class="ik" aria-hidden="true"><use href="#i-siren"/></svg><span>alarmy</span></div>
+      <svg class="ik strzalka" aria-hidden="true"><use href="#i-arrow-right"/></svg>
+      <div class="kostka"><svg class="ik" aria-hidden="true"><use href="#i-map"/></svg><span>mapy</span></div>
+      <svg class="ik strzalka" aria-hidden="true"><use href="#i-arrow-right"/></svg>
+      <div class="kostka"><svg class="ik" aria-hidden="true"><use href="#i-tram"/></svg><span>tramwaje</span></div>
     </div>
-    <p class="drobny" style="position:absolute;left:112px;bottom:72px;max-width:900px">Adresy punktów, gdzie można się ogrzać i naładować telefon, bez internetu trzeba było spisywać na kartce.</p>
   </section>
 
-  <!-- 4. Syreny -->
-  <section class="slajd" data-kroki="1" id="s-syreny"
-    data-notatka="A w Warszawie? Sprawdziliśmy syreny na danych Państwowej Straży Pożarnej. Dziś syrenę słychać przy 92,5% adresów. [klik: wyłącz prąd] Jeśli zabraknie prądu, a syreny analogowe nie mają zasilania awaryjnego, głośnej syreny, 75 decybeli i więcej, ubywa z 48,3% do 36,6% adresów. Najbardziej na Pradze-Południe. To model dźwięku na zewnątrz i przybliżenie, dlatego mówimy „jeśli”. [Tylko gdy ktoś zapyta: najgorszy wariant to 69,1% adresów w zasięgu 65 dB, a mapa pokazuje właśnie ten wariant.]">
+  <!-- 4. Syreny: paski i mapa głośności z adresów (dane.js, build_dane.py).
+       CHWILOWO UKRYTY (data-pomin, 18.10). Żeby go przywrócić, usuń atrybut data-pomin z <section> poniżej. -->
+  <section class="slajd" data-kroki="1" data-pomin id="s-syreny"
+    data-notatka="A w Warszawie? Sprawdziliśmy syreny na danych Państwowej Straży Pożarnej, dla każdego adresu w mieście. Syrenę słychać na zewnątrz przy 92,5% adresów, ale głośno, czyli tak, że najpewniej usłyszysz ją też w domu, tylko przy 48%. To zielony kawałek górnego paska. [klik: wyłącz prąd] Jeśli zabraknie prądu, a syreny analogowe nie mają zasilania awaryjnego, głośno zostaje już tylko przy 37% adresów. Na mapie zielonego ubywa, najbardziej na Pradze-Południe. To model dźwięku na zewnątrz budynków i przybliżenie, dlatego mówimy „jeśli”.">
     <div class="syreny">
       <div class="lewa">
-        <h2 class="tytul" style="font-size:60px">A w Warszawie?</h2>
-        <p class="opis" style="margin-top:24px">Dziś syrenę słychać (65 dB i więcej na zewnątrz) przy <b id="dzis-65">92,5%</b> adresów. Głośną, 75 dB i więcej, przy:</p>
-        <div class="liczba wynik" id="wynik-syren">48,3%</div>
-        <p class="roznica" id="roznica-syren" aria-live="polite"></p>
-        <button class="przelacznik" id="blackout" aria-pressed="false"><span class="gniazdo" aria-hidden="true"></span><span id="blackout-tekst">Wyłącz prąd</span></button>
-        <p class="drobny stopka">Model dźwięku na zewnątrz budynków, wynik przybliżony. Blackout: jeśli syreny analogowe nie mają zasilania awaryjnego, a cyfrowe działają. Podpisy dzielnic: adresy ≥ 75 dB, normalnie → jeśli zabraknie prądu. Dane: KG PSP, SOIA 2026.05 (CC BY 4.0), 126 923 punkty adresowe m.st. Warszawy.</p>
+        <h2 class="tytul">Jeśli zabraknie prądu, syrena w&nbsp;wielu miejscach będzie cichsza</h2>
+        <p class="miara">Jak głośno słychać syrenę na zewnątrz budynku · udział adresów</p>
+        <div class="paski">
+          <div class="p-wiersz dzis">
+            <div class="p-glowa"><span>Dziś</span></div>
+            <div class="p-pasek" id="pasek-dzis"><div class="pasek" role="img"><div class="wypelnienie"></div></div><span class="poza"></span></div>
+          </div>
+          <div class="p-wiersz bez">
+            <div class="p-glowa"><span>Jeśli zabraknie prądu</span><button class="przelacznik" id="blackout" aria-pressed="false"><span class="gniazdo" aria-hidden="true"></span><span id="blackout-tekst">Wyłącz prąd</span></button></div>
+            <div class="p-pasek" id="pasek-bez"><div class="pasek" role="img"><div class="wypelnienie"></div></div><span class="poza"></span></div>
+          </div>
+        </div>
+        <ul class="legenda-syr">
+          <li><i style="background:var(--k0)"></i><b>głośno</b>75 dB i więcej, najpewniej usłyszysz też w domu</li>
+          <li><i style="background:var(--k1)"></i><b>słychać na zewnątrz</b>65–75 dB, przy zamkniętych oknach może umknąć</li>
+          <li><i style="background:var(--k2)"></i><b>może nie dotrzeć</b>poniżej 65 dB</li>
+        </ul>
+        <p class="drobny stopka">Model dźwięku na zewnątrz budynków (KG PSP, SOIA 2026.05), wynik przybliżony. Bez prądu: jeśli syreny analogowe nie mają zasilania awaryjnego.</p>
       </div>
-      <div>
-        <div class="mapa" id="mapa" style="height:640px"></div>
-        <div class="legenda-mapy"><span class="d"><i class="z"></i><em style="font-style:normal">zasięg wszystkich syren (SOIA)</em></span><span class="n"><i class="z"></i><em style="font-style:normal">najgorszy wariant: zasięg zostaje tylko w strefach syren cyfrowych (<b id="mapa-po">69,1%</b> adresów ≥ 65 dB)</em></span><span class="u"><i class="u2"></i><em style="font-style:normal">zasięg tracony w najgorszym wariancie</em></span></div>
-      </div>
+      <div class="mapa-syr" id="mapa"></div>
     </div>
   </section>
 
-  <!-- 5. JTBD -->
-  <section class="slajd" data-kroki="0"
-    data-notatka="Nie zaczęliśmy od danych. Zaczęliśmy od ludzi. Rozpisaliśmy, co w kryzysie musi zrobić sześć grup mieszkańców: rodzic dojeżdżający do pracy, senior, osoba przewlekle chora, ktoś, kto nie zna polskiego, młody bez zapasów i ktoś w drodze. Od dni przed atakiem po powrót do normalności. Wyszły 24 zadania.">
+  <!-- JTBD: persony. UKRYTY (data-pomin): slajd jest pomijany w nawigacji, liczniku i adresie #N.k.
+       Żeby go przywrócić, usuń atrybut data-pomin z <section> poniżej. Nic więcej nie trzeba zmieniać. -->
+  <section class="slajd" data-kroki="0" data-pomin
+    data-notatka="Nie zaczęliśmy od danych. Zaczęliśmy od ludzi. Rozpisaliśmy, co w kryzysie musi zrobić sześć grup mieszkańców: rodzic dojeżdżający do pracy, senior, osoba przewlekle chora, ktoś, kto nie zna polskiego, młody bez zapasów i ktoś w drodze. Od dni przed atakiem po powrót do normalności. Wyszły 24 zadania. [Liczba przy grupie: ile z tych zadań ta grupa może mieć do wykonania.]">
     <div class="naglowek">
       <span class="liczba" id="ile-zadan">24</span>
       <div>
         <h2 class="tytul" style="font-size:56px">zadania mieszkańców w kryzysie</h2>
-        <p class="drobny" style="font-size:21px;margin-top:10px">Zaczęliśmy od ludzi, nie od danych: 6 grup mieszkańców, 7 faz kryzysu. Najedź na kropkę, żeby zobaczyć zadanie.</p>
+        <p class="drobny" style="font-size:24px;margin-top:8px">Zaczęliśmy od ludzi, nie od danych: 6 grup mieszkańców, 7 faz kryzysu.</p>
       </div>
     </div>
-    <div class="macierz" id="macierz"></div>
+    <ol class="fazy" id="fazy" aria-label="Fazy kryzysu"></ol>
+    <div class="persony" id="persony"></div>
+    <p class="drobny przypis" id="przypis-person"></p>
   </section>
 
-  <!-- 6. Siatka -->
-  <section class="slajd siatka" data-kroki="0"
-    data-notatka="Każde zadanie połączyliśmy z danymi: miejskimi, PSP i innymi otwartymi. Czarne działa bez sieci, niebieskie potrzebuje sieci. Szare to zadania, których żadne dane nie rozwiązują, na przykład gdzie naładować telefon. Tego nie udajemy. Zbudowaliśmy rozwiązanie tam, gdzie zadanie łączy się z danymi.">
-    <div class="siatka-glowa">
-      <h2 class="tytul" style="font-size:56px">Każde zadanie połączyliśmy z danymi</h2>
-      <div class="legenda">
-        <span><i></i>w telefonie, bez sieci</span>
-        <span><i class="live"></i>na żywo, przez sieć</span>
-        <span><i class="bez"></i>żadne dane nie pomagają</span>
-      </div>
+  <!-- 4. Na jakich danych stoimy -->
+  <section class="slajd" data-kroki="0" id="s-dane"
+    data-notatka="Aplikacja stoi na otwartych danych Warszawy z portalu dane.um.warszawa.pl. Przez API miasta bierzemy pięć zbiorów. Defibrylatory AED i toalety publiczne pobieramy z góry i zapisujemy w telefonie, więc działają bez sieci. Odjazdy ZTM, pogodę i wiatr oraz jakość powietrza bierzemy na żywo, gdy jest sieć. [Drobno na kafelkach: nazwy funkcji API miasta, dowód dla jury.]">
+    <h2 class="tytul" style="font-size:56px">Otwarte dane Warszawy, które adresowały problem</h2>
+    <div class="zrodlo-pas">
+      <svg class="ik" aria-hidden="true"><use href="#i-landmark"/></svg><b>Otwarte dane m.st. Warszawy</b>
+      <span class="z-adres">dane.um.warszawa.pl · API miasta</span>
     </div>
-    <div id="siatka" style="margin-top:22px"></div>
+    <div class="zbiory-siatka">
+        <div class="zbior-kafel" id="z-aed"><div class="zk-glowa"><span class="kolo"><svg class="ik" aria-hidden="true"><use href="#i-heart-pulse"/></svg></span><span class="tryb">w telefonie, bez sieci</span></div><h3>Defibrylatory AED</h3><code>get_<wbr>scb_<wbr>lokalizacja_<wbr>defibrylatorow</code></div>
+        <div class="zbior-kafel" id="z-toalety"><div class="zk-glowa"><span class="kolo"><svg class="ik" aria-hidden="true"><use href="#i-droplet"/></svg></span><span class="tryb">w telefonie, bez sieci</span></div><h3>Toalety publiczne</h3><code>get_<wbr>m_<wbr>toalety</code></div>
+        <div class="zbior-kafel zywo" id="z-ztm"><div class="zk-glowa"><span class="kolo"><svg class="ik" aria-hidden="true"><use href="#i-tram"/></svg></span><span class="tryb zywo">na żywo</span></div><h3>Odjazdy ZTM z&nbsp;przystanku</h3><code>get_<wbr>ztm_<wbr>odjazdy_<wbr>linii_<wbr>z_<wbr>przystanku</code></div>
+        <div class="zbior-kafel zywo" id="z-pogoda"><div class="zk-glowa"><span class="kolo"><svg class="ik" aria-hidden="true"><use href="#i-wind"/></svg></span><span class="tryb zywo">na żywo</span></div><h3>Pogoda i wiatr</h3><code>get_<wbr>zom_<wbr>pogoda</code></div>
+        <div class="zbior-kafel zywo" id="z-powietrze"><div class="zk-glowa"><span class="kolo"><svg class="ik" aria-hidden="true"><use href="#i-cloud"/></svg></span><span class="tryb zywo">na żywo</span></div><h3>Jakość powietrza</h3><code>get_<wbr>bopipk_<wbr>monitoring_<wbr>jakosci_<wbr>powietrza</code></div>
+    </div>
+  </section>
+
+  <!-- 5. Zadania ↔ dane -->
+  <section class="slajd" data-kroki="0"
+    data-notatka="Zaczęliśmy od ludzi, nie od danych: rozpisaliśmy 24 zadania, które mieszkańcy mają do wykonania w kryzysie. Każde połączyliśmy z danymi. Zielone działa w telefonie bez sieci, żółte potrzebuje sieci. 18 z 24 zadań łączy się z danymi. Dla 6 zadań brakuje danych, na przykład gdzie naładować telefon. Tego nie udajemy.">
+    <h2 class="tytul" style="font-size:56px">Analizowaliśmy, jakim wyzwaniom będą musieli sprostać mieszkańcy</h2>
+    <div class="kratki" id="kratki" role="img"></div>
+    <div class="grupy-danych" id="grupy-danych"></div>
     <p class="wniosek" id="wniosek-siatki"></p>
   </section>
 
-  <!-- 7. Rozwiązanie -->
-  <section class="slajd" data-kroki="1"
-    data-notatka="Tak powstała Warszawa w trybie kryzysowym. Jedna strona internetowa, a po wpisaniu adresu pięć kart dopasowanych do twojej sytuacji: syreny, najbliższe miejsce schronienia według PSP, pomoc medyczna, powietrze i wiatr, dotarcie do bliskich. Za kartami są dane na żywo, a wszystko, co da się policzyć z góry, jest w telefonie. Działa, gdy wszystko pada.">
-    <h2 class="tytul">Warszawa w trybie kryzysowym</h2>
-    <div class="funkcje">
-      <div class="funkcja"><h3>Syreny</h3><p>Czy usłyszysz alarm i co zrobić. Jeśli zabraknie prądu, a syreny analogowe nie mają zasilania awaryjnego, może być ciszej.</p></div>
-      <div class="funkcja"><h3>Najbliższe miejsce schronienia</h3><p>Według PSP, z trasą pieszą po ulicach i przyciskiem do aplikacji PSP.</p></div>
-      <div class="funkcja"><h3>Pomoc medyczna</h3><p>Najbliższy AED, SOR, apteka i przychodnia, z odległością.</p></div>
-      <div class="funkcja"><h3>Powietrze i wiatr</h3><p>Rekomendacja na dziś: czy wietrzyć, skąd wieje wiatr, jakie jest powietrze.</p></div>
-      <div class="funkcja"><h3>Dotarcie do bliskich</h3><p>Czas pieszo i rowerem do zapisanych adresów, najbliższa stacja Veturilo. Jeśli zabraknie prądu, tramwaje i metro stoją.</p></div>
-      <div class="funkcja"><h3>Paczka offline</h3><p>Dane, mapa Warszawy i trasy zapisane w telefonie. Bez sieci działa to, co da się policzyć z góry.</p></div>
-    </div>
-    <div class="przeplyw" data-krok="1">
-      <div><b>Dane miasta i PSP</b><span class="kreska"></span><b>paczka w telefonie</b><span class="etyk">działa bez sieci</span></div>
-      <div class="live"><b>API miasta</b><span class="kreska"></span><b>nasz serwer z kluczem</b><span class="kreska"></span><b>telefon</b><span class="etyk">gdy jest sieć</span></div>
+  <!-- 7. Rozwiązanie: Przezorny Obywatel -->
+  <section class="slajd" data-kroki="0"
+    data-notatka="Tak powstał Przezorny Obywatel. Jedna strona internetowa, a po wpisaniu adresu pięć kart dopasowanych do twojej sytuacji: syreny, najbliższe miejsce schronienia według PSP, pomoc medyczna, powietrze i wiatr, dotarcie do bliskich. Za kartami są dane na żywo, a wszystko, co da się policzyć z góry, jest w telefonie. Działa, gdy wszystko pada.">
+    <h2 class="tytul">Przezorny Obywatel</h2>
+    <div class="kafle">
+      <div class="kafelek"><div class="k-glowa"><span class="kolo"><svg class="ik" aria-hidden="true"><use href="#i-siren"/></svg></span></div><h3>Syreny</h3><p>Czy usłyszysz alarm i co zrobić, także jeśli zabraknie prądu.</p></div>
+      <div class="kafelek"><div class="k-glowa"><span class="kolo"><svg class="ik" aria-hidden="true"><use href="#i-shield"/></svg></span></div><h3>Najbliższe miejsce schronienia według PSP</h3><p>Trasa piesza po ulicach i przycisk do aplikacji PSP.</p></div>
+      <div class="kafelek"><div class="k-glowa"><span class="kolo"><svg class="ik" aria-hidden="true"><use href="#i-heart-pulse"/></svg></span></div><h3>Pomoc medyczna</h3><p>Najbliższy AED, SOR, apteka i przychodnia, z odległością.</p></div>
+      <div class="kafelek"><div class="k-glowa"><span class="kolo"><svg class="ik" aria-hidden="true"><use href="#i-wind"/></svg></span></div><h3>Powietrze i wiatr</h3><p>Czy wietrzyć i skąd wieje wiatr: rekomendacja, nie tabela.</p></div>
+      <div class="kafelek"><div class="k-glowa"><span class="kolo"><svg class="ik" aria-hidden="true"><use href="#i-users"/></svg></span></div><h3>Dotarcie do bliskich</h3><p>Pieszo i rowerem do zapisanych adresów, najbliższe Veturilo.</p></div>
+      <div class="kafelek paczka"><div class="k-glowa"><span class="kolo"><svg class="ik" aria-hidden="true"><use href="#i-package"/></svg></span><span class="nr">w telefonie</span></div><h3>Paczka offline</h3><p>Dane, mapa Warszawy i trasy w telefonie. Działa bez sieci.</p></div>
     </div>
   </section>
-
-  <!-- 8. Dzień Kasi -->
-  <section class="slajd" data-kroki="6" id="s-kasia"
-    data-notatka="[PRZYGOTOWANIE przed pitchem: otwórz prezentację z ?edycja=1, w telefonie zapisz adresy Kasi i pobierz paczkę offline. Telefon otwieramy z linkiem ?lokalizacja=52.2457,21.0874.] Pokażę to na Kasi. Jest u mamy na Grochowie. | 1 LOKALIZACJA I POŁĄCZENIE: Kasia klika „Tutaj”. Aplikacja sprawdza połączenie: „Jest połączenie. Dane na żywo włączone. Trasy na offline zapisuję w tle.” | 2 SYRENY: Pierwsza karta to syreny. Klik pokazuje na mapie okręgi najbliższych syren. Karta mówi, czy usłyszy alarm i co zrobić, jeśli zabraknie prądu. | 3 MIEJSCE SCHRONIENIA: Druga karta to najbliższe miejsce schronienia według PSP. Klik pokazuje trasę pieszą po ulicach i przycisk do aplikacji PSP. | 4 POZOSTAŁE KARTY: Dalej pomoc medyczna, powietrze i wiatr, dotarcie do bliskich. Każda mówi, co robić, a nie tylko pokazuje dane. | 5 BRAK SIECI: [klik: wyłącz sieć] Padła sieć. Odświeżamy: „Offline · paczka z 17.10, …” Klik w miejsce schronienia i ta sama trasa, zapisana w telefonie.">
-    <div class="przygotowanie" id="przygotowanie" hidden>
-      <h3>Przygotowanie telefonu przed pitchem</h3>
-      <ol>
-        <li>W telefonie obok wpisz adresy Kasi (wyszukaj po ulicy) i zapisz.</li>
-        <li>Pobierz paczkę offline.</li>
-        <li>Otwórz prezentację jeszcze raz, pod tym samym adresem, ale bez <code>?edycja=1</code>.</li>
-      </ol>
-      <table>
-        <tr><td>Dom</td><td>ul. Powstańców Śląskich 10, Bemowo</td></tr>
-        <tr><td>Praca</td><td>rondo Ignacego Daszyńskiego 1, Wola</td></tr>
-        <tr><td>Bliska osoba</td><td>ul. Grochowska 200, Praga-Południe</td></tr>
-      </table>
-      <p class="uwaga">Przeglądarka zapamiętuje te adresy tylko dla prezentacji otwartej spod tego samego adresu (np. zawsze http://127.0.0.1:8765/). Adresy wpisane w zwykłej karcie aplikacji tu się nie pojawią.</p>
-    </div>
-    <div class="kasia">
-      <div>
-        <h2 class="tytul" style="font-size:56px">Dzień Kasi</h2>
-        <p class="wstep">Kasia jest u mamy na Grochowie. Telefon w ręku, kilka sekund, żadnych zakładek: aplikacja sama pokazuje, co jest ważne w tym miejscu.</p>
-        <ol class="etapy" id="etapy">
-          <li><div role="button" tabindex="0" class="etap" data-etap="1"><span class="kiedy">Start</span><span class="problem">Gdzie jestem?</span><span class="szczegol"><span class="w"><p>„Tutaj”, potem „Sprawdzam połączenie…”. Wynik: „Jest połączenie. Dane na żywo włączone. Trasy na offline zapisuję w tle.”</p><p class="wartosc">Od razu wie, na jakich danych działa.</p></span></span></div></li>
-          <li><div role="button" tabindex="0" class="etap" data-etap="2"><span class="kiedy">Karta 1</span><span class="problem">Czy usłyszę alarm?</span><span class="szczegol"><span class="w"><p>Karta Syreny. Klik pokazuje na mapie okręgi najbliższych syren. Jeśli zabraknie prądu, a syreny analogowe nie mają zasilania awaryjnego, może ich nie usłyszeć.</p><p class="wartosc">Wie zawczasu i zna kroki.</p></span></span></div></li>
-          <li><div role="button" tabindex="0" class="etap" data-etap="3"><span class="kiedy">Karta 2</span><span class="problem">Gdzie się schować?</span><span class="szczegol"><span class="w"><p>Najbliższe miejsce schronienia według PSP. Klik pokazuje trasę pieszą po ulicach i przycisk do aplikacji PSP.</p><p class="wartosc">Nie szuka w panice.</p></span></span></div></li>
-          <li><div role="button" tabindex="0" class="etap" data-etap="4"><span class="kiedy">Karty 3–5</span><span class="problem">Co jeszcze?</span><span class="szczegol"><span class="w"><p>Pomoc medyczna (AED, SOR, apteka, przychodnia), powietrze i wiatr, dotarcie do bliskich. Każda karta mówi, co zrobić.</p><p class="wartosc">Dostaje rekomendacje, nie suche dane.</p></span></span></div></li>
-          <li><div role="button" tabindex="0" class="etap offline" data-etap="5"><span class="kiedy">Brak sieci</span><span class="problem">Nie ma sieci.</span><span class="szczegol"><span class="w"><p>Wyłączamy sieć i odświeżamy: „Offline · paczka z 17.10, …” Klik w miejsce schronienia i ta sama trasa, zapisana w telefonie.</p><p class="wartosc">Nie zostaje z pustym ekranem.</p></span></span></div></li>
-        </ol>
-      </div>
-      <div class="telefon-kol">
-        <div class="telefon">
-          <div class="ekran">
-            <iframe id="aplikacja" title="Aplikacja Warszawa w trybie kryzysowym" allow="geolocation"></iframe>
-          </div>
-        </div>
-        <div class="stan-sieci">
-          <button class="przelacznik" id="siec" aria-pressed="false"><span class="gniazdo" aria-hidden="true"></span><span id="siec-tekst">Wyłącz sieć</span></button>
-        </div>
-      </div>
-    </div>
+  <!-- 8. Dzień Kasi: demo w telefonie (telefon.js) -->
+  <section class="slajd" data-kroki="0" id="s-kasia"
+    data-notatka="Pokażę to na Kasi. Kasia jest w 42 Warsaw, na Woli, i otwiera aplikację. | 0–1 POŁĄCZENIE: aplikacja sprawdza sieć: jest, więc dane na żywo są włączone, a trasy na wypadek braku sieci zapisują się w tle. | 2 LOKALIZACJA: jedno dotknięcie „Lokalizacja” i pięć kart dla miejsca, w którym Kasia stoi. | 3 SYRENY: Kasia jest w zasięgu syreny, 75 dB i więcej na zewnątrz, także jeśli zabraknie prądu. Okręgi to najbliższe syreny. | 4 MIEJSCE SCHRONIENIA: najbliższe według PSP, 60 metrów, trasa piesza po ulicach. | 5 POWIETRZE: „Możesz wietrzyć”, rekomendacja z czujnika miasta, a nie tabela. | 6 BLISCY: do domu pieszo 66 minut, rowerem 26. Jeśli zabraknie prądu, tramwaje i metro stoją. | 7 KOMUNIKACJA: odjazdy ZTM z API miasta na żywo: tramwaj 26, odjazd za 11 minut. Przy blackoucie zostają same autobusy. | 8–10 BRAK SIECI: pada sieć, Kasia otwiera aplikację: „Brak sieci. Działam na danych z paczki”. Lokalizacja działa bez sieci, a miejsce schronienia ma tę samą trasę, zapisaną w telefonie. Działa, gdy wszystko pada.">
+    <div id="demo-kasi"></div>
   </section>
 
   <!-- 9. Wartość -->
-  <section class="slajd" data-kroki="1"
-    data-notatka="Kasia wie zawczasu, co zrobić, i to pod swoim adresem, a nie dla całej Polski. Miasto dostaje narzędzie na danych, które już publikuje, bez kont i bez sklepu z aplikacjami. Następne kroki: z wojewodą mazowieckim, właścicielem syren analogowych, sprawdzić ich zasilanie, porównać model ze zgłoszeniami z 19115 z ćwiczeń Syrena-26 i wpiąć tryb kryzysowy w aplikację, której warszawiacy używają na co dzień.">
+  <section class="slajd" data-kroki="0" id="s-wartosc"
+    data-notatka="Kasia wie, co zrobić pod swoim adresem, i wie to przed kryzysem, a nie dopiero w panice. Odpowiedzi działają także bez sieci. Miasto dostaje narzędzie na danych, które już publikuje, bez kont i bez sklepu z aplikacjami. Docelowo widzimy tryb kryzysowy w aplikacji mObywatel, którą wielu mieszkańców ma już w telefonie.">
     <h2 class="tytul">Spokój dla mieszkańców, narzędzie dla miasta</h2>
     <div class="kolumny">
-      <div><h3>Dla mieszkańca</h3><p>Wie zawczasu, co zrobić, pod swoim adresem, a nie dla całej Polski. Odpowiedzi działają także bez sieci.</p></div>
-      <div><h3>Dla miasta</h3><p>Stoi na danych, które Warszawa i PSP już publikują. Bez kont, bez sklepu z aplikacjami, na tanim hostingu.</p></div>
+      <div class="kolumna">
+        <div class="c-glowa"><span class="kolo"><svg class="ik" aria-hidden="true"><use href="#i-user"/></svg></span><h3>Dla mieszkańca</h3></div>
+        <ul>
+          <li><svg class="ik" aria-hidden="true"><use href="#i-map-pin"/></svg>Wie, co zrobić, pod swoim adresem</li>
+          <li><svg class="ik" aria-hidden="true"><use href="#i-clock"/></svg>Wie to przed kryzysem, a nie dopiero w panice</li>
+          <li><svg class="ik" aria-hidden="true"><use href="#i-wifi-off"/></svg>Odpowiedzi działają bez sieci</li>
+        </ul>
+      </div>
+      <div class="kolumna">
+        <div class="c-glowa"><span class="kolo"><svg class="ik" aria-hidden="true"><use href="#i-landmark"/></svg></span><h3>Dla miasta</h3></div>
+        <ul>
+          <li><svg class="ik" aria-hidden="true"><use href="#i-database"/></svg>Dane, które Warszawa i PSP już publikują</li>
+          <li><svg class="ik" aria-hidden="true"><use href="#i-user-x"/></svg>Bez kont i sklepu z aplikacjami</li>
+          <li><svg class="ik" aria-hidden="true"><use href="#i-server"/></svg>Tani hosting</li>
+        </ul>
+      </div>
     </div>
-    <ol class="kroki" data-krok="1">
-      <li>Z wojewodą mazowieckim, właścicielem syren analogowych, sprawdzić, czy któraś ma zasilanie awaryjne.</li>
-      <li>Porównać model ze zgłoszeniami o słyszalności z 19115 z ćwiczeń Syrena-26.</li>
-      <li>Wpiąć tryb kryzysowy w aplikację, której warszawiacy używają na co dzień.</li>
-    </ol>
+    <div class="docelowo">
+      <img class="mob-logo" src="logo/mobywatel.png" alt="Ikona aplikacji mObywatel">
+      <div class="d-tytul"><p class="etykieta">Docelowo</p><h3>Tryb kryzysowy w aplikacji mObywatel</h3></div>
+    </div>
   </section>
 
   <!-- 10. Zamknięcie -->
-  <section class="slajd noc" data-tlo="noc" data-kroki="2"
-    data-notatka="Czasy są niepewne. Warszawa może dać mieszkańcom spokój. Taki, który działa, gdy wszystko pada. Dziękujemy.">
-    <div class="linijki" style="bottom:150px">
+  <section class="slajd" data-kroki="2"
+    data-notatka="Czasy są niepewne. Warszawa może dać mieszkańcom spokój. Przezorny Obywatel to spokój, który działa, gdy wszystko pada. Dziękujemy.">
+    <div class="pasek-akcent" aria-hidden="true"></div>
+    <p class="marka"><svg class="ik" aria-hidden="true"><use href="#i-shield-user"/></svg><b>Przezorny Obywatel</b><span aria-hidden="true">·</span>Bezpieczny w swoim mieście</p>
+    <div class="linijki" style="bottom:170px">
       <p class="cicho">Czasy są niepewne.</p>
       <p class="cicho" data-krok="1">Warszawa może dać spokój.</p>
-      <p data-krok="2">Działa, gdy wszystko pada.</p>
-    </div>
-    <div class="linki">
-      <a href="https://warszawa-kryzys.startupaplikujmy.workers.dev/">warszawa-kryzys.startupaplikujmy.workers.dev</a>
-      <a href="https://warszawa-kryzys.startupaplikujmy.workers.dev/?offline=1">wersja offline: ?offline=1</a>
-      <a href="https://github.com/startupowe1konto1/AI-Slopers-Hackathon">github.com/startupowe1konto1/AI-Slopers-Hackathon</a>
-      <span style="margin-left:auto">Zespół AI Slopers</span>
+      <p data-krok="2">Działa, gdy wszystko <mark>pada</mark>.</p>
     </div>
   </section>
+
+  <!-- 11. AI Slopers: stary telewizor (VHS), krok 1 wyłącza kineskop -->
+  <section class="slajd" data-kroki="1" id="s-slopers"
+    data-notatka="Zespół AI Slopers. Dziękujemy! [Klik: telewizor gaśnie jak stary kineskop. Strzałka wstecz włącza obraz z powrotem.]">
+    <div class="tv-ekran">
+      <div class="tv-obraz" id="tv-obraz">
+        <div class="tv-tresc">
+          <h2 class="tv-tytul">AI Slopers</h2>
+          <p class="tv-pod">Dziękujemy</p>
+        </div>
+        <p class="tv-osd tv-osd-play" aria-hidden="true">▶ PLAY</p>
+        <p class="tv-osd tv-osd-czas" aria-hidden="true">SP <span id="tv-czas">0:04:52</span></p>
+        <div class="tv-szum" aria-hidden="true"></div>
+        <div class="tv-linie" aria-hidden="true"></div>
+        <div class="tv-pasek" aria-hidden="true"></div>
+        <div class="tv-blysk" id="tv-blysk" aria-hidden="true"></div>
+      </div>
+      <div class="tv-kropka" id="tv-kropka" aria-hidden="true"></div>
+      <div class="tv-szklo" aria-hidden="true"></div>
+    </div>
+  </section>
+
+  <!-- 12. Zaproszenie do testu: kod QR do wersji na Vercelu (docs/qr/, kopia w qr/) -->
+  <section class="slajd" data-kroki="0" id="s-test"
+    data-notatka="Zapraszamy do testu. Zeskanujcie kod telefonem, wpiszcie adres, pod którym mieszkacie albo pracujecie, i zobaczcie analizę swojej sytuacji.">
+    <div class="test">
+      <div class="t-lewa">
+        <h2 class="tytul">Zapraszamy do testu</h2>
+        <p class="t-lead">Sprawdź aplikację na swoim telefonie.</p>
+        <ol class="t-kroki">
+          <li><span class="kolo">1</span>Zeskanuj kod aparatem telefonu</li>
+          <li><span class="kolo">2</span>Wpisz adres albo użyj swojej lokalizacji</li>
+          <li><span class="kolo">3</span>Zobacz analizę swojej sytuacji</li>
+        </ol>
+      </div>
+      <figure class="t-qr">
+        <img src="qr/warszawa-kryzys-vercel.svg" alt="Kod QR do aplikacji: warszawa-kryzys.vercel.app">
+        <figcaption><svg class="ik" aria-hidden="true"><use href="#i-globe"/></svg>warszawa-kryzys.vercel.app</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- Rama: logotypy i licznik slajdów (na wierzchu każdego slajdu) -->
+  <div class="rama" aria-hidden="true">
+    <div class="logotypy">
+      <svg class="znak" viewBox="175 165 1095 650"><image href="logo/warszawa-znak.svg" width="1440" height="990"/></svg>
+      <span class="kreska-p"></span>
+      <img class="logo42" src="logo/42warsaw.png" alt="">
+    </div>
+    <div class="stopka"><span id="licznik">1 / 11</span></div>
+  </div>
 </div>
 
 <nav class="nawig" aria-label="Nawigacja prezentacji">
   <button id="wstecz" aria-label="Poprzedni krok">‹</button>
-  <span id="licznik">1 / 10</span>
   <button id="dalej" aria-label="Następny krok">›</button>
 </nav>
 <div class="notatki" id="notatki" hidden></div>
-<div class="dymek" id="dymek" role="tooltip"></div>
 
 <script src="dane.js"></script>
+<script src="telefon.js"></script>
 <script>
 (() => {
   const D = window.DANE;
@@ -450,11 +678,16 @@ body.ciemno .nawig { color: var(--noc-2); }
   };
   const pct = (v) => v.toFixed(1).replace('.', ',') + '%';
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const ik = (n) => `<svg class="ik" aria-hidden="true"><use href="#i-${n}"/></svg>`;
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  // 1 zadanie, 2–4 zadania (bez 12–14), reszta zadań
+  const zadan = (n) => (n === 1 ? 'zadanie' : (n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14)) ? 'zadania' : 'zadań');
 
   /* ---------- Skalowanie sceny ---------- */
   const scena = document.getElementById('scena');
   function dopasuj() {
-    const s = Math.min(innerWidth / 1600, innerHeight / 900);
+    const de = document.documentElement;
+    const s = Math.min(de.clientWidth / 1600, de.clientHeight / 900);
     scena.style.transform = `translate(-50%, -50%) scale(${s})`;
     scena.style.transformOrigin = '50% 50%';
     scena.style.left = '50%'; scena.style.top = '50%';
@@ -463,191 +696,189 @@ body.ciemno .nawig { color: var(--noc-2); }
   scena.style.transformOrigin = '50% 50%';
   addEventListener('resize', dopasuj); dopasuj();
 
-  /* ---------- Dymek ---------- */
-  const dymek = document.getElementById('dymek');
-  function pokazDymek(e, tekst) {
-    dymek.textContent = tekst; dymek.classList.add('on');
-    dymek.style.left = (e.clientX + 14) + 'px'; dymek.style.top = (e.clientY + 14) + 'px';
-  }
-  const schowajDymek = () => dymek.classList.remove('on');
-
-  /* ---------- Mapa syren ---------- */
+  /* ---------- Syreny: paski i mapa głośności ---------- */
+  // Klasy: 0 = głośno (≥ 75 dB), 1 = słychać na zewnątrz (65–75), 2 = może nie dotrzeć (< 65). Dane: build_dane.py.
   const M = D.mapa;
-  const svgM = el('svg', { viewBox: `-10 -10 ${M.w + 20} ${M.h + 20}`, role: 'img', 'aria-label': 'Mapa zasięgu syren w Warszawie' }, document.getElementById('mapa'));
+  const KLASY = ['głośno', 'słychać na zewnątrz', 'może nie dotrzeć'];
+  for (const [id, nazwa, wart] of [['pasek-dzis', 'Dziś', M.dzis], ['pasek-bez', 'Jeśli zabraknie prądu', M.bez_pradu]]) {
+    const p = document.getElementById(id);
+    // Najmniejszy kawałek jest za wąski na podpis w środku: jego liczba stoi za paskiem.
+    p.querySelector('.wypelnienie').innerHTML = wart.map((v, k) => `<span class="seg k${k}" style="width:${v}%">${k < 2 ? pct(v) : ''}</span>`).join('');
+    p.querySelector('.poza').textContent = pct(wart[2]);
+    p.querySelector('.pasek').setAttribute('aria-label', `${nazwa}: ` + wart.map((v, k) => `${KLASY[k]} ${pct(v)}`).join(', ') + ' adresów');
+  }
+  const svgM = el('svg', { viewBox: `-10 -10 ${M.w + 20} ${M.h + 20}`, role: 'img', 'aria-label': 'Mapa głośności syren w Warszawie: kolor kwadratu to klasa, w której jest najwięcej adresów' }, document.getElementById('mapa'));
   el('path', { d: M.granica, class: 'granica' }, svgM);
-  el('path', { d: M.cyfrowe, class: 'cyfrowe' }, svgM);
-  el('path', { d: M.utracony, class: 'utracony' }, svgM);
-  const tabliczki = [];
+  // Kwadraty: jedna ścieżka na klasę. Warstwa „bez prądu” ma tylko kwadraty, które zmieniają klasę, i przenika na wierzch.
+  (function kwadraty() {
+    const b = M.bok, szczelina = 1.3, w = (b - szczelina).toFixed(2);
+    const dzis = [[], [], []], bez = [[], [], []];
+    M.siatka.forEach((wiersz, r) => {
+      for (let c = 0; c < wiersz.length; c++) {
+        if (wiersz[c] === '.') continue;
+        const v = Number(wiersz[c]), kn = Math.floor(v / 3), kb = v % 3;
+        const kw = `M${(c * b + szczelina / 2).toFixed(1)} ${(r * b + szczelina / 2).toFixed(1)}h${w}v${w}h-${w}z`;
+        dzis[kn].push(kw);
+        if (kb !== kn) bez[kb].push(kw);
+      }
+    });
+    for (const [klasa, warstwa] of [['warstwa-n', dzis], ['warstwa-b', bez]]) {
+      const g = el('g', { class: klasa }, svgM);
+      warstwa.forEach((d, k) => d.length && el('path', { d: d.join(''), class: `k${k}` }, g));
+    }
+  })();
   for (const d of M.dzielnice) {
     const g = el('g', { class: 'dz' }, svgM);
-    el('circle', { cx: d.x, cy: d.y, r: 5 }, g);
-    const tlo = el('rect', { rx: 4 }, g);
-    const lewa = d.strona === 'l';
-    const tx = lewa ? d.x - 16 : d.x + 16, kotwica = lewa ? 'end' : 'start';
-    const t = el('text', { x: tx, y: d.y - 4, 'text-anchor': kotwica }, g);
-    t.textContent = d.nazwa;
-    const t2 = el('text', { x: tx, y: d.y + 24, class: 'pp', 'text-anchor': kotwica }, g);
-    t2.textContent = pct(d.przed).replace('%', '') + ' → ' + pct(d.po);
-    tabliczki.push([tlo, t, t2]);
+    el('circle', { cx: d.x, cy: d.y, r: 6 }, g);
+    el('text', { x: d.x + 14, y: d.y + 10 }, g).textContent = d.nazwa;
   }
-  // Tabliczki pod podpisami: wymiary znane dopiero po wczytaniu fontu.
-  document.fonts.ready.then(() => {
-    for (const [tlo, t, t2] of tabliczki) {
-      const a = t.getBBox(), b = t2.getBBox();
-      const x = Math.min(a.x, b.x) - 8, y = a.y - 5, w = Math.max(a.width, b.width) + 16, h = b.y + b.height - a.y + 10;
-      Object.entries({ x, y, width: w, height: h }).forEach(([k, v]) => tlo.setAttribute(k, v));
-    }
-  });
-  const wynik = document.getElementById('wynik-syren');
-  const tys = (n) => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
-  document.getElementById('dzis-65').textContent = pct(M.przed);
-  document.getElementById('mapa-po').textContent = pct(M.po); // najgorszy wariant, tylko podpis mapy
-  wynik.textContent = pct(M.glosne_przed);
-  const roznica = document.getElementById('roznica-syren');
   const btnBlackout = document.getElementById('blackout');
-  let animLiczby = null;
-  function liczDo(od, doo) {
-    cancelAnimationFrame(animLiczby);
-    if (reduce) { wynik.textContent = pct(doo); return; }
-    const t0 = performance.now(), dur = 1100;
-    const krok = (t) => {
-      const p = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - p, 3);
-      wynik.textContent = pct(od + (doo - od) * e);
-      if (p < 1) animLiczby = requestAnimationFrame(krok);
-    };
-    animLiczby = requestAnimationFrame(krok);
-  }
+  const sSyreny = document.getElementById('s-syreny');
   function blackout(wl) {
-    const s = document.getElementById('s-syreny');
-    document.body.classList.toggle('ciemno', wl);
-    if (s.classList.contains('noc') === wl) return;
-    s.classList.toggle('noc', wl);
-    document.body.classList.toggle('ciemno', wl);
+    sSyreny.classList.toggle('blackout', wl);
     btnBlackout.setAttribute('aria-pressed', String(wl));
     document.getElementById('blackout-tekst').textContent = wl ? 'Włącz prąd' : 'Wyłącz prąd';
-    liczDo(wl ? M.glosne_przed : M.glosne_po, wl ? M.glosne_po : M.glosne_przed);
-    roznica.textContent = wl
-      ? `Jeśli syreny analogowe nie mają zasilania awaryjnego. Przy 65 dB i więcej zostaje ${pct(M.po_przyblizenie)} adresów: zasięg traci ok. tysiąca (rząd wielkości, ${tys(M.traci_zakres[0])}–${tys(M.traci_zakres[1])}). Czerwony obszar na mapie to najgorszy wariant, nie ta liczba.`
-      : '';
   }
   btnBlackout.addEventListener('click', () => { ustawKrok(btnBlackout.getAttribute('aria-pressed') === 'true' ? 0 : 1); });
 
-  /* ---------- Macierz JTBD ---------- */
-  const mac = document.getElementById('macierz');
-  mac.appendChild(document.createElement('div'));
-  for (const [, nazwa] of D.fazy) { const f = document.createElement('div'); f.className = 'faza'; f.textContent = nazwa; mac.appendChild(f); }
-  const bezDanych = new Set(D.zadania.filter((z) => !z.zbiory.length).map((z) => z.nr));
-  for (const [kod, nazwa] of D.grupy) {
-    const g = document.createElement('div'); g.className = 'grupa'; g.textContent = nazwa; mac.appendChild(g);
-    for (const [fk] of D.fazy) {
-      const k = document.createElement('div'); k.className = 'komorka';
-      for (const z of D.zadania) {
-        if (!z.grupy.includes(kod) || !z.fazy.includes(fk)) continue;
-        const kr = document.createElement('span'); kr.className = 'kropka';
-        kr.addEventListener('mousemove', (e) => pokazDymek(e, z.nazwa));
-        kr.addEventListener('mouseleave', schowajDymek);
-        k.appendChild(kr);
-      }
-      mac.appendChild(k);
-    }
-  }
+  /* ---------- Persony (JTBD) ---------- */
+  const zadPo = new Map(D.zadania.map((z) => [z.nr, z]));
+  const IK_GRUP = { M1: 'briefcase', M2: 'accessibility', M3: 'pill', M4: 'languages', M5: 'backpack', M6: 'route' };
+  // Przykłady: zadania typowe dla grupy (numery z dane.js); brak numeru → pierwsze zadania tej grupy.
+  const PRZYKLADY = { M1: [11, 30], M2: [4, 18], M3: [9, 19], M4: [5, 1], M5: [21, 13], M6: [3, 2] };
+  document.getElementById('fazy').innerHTML = D.fazy.map(([, n]) => `<li>${esc(n)}</li>`).join('');
+  const wszystkich = D.zadania.filter((z) => D.grupy.every(([k]) => z.grupy.includes(k)));
+  document.getElementById('persony').innerHTML = D.grupy.map(([kod, nazwa]) => {
+    const jej = D.zadania.filter((z) => z.grupy.includes(kod));
+    let prz = (PRZYKLADY[kod] || []).map((n) => zadPo.get(n)).filter((z) => z && z.grupy.includes(kod));
+    if (prz.length < 2) prz = prz.concat(jej.filter((z) => !prz.includes(z))).slice(0, 2);
+    return `<article class="persona">
+      <div class="p-glowa"><span class="kolo">${ik(IK_GRUP[kod] || 'user')}</span><h3>${esc(nazwa)}</h3>
+        <div class="p-ile"><span class="liczba">${jej.length}</span><small>${zadan(jej.length)}</small></div></div>
+      <ul>${prz.map((z) => `<li>${esc(z.nazwa)}</li>`).join('')}</ul></article>`;
+  }).join('');
+  document.getElementById('przypis-person').textContent =
+    `Liczba przy grupie: ile z ${D.zadania.length} zadań ta grupa może mieć do wykonania. ${wszystkich.length} zadań dotyczy wszystkich, np. „${wszystkich[0]?.nazwa ?? ''}”.`;
   document.getElementById('ile-zadan').textContent = D.zadania.length;
 
-  /* ---------- Siatka zadań i danych ---------- */
-  (function siatka() {
-    const W = 1376, H = 580, xZ = 470, xD = 930;
-    const fazaIdx = Object.fromEntries(D.fazy.map(([k], i) => [k, i]));
-    const zad = [...D.zadania].sort((a, b) => (fazaIdx[a.fazy[0]] - fazaIdx[b.fazy[0]]) || a.nr - b.nr);
-    const yZ = (i) => 10 + i * ((H - 20) / (zad.length - 1));
-    const pozZ = new Map(zad.map((z, i) => [z.nr, yZ(i)]));
-    const uzyte = D.zbiory.map((zb) => {
-      const ys = zad.filter((z) => z.zbiory.includes(zb.id)).map((z) => pozZ.get(z.nr));
-      return { ...zb, bary: ys.reduce((a, b) => a + b, 0) / ys.length };
-    }).sort((a, b) => a.bary - b.bary);
-    const yD = (i) => 30 + i * ((H - 60) / (uzyte.length - 1));
-    const pozD = new Map(uzyte.map((d, i) => [d.id, yD(i)]));
+  /* ---------- Zadania ↔ dane: trzy grupy ---------- */
+  (function grupyDanych() {
     const rodz = Object.fromEntries(D.zbiory.map((z) => [z.id, z.rodzaj]));
+    const maOff = (z) => z.zbiory.some((id) => rodz[id] !== 'live');
+    const maLive = (z) => z.zbiory.some((id) => rodz[id] === 'live');
+    const grupa = (z) => (!z.zbiory.length ? 'brak' : maOff(z) ? 'offline' : 'live');
+    const G = { offline: [], live: [], brak: [] };
+    for (const z of D.zadania) G[grupa(z)].push(z);
+    const oba = G.offline.filter(maLive);
+    // Kratki: każda to jedno zadanie
+    const kr = document.getElementById('kratki');
+    const kratki = [
+      ...G.offline.filter((z) => !maLive(z)).map(() => 'offline'),
+      ...oba.map(() => 'oba'),
+      ...G.live.map(() => 'live'),
+      ...G.brak.map(() => 'brak'),
+    ];
+    let poprz = null;
+    kr.innerHTML = kratki.map((k) => {
+      const grp = k === 'oba' ? 'offline' : k;
+      const przerwa = poprz && poprz !== grp ? ' przerwa' : '';
+      poprz = grp;
+      return `<span class="kratka ${k}${przerwa}"></span>`;
+    }).join('') + `<span class="suma">= ${D.zadania.length} ${zadan(D.zadania.length)}</span>`;
+    kr.setAttribute('aria-label', `${D.zadania.length} ${zadan(D.zadania.length)}: ${G.offline.length} w telefonie bez sieci, ${G.live.length} na żywo, ${G.brak.length} bez danych`);
 
-    const svg = el('svg', { width: W, height: H, viewBox: `0 0 ${W} ${H}`, role: 'img', 'aria-label': 'Siatka połączeń zadań mieszkańców ze zbiorami danych' }, document.getElementById('siatka'));
-    const gL = el('g', {}, svg), gN = el('g', {}, svg);
-    const lacza = [];
-    for (const z of zad) for (const id of z.zbiory) {
-      const y1 = pozZ.get(z.nr), y2 = pozD.get(id), mx = (xZ + xD) / 2;
-      const p = el('path', { d: `M${xZ},${y1} C${mx},${y1} ${mx},${y2} ${xD},${y2}`, class: 'lacze' + (rodz[id] === 'live' ? ' live' : '') }, gL);
-      lacza.push({ p, z: z.nr, d: id });
-    }
-    const wezly = [];
-    for (const z of zad) {
-      const g = el('g', { class: 'wezel' + (z.zbiory.length ? '' : ' bez'), transform: `translate(${xZ},${pozZ.get(z.nr)})` }, gN);
-      el('circle', { r: 6 }, g);
-      const t = el('text', { x: -16, y: 6, 'text-anchor': 'end' }, g); t.textContent = z.nazwa;
-      wezly.push({ g, z: z.nr });
-      g.addEventListener('mouseenter', () => wybierz({ z: z.nr }));
-      g.addEventListener('mouseleave', () => wybierz(null));
-    }
-    for (const d of uzyte) {
-      const g = el('g', { class: 'wezel zbior' + (d.rodzaj === 'live' ? ' live' : ''), transform: `translate(${xD},${pozD.get(d.id)})` }, gN);
-      el('circle', { r: 8 }, g);
-      const t = el('text', { x: 18, y: 6 }, g); t.textContent = d.nazwa;
-      wezly.push({ g, d: d.id });
-      g.addEventListener('mouseenter', () => wybierz({ d: d.id }));
-      g.addEventListener('mouseleave', () => wybierz(null));
-    }
-    function wybierz(w) {
-      svg.classList.toggle('wybor', !!w);
-      if (!w) return;
-      const on = lacza.filter((l) => (w.z && l.z === w.z) || (w.d && l.d === w.d));
-      const zOn = new Set(on.map((l) => l.z).concat(w.z ? [w.z] : []));
-      const dOn = new Set(on.map((l) => l.d).concat(w.d ? [w.d] : []));
-      for (const l of lacza) l.p.classList.toggle('on', on.includes(l));
-      for (const n of wezly) n.g.classList.toggle('on', n.z ? zOn.has(n.z) : dOn.has(n.d));
-    }
-    const zDanymi = zad.length - bezDanych.size;
+    const PRZ = { offline: [1, 2, 8], live: [6, 7, 28], brak: [21, 25, 29] };
+    const wybierz = (lista, nry) => {
+      const w = nry.map((n) => lista.find((z) => z.nr === n)).filter(Boolean);
+      return w.concat(lista.filter((z) => !w.includes(z))).slice(0, 3);
+    };
+    const karta = (klasa, ikona, tytul, lista) => `<div class="gd ${klasa}">
+        <div class="g-glowa"><span class="kolo">${ik(ikona)}</span><span class="liczba">${lista.length}</span></div>
+        <h3>${tytul}</h3>
+        <ul>${wybierz(lista, PRZ[klasa]).map((z) => `<li>${esc(z.nazwa)}</li>`).join('')}</ul></div>`;
+    document.getElementById('grupy-danych').innerHTML =
+      karta('offline', 'smartphone', 'W telefonie, bez sieci', G.offline) +
+      karta('live', 'wifi', 'Na żywo, przez sieć', G.live) +
+      karta('brak', 'help', 'Żadne zbiory otwartych danych tego nie rozwiązują', G.brak);
+    const zDanymi = D.zadania.length - G.brak.length;
+    // „z 24 zadań”, „dla 6 zadań”, ale „dla 1 zadania”
     document.getElementById('wniosek-siatki').textContent =
-      `${zDanymi} z ${zad.length} zadań łączy się z danymi. Tam budujemy. Pozostałe ${bezDanych.size} pokazujemy uczciwie na szaro.`;
+      `${zDanymi} z ${D.zadania.length} zadań łączy się z danymi. Dla ${G.brak.length} ${G.brak.length === 1 ? 'zadania' : 'zadań'} brakuje danych.`;
   })();
 
-  /* ---------- Telefon z aplikacją ---------- */
-  const APP = new URLSearchParams(location.search).get('app') || 'https://warszawa-kryzys.startupaplikujmy.workers.dev/';
-  const ifr = document.getElementById('aplikacja');
-  const btnSiec = document.getElementById('siec');
-  let offline = false;
-  function ustawSiec(off) {
-    if (offline === off && ifr.src) return;
-    offline = off;
-    const u = new URL(APP);
-    if (off) u.searchParams.set('offline', '1'); else u.searchParams.delete('offline');
-    ifr.src = u.toString();
-    btnSiec.setAttribute('aria-pressed', String(off));
-    document.getElementById('siec-tekst').textContent = off ? 'Włącz sieć' : 'Wyłącz sieć';
+  /* ---------- AI Slopers: telewizor ---------- */
+  // Licznik taśmy w rogu (OSD magnetowidu) tyka, dopóki slajd jest na ekranie.
+  const tvCzas = document.getElementById('tv-czas');
+  let tykanie = null;
+  function licznikTasmy() {
+    clearInterval(tykanie);
+    let t = 4 * 60 + 52;
+    const pokazCzas = () => { tvCzas.textContent = `${Math.floor(t / 3600)}:${String(Math.floor(t / 60) % 60).padStart(2, '0')}:${String(t % 60).padStart(2, '0')}`; };
+    pokazCzas();
+    tykanie = setInterval(() => {
+      if (!document.getElementById('s-slopers').classList.contains('aktywny')) { clearInterval(tykanie); tykanie = null; return; }
+      t += 1; pokazCzas();
+    }, 1000);
   }
-  btnSiec.addEventListener('click', () => ustawSiec(!offline));
-  ustawSiec(false); // telefon ładuje się od startu prezentacji, żeby był gotowy na slajd 8
-  const etapy = [...document.querySelectorAll('.etap')];
-  function ustawEtap(n) {
-    etapy.forEach((e) => e.classList.toggle('aktywny', Number(e.dataset.etap) === n));
+  // Wyłączenie kineskopu. Każde wejście na krok 1 anuluje poprzedni przebieg i gra od zera, krok 0 przywraca obraz.
+  const tvObraz = document.getElementById('tv-obraz'), tvBlysk = document.getElementById('tv-blysk'), tvKropka = document.getElementById('tv-kropka');
+  let tvAnimacje = [], tvZgaszony = false;
+  const EASE_OUT = 'cubic-bezier(0.23, 1, 0.32, 1)', EASE_IN_OUT = 'cubic-bezier(0.77, 0, 0.175, 1)';
+  function telewizor(k) {
+    tvAnimacje.forEach((a) => a.cancel());
+    tvAnimacje = [];
+    if (k >= 1) {
+      tvZgaszony = true;
+      if (reduce) {
+        tvAnimacje = [tvObraz.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 400, easing: 'ease-out', fill: 'forwards' })];
+        return;
+      }
+      // 0–360 ms: obraz spłaszcza się do jasnej linii; 360–620 ms: linia kurczy się do kropki; potem kropka gaśnie do 1,3 s.
+      const T = 1300, o = { duration: T, fill: 'forwards' };
+      tvAnimacje = [
+        tvObraz.animate([
+          { transform: 'scale(1, 1)', opacity: 1, easing: EASE_OUT },
+          { transform: 'scale(1, 0.004)', opacity: 1, offset: 0.28, easing: EASE_IN_OUT },
+          { transform: 'scale(0.003, 0.004)', opacity: 1, offset: 0.48 },
+          { transform: 'scale(0.003, 0.004)', opacity: 0, offset: 0.5 },
+          { transform: 'scale(0.003, 0.004)', opacity: 0 },
+        ], o),
+        tvBlysk.animate([{ opacity: 0 }, { opacity: 0.85, offset: 0.28 }, { opacity: 1, offset: 0.48 }, { opacity: 1 }], o),
+        tvKropka.animate([
+          { opacity: 0, transform: 'scale(1)' },
+          { opacity: 0, transform: 'scale(1)', offset: 0.46 },
+          { opacity: 1, transform: 'scale(1.2)', offset: 0.5, easing: EASE_OUT },
+          { opacity: 0, transform: 'scale(0.4)' },
+        ], o),
+      ];
+    } else if (tvZgaszony) {
+      // Powrót: obraz wraca krótkim rozjaśnieniem, bez odgrywania wyłączenia od tyłu.
+      tvZgaszony = false;
+      tvAnimacje = [tvObraz.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 260, easing: EASE_OUT })];
+    }
   }
-  etapy.forEach((e) => e.addEventListener('click', () => ustawKrok(Number(e.dataset.etap))));
 
   /* ---------- Silnik slajdów ---------- */
-  const slajdy = [...document.querySelectorAll('.slajd')];
+  // Slajd z data-pomin jest pomijany: nie ma go w nawigacji, liczniku ani w #N.k. Bez atrybutu wraca na swoje miejsce.
+  const slajdy = [...document.querySelectorAll('.slajd:not([data-pomin])')];
   const licznik = document.getElementById('licznik');
   const notatki = document.getElementById('notatki');
   let biezacy = 0, krok = 0;
 
+  // Demo w telefonie (telefon.js, osobny autor). Bez pliku slajd po prostu nie ma kroków.
+  if (window.telefonDemo && Number.isFinite(Number(window.telefonDemo.kroki))) {
+    document.getElementById('s-kasia').dataset.kroki = String(window.telefonDemo.kroki);
+  }
+
   const HAKI = {
     's-kijow': (k) => document.getElementById('domino').classList.toggle('pada', k >= 1),
     's-syreny': (k) => blackout(k >= 1),
-    's-kasia': (k) => {
-      if (!ifr.src) ustawSiec(false);
-      ustawEtap(Math.min(k, 5));
-      if (k >= 6 && !offline) ustawSiec(true);
-      if (k < 6 && offline) ustawSiec(false);
-    },
+    's-kasia': (k) => window.telefonDemo?.krok(k),
+    's-slopers': (k) => { if (!tykanie) licznikTasmy(); telewizor(k); },
   };
   const kaskada = () => {
     const kostki = [...document.querySelectorAll('#domino .kostka')];
-    kostki.forEach((k, i) => (k.style.transitionDelay = reduce ? '0s' : `${i * 0.22}s`));
+    kostki.forEach((k, i) => k.style.setProperty('--d', reduce ? '0s' : `${i * 0.22}s`));
   };
   kaskada();
 
@@ -655,8 +886,8 @@ body.ciemno .nawig { color: var(--noc-2); }
     const s = slajdy[biezacy];
     krok = Math.max(0, Math.min(k, Number(s.dataset.kroki || 0)));
     s.querySelectorAll('[data-krok]').forEach((n) => n.classList.toggle('widoczny', Number(n.dataset.krok) <= krok));
-    HAKI[s.id]?.(krok);
-    if (!s.id || s.id !== 's-syreny') document.body.classList.toggle('ciemno', s.dataset.tlo === 'noc');
+    try { HAKI[s.id]?.(krok); } catch (e) { console.error(e); }
+    scena.dataset.slajd = s.id || '';
     licznik.textContent = `${biezacy + 1} / ${slajdy.length}`;
     notatki.textContent = s.dataset.notatka || '';
     history.replaceState(null, '', `#${biezacy + 1}.${krok}`);
@@ -664,7 +895,6 @@ body.ciemno .nawig { color: var(--noc-2); }
   function pokaz(i, k = 0) {
     biezacy = Math.max(0, Math.min(i, slajdy.length - 1));
     slajdy.forEach((s, j) => s.classList.toggle('aktywny', j === biezacy));
-    schowajDymek();
     ustawKrok(k);
   }
   function dalej() {
@@ -676,7 +906,7 @@ body.ciemno .nawig { color: var(--noc-2); }
     else if (biezacy > 0) pokaz(biezacy - 1, Number(slajdy[biezacy - 1].dataset.kroki || 0));
   }
   addEventListener('keydown', (e) => {
-    if (e.target.closest && e.target.closest('iframe')) return;
+    if (e.altKey || e.ctrlKey || e.metaKey) return;
     const k = e.key;
     if (['ArrowRight', 'PageDown', ' ', 'Enter'].includes(k)) { e.preventDefault(); dalej(); }
     else if (['ArrowLeft', 'PageUp', 'Backspace'].includes(k)) { e.preventDefault(); wstecz(); }
@@ -684,24 +914,24 @@ body.ciemno .nawig { color: var(--noc-2); }
     else if (k === 'End') pokaz(slajdy.length - 1);
     else if (k === 'f' || k === 'F') { document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen(); }
     else if (k === 'n' || k === 'N') notatki.hidden = !notatki.hidden;
-    else if (k === 'o' || k === 'O') ustawSiec(!offline);
   });
   document.getElementById('dalej').addEventListener('click', dalej);
   document.getElementById('wstecz').addEventListener('click', wstecz);
+  // Telefon i tablet: przesunięcie palcem w lewo to dalej, w prawo to wstecz.
+  let dotyk = null;
+  addEventListener('touchstart', (e) => { const t = e.changedTouches[0]; dotyk = [t.clientX, t.clientY]; }, { passive: true });
+  addEventListener('touchend', (e) => {
+    if (!dotyk) return;
+    const t = e.changedTouches[0], dx = t.clientX - dotyk[0], dy = t.clientY - dotyk[1];
+    dotyk = null;
+    if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) (dx < 0 ? dalej : wstecz)();
+  }, { passive: true });
 
-  // Pilot wysyła klawisze do okna z fokusem. Po kliknięciu w telefon fokus wraca do prezentacji po 3 s,
-  // chyba że prezentacja jest otwarta z ?edycja=1 (np. żeby wpisać adresy Kasi w telefonie przed pitchem).
-  const edycja = new URLSearchParams(location.search).has('edycja');
-  document.getElementById('przygotowanie').hidden = !edycja;
-  let zwrot = null;
-  addEventListener('blur', () => {
-    if (edycja) return;
-    clearTimeout(zwrot);
-    zwrot = setTimeout(() => { if (document.activeElement === ifr) { ifr.blur(); window.focus(); } }, 3000);
-  });
-
-  const [s0, k0] = (location.hash.slice(1) || '1.0').split('.').map(Number);
+  const zHasha = () => (location.hash.slice(1) || '1.0').split('.').map(Number);
+  const [s0, k0] = zHasha();
   pokaz((s0 || 1) - 1, k0 || 0);
+  // Ręcznie wpisany adres #N.k (bez przeładowania) też przełącza slajd.
+  addEventListener('hashchange', () => { const [s, k] = zHasha(); pokaz((s || 1) - 1, k || 0); });
 })();
 </script>
 </body>

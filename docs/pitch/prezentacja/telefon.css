@@ -1,0 +1,147 @@
+/* Slajd demo (sekcja s-kasia) „Dzień Kasi”: zaprogramowane demo na makiecie telefonu (telefon.js).
+   Scena 1600×900, jednostki px w skali sceny. Wszystkie klasy z prefiksem dk-. */
+
+#demo-kasi {
+  --dk-tlo: var(--tlo, #FBF9F5);
+  --dk-tekst: var(--tekst, #2E2A27);
+  --dk-akcent: var(--akcent, #C8372D);
+  --dk-szary: var(--szary, #8A817A);
+  --dk-tekst-2: var(--tekst-2, #5F5852);
+  --dk-ok: var(--ok, #4A8B5C);
+  --dk-linia: var(--linia, #E7E1D8);
+  --dk-kafel: var(--kafel, #FFFFFF);
+  --dk-ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --dk-ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  position: absolute; inset: 0;
+  color: var(--dk-tekst);
+  font-family: var(--font, 'Archivo', 'Segoe UI', system-ui, sans-serif);
+}
+
+/* ---------- lewa kolumna: nagłówek, oś, podpis (lupa ma własną strefę od y = 560) ---------- */
+.dk-lewa { position: absolute; left: 112px; top: 96px; width: 790px; }
+.dk-nad { font-size: 24px; line-height: 1.3; color: var(--dk-tekst-2); margin: 0; }
+.dk-tytul {
+  font-family: var(--font-waski, 'Archivo', 'Arial Narrow', sans-serif); font-stretch: 78%;
+  font-size: 64px; line-height: 1.02; font-weight: 750; letter-spacing: -0.005em; margin: 8px 0 0; color: var(--dk-tekst);
+}
+
+/* oś pięciu kroków */
+.dk-os { position: relative; list-style: none; margin: 36px 0 0; padding: 0; display: grid; grid-template-columns: repeat(5, 1fr); }
+.dk-os-linia, .dk-os-postep { position: absolute; left: 8px; top: 7px; height: 2px; width: calc(100% * 4 / 5); }
+.dk-os-linia { background: var(--dk-linia); }
+.dk-os-postep { background: var(--dk-akcent); transform-origin: 0 50%; transform: scaleX(0); transition: transform 450ms var(--dk-ease-out); }
+.dk-os li { position: relative; padding-top: 34px; padding-right: 16px; font-size: 24px; line-height: 1.15; color: var(--dk-szary); transition: color 300ms ease; }
+.dk-os li::before {
+  content: ""; position: absolute; left: 0; top: 0; width: 16px; height: 16px; border-radius: 50%; box-sizing: border-box;
+  background: var(--dk-tlo); border: 2px solid var(--dk-linia);
+  transition: background-color 300ms ease, border-color 300ms ease, box-shadow 300ms ease;
+}
+.dk-os li.dk-bylo { color: var(--dk-tekst); }
+.dk-os li.dk-bylo::before { background: var(--dk-tekst); border-color: var(--dk-tekst); }
+.dk-os li.dk-teraz { color: var(--dk-tekst); font-weight: 700; }
+.dk-os li.dk-teraz::before { background: var(--dk-akcent); border-color: var(--dk-akcent); box-shadow: 0 0 0 6px color-mix(in srgb, var(--dk-akcent) 18%, transparent); }
+
+/* podpis kroku: najwyżej 2 + 2 wiersze, żeby nie wejść w strefę lupy */
+.dk-podpis { margin-top: 40px; }
+.dk-podpis-w { transition: opacity 260ms var(--dk-ease-out), transform 260ms var(--dk-ease-out); }
+.dk-podpis-w.dk-ukryty { opacity: 0; transform: translateY(8px); transition-duration: 140ms; }
+.dk-podpis h3 { font-size: 40px; line-height: 1.12; font-weight: 700; letter-spacing: -0.01em; margin: 0; max-width: 790px; text-wrap: balance; }
+.dk-podpis p { font-size: 26px; line-height: 1.35; color: var(--dk-tekst-2); margin: 12px 0 0; max-width: 790px; text-wrap: pretty; }
+
+/* ---------- telefon ---------- */
+.dk-telefon {
+  position: absolute; z-index: 1; left: 960px; top: 38px; width: 408px; height: 824px;
+  border-radius: 58px; padding: 12px; box-sizing: border-box;
+  background: #1F1C1A;
+  box-shadow: 0 0 0 1px rgba(0,0,0,.35), inset 0 0 0 2px #3A3532, 0 30px 60px -20px rgba(46,42,39,.35), 0 12px 24px -12px rgba(46,42,39,.25);
+}
+.dk-ekran { position: relative; width: 384px; height: 800px; border-radius: 46px; overflow: hidden; background: #fff; isolation: isolate; }
+
+/* pasek stanu telefonu */
+.dk-stan { position: absolute; left: 0; right: 0; top: 0; height: 32px; z-index: 30; background: #fff; display: flex; align-items: center; justify-content: space-between; padding: 0 30px 0 34px; font: 600 14px/1 'Segoe UI', system-ui, sans-serif; color: #111; }
+.dk-wyspa { position: absolute; left: 50%; top: 8px; width: 96px; height: 22px; margin-left: -48px; border-radius: 12px; background: #111; }
+.dk-ikony { display: flex; gap: 6px; align-items: center; }
+.dk-ikony svg { display: block; }
+.dk-ikony .dk-wifi-off, .dk-ikony .dk-zasieg-off { display: none; }
+.dk-bez-sieci .dk-ikony .dk-wifi-on, .dk-bez-sieci .dk-ikony .dk-zasieg-on { display: none; }
+.dk-bez-sieci .dk-ikony .dk-wifi-off, .dk-bez-sieci .dk-ikony .dk-zasieg-off { display: block; }
+.dk-wifi-off { color: var(--dk-akcent); }
+
+/* obszar aplikacji pod paskiem stanu */
+.dk-app { position: absolute; left: 0; top: 32px; width: 384px; height: 768px; overflow: hidden; }
+.dk-widoki { position: absolute; inset: 0; z-index: 0; isolation: isolate; }
+.dk-widok {
+  position: absolute; inset: 0; opacity: 0; background: #fff; filter: blur(3px);
+  transition: opacity 380ms var(--dk-ease-out), transform 420ms var(--dk-ease-out), filter 380ms var(--dk-ease-out);
+}
+/* Lekkie rozmycie wchodzącego ekranu: przejście czyta się jak jedna zmiana, a nie dwa nałożone zrzuty. */
+.dk-widok.dk-on { opacity: 1; filter: none; }
+.dk-widok.dk-z-dolu { transform: translateY(36px); }
+.dk-widok.dk-z-dolu.dk-on { transform: none; }
+.dk-widok img { display: block; width: 384px; height: 768px; }
+.dk-cien { position: absolute; inset: 0; z-index: 15; background: rgba(46,42,39,.4); opacity: 0; pointer-events: none; transition: opacity 380ms var(--dk-ease-out); }
+.dk-przyciemnij .dk-cien { opacity: 1; }
+.dk-bez-ruchu, .dk-bez-ruchu * { transition: none !important; }
+
+/* ekran „Sprawdzam połączenie…” (jak w aplikacji: białe tło, kółko, tekst) */
+.dk-pol { display: grid; place-content: center; justify-items: center; gap: 16px; padding: 28px; text-align: center; font: 17px/1.4 'Segoe UI', system-ui, sans-serif; color: #111827; }
+.dk-pol p { margin: 0; max-width: 26ch; text-wrap: balance; }
+.dk-kolko { width: 34px; height: 34px; border-radius: 50%; box-sizing: border-box; border: 4px solid #e5e7eb; border-top-color: #b91c1c; animation: dk-obrot .9s linear infinite; }
+.dk-pol.dk-wynik .dk-kolko { display: none; }
+@keyframes dk-obrot { to { transform: rotate(360deg); } }
+
+/* ramka na telefonie: skąd jest wycinek w lupie */
+.dk-ring {
+  position: absolute; z-index: 10; box-sizing: border-box; pointer-events: none;
+  border: 3px solid var(--dk-akcent); border-radius: 10px;
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--dk-akcent) 18%, transparent);
+  opacity: 0; transform: scale(1.04);
+  transition: opacity 300ms var(--dk-ease-out), transform 300ms var(--dk-ease-out);
+}
+.dk-ring.dk-on { opacity: 1; transform: none; }
+
+/* palec: tapnięcie i przewinięcie */
+.dk-palec {
+  position: absolute; z-index: 20; left: 0; top: 0; width: 46px; height: 46px; margin: -23px 0 0 -23px; border-radius: 50%;
+  background: rgba(46,42,39,.28); border: 2px solid rgba(255,255,255,.95);
+  box-shadow: 0 4px 12px rgba(0,0,0,.25); opacity: 0; pointer-events: none;
+}
+.dk-fala {
+  position: absolute; z-index: 19; left: 0; top: 0; width: 46px; height: 46px; margin: -23px 0 0 -23px; border-radius: 50%;
+  border: 3px solid var(--dk-akcent); box-sizing: border-box; opacity: 0; pointer-events: none;
+}
+
+/* dymek „Brak sieci” nad aplikacją */
+.dk-dymek {
+  position: absolute; z-index: 25; left: 50%; top: 44px; transform: translate(-50%, -140%);
+  display: flex; align-items: center; gap: 10px; white-space: nowrap;
+  background: #2E2A27; color: #fff; border-radius: 999px; padding: 12px 20px 12px 16px;
+  font: 600 19px/1 'Segoe UI', system-ui, sans-serif; box-shadow: 0 10px 24px rgba(0,0,0,.25);
+  opacity: 0; transition: transform 420ms var(--dk-ease-out), opacity 300ms var(--dk-ease-out);
+}
+.dk-dymek svg { color: #F2A39C; }
+.dk-dymek.dk-on { transform: translate(-50%, 0); opacity: 1; }
+
+/* ---------- lupa: powiększony wycinek ekranu obok telefonu ---------- */
+/* Pozycję, rozmiar i wycinek ustawia telefon.js. Obrys zamiast ramki, żeby nie przesuwać zawartości. */
+.dk-lupa {
+  position: absolute; z-index: 3; overflow: hidden; pointer-events: none;
+  border-radius: 14px; background: #fff;
+  box-shadow: 0 0 0 2px var(--dk-akcent), 0 2px 4px rgba(46,42,39,.06), 0 24px 48px -16px rgba(46,42,39,.32);
+  transform-origin: 0 0; opacity: 0;
+}
+.dk-lupa.dk-on { opacity: 1; }
+.dk-lupa img { position: absolute; display: block; max-width: none; }
+
+/* stożek od lupy do ramki na telefonie */
+.dk-stozek { position: absolute; left: 0; top: 0; width: 1600px; height: 900px; z-index: 2; pointer-events: none; overflow: visible; opacity: 0; transition: opacity 240ms var(--dk-ease-out); }
+.dk-stozek.dk-on { opacity: 1; }
+.dk-stozek-pole { fill: var(--dk-akcent); fill-opacity: .07; }
+.dk-stozek-linia { stroke: var(--dk-akcent); stroke-opacity: .5; stroke-width: 1.5; }
+
+@media (prefers-reduced-motion: reduce) {
+  .dk-widok.dk-z-dolu { transform: none; }
+  .dk-ring, .dk-podpis-w.dk-ukryty { transform: none; }
+  .dk-dymek { transform: translate(-50%, 0); }
+  .dk-kolko { animation-duration: 2.4s; }
+}

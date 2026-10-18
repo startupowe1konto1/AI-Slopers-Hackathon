@@ -11,9 +11,9 @@
 | Pytanie | Jak dać mieszkańcowi odpowiedzi, które działają także wtedy, gdy wszystko pada? |
 | Odpowiedź | Rozpisaliśmy zadania mieszkańców, połączyliśmy je z otwartymi danymi i zbudowaliśmy aplikację, która odpowiada pod adresem i działa offline. |
 
-**Forma:** prezentacja w HTML, typograficzna i minimalistyczna, jak startupowy pitch deck. Dwa żywe elementy: przełącznik blackoutu na mapie syren i działająca aplikacja w makiecie telefonu na slajdzie. Plik: [prezentacja/index.html](prezentacja/index.html), obsługa w [prezentacja/README.md](prezentacja/README.md).
+**Forma:** prezentacja w HTML, 12 slajdów na jasnym tle, z ikonami, znakiem Warszawy i logo 42 Warsaw. Na każdym slajdzie jedna myśl w nagłówku. Dwa elementy ruchome: przełącznik blackoutu na mapie syren (slajd 4) i demo „Dzień Kasi” (slajd 9). Demo to zaprogramowany przebieg aplikacji na prawdziwych zrzutach z produkcji, prowadzony tymi samymi strzałkami co cały pitch, bez sieci i bez żywej aplikacji. Slajd 12 to żart zespołu w stylu stron z lat 90., poza czasem pitchu, na pytania jury. Plik: [prezentacja/index.html](prezentacja/index.html), uruchomienie i struktura w [prezentacja/README.md](prezentacja/README.md).
 
-Stan: wersja 3 (sobota, 17.10, wieczór). Liczby syren z `pipeline/syreny/WYNIKI.md` (przybliżenie, nie najgorszy wariant 69,1%) i demo na nowym przepływie: lokalizacja → „Sprawdzam połączenie…” → karty „Twoja sytuacja” → trasa → brak sieci (`HANDOFF-v3.md` §2). Próbę na działającym ekranie z kartami robimy po V4 (23:30) i wtedy poprawiamy czasy i teksty demo.
+Stan: wersja 4 (sobota, 17.10, późny wieczór). Liczby syren z `pipeline/syreny/WYNIKI.md` (przybliżenie, nie najgorszy wariant 69,1%). Demo na przepływie z aplikacji na produkcji: otwarcie → „Sprawdzam połączenie…” → „Jest połączenie…” → „Tutaj” → karty „Twoja sytuacja” → trasa → brak sieci. Czasy poniżej policzone ze słów (130 słów na minutę), jeszcze nie zmierzone zegarem: pomiar na próbie (P7).
 
 ---
 
@@ -21,60 +21,70 @@ Stan: wersja 3 (sobota, 17.10, wieczór). Liczby syren z `pipeline/syreny/WYNIKI
 
 Same nagłówki czytane po kolei dają cały wywód.
 
-| Czas | Sek. | Slajd: co jury ma zapamiętać | Kryterium oceny |
-|---|---|---|---|
-| 0:00–0:20 | 20 | Napięcie rośnie, a ludzie pytają: co zrobię, jeśli to się stanie tutaj? | związek z realiami Warszawy (15%) |
-| 0:20–0:35 | 15 | Miasto ma dawać spokój także wtedy, gdy zawiedzie prąd i sieć | związek z realiami Warszawy |
-| 0:35–0:55 | 20 | Kijów pokazał, co pada najpierw: prąd, sieć, alarmy, mapy, tramwaje | związek z realiami Warszawy |
-| 0:55–1:20 | 25 | Jeśli zabraknie prądu, głośnej syreny ubywa z 48,3% do 36,6% adresów | innowacyjność (25%), otwarte dane (20%) |
-| 1:20–1:40 | 20 | Zaczęliśmy od zadań mieszkańców, nie od danych | innowacyjność |
-| 1:40–2:05 | 25 | Każde zadanie połączyliśmy z danymi i widać, gdzie dane pomagają, a gdzie nie | otwarte dane Warszawy (20%) |
-| 2:05–2:30 | 25 | Pięć kart w jednej stronie, a to, co da się policzyć z góry, jest w telefonie | praktyczne zastosowanie (20%) |
-| 2:30–4:05 | 95 | Aplikacja sama pokazuje, co jest ważne w tym miejscu, także gdy padnie sieć | praktyczne zastosowanie, innowacyjność |
-| 4:05–4:40 | 35 | Mieszkaniec zyskuje spokój, a miasto narzędzie na danych, które już ma | potencjał wdrożeniowy (20%) |
-| 4:40–5:00 | 20 | Działa, gdy wszystko pada | jakość prezentacji (20%) |
+| Czas | Sek. | Slajd | Co jury ma zapamiętać | Kryterium oceny |
+|---|---|---|---|---|
+| 0:00–0:20 | 20 | 1 | Napięcie rośnie, a ludzie pytają: co zrobię, jeśli to się stanie tutaj? | związek z realiami Warszawy (15%) |
+| 0:20–0:35 | 15 | 2 | Miasto ma dawać spokój także wtedy, gdy zawiedzie prąd i sieć | związek z realiami Warszawy |
+| 0:35–0:54 | 19 | 3 | Kijów pokazał, co pada najpierw: prąd, sieć, alarmy, mapy, tramwaje | związek z realiami Warszawy |
+| 0:54–1:19 | 25 | 4 | Jeśli zabraknie prądu, głośnej syreny ubywa z 48,3% do 36,6% adresów | innowacyjność (25%), otwarte dane (20%) |
+| 1:19–1:38 | 19 | 5 | Zaczęliśmy od zadań mieszkańców, nie od danych | innowacyjność |
+| 1:38–2:00 | 22 | 6 | Każde zadanie połączyliśmy z danymi i widać, gdzie dane pomagają, a gdzie nie | otwarte dane Warszawy (20%) |
+| 2:00–2:20 | 20 | 7 | Pięć kart w jednej stronie, a to, co da się policzyć z góry, jest w telefonie | praktyczne zastosowanie (20%) |
+| 2:20–2:40 | 20 | 8 | Stoimy na otwartych danych: sześć zbiorów miasta, miejsca schronienia i syreny od PSP | otwarte dane Warszawy (20%) |
+| 2:40–4:14 | 94 | 9 | Aplikacja sama pokazuje, co jest ważne w tym miejscu, także gdy padnie sieć | praktyczne zastosowanie, innowacyjność |
+| 4:14–4:45 | 31 | 10 | Mieszkaniec zyskuje spokój, a miasto narzędzie na danych, które już ma | potencjał wdrożeniowy (20%) |
+| 4:45–5:00 | 15 | 11 | Działa, gdy wszystko pada | jakość prezentacji (20%) |
+| poza czasem | | 12 | AI Slopers: żart zespołu, zostaje na ekranie podczas pytań jury | |
 
-Prezenter: **DO USTALENIA**. Druga osoba klika w telefonie na slajdzie.
+Suma: 300 s. Slajd 12 nie wlicza się w limit: wchodzimy na niego jednym naciśnięciem po „Dziękujemy”.
 
-Tempo: około 130 słów na minutę. Tekst ma około 510 słów, czyli około 3:55 mówienia. Reszta to kliknięcia, animacje i pauzy. Jeśli próba (P7) wyjdzie za długa, tniemy w tej kolejności: zdanie o mapie punktów w Kijowie, lista grup mieszkańców (zostaje sama liczba), drugi krok wdrożenia (Syrena-26).
+Prezenter: **DO USTALENIA**. Ta sama osoba mówi i prowadzi prezentację strzałkami lub pilotem (27 naciśnięć do końca slajdu 11, 28 do slajdu 12). Telefon na slajdzie 9 steruje się sam, więc druga osoba nie musi nic klikać (może pilnować czasu).
 
-Oznaczenie ⚠️ znaczy, że slajd pokazuje funkcję, której jeszcze nie ma na `main`. Szczegóły w sekcji „Zależności demo”.
+Tempo: około 130 słów na minutę. Tekst bez opcji ma około 550 słów, czyli około 4:10 mówienia. Zdania w [nawiasach kwadratowych] to opcje (znacznik [→] to naciśnięcie strzałki, nie opcja): wchodzą, jeśli próba (P7) zmieści się w limicie, z nimi tekst ma około 610 słów (4:40). Reszta czasu to kliknięcia, animacje telefonu i pauzy. Jeśli próba wyjdzie za długa, tniemy w tej kolejności: opcje w nawiasach, zdanie o Veturilo w kroku 4 demo, zdanie „Za kartami są dane na żywo…” na slajdzie 7 (dane są jeszcze raz na slajdzie 8).
 
 ---
 
-## 0:00–0:20 · Napięcie rośnie, a ludzie pytają: co zrobię, jeśli to się stanie tutaj?
+## 0:00–0:20 · Slajd 1 · Napięcie rośnie, a ludzie pytają: co zrobię, jeśli to się stanie tutaj?
 
-**Na ekranie:** czarne tło, białe litery. Trzy krótkie linijki pojawiają się jedna po drugiej, w rytm mówienia: „Wojna za wschodnią granicą.” → „Rosnące napięcie.” → „Co zrobię, jeśli to się stanie tutaj?”
+**Na ekranie:** jasne tło z żółtą kreską u góry. Trzy krótkie linijki pojawiają się jedna po drugiej, w rytm mówienia: „Wojna za wschodnią granicą.” (od razu) → „Rosnące napięcie.” → „Co zrobię, jeśli to się stanie tutaj?” („tutaj” zakreślone na żółto). Pierwsze dwie linijki są szare, ostatnia grafitowa. W rogach na każdym slajdzie: znak Warszawy (lewy górny), numer slajdu i logo 42 Warsaw (prawy dolny).
+
+**Klikamy:** → dwa razy (dwie kolejne linijki).
 
 **Mówimy:**
 
-> Od ponad czterech lat za naszą wschodnią granicą trwa wojna. Napięcie w regionie rośnie. Rząd wydał poradnik bezpieczeństwa. Nikt nie chce o tym myśleć, a jednak coraz więcej osób zadaje sobie pytanie: co zrobię, jeśli to się stanie tutaj?
+> Od ponad czterech lat za naszą wschodnią granicą trwa wojna. [→] Napięcie w regionie rośnie. Rząd wydał poradnik bezpieczeństwa. [→] Nikt nie chce o tym myśleć, a jednak coraz więcej osób zadaje sobie pytanie: co zrobię, jeśli to się stanie tutaj?
 
 ---
 
-## 0:20–0:35 · Miasto ma dawać spokój także wtedy, gdy zawiedzie prąd i sieć
+## 0:20–0:35 · Slajd 2 · Miasto ma dawać spokój także wtedy, gdy zawiedzie prąd i sieć
 
-**Na ekranie:** jedno zdanie, duża typografia: „Miasto ma dawać spokój.”
+**Na ekranie:** jedno zdanie, duża typografia: „Miasto ma dawać spokój.” Po naciśnięciu strzałki pod hasłem pojawia się zdanie „Nie obietnicę, że nic się nie stanie. Pewność, że każdy wie, co zrobić, także gdy zawiedzie prąd i sieć.” i trzy pigułki z ikonami: „bez prądu”, „bez sieci”, „każdy wie, co zrobić” (ostatnia zielona).
+
+**Klikamy:** → raz (zdanie i pigułki).
 
 **Mówimy:**
 
-> Miasto takie jak Warszawa powinno dawać mieszkańcom spokój. Nie obietnicę, że nic się nie stanie, tylko pewność, że każdy wie, co zrobić. Także wtedy, gdy zawiedzie prąd i sieć.
+> Miasto takie jak Warszawa powinno dawać mieszkańcom spokój. [→] Nie obietnicę, że nic się nie stanie, tylko pewność, że każdy wie, co zrobić. Także wtedy, gdy zawiedzie prąd i sieć.
 
 ---
 
-## 0:35–0:55 · Kijów pokazał, co pada najpierw
+## 0:35–0:54 · Slajd 3 · Kijów pokazał, co pada najpierw
 
-**Na ekranie:** rząd pięciu słów jak kostki domina: „prąd → sieć → alarmy → mapy → tramwaje”. Kostki przewracają się jedna po drugiej. Bez zdjęć zniszczeń i ważnych obiektów.
+**Na ekranie:** tytuł „Kijów pokazał, co pada najpierw.” i rząd pięciu kafli z ikonami, połączonych strzałkami: prąd → sieć → alarmy → mapy → tramwaje. Po naciśnięciu strzałki kafle przewracają się kolejno jak domino, szarzeją i przekreśla je czerwona kreska. Pod spodem notka z ikoną ołówka: „Adresy punktów, gdzie można się ogrzać i naładować telefon, bez internetu trzeba było spisywać na kartce.” Bez zdjęć zniszczeń i ważnych obiektów.
+
+**Klikamy:** → raz, po zdaniu „Rosja uderza w sieć energetyczną” (kafle przewracają się, kiedy mówimy o skutkach).
 
 **Mówimy:**
 
-> Kijów pokazał, co pada najpierw. Rosja uderza w sieć energetyczną. Bez prądu znika zasięg komórkowy, a z nim alarmy w telefonie i mapy. Mapa punktów, gdzie można się ogrzać, bez internetu nie działała, więc ludziom radzono spisać adresy na kartce. Stanęły tramwaje.
+> Kijów pokazał, co pada najpierw. Rosja uderza w sieć energetyczną. [→] Bez prądu znika zasięg komórkowy, a z nim alarmy w telefonie i mapy. [Mapa punktów, gdzie można się ogrzać, bez internetu nie działała, więc ludziom radzono spisać adresy na kartce.] Stanęły tramwaje.
 
 ---
 
-## 0:55–1:20 · Jeśli zabraknie prądu, głośnej syreny ubywa z 48,3% do 36,6% adresów
+## 0:54–1:19 · Slajd 4 · Jeśli zabraknie prądu, głośnej syreny ubywa z 48,3% do 36,6% adresów
 
-**Na ekranie:** mapa Warszawy i duża liczba „48,3%” (adresy, gdzie syrena jest głośna, 75 dB i więcej), nad nią „Dziś syrenę słychać przy 92,5% adresów”. Prezenter klika przełącznik „wyłącz prąd”: liczba spada do „36,6%”, pod nią „Przy 65 dB i więcej zostaje 91,5% adresów: zasięg traci ok. tysiąca (rząd wielkości)”, a cztery dzielnice z największym spadkiem podświetlają się z podpisem „przed → po” (Praga-Południe 81,7 → 45,2%, Praga-Północ 85,5 → 52,6%, Żoliborz 93,0 → 64,0%, Wola 88,2 → 60,4%). Na dole drobnym drukiem: „Model dźwięku na zewnątrz, wynik przybliżony. Blackout: jeśli syreny analogowe nie mają zasilania awaryjnego, a cyfrowe działają. Dane: KG PSP, SOIA 2026.05.”
+**Na ekranie:** po lewej „A w Warszawie?”, zdanie „Dziś syrenę słychać (65 dB i więcej na zewnątrz) przy 92,5% adresów. Głośną, 75 dB i więcej, przy:” i duża liczba „48,3%”, pod nią przełącznik „Wyłącz prąd” (zielony, gdy prąd jest). Po prawej mapa Warszawy w kolorze zasięgu syren. Prezenter naciska strzałkę (albo klika przełącznik): liczba spada do „36,6%” i robi się czerwona, pod nią pojawia się „Przy 65 dB i więcej zostaje 91,5% adresów: zasięg traci ok. tysiąca (rząd wielkości)”, a cztery dzielnice z największym spadkiem dostają podpis „przed → po” (Praga-Południe 81,7 → 45,2%, Praga-Północ 85,5 → 52,6%, Żoliborz 93,0 → 64,0%, Wola 88,2 → 60,4%). Na dole drobnym drukiem: „Model dźwięku na zewnątrz budynków, wynik przybliżony. Blackout: jeśli syreny analogowe nie mają zasilania awaryjnego, a cyfrowe działają. Dane: KG PSP, SOIA 2026.05.”
+
+**Klikamy:** → raz (albo przełącznik „Wyłącz prąd”). ← wraca do stanu „prąd jest”.
 
 **Uwaga o mapie.** Kształt mapy pochodzi z najgorszego wariantu (dolne oszacowanie: tylko strefy, gdzie SOIA pokazuje syrenę cyfrową, 69,1% adresów w zasięgu 65 dB). Legenda pod mapą mówi to wprost: przed kliknięciem „zasięg wszystkich syren”, po kliknięciu „najgorszy wariant: zasięg zostaje tylko w strefach syren cyfrowych (69,1%)” i czerwony obszar „zasięg tracony w najgorszym wariancie”. Podpis pod liczbą dodaje: „Czerwony obszar na mapie to najgorszy wariant, nie ta liczba.” Nie mówimy ze sceny „mapa pokazuje spadek do 69,1%”. Gdy O2 doda okręgi z modelu (`okregi.json`, zadanie S2), można wymienić mapę na przybliżenie.
 
@@ -82,145 +92,211 @@ Dane do slajdu: liczby z `pipeline/syreny/WYNIKI.md` (czyta je `prezentacja/buil
 
 **Mówimy:**
 
-> A w Warszawie? Sprawdziliśmy syreny na danych Państwowej Straży Pożarnej. Dziś syrenę słychać przy 92,5% adresów. [klik: wyłącz prąd] Jeśli zabraknie prądu, a syreny analogowe nie mają zasilania awaryjnego, głośnej syreny, 75 decybeli i więcej, ubywa z 48,3% do 36,6% adresów. Najbardziej na Pradze-Południe. To model dźwięku na zewnątrz i przybliżenie, dlatego mówimy „jeśli”.
+> A w Warszawie? Sprawdziliśmy syreny na danych Państwowej Straży Pożarnej. Dziś syrenę słychać przy 92,5% adresów. [→ wyłącz prąd] Jeśli zabraknie prądu, a syreny analogowe nie mają zasilania awaryjnego, głośnej syreny, 75 decybeli i więcej, ubywa z 48,3% do 36,6% adresów. Najbardziej na Pradze-Południe. To model dźwięku na zewnątrz i przybliżenie, dlatego mówimy „jeśli”.
 
 Jeśli ktoś dopyta o najgorszy wariant: „Gdybyśmy wyrzucili wszystkie strefy, w których SOIA nie pokazuje syreny cyfrowej, zostaje 69,1% adresów w zasięgu 65 dB. To wariant skrajny, dolne oszacowanie, nie nasza główna liczba.”
 
 ---
 
-## 1:20–1:40 · Zaczęliśmy od zadań mieszkańców, nie od danych
+## 1:19–1:38 · Slajd 5 · Zaczęliśmy od zadań mieszkańców, nie od danych
 
-**Na ekranie:** macierz. W wierszach 6 grup mieszkańców, w kolumnach 7 faz kryzysu: „dni przed”, „0–15 min”, „15–60 min”, „1–6 h”, „6–24 h”, „1–3 dni”, „3+ dni”. W komórkach kropki, czyli zadania. Na górze liczba „24 zadania”.
+**Na ekranie:** po lewej wielka czerwona „24”, obok tytuł „zadania mieszkańców w kryzysie” i podtytuł „Zaczęliśmy od ludzi, nie od danych: 6 grup mieszkańców, 7 faz kryzysu.” Pod spodem oś siedmiu faz: „dni przed”, „0–15 min”, „15–60 min”, „1–6 h”, „6–24 h”, „1–3 dni”, „3+ dni”. Niżej sześć kart z grupami: Rodzic dojeżdżający do pracy (15 zadań), Senior lub osoba z niepełnosprawnością (14), Osoba przewlekle chora (13), Osoba nieznająca polskiego (11), Młoda osoba bez zapasów (12), Osoba w drodze (14). Każda karta ma ikonę i dwa przykładowe zadania (np. „Dotrzeć do dziecka bez tramwaju”, „Zasilanie sprzętu medycznego”, „Alert w moim języku”). Przypis: „Liczba przy grupie: ile z 24 zadań ta grupa może mieć do wykonania. 10 zadań dotyczy wszystkich.” Bez kliknięć.
 
-Źródło: `kontekst/jtbd-kryzys-warszawa.md`, części 3, 4 i 6. Plik ma 31 zadań, w tym 7 zadań wyłącznie instytucji. Na slajdzie pokazujemy 24 zadania mieszkańców, bo aplikacja jest dla mieszkańców.
-
-**Mówimy:**
-
-> Nie zaczęliśmy od danych. Zaczęliśmy od ludzi. Rozpisaliśmy, co w kryzysie musi zrobić sześć grup mieszkańców: rodzic dojeżdżający do pracy, senior, osoba przewlekle chora, ktoś, kto nie zna polskiego, młody bez zapasów i ktoś w drodze. Od dni przed atakiem po powrót do normalności. Wyszły 24 zadania.
-
----
-
-## 1:40–2:05 · Każde zadanie połączyliśmy z danymi i widać, gdzie dane pomagają, a gdzie nie
-
-**Na ekranie:** siatka połączeń. Z lewej zadania, z prawej zbiory danych (portal Warszawy, WFS, PSP, dane.gov.pl, OSM), między nimi linie. Kolory: czarne działa offline, niebieskie potrzebuje sieci, szare to zadania bez danych. Najechanie na zadanie podświetla jego zbiory. Na dole wniosek: „Budujemy tam, gdzie zadanie łączy się z danymi.”
-
-Liczby do slajdu (z części 6 pliku JTBD, dla 24 zadań mieszkańców): pokrycie danymi pełne w 3, częściowe w 13, brak w 7, nie dotyczy w 1. Aplikacja jest właściwym narzędziem w 13 zadaniach, a częściowo w 4. Analiza powstała przed pozyskaniem danych PSP o miejscach schronienia. Przy budowie siatki zadanie 2 („najbliższe ukrycie”) trzeba przestawić na pełne pokrycie.
+Źródło: `kontekst/jtbd-kryzys-warszawa.md`, części 3, 4 i 6. Plik ma 31 zadań, w tym 7 zadań wyłącznie instytucji. Na slajdzie pokazujemy 24 zadania mieszkańców, bo aplikacja jest dla mieszkańców. Liczby przy grupach nie sumują się do 24, bo zadanie „dla wszystkich” liczy się każdej grupie.
 
 **Mówimy:**
 
-> Każde zadanie połączyliśmy z danymi: miejskimi, PSP i innymi otwartymi. Czarne działa bez sieci, niebieskie potrzebuje sieci. Szare to zadania, których żadne dane nie rozwiązują, na przykład gdzie naładować telefon. Tego nie udajemy. Zbudowaliśmy rozwiązanie tam, gdzie zadanie łączy się z danymi.
+> Nie zaczęliśmy od danych. Zaczęliśmy od ludzi. Rozpisaliśmy, co w kryzysie musi zrobić sześć grup mieszkańców[: rodzic dojeżdżający do pracy, senior, osoba przewlekle chora, ktoś, kto nie zna polskiego, młody bez zapasów i ktoś w drodze]. Od dni przed atakiem po powrót do normalności. Wyszły 24 zadania.
 
 ---
 
-## 2:05–2:30 · Pięć kart w jednej stronie, a to, co da się policzyć z góry, jest w telefonie
+## 1:38–2:00 · Slajd 6 · Każde zadanie połączyliśmy z danymi i widać, gdzie dane pomagają, a gdzie nie
 
-**Na ekranie:** sześć kafli z nazwą i krótkim opisem. Pięć to karty z ekranu „Twoja sytuacja”: „Syreny”, „Najbliższe miejsce schronienia (PSP)”, „Pomoc medyczna”, „Powietrze i wiatr”, „Dotarcie do bliskich”. Szósty kafel to „Paczka offline”. Pod spodem prosty diagram: dane → paczka w telefonie (offline); API miasta → nasz serwer → telefon (na żywo, za kartami Powietrze i wiatr oraz Dotarcie do bliskich).
+**Na ekranie:** tytuł „Każde zadanie połączyliśmy z danymi”. Pod nim rząd 24 kwadratów (jeden kwadrat to jedno zadanie), a niżej trzy karty z dużą liczbą: **13** „W telefonie, bez sieci” (zielona), **5** „Na żywo, przez sieć” (żółta), **6** „Żadne dane nie pomagają” (szara, przerywana ramka). Każda karta ma trzy przykładowe zadania i zbiory danych (np. „12 zbiorów do zapisania w telefonie, np. Syreny SOIA, Punkty adresowe, Miejsca schronienia”). Dwa zadania z zielonej grupy korzystają też z danych na żywo (kwadraty pół na pół). Wniosek na dole: „18 z 24 zadań łączy się z danymi. Tam budujemy. Pozostałe 6 pokazujemy uczciwie na szaro.” Bez kliknięć.
+
+Liczby liczy slajd z `dane.js`: zadanie z co najmniej jednym zbiorem w paczce to „w telefonie”, zadanie tylko ze zbiorami na żywo to „na żywo”, zadanie bez zbiorów to szare. Połączenia zadań ze zbiorami: `build_dane.py`, słownik `ZADANIA` (na podstawie kolumny „Dane” w pliku JTBD; zadanie 1 przestawione na SOIA, zadanie 2 na dane PSP, bo analiza powstała przed pozyskaniem obu źródeł).
+
+Uwaga: podział pochodzi z analizy zadań, nie z listy funkcji wersji 3. Wśród 5 zbiorów na żywo z analizy są też utrudnienia i pozycje pojazdów ZTM, których aplikacja v3 nie pokazuje (`HANDOFF-v3.md` §4). Karta „Na żywo” jako przykłady podaje tylko zbiory obecne w aplikacji: pogodę i wiatr, jakość powietrza i Veturilo. Gdy jury zapyta, mówimy, że to analiza zadań i danych, a pokazane funkcje to pięć kart.
 
 **Mówimy:**
 
-> Tak powstała Warszawa w trybie kryzysowym. Jedna strona internetowa, a po wpisaniu adresu pięć kart dopasowanych do twojej sytuacji: syreny, najbliższe miejsce schronienia według PSP, pomoc medyczna, powietrze i wiatr, dotarcie do bliskich. Za kartami są dane na żywo, a wszystko, co da się policzyć z góry, jest w telefonie. Działa, gdy wszystko pada.
+> Każde zadanie połączyliśmy z danymi: miejskimi, PSP i innymi otwartymi. Zielone działa w telefonie bez sieci, żółte potrzebuje sieci. Szare to zadania, których żadne dane nie rozwiązują, na przykład gdzie naładować telefon. Tego nie udajemy. Zbudowaliśmy rozwiązanie tam, gdzie zadanie łączy się z danymi.
 
 ---
 
-## 2:30–4:05 · Aplikacja sama pokazuje, co jest ważne w tym miejscu, także gdy padnie sieć
+## 2:00–2:20 · Slajd 7 · Pięć kart w jednej stronie, a to, co da się policzyć z góry, jest w telefonie
 
-**Na ekranie:** z lewej oś z pięcioma krokami (start, karta Syreny, karta miejsca schronienia, pozostałe karty, brak sieci). Z prawej makieta telefonu z działającą aplikacją (iframe z `https://warszawa-kryzys.startupaplikujmy.workers.dev/`). Szóste naciśnięcie klawisza (albo przełącznik „wyłącz sieć”) przeładowuje telefon z `?offline=1`. Kliknięcie kroku podświetla go na osi.
+**Na ekranie:** tytuł „Warszawa w trybie kryzysowym” i sześć kafli z ikoną, numerem i jedną linijką. Pięć to karty z ekranu „Twoja sytuacja”: „Syreny”, „Najbliższe miejsce schronienia według PSP”, „Pomoc medyczna”, „Powietrze i wiatr”, „Dotarcie do bliskich”. Szósty, zielony kafel z przerywaną ramką to „Paczka offline”: „Dane, mapa Warszawy i trasy w telefonie. Działa bez sieci.” Bez kliknięć.
 
-Fabuła: Kasia jest u mamy na Grochowie (ul. Grochowska 200). Demo startuje z linku z lokalizacją, więc nie zależy od GPS na laptopie. Przepływ ekranów: `HANDOFF-v3.md` §2, karty: §3.
+**Mówimy:**
 
-**Link demo:** `https://warszawa-kryzys.startupaplikujmy.workers.dev/?lokalizacja=52.2457,21.0874` (Grochowska 200). Telefon na slajdzie ładuje ten sam adres, jeśli prezentację otworzymy z parametrem `app` (adres zakodowany): `?app=https%3A%2F%2Fwarszawa-kryzys.startupaplikujmy.workers.dev%2F%3Flokalizacja%3D52.2457%2C21.0874`.
+> Tak powstała Warszawa w trybie kryzysowym. Jedna strona internetowa, a po wpisaniu adresu pięć kart dopasowanych do twojej sytuacji[: syreny, najbliższe miejsce schronienia według PSP, pomoc medyczna, powietrze i wiatr, dotarcie do bliskich]. Za kartami są dane na żywo, a wszystko, co da się policzyć z góry, jest w telefonie. Działa, gdy wszystko pada.
 
-Jak przygotować telefon na slajdzie: `prezentacja/README.md`, sekcja „Telefon na slajdzie 8” (zapisane adresy Kasi i pobrana paczka, żeby tryb offline miał z czego działać).
+---
 
-| Czas | Krok | Klikamy | Widać | Wartość |
+## 2:20–2:40 · Slajd 8 · Stoimy na otwartych danych Warszawy i PSP
+
+**Na ekranie:** tytuł „Na jakich danych stoimy” i trzy kolumny połączone liniami: „Źródła danych” → „W aplikacji” → „Pytania mieszkańca”.
+- Źródła: wyróżniona czerwoną ramką „Otwarte dane m.st. Warszawy” (dane.um.warszawa.pl, API miasta, WFS, „6 zbiorów”: defibrylatory AED, toalety publiczne, punkty adresowe 126 923, apteki, pogoda i wiatr, jakość powietrza), „Państwowa Straż Pożarna” (miejsca schronienia według PSP 8 006, syreny SOIA 2026.05) i „Inne otwarte dane” (OpenStreetMap, trasy OSRM, rejestr SOR, GTFS Warszawa, Veturilo).
+- W aplikacji: „Paczka offline” (w telefonie, bez sieci) i „Na żywo” (gdy jest sieć, przez nasz serwer).
+- Pytania mieszkańca: pięć kart (Czy usłyszę alarm? Gdzie się schronić? Gdzie pomoc medyczna? Czy mogę wietrzyć? Jak dotrę do bliskich?).
+
+Linie z danych miasta są czerwone, linie do „Na żywo” kropkowane. Bez kliknięć. Ten slajd odpowiada na kryterium otwartych danych Warszawy (20%) i na warunek oceny z regulaminu (§4 ust. 9: użycie zbiorów m.st. Warszawy).
+
+| Zbiór miasta na slajdzie | Droga | Dowód w repo |
+|---|---|---|
+| Defibrylatory AED | API `get_scb_lokalizacja_defibrylatorow`, w paczce | `public/pack/punkty/meta.json` (`um-aed`) |
+| Toalety publiczne | API `get_m_toalety`, w paczce | `public/pack/punkty/meta.json` (`um-toalety`) |
+| Pogoda i wiatr (ZOM) | API `get_zom_pogoda`, na żywo | `server/live/wiatr.ts` |
+| Jakość powietrza | API `get_bopipk_monitoring_jakosci_powietrza`, na żywo | `server/live/powietrze.ts` |
+| Punkty adresowe (126 923) | WFS `PUNKTY_ADRESOWE_WGS84`, w paczce | `public/pack/adresy/meta.json` |
+| Apteki | WFS `APTEKI`, w paczce | `public/pack/punkty/meta.json` (`wfs-apteki`) |
+
+Z PSP: 8 006 miejsc schronienia (`public/pack/punkty/punkty.json`, rodzaj `schronienie_psp`) i syreny SOIA 2026.05 (`public/pack/syreny/meta.json`). Apteki z WFS to dane z marca 2017 (tak mówi `public/pack/punkty/meta.json`), więc przy aptekach nie mówimy „aktualne”. `docs/DOKUMENTACJA.md` §1.1 liczy dziewięć zbiorów miasta, bo wlicza też wejścia do metra (WFS) oraz pozycje pojazdów i utrudnienia w ruchu, które w v3 są ukryte. Slajd pokazuje sześć używanych w v3. Gdy jury zapyta o liczbę: „sześć w aplikacji, dziewięć w dokumentacji”.
+
+Notatka prezentera (`data-notatka`, klawisz N) ma tu pełną listę zbiorów (ok. 90 słów, 40 s). Ze sceny mówimy skrót poniżej, żeby zmieścić się w 20 s, a pełna lista jest na slajdzie.
+
+**Mówimy:**
+
+> Stoimy na otwartych danych. Sześć zbiorów to dane Warszawy, z API i WFS miasta: między innymi defibrylatory, pogoda, powietrze i punkty adresowe. Do tego PSP: miejsca schronienia i syreny. Co da się policzyć z góry, jest w telefonie, resztę bierzemy na żywo.
+
+---
+
+## 2:40–4:14 · Slajd 9 · Aplikacja sama pokazuje, co jest ważne w tym miejscu, także gdy padnie sieć
+
+**Na ekranie:** z lewej tytuł „Dzień Kasi”, podtytuł „Kasia jest u mamy na Grochowie, ul. Grochowska 200”, oś pięciu etapów (Start, Karta Syreny, Miejsce schronienia, Pozostałe karty, Brak sieci) i duży podpis, który zmienia się z każdym krokiem. Z prawej makieta telefonu.
+
+To nie jest żywa aplikacja. Ekrany to prawdziwe zrzuty z produkcji z 17.10 (ok. 21:00, Grochowska 200), a ruch (palec, przejścia, podświetlenia) jest zaprogramowany w `prezentacja/telefon.js`. Każde naciśnięcie strzałki to jeden krok. Wejście na slajd pokazuje stan początkowy (`#9.0`), potem jest 9 kroków (`#9.1`–`#9.9`), a dziesiąte naciśnięcie przechodzi na slajd 10. Strzałka wstecz cofa o krok bez animacji. Szybkie klikanie jest bezpieczne: animacja się przerywa, a telefon pokazuje właściwy stan.
+
+Fabuła: Kasia jest u mamy na Grochowie (ul. Grochowska 200). Telefon pokazuje przebieg z produkcji: aplikacja sprawdza połączenie już przy otwarciu, a „Tutaj” tylko zmienia miejsce (zamiast adresu domu Kasia wybiera to, w którym stoi). Przepływ ekranów: `HANDOFF-v3.md` §2, karty: §3.
+
+| Czas | Etap na osi | Naciskamy | Widać na telefonie | Podpis na slajdzie |
 |---|---|---|---|---|
-| 2:30–2:50 | 1. Start: lokalizacja i połączenie | przycisk „Tutaj” w pasku (adresy i paczka zapisane przed pitchem), potem czekamy | „Sprawdzam połączenie…” → „Jest połączenie. Dane na żywo włączone. Trasy na offline zapisuję w tle.”, potem mapa z punktem „Tutaj” i karty; pasek „Online” | zaczyna od miejsca, w którym stoi, i wie, na jakich danych działa |
-| 2:50–3:10 | 2. Syreny | karta Syreny | okręgi najbliższych syren na mapie, tekst o zasięgu i o blackoucie (z „jeśli”) | wie, czy usłyszy alarm, i zna kroki |
-| 3:10–3:30 | 3. Miejsce schronienia | karta Najbliższe miejsce schronienia (PSP) | trasa piesza po ulicach, odległość i czas, przycisk do aplikacji PSP | nie szuka w panice |
-| 3:30–3:40 | 4. Pozostałe karty | przewinięcie listy: Pomoc medyczna, Powietrze i wiatr, Dotarcie do bliskich | trzy karty z poziomem (zielony, pomarańczowy, czerwony, szary); w bliskich trasa do domu Kasi i najbliższe Veturilo | rekomendacja, nie suche dane |
-| 3:40–4:05 | 5. Brak sieci | wyłączamy Wi-Fi, odświeżamy, klik w miejsce schronienia | pasek „Offline · paczka z 17.10, …”, karty dalej działają, ta sama trasa „zapisana w telefonie” | nie zostaje z pustym ekranem |
+| 2:40–3:02 | Start | wejście na slajd (`#9.0`) | ekran „Sprawdzam połączenie…” z kółkiem | Kasia otwiera aplikację u mamy na Grochowie. / Najpierw aplikacja sprawdza, czy jest sieć. |
+| (cd.) | Start | → 1 | ten sam ekran, tekst zmienia się na „Jest połączenie. Dane na żywo włączone. Trasy na offline zapisuję w tle.” | Jest sieć, więc dane na żywo są włączone. / W tle zapisuje trasy na wypadek, gdyby sieci zabrakło. |
+| (cd.) | Start | → 2 | ekran z adresem „Dom: ul. Powstańców Śląskich 10” (ok. 1 s), palec dotyka „Tutaj”, ekran zmienia się na Grochowską 200 z pięcioma kartami, podświetlony pasek „Tutaj: ul. Grochowska 200” | Jedno dotknięcie: „Tutaj”. / Zamiast adresu domu miejsce, w którym Kasia stoi. Pięć kart dla tego miejsca. |
+| 3:02–3:17 | Karta Syreny | → 3 | palec dotyka karty Syreny, na mapie okręgi najbliższych syren (analogowe pomarańczowe, cyfrowe niebieskie), podświetlone elipsą | Karta Syreny: okręgi najbliższych syren. / Kasia wie, czy usłyszy alarm, także jeśli zabraknie prądu. |
+| 3:17–3:32 | Miejsce schronienia | → 4 | powrót do listy, palec dotyka karty schronienia, na mapie trasa piesza (70 m), podświetlona; niżej przycisk „Otwórz w aplikacji PSP” | Miejsce schronienia według PSP: 70 m. / Trasa piesza po ulicach. Kasia nie szuka w panice. |
+| 3:32–3:49 | Pozostałe karty | → 5 | palec przewija listę, wjeżdża karta Powietrze i wiatr, podświetlone „Powietrze dobre. Możesz wietrzyć.” | Powietrze i wiatr: „Możesz wietrzyć”. / Rekomendacja z pomiaru 230 m dalej, a nie suche dane. |
+| (cd.) | Pozostałe karty | → 6 | kolejne przewinięcie, karta Dotarcie do bliskich, podświetlona linia: do domu pieszo ok. 172 min, rowerem ok. 58 min, „Jeśli zabraknie prądu, tramwaje i metro stoją” | Do domu pieszo 172 min, rowerem 58. / Jeśli zabraknie prądu, tramwaje i metro stoją. Najbliższe Veturilo: 280 m. |
+| 3:49–4:14 | Brak sieci | → 7 | w pasku stanu przekreślone Wi-Fi, szary zasięg, dymek „Brak sieci”, aplikacja przyciemniona | Pada sieć. / Bez prądu znika zasięg. Tak było w Kijowie. |
+| (cd.) | Brak sieci | → 8 | „odświeżenie”: „Sprawdzam połączenie…” → „Brak sieci. Działam na danych z paczki z 17.10, 20:52.” → ekran główny z paskiem „Offline · paczka z 17.10, 20:52” | Odświeżamy: aplikacja działa dalej z paczki w telefonie. / Pasek mówi wprost: offline, dane z 17.10, 20:52. |
+| (cd.) | Brak sieci | → 9 | palec dotyka karty schronienia, ta sama trasa i napis „(trasa zapisana w telefonie)” | Ta sama trasa, zapisana w telefonie. / Działa, gdy wszystko pada. |
+
+Karty Pomoc medyczna w przebiegu nie pokazujemy (jest na slajdzie 7 i w aplikacji).
 
 **Mówimy:**
 
-**Krok 1, start: lokalizacja i połączenie (20 s)**
+**Krok 1, start (22 s)**
 
-> Pokażę to na Kasi. Jest u mamy na Grochowie i otwiera aplikację. Jedno dotknięcie: „Tutaj”. Aplikacja sprawdza połączenie. Jest sieć, więc dane na żywo są włączone, a trasy na wypadek braku sieci zapisują się w tle.
+> Pokażę to na Kasi. Jest u mamy na Grochowie i otwiera aplikację, a ta sprawdza połączenie. [→ 1] Jest sieć, więc dane na żywo działają, a trasy na wypadek braku sieci zapisują się w tle. [→ 2] Kasia dotyka „Tutaj” i dostaje pięć kart dla miejsca, w którym stoi.
 
-**Krok 2, karta Syreny (20 s)**
+**Krok 2, karta Syreny (15 s)**
 
-> Pierwsza karta: syreny. Klik i na mapie widać okręgi najbliższych syren. Kasia dowiaduje się, czy usłyszy alarm i co zrobić, jeśli zabraknie prądu.
+> [→ 3] Pierwsza karta: syreny. Okręgi pokazują najbliższe syreny, a tekst mówi, czy Kasia usłyszy alarm i co zrobić. Jeśli zabraknie prądu, a syreny analogowe nie mają zasilania awaryjnego, może być ciszej.
 
-**Krok 3, miejsce schronienia (20 s)**
+**Krok 3, miejsce schronienia (15 s)**
 
-> Druga karta: najbliższe miejsce schronienia według PSP, z odległością i czasem. Tutaj to 70 metrów. Klik i trasa piesza po ulicach, a obok przycisk do oficjalnej aplikacji PSP.
+> [→ 4] Druga karta: najbliższe miejsce schronienia według PSP. Tutaj to 70 metrów, a trasa piesza prowadzi po ulicach. Obok jest przycisk do aplikacji PSP. Kasia nie szuka w panice.
 
-**Krok 4, pozostałe karty (10 s)**
+**Krok 4, pozostałe karty (17 s)**
 
-> Dalej pomoc medyczna, powietrze i wiatr, dotarcie do bliskich. Do domu Kasia ma prawie trzy godziny pieszo, a jeśli zabraknie prądu, tramwaje i metro stoją. Aplikacja podpowiada najbliższą stację Veturilo z rowerami. Każda karta mówi, co zrobić, a nie tylko pokazuje dane.
+> [→ 5] Powietrze i wiatr: „Możesz wietrzyć”, czyli rekomendacja, a nie tabela pomiarów. [→ 6] Dotarcie do bliskich: do domu pieszo prawie trzy godziny, rowerem niecała godzina. Jeśli zabraknie prądu, tramwaje i metro stoją, więc aplikacja podpowiada najbliższe Veturilo.
 
 **Krok 5, brak sieci (25 s)**
 
-> A teraz najgorsze: pada sieć. [wyłączamy Wi-Fi, odświeżamy] Aplikacja pokazuje „Offline” i datę paczki, a karty dalej działają. Klikamy miejsce schronienia i jest ta sama trasa, zapisana w telefonie. Działa, gdy wszystko pada.
+> [→ 7] A teraz najgorsze: pada sieć. Jeśli zabraknie prądu, znika zasięg, jak w Kijowie. [→ 8] Kasia odświeża aplikację. Pasek mówi wprost: offline, dane z paczki z 17 października. Karty dalej działają. [→ 9] Klika miejsce schronienia i jest ta sama trasa, zapisana w telefonie. Działa, gdy wszystko pada.
+
+**Jeśli jury zapyta, czy demo jest na żywo:** „To zaprogramowany przebieg na prawdziwych zrzutach z produkcji, żeby pokaz nie zależał od sieci na sali. Żywa aplikacja jest pod linkiem i można ją sprawdzić od razu.”
 
 **Plan B (kolejność):**
-1. Jeśli Wi-Fi na laptopie sprawia kłopot: przełącznik „wyłącz sieć” w prezentacji albo klawisz O (telefon przeładowuje się z `?offline=1`, pasek pokaże „Offline (symulacja) · paczka z …”). Działa tylko po wcześniejszym przejściu online, żeby paczka i trasy były zapisane.
-2. Jeśli ekran z kartami się nie ładuje: nagranie wideo demo na pulpicie, a zrzuty kart w `docs/pitch/zrzuty/` (pliki `v3-*.png`, opis w `zrzuty.md`).
-3. Jeśli lokalizacja nie działa: link z `?lokalizacja=…` albo zapisany adres Kasi.
+1. Jeśli animacja telefonu się zetnie: wpisać adres kroku w pasku przeglądarki (`#9.k`) albo ← i → (każdy skok ustawia stan od razu).
+2. Jeśli prezentacja nie wstaje z serwera lokalnego: otworzyć `prezentacja/index.html` z dysku (działa bez serwera; font Archivo bez sieci przechodzi na systemowy).
+3. Zapas na pytania jury: żywa aplikacja z linku `https://warszawa-kryzys.startupaplikujmy.workers.dev/?lokalizacja=52.2457,21.0874` (Grochowska 200) w drugiej karcie. Bez sieci na sali: zrzuty z `prezentacja/ekrany/` i `docs/pitch/zrzuty/` (opis w `zrzuty.md`).
 
 ---
 
-## 4:05–4:40 · Mieszkaniec zyskuje spokój, a miasto narzędzie na danych, które już ma
+## 4:14–4:45 · Slajd 10 · Mieszkaniec zyskuje spokój, a miasto narzędzie na danych, które już ma
 
-**Na ekranie:** dwie kolumny, „Dla mieszkańca” i „Dla miasta”, po dwie linijki. Pod spodem trzy następne kroki.
+**Na ekranie:** tytuł „Spokój dla mieszkańców, narzędzie dla miasta” i dwie karty z ikonami. „Dla mieszkańca”: wie, co zrobić, pod swoim adresem; zawczasu, a nie dla całej Polski; odpowiedzi działają bez sieci. „Dla miasta”: dane, które Warszawa i PSP już publikują; bez kont i sklepu z aplikacjami; tani hosting. Po naciśnięciu strzałki pod spodem pojawia się oś „Następne kroki” z trzema węzłami (wojewoda i zasilanie syren, 19115 i Syrena-26, wpięcie w codzienną aplikację).
+
+**Klikamy:** → raz, przy słowach „Następne kroki”.
 
 **Mówimy:**
 
-> Kasia wie zawczasu, co zrobić, i to pod swoim adresem, a nie dla całej Polski. Miasto dostaje narzędzie na danych, które już publikuje, bez kont i bez sklepu z aplikacjami. Następne kroki: z wojewodą mazowieckim, właścicielem syren analogowych, sprawdzić ich zasilanie, porównać model ze zgłoszeniami z 19115 z ćwiczeń Syrena-26 i wpiąć tryb kryzysowy w aplikację, której warszawiacy używają na co dzień.
+> Kasia wie zawczasu, co zrobić, i to pod swoim adresem, a nie dla całej Polski. Miasto dostaje narzędzie na danych, które już publikuje, bez kont i bez sklepu z aplikacjami. [→] Następne kroki: z wojewodą mazowieckim, właścicielem syren analogowych, sprawdzić ich zasilanie[, porównać model ze zgłoszeniami z 19115 z ćwiczeń Syrena-26] i wpiąć tryb kryzysowy w aplikację, której warszawiacy używają na co dzień.
 
 ---
 
-## 4:40–5:00 · Działa, gdy wszystko pada
+## 4:45–5:00 · Slajd 11 · Działa, gdy wszystko pada
 
-**Na ekranie:** czarne tło jak na pierwszym slajdzie. Trzy linijki: „Czasy są niepewne.” → „Warszawa może dać spokój.” → „Działa, gdy wszystko pada.” Na dole małe linki: aplikacja, wersja offline, repozytorium.
+**Na ekranie:** jasne tło z żółtą kreską u góry, jak na pierwszym slajdzie. Trzy linijki: „Czasy są niepewne.” → „Warszawa może dać spokój.” → „Działa, gdy wszystko pada.” („pada” zakreślone na żółto). Na dole linki z ikonami: aplikacja, wersja offline (`?offline=1`), repozytorium, „Zespół AI Slopers”.
+
+**Klikamy:** → dwa razy (druga i trzecia linijka). Po „Dziękujemy” jeszcze raz → na slajd 12.
 
 **Mówimy:**
 
-> Czasy są niepewne. Warszawa może dać mieszkańcom spokój. Taki, który działa, gdy wszystko pada. Dziękujemy.
+> Czasy są niepewne. [→] Warszawa może dać mieszkańcom spokój. [→] Taki, który działa, gdy wszystko pada. Dziękujemy.
+
+---
+
+## Poza czasem · Slajd 12 · AI Slopers (na pytania jury)
+
+**Na ekranie:** żart zespołu w stylu stron z lat 90.: tęczowy napis „AI Slopers” (WordArt, falujące litery), migające „NEW!”, przesuwany pas „Witamy na naszej stronie!”, licznik odwiedzin „Jesteś gościem nr …”, pas „UWAGA! STRONA W BUDOWIE”, przyciski „Netscape NOW!” i „Zrobione w Notatniku”, „Dzięki za uwagę!!!1”. Animacja rusza sama po wejściu na slajd. Slajd celowo łamie paletę reszty prezentacji.
+
+Wchodzimy na niego jednym naciśnięciem po „Dziękujemy”. Zostaje na ekranie podczas pytań jury. Nie wlicza się w 5 minut.
+
+**Mówimy:**
+
+> Zespół AI Slopers. Dziękujemy!
 
 ---
 
 ## Zależności demo
 
-Stan na 17.10 ok. 21:00: ekran z kartami (V4) jest na `main` i na produkcji. Kroki 1–5 przeszliśmy na produkcji z linkiem demo (zrzuty w `zrzuty.md`). Zrzuty pokazują już kafelki warstw (P4).
+Stan na 17.10 ok. 21:00: ekran z kartami (V4) jest na `main` i na produkcji. Kroki demo przeszliśmy na produkcji z linkiem demo, a ekrany z tego przejścia są zrzutami w `prezentacja/ekrany/`. Na scenie demo nie zależy od aplikacji ani od sieci.
 
-| Krok demo | Funkcja | Zadanie w PLAN-v3.md | Jeśli nie zdąży |
-|---|---|---|---|
-| 0:55 Syreny | mapa z przełącznikiem w prezentacji, liczby z `WYNIKI.md` | L4 (to zadanie), dane w repo | gotowe, zależy tylko od prezentacji |
-| 1:40 Siatka | siatka zadań i danych w prezentacji | O4-P | statyczny obraz siatki |
-| 1. Start: lokalizacja | „Użyj mojej lokalizacji”, `?lokalizacja=lat,lon` | V2 | zapisany adres Kasi zamiast lokalizacji |
-| 1. Start: połączenie | „Sprawdzam połączenie…”, automatyczne pobranie paczki | V3 | pomijamy to zdanie, mówimy od razu o kartach |
-| 2. Syreny | karta Syreny i okręgi na mapie | S1, S2 | sama karta z tekstem, bez okręgów |
-| 3. Miejsce schronienia | karta, trasa piesza, przycisk PSP | P2, L1 (proxy tras), V5 (`trasa()`) | karta bez trasy, trasa jako linia prosta |
-| 4. Pozostałe karty | Pomoc medyczna, Powietrze i wiatr, Dotarcie do bliskich | P3, L2, S3 | pokazujemy tylko karty, które są gotowe (bez atrap „Karta w budowie.”) |
-| 5. Brak sieci | tryb offline, trasa „zapisana w telefonie” | V3, V5 | `?offline=1`, potem nagranie wideo |
-| Telefon w prezentacji | aplikacja w iframe | wdrożenie na Workerze (jest) | zrzuty ekranu zamiast iframe |
+| Element | Z czego korzysta | Jeśli nie zadziała |
+|---|---|---|
+| Slajd 4, mapa i przełącznik | `dane.js` z `build_dane.py`, liczby z `WYNIKI.md` | strzałka → albo `#4.1` ustawia blackout; w ostateczności same liczby z tekstu |
+| Slajdy 5 i 6, persony i zadania z danymi | `dane.js` (liczone w przeglądarce) | brak zależności od aplikacji |
+| Slajd 8, zbiory danych | ręcznie wpisane liczby i nazwy w `index.html` | brak zależności od aplikacji; liczby do sprawdzenia po odświeżeniu paczki (126 923 adresy, 8 006 miejsc schronienia) |
+| Slajd 9, demo „Dzień Kasi” | `telefon.js`, `telefon.css`, `ekrany/*.jpg` | `#9.k` w pasku adresu, ← i →; zapas: żywa aplikacja z linku |
+| Zapas na pytania jury | żywa aplikacja na Workerze (jest), `?lokalizacja=…` | zrzuty z `ekrany/` i `docs/pitch/zrzuty/` |
 
-Ryzyko techniczne iframe: przeglądarka trzyma pamięć strony w ramce osobno od zwykłej karty. Rozwiązanie w prezentacji: przed pitchem otwieramy ją z `?edycja=1` i w telefonie na slajdzie zapisujemy adresy Kasi oraz pobieramy paczkę (instrukcja w `prezentacja/README.md`). Podawanie prezentacji z adresu aplikacji (`/pitch/`) nie jest potrzebne.
+Skąd ekrany w telefonie: `glowny`, `syreny`, `trasa`, `powietrze`, `bliscy`, `offline-trasa` to zrzuty z produkcji (`docs/pitch/zrzuty/v3-*.png`, przeskalowane), `dom` to nowy zrzut z produkcji (aplikacja po ponownym otwarciu z wybranym adresem Dom), a `offline-glowny` jest złożony z dwóch prawdziwych zrzutów (ekran główny i pasek „Offline · paczka z 17.10, 20:52”). Ekran „Sprawdzam połączenie…” jest odtworzony w HTML (tekst jak w `src/app/Polaczenie.tsx`). Godzina w pasku stanu to stałe 21:04.
 
 Karta Syreny dla Grochowskiej 200 mówi: „Jesteś w zasięgu syreny (75 dB i więcej). Jeśli zabraknie prądu (70–75 dB, szacunek), nadal powinna być słyszalna na zewnątrz.” Najbliższe miejsce schronienia według PSP jest pod tym samym adresem (70 m), więc trasa na mapie jest krótka.
 
-**Znany błąd paczki offline (zgłoszony do O1).** Przy pierwszym wejściu `adresy.json` (pierwszy plik paczki, 5,4 MB) pobiera się, zanim service worker przejmie stronę, i nie trafia do zapisu. Bez sieci karta Syreny pokazuje wtedy „dane o syrenach nie są zapisane w telefonie”. Obejście: po pobraniu paczki odświeżyć aplikację raz z siecią (także w telefonie na slajdzie). Po drugim wejściu wszystkie karty działają bez sieci.
+**Znany błąd paczki offline (zgłoszony do O1).** Dotyczy tylko żywej aplikacji, czyli zapasu na pytania jury, nie prezentacji. Przy pierwszym wejściu `adresy.json` (pierwszy plik paczki, 5,4 MB) pobiera się, zanim service worker przejmie stronę, i nie trafia do zapisu. Bez sieci karta Syreny pokazuje wtedy „dane o syrenach nie są zapisane w telefonie”. Obejście: po pobraniu paczki odświeżyć aplikację raz z siecią. Po drugim wejściu wszystkie karty działają bez sieci.
 
 ## Przygotowanie przed wejściem na scenę
 
-- [ ] Czysty profil przeglądarki albo „Wyczyść dane witryny” dla aplikacji (DECYZJE-v3 W9). Dopiero potem kroki poniżej i z `prezentacja/README.md`, w tym samym profilu.
-- [ ] Prezentacja otwarta na pełnym ekranie, telefon na slajdzie załadowany z linkiem `?lokalizacja=52.2457,21.0874`, paczka pobrana.
-- [ ] W „Adresy” wpisane dom (ul. Powstańców Śląskich 10) i praca (rondo Daszyńskiego 1). Bez domu przycisk „Zapisz” jest nieaktywny, a bez tych adresów karta Dotarcie do bliskich jest szara.
-- [ ] Po pobraniu paczki aplikacja odświeżona raz z siecią (obejście błędu paczki, sekcja „Zależności demo”). Sprawdzić: po wyłączeniu sieci karta Syreny jest zielona, nie szara.
-- [ ] Po kliknięciu „Tutaj” odczekać ok. 30 s z siecią (trasy na offline zapisują się w tle, 2 naraz), potem bez sieci klik w kartę schronienia: ma być „(trasa zapisana w telefonie)”. Jeśli widać „w linii prostej … Nie mamy teraz trasy po ulicach”, kliknąć „Tutaj” z siecią i odczekać jeszcze raz.
-- [ ] Próba na sucho: przełącznik „wyłącz prąd” na mapie, cały przepływ w telefonie (lokalizacja, karty, trasa), wyłączenie sieci i odświeżenie.
-- [ ] Zapas: druga karta z `?offline=1` (po wcześniejszym przejściu online), nagranie demo na pulpicie.
+Telefonu, adresów, paczki ani czystego profilu przygotowywać nie trzeba: demo nie używa żywej aplikacji.
+
+- [ ] Serwer prezentacji: `python -m http.server 8765 --bind 127.0.0.1 --directory docs/pitch/prezentacja` (z katalogu repo), w przeglądarce http://127.0.0.1:8765/ na pełnym ekranie (F). Sprawdzone na laptopie, z którego wystąpimy, i na rzutniku.
+- [ ] Przejście na sucho strzałkami lub pilotem od `#1.0` do slajdu 12: 12 slajdów, 28 naciśnięć, w tym 9 kroków demo na slajdzie 9. Pilot musi wysyłać strzałki albo PageDown.
+- [ ] Slajd 4: strzałka włącza blackout (liczba 36,6% na czerwono, podpisy dzielnic), ← wraca.
+- [ ] Slajd 9: telefon w całości widoczny na rzutniku (nie zachodzi na numer slajdu), podpisy po lewej czytelne z końca sali. Tekst w samym telefonie jest drobny, więc treść niosą podpisy i podświetlenia.
+- [ ] Klawisz N (notatki) pokazuje notatki na tym samym ekranie: przy rzutniku zostaje wyłączony.
+- [ ] Internet nie jest potrzebny. Bez sieci tylko font Archivo przechodzi na systemowy (wygląd nieco inny).
+- [ ] Próba na sucho z zegarem (P7): czasy z tabeli, opcje w nawiasach kwadratowych włączamy tylko, jeśli się mieszczą.
+- [ ] Zapas na pytania jury: żywa aplikacja z linku `https://warszawa-kryzys.startupaplikujmy.workers.dev/?lokalizacja=52.2457,21.0874` w drugiej karcie, z siecią. Gdyby jury poprosiło o pokaz offline na żywo: w „Adresy” wpisać dom (ul. Powstańców Śląskich 10), pracę (rondo Daszyńskiego 1) i bliską osobę (ul. Grochowska 200), kliknąć „Tutaj”, odczekać ok. 30 s (trasy na offline zapisują się w tle), odświeżyć raz z siecią (obejście błędu paczki), potem wyłączyć Wi-Fi. Bez domu przycisk „Zapisz” jest nieaktywny.
 - [ ] Wyłączone powiadomienia systemowe i komunikatory.
+
+## Liczby ze slajdów 5, 6 i 8 (nowe w wersji 4)
+
+Liczby na slajdach 5 i 6 liczy przeglądarka z `dane.js` (z `build_dane.py` i `kontekst/jtbd-kryzys-warszawa.md`). Liczby na slajdzie 8 są wpisane ręcznie w `index.html`.
+
+| Liczba w pitchu | Wartość | Źródło |
+|---|---|---|
+| zadania na grupę (slajd 5) | Rodzic 15, Senior 14, Przewlekle chora 13, Nie zna polskiego 11, Młoda bez zapasów 12, W drodze 14; 10 zadań dotyczy wszystkich | `dane.js`, pole `grupy` zadania; zadanie „dla wszystkich” liczy się każdej grupie |
+| podział zadań na dane (slajd 6) | 13 w telefonie bez sieci (w tym 2 także z danymi na żywo), 5 na żywo, 6 bez danych; 18 z 24 łączy się z danymi | `dane.js`, pole `rodzaj` zbioru (`ZADANIA` i `ZBIORY` w `build_dane.py`) |
+| 6 zbiorów otwartych danych Warszawy (slajd 8) | AED, toalety, pogoda i wiatr, jakość powietrza, punkty adresowe, apteki | tabela w sekcji slajdu 8 |
+| 126 923 punkty adresowe | liczba rekordów paczki adresów | `public/pack/adresy/meta.json` |
+| 8 006 miejsc schronienia według PSP | punkty rodzaju `schronienie_psp` | `public/pack/punkty/punkty.json` |
+
+Wiersz o pokryciu danymi (3 pełne, 13 częściowe, 7 brak, 1 n/d) w tabeli „Liczby w pitchu i skąd je mamy” poniżej opisuje analizę JTBD, a nie slajd 6. Na slajdzie jest podział 13 / 5 / 6, zbudowany inaczej (według tego, czy zbiór jest w paczce, czy na żywo). Ze sceny nie mieszamy tych dwóch podziałów.
 
 ## Liczby w pitchu i skąd je mamy
 
