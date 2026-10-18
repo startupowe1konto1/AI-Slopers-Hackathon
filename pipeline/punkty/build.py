@@ -19,12 +19,12 @@ WFS = "https://wfs.um.warszawa.pl/serwis?SERVICE=WFS&VERSION=1.1.0&REQUEST=GetFe
 KATALOG = "https://dane.um.warszawa.pl/pl/catalogue/"
 ZRODLA = {
     # Nazwa jak w stałych atrybucjach stopki (src/app/zrodla.ts, O1), żeby się nie powtarzała.
-    "psp": (zrodla.psp, "Miejsca schronienia według PSP (gdziesieukryc.pl)", "za zgodą PSP", "https://gdziesieukryc.pl"),
+    "psp": (zrodla.psp, "Miejsca schronienia według PSP (gdziesieukryc.pl)", "ponowne wykorzystywanie informacji sektora publicznego (art. 14 ustawy o otwartych danych)", "https://gdziesieukryc.pl"),
     # Ten sam klucz i opis co public/pack/transport/meta.json (O2): stopka pokaże jedno źródło.
     "gtfs-ztm": (
         zrodla.metro,
         "GTFS Warszawa (mkuran.pl, wersja 2026-10-17 00:15:22), źródło nieoficjalne, na podstawie danych ZTM",
-        "do weryfikacji (dane ZTM; GTFS: Mikołaj Kuranowski)",
+        "rozkład: warunki korzystania z danych ZTM Warszawa, przebiegi: ODbL (ZTM Warszawa, Mikołaj Kuranowski, OpenStreetMap contributors)",
         "https://mkuran.pl/gtfs/",
     ),
     "wfs-apteki": (zrodla.apteki, "m.st. Warszawa, apteki (WFS, dane z marca 2017)", "CC BY", WFS + "APTEKI"),

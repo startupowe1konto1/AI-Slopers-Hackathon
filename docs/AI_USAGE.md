@@ -5,7 +5,7 @@ Regulamin (§4 ust. 4) dopuszcza narzędzia AI, jeśli zespół opisze w dokumen
 ## Narzędzia
 
 - Claude Code (Anthropic) z modelem Claude Opus 5.5. Część mniejszych zadań subagentów wykonały Claude Sonnet 5.5 i Claude Haiku 5.5. Z Claude Code pracowały wszystkie cztery osoby z zespołu.
-- Automatyczna transkrypcja rozmów zespołu z 17.10 (`kontekst/transkrypty/`). Transkrypty posłużyły jako kontekst do planu i nie są częścią aplikacji.
+- Automatyczna transkrypcja rozmów zespołu z 17.10. Transkrypty posłużyły jako kontekst do planu. Nie są częścią aplikacji ani repozytorium.
 
 Sama aplikacja nie wywołuje żadnego modelu AI. Pokazuje dane ze źródeł wymienionych w [DOKUMENTACJA.md](DOKUMENTACJA.md), sekcja 1.
 
@@ -19,7 +19,7 @@ Każda zmiana trafiała na `main` przez pull request z CI: sprawdzenie typów, t
 
 ## Do czego użyliśmy AI
 
-- Rozpoznanie: regulamin, katalog zbiorów portalu dane.um.warszawa.pl i dokumentacja API, doświadczenia Kijowa z blackoutów, zadania mieszkańców w czasie kryzysu (`kontekst/`).
+- Rozpoznanie: regulamin, zbiory portalu dane.um.warszawa.pl i dokumentacja API, doświadczenia Kijowa z blackoutów, zadania mieszkańców w czasie kryzysu (`kontekst/`).
 - Specyfikacja i plan prac (`HANDOFF.md`, `HANDOFF-v3.md`, `docs/SPEC.md`, `docs/PLAN.md`, `docs/PLAN-v3.md`).
 - Kod aplikacji: szkielet PWA, mapa offline, service worker, karty ekranu „Twoja sytuacja”, wygląd i ikony SVG, proxy danych na żywo.
 - Skrypty danych w Pythonie (`pipeline/`): adresy, syreny z modelu SOIA, punkty pomocy, przystanki z GTFS, walidacja paczki offline.
@@ -34,7 +34,7 @@ Każda zmiana trafiała na `main` przez pull request z CI: sprawdzenie typów, t
 - Pomysł, wybór wyzwania 3 (decyzja zespołu z 17.10, 16:25), zakres i kolejność prac.
 - Zasady pracy modelu i pętli autopilota.
 - Dane i liczby. AI nie wymyślało danych: każdą liczbę w aplikacji liczy skrypt z `pipeline/` na pobranym zbiorze, a liczby w pitchu i dokumentacji sprawdzaliśmy na plikach z danymi, nie z pamięci modelu.
-- Licencje danych i bibliotek oraz zgoda PSP na dane o miejscach schronienia.
+- Licencje danych i bibliotek oraz podstawa użycia danych PSP o miejscach schronienia.
 - Teksty o bezpieczeństwie. Aplikacja nie ogłasza alarmów i nie pokazuje miejsc uderzeń. Pisze „miejsca schronienia według PSP”, a przy wyniku syren podaje założenia modelu.
 
 ## Czego AI nie zrobiło dobrze

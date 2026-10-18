@@ -8,7 +8,7 @@ Oznaczenie ⚠️ znaczy, że odpowiedź opiera się na czymś, co trzeba potwie
 
 | # | Pytanie | Kto odpowiada |
 |---|---|---|
-| 1 | Licencje i zgoda PSP | **DO USTALENIA** |
+| 1 | Licencje i dane PSP | **DO USTALENIA** |
 | 2 | Skąd założenie, że syreny analogowe padną przy blackoucie? | **DO USTALENIA** |
 | 3 | Kto i jak to wdroży? | **DO USTALENIA** |
 | 4 | Ile kosztuje utrzymanie? | **DO USTALENIA** |
@@ -19,15 +19,15 @@ Oznaczenie ⚠️ znaczy, że odpowiedź opiera się na czymś, co trzeba potwie
 
 ---
 
-## 1. Czy możecie legalnie używać tych danych? Czy PSP się zgodziła?
+## 1. Czy możecie legalnie używać tych danych? Także miejsc schronienia PSP?
 
-> Tak. Dane miasta są na licencji CC BY, a model syren SOIA od Komendy Głównej PSP na CC BY 4.0 z Zenodo. Mapa to OpenStreetMap na ODbL. Każde źródło podpisujemy w aplikacji. Miejsc schronienia nie kopiujemy z pominięciem PSP: mamy je od PSP ⚠️, a przycisk otwiera oficjalną aplikację PSP w tym samym miejscu. Biblioteki to open source z licencjami, które pozwalają na użycie komercyjne.
+> Tak. Dane miasta są na licencji CC BY, a model syren SOIA od Komendy Głównej PSP na CC BY 4.0 z Zenodo. Mapa to OpenStreetMap na ODbL. Każde źródło podpisujemy w aplikacji. Miejsca schronienia to informacja sektora publicznego, którą PSP publikuje w gdziesieukryc.pl. Ustawa o otwartych danych (art. 14) pozwala ją ponownie wykorzystywać bez osobnej zgody, jeśli urząd nie postawił warunków. Podajemy źródło i datę, a przycisk otwiera oficjalną aplikację PSP w tym samym miejscu. Biblioteki to open source z licencjami, które pozwalają na użycie komercyjne.
 
 **Fakty w zanadrzu:**
 - SOIA: KG PSP, wersja danych 2026.05, Zenodo 10.5281/zenodo.21921103, CC BY 4.0. Wymagane oznaczenie jest w `dane/soia-warszawa/README.md`.
 - Biblioteki i ich licencje: MIT, BSD-3-Clause, ISC, Apache-2.0. Lista jest w `docs/DOKUMENTACJA.md`, sekcja 3.
 - Przycisk PSP prowadzi pod `gdziesieukryc.pl/?lat=…&lng=…`, czyli kieruje ludzi do oficjalnego źródła.
-- ⚠️ Zgoda PSP na dane o miejscach schronienia: HANDOFF §6 mówi tylko, że „zespół deklaruje”. Dopóki nie mamy jej na piśmie, mówimy „mamy je od PSP”, a nie „za zgodą PSP”.
+- Miejsca schronienia PSP: art. 14 ust. 1 ustawy z 11 sierpnia 2021 r. o otwartych danych i ponownym wykorzystywaniu informacji sektora publicznego (bezwarunkowo, chyba że podmiot określi warunki; dla tych danych warunków nie znaleźliśmy). Szczegóły: `docs/DOKUMENTACJA.md`, sekcja 1.2.
 
 ---
 

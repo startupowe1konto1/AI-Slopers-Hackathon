@@ -22,7 +22,7 @@ export const STALE_ZRODLA: Zrodlo[] = [
   },
   {
     nazwa: 'Miejsca schronienia według PSP (gdziesieukryc.pl)',
-    licencja: 'za zgodą PSP',
+    licencja: 'ponowne wykorzystywanie informacji sektora publicznego (art. 14 ustawy o otwartych danych)',
     url: 'https://gdziesieukryc.pl',
     pobrano: '2026-10-17',
   },

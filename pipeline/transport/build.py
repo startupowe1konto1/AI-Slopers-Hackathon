@@ -207,7 +207,7 @@ def main():
         "modul": "transport", "rekordy": len(przystanki) + len(trasy),
         "zrodla": {"gtfs-ztm": {"nazwa": f"GTFS Warszawa (mkuran.pl, wersja {wersja}): przystanki i linie autobusów, tramwajów i metra, "
                                          "źródło nieoficjalne, na podstawie danych ZTM",
-                                "licencja": "do weryfikacji (dane ZTM; GTFS: Mikołaj Kuranowski)",
+                                "licencja": "rozkład: warunki korzystania z danych ZTM Warszawa, przebiegi: ODbL (ZTM Warszawa, Mikołaj Kuranowski, OpenStreetMap contributors)",
                                 "url": "https://mkuran.pl/gtfs/", "pobrano": pobrano}},
     }, ensure_ascii=False, indent=1), encoding="utf-8", newline="\n")
     print("przystanki:", len(przystanki), "linie:", dict(Counter(t["typ"] for t in trasy)),
