@@ -2,6 +2,7 @@ import { distance } from 'geokdbush';
 import { get, set } from 'idb-keyval';
 import type { Profil, Trasa, Wsp } from '../contracts';
 import { wymuszonyOffline } from './siec';
+import { tylkoOnline } from './tryb';
 
 // Szacunek bez sieci: droga ok. 1,3 razy dłuższa niż linia prosta, pieszo 5 km/h, rowerem 15 km/h
 // (te same założenia co src/modules/transport/trasy.ts).
@@ -35,6 +36,7 @@ const odpowiedzOk = (o: Partial<OdpowiedzTrasy> | null): o is OdpowiedzTrasy =>
 
 // idb-keyval rzuca od razu (nie odrzuca obietnicy), gdy nie ma IndexedDB (np. część trybów prywatnych): zapis jest tylko przyspieszeniem.
 async function odczytaj(klucz: string): Promise<Trasa | undefined> {
+  if (tylkoOnline()) return undefined;
   try {
     return await get<Trasa>(klucz);
   } catch {
@@ -42,6 +44,7 @@ async function odczytaj(klucz: string): Promise<Trasa | undefined> {
   }
 }
 async function zapisz(klucz: string, t: Trasa): Promise<void> {
+  if (tylkoOnline()) return;
   try {
     await set(klucz, t);
   } catch {

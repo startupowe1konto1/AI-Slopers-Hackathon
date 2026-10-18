@@ -4,6 +4,7 @@ import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url';
 import { FileSource, PMTiles, Protocol } from 'pmtiles';
 import type { Modul, Wsp } from '../contracts';
 import { zapewnijMape } from '../offline/paczka';
+import { tylkoOnline } from '../offline/tryb';
 import { styl } from './styl';
 
 const BBOX: [number, number, number, number] = [20.85, 52.09, 21.28, 52.37];
@@ -13,7 +14,13 @@ const protocol = new Protocol();
 addProtocol('pmtiles', protocol.tile);
 
 // Mapa zawsze z OPFS: przy pierwszym otwarciu pobierana w całości (hosting nie obsługuje Range).
+// Wersja tylko online: kafelki zapytaniami Range prosto z serwera (Vercel je obsługuje), bez zapisu w OPFS.
 async function zrodloMapy(): Promise<string> {
+  if (tylkoOnline()) {
+    const url = `${location.origin}/map/warszawa.pmtiles`;
+    protocol.add(new PMTiles(url));
+    return `pmtiles://${url}`;
+  }
   const plik = await zapewnijMape();
   protocol.add(new PMTiles(new FileSource(plik)));
   return `pmtiles://${plik.name}`;
@@ -84,9 +91,13 @@ export function MapView({ centrum, moduly, onMapa }: { centrum: Wsp | null; modu
       <div ref={kontener} aria-label="Mapa Warszawy" />
       {!gotowa && (
         <div className="mapa-stan" role="status">
-          {blad
-            ? 'Mapa niedostępna bez sieci. Połącz się raz, żeby ją zapisać w przeglądarce.'
-            : 'Ładowanie mapy Warszawy (12 MB przy pierwszym otwarciu)…'}
+          {tylkoOnline()
+            ? blad
+              ? 'Mapa niedostępna. Sprawdź połączenie z internetem.'
+              : 'Ładowanie mapy Warszawy…'
+            : blad
+              ? 'Mapa niedostępna bez sieci. Połącz się raz, żeby ją zapisać w przeglądarce.'
+              : 'Ładowanie mapy Warszawy (12 MB przy pierwszym otwarciu)…'}
         </div>
       )}
     </>

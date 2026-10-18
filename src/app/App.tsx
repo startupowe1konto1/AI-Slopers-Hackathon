@@ -4,7 +4,8 @@ import type { KontekstWskazowek, RolaMiejsca, WyznaczTrase } from '../contracts'
 import { moduly } from '../modules';
 import { useSiec } from '../offline/siec';
 import { zapiszTrasyOffline } from '../offline/zapisTras';
-import type { Przygotowanie } from '../offline/polaczenie';
+import { sprawdzPolaczenie, type Przygotowanie } from '../offline/polaczenie';
+import { tylkoOnline, usunZapisyOffline } from '../offline/tryb';
 import { useMiejsca, zapiszMiejsca } from './miejsca';
 import { miejsceTutaj, zTutaj } from './lokalizacja';
 import { Onboarding } from './Onboarding';
@@ -21,7 +22,13 @@ const KAFELKI = moduly.flatMap((m) => m.kafelki ?? []);
 
 export default function App() {
   const { miejsca, gotowe } = useMiejsca();
-  const [przygotowanie, setPrzygotowanie] = useState<Przygotowanie | null>(null);
+  // Wersja tylko online: bez ekranu „Sprawdzam połączenie” (nic nie pobieramy na offline), połączenie sprawdzamy w tle.
+  const [przygotowanie, setPrzygotowanie] = useState<Przygotowanie | null>(() => (tylkoOnline() ? { siec: true, api: true, paczka: null } : null));
+  useEffect(() => {
+    if (!tylkoOnline()) return;
+    void usunZapisyOffline();
+    void sprawdzPolaczenie().then((w) => setPrzygotowanie({ ...w, paczka: null }));
+  }, []);
   const siec = useSiec();
   // Sieć wróciła po starcie bez sieci: przechodzimy na online bez ponownego ekranu sprawdzania.
   useEffect(() => {
@@ -30,7 +37,7 @@ export default function App() {
   const online = siec.online && przygotowanie?.siec !== false;
   // Trasy na offline zapisujemy w tle, gdy jest sieć (HANDOFF-v3 §5): raz na zestaw miejsc, nie przy każdym renderze.
   // Zapisane trasy nie idą drugi raz do OSRM. Bez sieci zapominamy zestaw, żeby po jej powrocie dokończyć brakujące.
-  const zapisTras = !!przygotowanie && online;
+  const zapisTras = !!przygotowanie && online && !tylkoOnline();
   const kluczMiejsc = miejsca.map((m) => `${m.adres.lat},${m.adres.lon}`).sort().join(';');
   const zapisanyZestaw = useRef<string | null>(null);
   useEffect(() => {

@@ -4,6 +4,7 @@ import { znajdzAdres } from '../modules/adresy';
 import { zapiszMiejsca } from './miejsca';
 import { miejsceTutaj, zTutaj } from './lokalizacja';
 import { pobierzPaczke, stanPaczki } from '../offline/paczka';
+import { tylkoOnline } from '../offline/tryb';
 
 const ROLE: { rola: RolaMiejsca; etykieta: string; wymagane: boolean }[] = [
   { rola: 'dom', etykieta: 'Dom', wymagane: true },
@@ -119,7 +120,7 @@ export function Onboarding({ poczatkowe, onGotowe }: { poczatkowe: MiejsceUzytko
       <button className="przycisk" disabled={!wybor.dom} onClick={zapisz}>
         Zapisz
       </button>
-      <PaczkaOffline />
+      {!tylkoOnline() && <PaczkaOffline />}
     </div>
   );
 }
