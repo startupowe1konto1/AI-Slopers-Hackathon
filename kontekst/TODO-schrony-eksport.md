@@ -1,6 +1,6 @@
 # TODO: eksport punktów schronienia PSP (odłożone)
 
-**Status:** do zrobienia ręcznie. Zespół deklaruje zgodę PSP na wykorzystanie danych.
+**Status:** do zrobienia ręcznie. Dane to informacja sektora publicznego, używana na zasadach ponownego wykorzystywania (art. 14 ust. 1 ustawy o otwartych danych).
 
 ## Co wiemy
 

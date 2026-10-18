@@ -82,7 +82,7 @@ Poza zakresem tej wersji (decyzja zespołu). Ewentualny kierunek rozwoju opisuje
 - **Dane są zanonimizowane** zgodnie z ustawą o ochronie ludności (2024). Nie ma pojemności ani nazw właścicieli i nie należy ich oczekiwać.
 - **Projekt importu:** adapter przyjmujący oficjalny eksport (CSV albo GeoJSON z polami: id, typ, dostępność, adres, lat, lon). Codzienna aktualizacja z różnicami (dodane, usunięte, zmienione). W aplikacji pokazujemy datę stanu danych i źródło PSP.
 - **Przekierowanie bez kopiowania danych:** aplikacja PSP przyjmuje parametry `?lat=…&lng=…`, np. `https://gdziesieukryc.pl/?lat=52.23164&lng=21.00645`. Możemy otworzyć ją od razu w miejscu, w którym jest użytkownik.
-- **Pełna baza w przeglądarce (zespół deklaruje zgodę PSP):** aplikacja PSP zapisuje w pamięci przeglądarki (IndexedDB `gsu-national`, magazyn `cells`) wszystkie 87 308 punktów. Każdy rekord ma postać `[id_publiczny, lat, lon, adres, miejscowość, dostępność]`.
+- **Pełna baza w przeglądarce (informacja sektora publicznego, art. 14 ustawy o otwartych danych):** aplikacja PSP zapisuje w pamięci przeglądarki (IndexedDB `gsu-national`, magazyn `cells`) wszystkie 87 308 punktów. Każdy rekord ma postać `[id_publiczny, lat, lon, adres, miejscowość, dostępność]`.
   - W prostokącie obejmującym Warszawę jest 8006 punktów: 6982 „na żądanie”, 890 „określone godziny”, 134 „całodobowe”.
   - Dokładne przycięcie do granicy miasta: skryptem po eksporcie.
 - **Do zrobienia:** eksport do pliku (`dane/psp-schrony/`). Automatyczny eksport z wbudowanej przeglądarki zablokowały uprawnienia sesji, więc instrukcja ręcznego eksportu jest poniżej.

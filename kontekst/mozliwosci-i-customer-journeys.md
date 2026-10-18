@@ -6,8 +6,8 @@ Bazuje na `jtbd-kryzys-warszawa.md` (31 zadań JTBD, numery w tekście się do n
 
 - **Repozytorium `KGPSP/gdziesieukryc.pl` nie zawiera danych.** Są tam tylko README, CHANGELOG i szablon zgłoszenia błędu. Nie ma innych gałęzi, wydań ani tagów, nie ma też licencji.
 - **Dane (87 308 punktów, format „gsu-shelters-compact”) pobiera aplikacja w przeglądarce** do trybu offline. Serwer stoi za ochroną antybotową Cloudflare: zapytanie spoza przeglądarki dostaje 403. Automatyczne cykliczne pobieranie oznaczałoby obchodzenie tej ochrony, więc nie wchodzi w grę.
-- **Brak licencji, a regulamin hackathonu (§4 ust. 7–8) zabrania naruszania praw osób trzecich.** Skopiowanie bazy bez zgody to ryzyko prawne i ryzyko dyskwalifikacji.
-- **Realna szansa na zgodę:** to samo Biuro Informatyki i Łączności KG PSP opublikowało w sierpniu otwarte dane SOIA na licencji CC BY 4.0. Warto napisać do BIŁ KG PSP albo dodać zgłoszenie w repozytorium z prośbą o eksport lub zgodę na ponowne wykorzystanie. Odpowiedź raczej nie przyjdzie w trakcie hackathonu, ale to gotowy krok pilotażu.
+- **Brak osobnej licencji, ale to informacja sektora publicznego.** Według art. 14 ust. 1 ustawy o otwartych danych i ponownym wykorzystywaniu informacji sektora publicznego udostępnia się ją do ponownego wykorzystywania bezwarunkowo, chyba że podmiot określi warunki. Dla tych danych warunków nie znaleźliśmy. Podajemy źródło i datę, a regulamin hackathonu (§4 ust. 7–8) i tak wymaga, żebyśmy nie naruszali praw osób trzecich.
+- **Oficjalny eksport jako krok pilotażu:** to samo Biuro Informatyki i Łączności KG PSP opublikowało w sierpniu otwarte dane SOIA na licencji CC BY 4.0. Warto poprosić BIŁ KG PSP o oficjalny eksport danych o miejscach schronienia.
 - **Na czas hackathonu:**
   - (a) przycisk „Pokaż oficjalne punkty PSP”, który przenosi do gdziesieukryc.pl;
   - (b) własna warstwa „kandydatów” w kategoriach z README PSP (wejścia do metra z WFS, wielopoziomowe parkingi z portalu, przejścia i garaże podziemne z OSM), wyraźnie oznaczona jako niezweryfikowana.

@@ -41,7 +41,7 @@ Warsaw Open Data Hackathon, 42 Warsaw. Regulamin: `kontekst/regulamin.txt`.
 - Kolejna mapa schronów: gdziesieukryc.pl już istnieje.
 - „Tryb awaryjny dla bloku” i „Od drzwi do drzwi”: zespół odrzucił.
 - **Konsola dla miasta** (wykrywanie ciszy czujników, autobusy zastępcze, punkty pomocy): odłożona, bo rozmywała wizję. Opis zostaje jako kierunek rozwoju w `kontekst/mozliwosci-i-customer-journeys.md`.
-- „Zanim zgłosisz” (budżet obywatelski): oficjalny serwis bo.um.warszawa.pl ma już wyszukiwarkę, filtry i mapę. Analiza w `kontekst/zanim-zglosisz/`.
+- „Zanim zgłosisz” (budżet obywatelski): oficjalny serwis bo.um.warszawa.pl ma już wyszukiwarkę, filtry i mapę.
 - Narracja oparta na lukach w danych miasta: zespół jej nie chce.
 
 ---
@@ -135,7 +135,7 @@ Analiza: `dane/soia-warszawa/analiza/` (skrypt `syreny_blackout.py`, mapa PNG, t
 
 **PSP:**
 - **Syreny SOIA:** Zenodo 21921103, licencja CC BY 4.0. Wycinek dla Warszawy jest w `dane/soia-warszawa/` razem z README i wymaganą atrybucją.
-- **Punkty schronienia z gdziesieukryc.pl:** zespół deklaruje zgodę PSP. Eksport odłożony, instrukcja w `kontekst/TODO-schrony-eksport.md`. W rejonie Warszawy jest 8006 punktów (6982 na żądanie, 890 w określonych godzinach, 134 całodobowe), bez pojemności, bo dane są zanonimizowane ustawowo. Aplikacja PSP przyjmuje w linku współrzędne: `gdziesieukryc.pl/?lat=…&lng=…`.
+- **Punkty schronienia z gdziesieukryc.pl:** informacja sektora publicznego, używana na zasadach ponownego wykorzystywania (art. 14 ust. 1 ustawy o otwartych danych). Eksport odłożony, instrukcja w `kontekst/TODO-schrony-eksport.md`. W rejonie Warszawy jest 8006 punktów (6982 na żądanie, 890 w określonych godzinach, 134 całodobowe), bez pojemności, bo dane są zanonimizowane ustawowo. Aplikacja PSP przyjmuje w linku współrzędne: `gdziesieukryc.pl/?lat=…&lng=…`.
 
 **Zewnętrzne otwarte:**
 - Ewidencja SOR (RPRM, CC BY 4.0) i Rejestr Aptek (CC BY 4.0), obie z dane.gov.pl;
@@ -191,7 +191,7 @@ pmtiles extract https://build.protomaps.com/20261017.pmtiles warszawa.pmtiles --
   - SOIA: KG PSP, dane w wersji 2026.05;
   - OSM i Protomaps: ODbL;
   - portal miasta: CC BY;
-  - PSP gdziesieukryc: zgoda zespołu.
+  - PSP gdziesieukryc: ponowne wykorzystywanie informacji sektora publicznego (art. 14 ustawy o otwartych danych).
 
 ---
 
@@ -231,7 +231,7 @@ pmtiles extract https://build.protomaps.com/20261017.pmtiles warszawa.pmtiles --
 | `kontekst/research-defense-dane.md` | poradnik bezpieczeństwa, pola API, precedensy |
 | `kontekst/koncepcja-oskara-dane-i-persona.md` | pierwsza koncepcja zespołu a dane |
 | `kontekst/TODO-schrony-eksport.md` | odłożony eksport punktów schronienia PSP |
-| `kontekst/dane-warszawa.md`, `kontekst/regulamin.txt` | rozpoznanie hackathonu i regulamin |
-| `kontekst/dokumentacja-api/`, `kontekst/katalogi/` | opisy pól API portalu (`_pa.json`, `_pw.json`) i katalogi zbiorów |
+| `kontekst/regulamin.txt` | regulamin |
+| `kontekst/dokumentacja-api/` | opisy pól API portalu (`_pa.json`, `_pw.json`) |
 | `docs/AI_USAGE.md` | rejestr użycia AI (regulamin, §4 ust. 4) |
 | `dane/soia-warszawa/` | wycinek SOIA dla Warszawy, README z licencją, analiza syren przy blackoucie |

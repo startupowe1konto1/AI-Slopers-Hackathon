@@ -162,7 +162,7 @@ Format plików w `public/pack/<moduł>/` ustala właściciel modułu. Każdy fol
 - Aplikacja nie ogłasza alarmów. Wynik syreny pokazuje kroki, które pomagają upewnić się, że alarm do kogoś dotrze.
 - Wynik syreny zawsze ma dopisek: „model dźwięku na zewnątrz” i „przy blackoucie: jeśli syreny analogowe nie mają zasilania awaryjnego”.
 - Nie pokazujemy miejsc uderzeń. Dym to kierunek wiatru i pomiar powietrza, a nie model skażenia.
-- Atrybucje w stopce i w „O danych”: KG PSP SOIA 2026.05 (CC BY 4.0, pełne oznaczenie z `dane/soia-warszawa/README.md`), m.st. Warszawa (CC BY), OpenStreetMap i Protomaps (ODbL), PSP gdziesieukryc.pl (za zgodą).
+- Atrybucje w stopce i w „O danych”: KG PSP SOIA 2026.05 (CC BY 4.0, pełne oznaczenie z `dane/soia-warszawa/README.md`), m.st. Warszawa (CC BY), OpenStreetMap i Protomaps (ODbL), PSP gdziesieukryc.pl (ponowne wykorzystywanie informacji sektora publicznego (art. 14 ustawy o otwartych danych)).
 
 ## 8. Stany i błędy
 

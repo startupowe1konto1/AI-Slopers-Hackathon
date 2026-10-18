@@ -1,6 +1,6 @@
 # Handoff v3: ekran „Twoja sytuacja” zamiast zakładek
 
-Stan na sobotę, 19:10. Źródła: rozpiska lidera po wieczornym przeglądzie, transkrypt `kontekst/transkrypty/2026-10-17-rozmowa-zespolu-cz3.txt`, odpowiedzi lidera na pytania doprecyzowujące. Transkrypcje „Hackathon v3” jeszcze nie trafiły do repo; po ich dodaniu ten plik zostanie uzupełniony.
+Stan na sobotę, 19:10. Źródła: rozpiska lidera po wieczornym przeglądzie, rozmowa zespołu przy przeglądzie, odpowiedzi lidera na pytania doprecyzowujące. Transkrypcje „Hackathon v3” jeszcze nie trafiły do repo; po ich dodaniu ten plik zostanie uzupełniony.
 
 Obowiązuje razem z [docs/SPEC.md](docs/SPEC.md) (dane, zasady treści §7, stany §8) i [CLAUDE.md](CLAUDE.md). Gdzie ten plik zmienia SPEC, wygrywa ten plik. Zadania krok po kroku (testy, kod, kolejność, praca z subagentami): [docs/PLAN-v3.md](docs/PLAN-v3.md).
 

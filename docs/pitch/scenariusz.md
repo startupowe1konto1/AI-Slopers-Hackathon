@@ -251,7 +251,7 @@ W repo nie ma linku do źródła tych stwierdzeń:
 
 - [ ] Kijów: stanęły tramwaje przy blackoucie w styczniu 2026 (`kontekst/rozwiazanie-podsumowanie.md`, bez linku).
 - [ ] Syrena-26: Warszawa zbierała zgłoszenia o słyszalności przez 19115 (jw.).
-- [ ] Zgoda PSP na użycie miejsc schronienia z gdziesieukryc.pl (HANDOFF §6: „zespół deklaruje”). Do potwierdzenia mówimy „od PSP”, nie „za zgodą PSP”.
+- [x] Miejsca schronienia z gdziesieukryc.pl: informacja sektora publicznego, ponowne wykorzystywanie na podstawie art. 14 ustawy o otwartych danych (`docs/DOKUMENTACJA.md`, sekcja 1.2). Nie mówimy „za zgodą PSP”.
 
 ## Czego nie mówimy
 

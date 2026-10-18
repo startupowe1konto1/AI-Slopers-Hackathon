@@ -11,8 +11,7 @@ Zacznij od [HANDOFF.md](HANDOFF.md): decyzje, koncepcja, dane, ryzyka, narracja 
 | Ścieżka | Zawartość |
 |---|---|
 | `HANDOFF.md` | punkt wyjścia do dalszej pracy |
-| `kontekst/` | research, regulamin, katalogi zbiorów, dokumentacja API portalu |
-| `kontekst/transkrypty/` | transkrypty rozmów zespołu z 17.10 (wybór pomysłu, zakres, podział pracy) |
+| `kontekst/` | research z 17.10, regulamin, dokumentacja API portalu |
 | `dane/soia-warszawa/` | wycinek SOIA (syreny) dla Warszawy i analiza zasięgu przy blackoucie |
 | `docs/AI_USAGE.md` | rejestr użycia AI (regulamin, §4 ust. 4) |
 

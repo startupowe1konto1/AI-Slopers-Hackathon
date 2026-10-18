@@ -19,7 +19,7 @@ Szczegóły projektu: [SPEC.md](SPEC.md) (specyfikacja), [PLAN.md](PLAN.md) (pla
 
 ## 1. Wykorzystane dane
 
-Warunek oceny (§4 ust. 9) spełniamy z zapasem: aplikacja korzysta z dziewięciu zbiorów m.st. Warszawy (portal dane.um.warszawa.pl i WFS).
+Warunek oceny (§4 ust. 9) spełniamy z zapasem: aplikacja korzysta z ośmiu zbiorów m.st. Warszawy (portal dane.um.warszawa.pl i WFS). Sześć z nich widać w interfejsie, dwa (pozycje pojazdów i utrudnienia) są w kodzie i w proxy.
 
 Zasady, których się trzymamy:
 - Aplikacja nie odpytuje WFS na żywo. Warstwy WFS pobieramy raz i zapisujemy w paczce offline.
@@ -31,10 +31,9 @@ Zasady, których się trzymamy:
 | Zbiór | Źródło i identyfikator | Do czego | Rekordy | Pobrano |
 |---|---|---|---|---|
 | Punkty adresowe | WFS `wfs:PUNKTY_ADRESOWE_WGS84` | wyszukiwanie adresu offline, bez GPS; podstawa analizy syren | 126 923 | 17.10.2026 |
-| Wejścia do metra | WFS `wfs:METRO_WEJSCIA` | najbliższe punkty | **DO UZUPEŁNIENIA** | **DO UZUPEŁNIENIA** |
-| Apteki | WFS `wfs:APTEKI` | najbliższe punkty | **DO UZUPEŁNIENIA** | **DO UZUPEŁNIENIA** |
-| Lokalizacja defibrylatorów (AED) | portal, `get_scb_lokalizacja_defibrylatorow` | najbliższe punkty | 710 | **DO UZUPEŁNIENIA** |
-| Toalety | portal, `get_m_toalety` | najbliższe punkty (blackout) | 695 | **DO UZUPEŁNIENIA** |
+| Apteki | WFS `wfs:APTEKI` | najbliższe punkty | 679 (stan danych w WFS: marzec 2017) | 17.10.2026 |
+| Lokalizacja defibrylatorów (AED) | portal, `get_scb_lokalizacja_defibrylatorow` | najbliższe punkty | 610 w granicach paczki (710 w API) | 17.10.2026 |
+| Toalety | portal, `get_m_toalety` | najbliższe punkty (blackout) | 695 | 17.10.2026 |
 | Lokalizacja pojazdów komunikacji miejskiej | portal, `get_ztm_lokalizacja_pojazdow` (`type` 1 i 2) | autobusy i tramwaje do 1 km od adresu (w tej wersji niewidoczne w interfejsie, kod i dane zostają w repo) | ok. 1100 aktualnych pozycji | na żywo |
 | Pogoda (stacje ZOM) | portal, `get_zom_pogoda` | kierunek i prędkość wiatru z najbliższej stacji; kierunek stożka dymu | 16 stacji | na żywo |
 | Monitoring jakości powietrza | portal, `get_bopipk_monitoring_jakosci_powietrza` | PM2.5 i PM10 ze stacji najbliższej adresowi albo zgłoszonemu dymowi | 140 stacji z pomiarem pyłów (miejskie, GIOŚ, czujniki w gminach) | na żywo |
@@ -42,21 +41,24 @@ Zasady, których się trzymamy:
 
 Liczby rekordów dla danych na żywo pochodzą z odpowiedzi API z 17.10.2026 ok. 16:40. Wiatr i powietrze zasilają kartę „Powietrze i wiatr”. Pozycje pojazdów i utrudnienia w ruchu są w kodzie i w proxy (PR #5 i #8), ale interfejs v3 ich nie pokazuje (`HANDOFF-v3.md` §4). Proxy odrzuca pozycje pojazdów starsze niż 5 minut od najnowszej, bo API zwraca też pozycje sprzed dni, a nawet lat.
 
-**DO UZUPEŁNIENIA** (O3): które zbiory punktów pomocy weszły do wersji końcowej, liczby rekordów i daty pobrania.
+Punkty pomocy w wersji końcowej (`public/pack/punkty/`, 11 299 punktów, pobrane 17.10.2026): 8006 miejsc schronienia według PSP, 1044 przychodnie, gabinety i szpitale z OpenStreetMap, 695 toalet, 679 aptek, 610 AED, 253 wejścia do metra i 12 SOR. Wejścia do metra bierzemy z rozkładu GTFS, bo warstwa WFS `METRO_WEJSCIA` nie ma pięciu nowych stacji M2.
 
 ### 1.2. Dane Państwowej Straży Pożarnej
 
 | Zbiór | Źródło | Do czego | Rekordy | Licencja |
 |---|---|---|---|---|
 | SOIA: zasięg syren alarmowych, wersja 2026.05 | KG PSP, Zenodo [10.5281/zenodo.21921103](https://doi.org/10.5281/zenodo.21921103), wycinek w `dane/soia-warszawa/` | klasa słyszalności syreny dla każdego adresu, normalnie i przy blackoucie | 961 zasięgów, 451 syren | CC BY 4.0 (składowe: ODbL, GUS, GUGiK) |
-| Miejsca schronienia | PSP, [gdziesieukryc.pl](https://gdziesieukryc.pl), eksport CSV (poza repozytorium) | najbliższe miejsca schronienia według PSP; przycisk „Otwórz w aplikacji PSP” | 8006 w rejonie Warszawy | za zgodą PSP, **DO UZUPEŁNIENIA**: forma i data zgody |
+| Miejsca schronienia | PSP, [gdziesieukryc.pl](https://gdziesieukryc.pl), eksport CSV (poza repozytorium) | najbliższe miejsca schronienia według PSP; przycisk „Otwórz w aplikacji PSP” | 8006 w rejonie Warszawy | informacja sektora publicznego, ponowne wykorzystywanie (art. 14 ust. 1 ustawy o otwartych danych) |
+
+Miejsca schronienia publikuje KG PSP w serwisie gdziesieukryc.pl. To informacja sektora publicznego. Według art. 14 ust. 1 ustawy z 11 sierpnia 2021 r. o otwartych danych i ponownym wykorzystywaniu informacji sektora publicznego udostępnia się ją do ponownego wykorzystywania bezwarunkowo, chyba że podmiot określi warunki (art. 14 ust. 2). Warunków dla tych danych nie znaleźliśmy. Podajemy źródło i datę pobrania, nie zmieniamy opisu punktów, a przycisk „Otwórz w aplikacji PSP” prowadzi do oficjalnej, aktualnej wersji.
 
 ### 1.3. Inne otwarte źródła
 
 | Zbiór | Źródło | Do czego | Licencja |
 |---|---|---|---|
-| Szpitalne oddziały ratunkowe (SOR) | dane.gov.pl, zbiór 1642 (ewidencja RPRM) | najbliższe punkty | CC BY 4.0 |
-| Rozkład jazdy GTFS | [mkuran.pl/gtfs/warsaw.zip](https://mkuran.pl/gtfs/warsaw.zip), źródło nieoficjalne na podstawie danych ZTM | linie autobusowe na przystankach (w tej wersji niewidoczne w interfejsie) | **DO UZUPEŁNIENIA** |
+| Szpitalne oddziały ratunkowe (SOR) | Rejestr Państwowego Ratownictwa Medycznego, eksport publiczny [rprm.ezdrowie.gov.pl](https://rprm.ezdrowie.gov.pl/) (ten sam rejestr jest na dane.gov.pl, zbiór 1642) | najbliższe punkty (12 SOR) | CC BY 4.0 |
+| Przychodnie, gabinety i szpitale | OpenStreetMap przez Overpass API | najbliższe punkty pomocy medycznej (1044) | ODbL |
+| Rozkład jazdy GTFS | [mkuran.pl/gtfs/warsaw.zip](https://mkuran.pl/gtfs/warsaw.zip), źródło nieoficjalne na podstawie danych ZTM | wejścia do metra w punktach pomocy (253); przejazd jedną linią autobusu, tramwaju albo metra w arkuszu trasy | rozkład: warunki korzystania z danych ZTM Warszawa; przebiegi autobusów: ODbL |
 | Stacje Veturilo | GBFS nextbike (`gbfs.nextbike.net/maps/gbfs/v2/nextbike_vw/gbfs.json`), bez klucza | najbliższa stacja z wolnymi rowerami, w karcie „Dotarcie do bliskich”, na żywo | CC0-1.0 (pole `license_id` w `system_information` feedu) |
 | Mapa | Protomaps, plik `20261017.pmtiles` wycięty do Warszawy, dane OpenStreetMap | mapa online i offline | ODbL |
 
@@ -86,12 +88,13 @@ Liczby rekordów dla danych na żywo pochodzą z odpowiedzi API z 17.10.2026 ok.
 
 - Nie nazywamy ich „schronami”. Dane PSP nie mówią o pojemności (są zanonimizowane z mocy ustawy).
 - Pokazujemy źródło i datę danych. Przycisk „Otwórz w aplikacji PSP” prowadzi do oficjalnej, aktualnej wersji.
+- Podstawa użycia: ponowne wykorzystywanie informacji sektora publicznego (sekcja 1.2).
 
 ### Dotarcie do bliskich
 
 - Karta pokazuje dla każdego zapisanego adresu czas pieszo i rowerem po ulicach (trasy z OSRM, „Trasy: OSRM, © OpenStreetMap contributors”) oraz najbliższą stację Veturilo z rowerami.
 - Jeśli zabraknie prądu, zakładamy, że tramwaje, metro i SKM stoją. To założenie, nie fakt.
-- Zakładka Dojazd, „co jeździ w okolicy” (pozycje tramwajów i autobusów) i dolne menu modułów są w tej wersji ukryte (`HANDOFF-v3.md` §4). Linie autobusowe z rozkładu GTFS nie są pokazywane.
+- Zakładka Dojazd, „co jeździ w okolicy” (pozycje tramwajów i autobusów) i dolne menu modułów są w tej wersji ukryte (`HANDOFF-v3.md` §4). Arkusz trasy pokazuje za to przejazd komunikacją miejską jedną linią, bez przesiadek, z rozkładu GTFS.
 
 ### Dane na żywo
 
@@ -113,7 +116,7 @@ Liczby rekordów dla danych na żywo pochodzą z odpowiedzi API z 17.10.2026 ok.
 - Interfejs v3: ekran „Twoja sytuacja” z pięcioma kartami i kafelkami warstw. Zakładka Dojazd, „co jeździ w okolicy” i dolne menu są ukryte, kod zostaje w repo.
 - Demo działa w przeglądarce na laptopie, w widoku telefonu. Nie testowaliśmy aplikacji na telefonach.
 - Na iOS dane offline przetrwają dłużej niż 7 dni tylko po dodaniu strony do ekranu głównego.
-- **DO UZUPEŁNIENIA:** co ostatecznie nie weszło do wersji końcowej (np. mapa offline, jeśli zadziałał plan B z SPEC §12).
+- Do wersji końcowej nie weszły: zakładka Dojazd, „co jeździ w okolicy” (pozycje tramwajów i autobusów), utrudnienia w ruchu, dolne menu modułów i lista stacji Veturilo (`HANDOFF-v3.md` §4). Kod zostaje w repo. Mapa offline działa, więc plan B z SPEC §12 nie był potrzebny.
 
 ---
 
@@ -128,7 +131,7 @@ Wszystkie biblioteki są open source z licencją, która pozwala na użycie kome
 | Mapa | MapLibre GL JS, `pmtiles`, `@protomaps/basemaps` | BSD-3-Clause |
 | Przechowywanie | Cache Storage (service worker), OPFS (plik mapy), IndexedDB przez `idb-keyval` | `idb-keyval`: Apache-2.0 |
 | Najbliższe punkty | `kdbush`, `geokdbush` (w przeglądarce) | ISC |
-| Przetwarzanie danych | Python, `uv`, skrypty w `pipeline/` | **DO UZUPEŁNIENIA** (biblioteki z `pipeline/pyproject.toml`) |
+| Przetwarzanie danych | Python, `uv`, skrypty w `pipeline/`: `geopandas`, `shapely`, `pandas`, `rasterio`, `pyproj`, `requests`, `pytest` | `geopandas`, `shapely`, `pandas`, `rasterio`: BSD-3-Clause; `pyproj`, `pytest`: MIT; `requests`: Apache-2.0 |
 | Analiza syren | Python, `geopandas`, `rasterio` (`dane/soia-warszawa/`) | BSD-3-Clause |
 | Proxy na żywo | TypeScript w `server/live/`, Cloudflare Worker | — |
 | Testy | Vitest, Playwright | MIT, Apache-2.0 |
@@ -141,19 +144,23 @@ Skrypty w Pythonie liczą z góry wyniki dla każdego adresu (klasa syreny, najb
 
 ### Uruchomienie i testy
 
-**DO UZUPEŁNIENIA** (zadanie F w PLAN.md): polecenia uruchomienia i wynik czystej instalacji na świeżym klonie:
+Polecenia uruchomienia:
 
 ```bash
 npm ci && npm run typecheck && npm test && npm run build && uv run --project pipeline pipeline/validate.py && npm run test:e2e
 ```
 
+Lokalnie `npm run dev`. Dane na żywo wymagają klucza `WARSAW_API_TOKEN` w `.env` (wzór w `.env.example`).
+
+Wynik czystej instalacji na świeżym klonie `main` (commit `dc2945f`, 18.10.2026 ok. 8:45, Windows 11, Node 24, uv): `npm ci`, `npm run typecheck` i `npm run build` bez błędów; `npm test`: 53 pliki, 360 testów zielonych; `validate.py`: „paczka OK”. Test e2e ścieżki Kasi (`npm run test:e2e`) uruchamiamy na macOS z zainstalowanym Chrome; na Windowsie trzeba najpierw `npx playwright install chromium`.
+
 ---
 
 ## 4. Użycie AI
 
-Regulamin (§4 ust. 4) dopuszcza AI i wymaga opisania zakresu jego użycia. Rejestr osoba po osobie: [AI_USAGE.md](AI_USAGE.md).
+Regulamin (§4 ust. 4) dopuszcza AI i wymaga opisania zakresu jego użycia. Pełny opis dla całego zespołu: [AI_USAGE.md](AI_USAGE.md).
 
-Wszystkie cztery osoby w zespole pracowały z **Claude Code**. Każda osoba prowadziła swój pas prac w osobnym `git worktree` i zlecała subagentom zadania z [PLAN.md](PLAN.md), tylko w swoich folderach.
+Wszystkie cztery osoby w zespole pracowały z **Claude Code** (model Claude Opus 5.5). Każda osoba prowadziła swój pas prac w osobnym `git worktree` i zlecała subagentom zadania z [PLAN.md](PLAN.md), tylko w swoich folderach. Sama aplikacja nie korzysta z AI.
 
 AI pomagało w:
 - rozpoznaniu regulaminu, źródeł danych i doświadczeń Kijowa (research w `kontekst/`);
@@ -165,8 +172,9 @@ AI pomagało w:
 Kontrola po stronie ludzi: każda zmiana wchodzi na `main` przez pull request z CI (typy, testy, build, walidacja paczki). Liczby w pitchu i dokumentacji sprawdzaliśmy na plikach z danymi, nie z pamięci modelu.
 
 Czego AI nie zrobiło dobrze i co trzeba było poprawić:
-- **O4 (na żywo i prezentacja):** plan wygenerowany przez AI zakładał jeden zapis pyłu `PM25` i konstruktor, którego nie przepuszcza konfiguracja TypeScriptu. Parsery pisaliśmy więc od nowa na zapisanych próbkach odpowiedzi (`dane/probki/`). Błąd znikającego stożka dymu po przeładowaniu strony wyszedł dopiero przy zrzutach z produkcji, nie w testach.
-- **DO UZUPEŁNIENIA:** po jednym zdaniu od O1, O2 i O3.
+- Plan wygenerowany przez AI zakładał jeden zapis pyłu `PM25` i konstruktor, którego nie przepuszcza konfiguracja TypeScriptu. Parsery pisaliśmy więc od nowa na zapisanych próbkach odpowiedzi (`dane/probki/`).
+- Błąd znikającego stożka dymu po przeładowaniu strony wyszedł dopiero przy zrzutach z produkcji, nie w testach.
+- Pętla autopilota zrobiła i scaliła kilka zadań, nad którymi ktoś pracował jeszcze lokalnie. Od tej pory zadanie trzeba było najpierw zająć na GitHubie.
 
 ---
 
@@ -175,15 +183,19 @@ Czego AI nie zrobiło dobrze i co trzeba było poprawić:
 Te same oznaczenia są w stopce aplikacji i w zakładce „O danych”.
 
 - **SOIA (syreny):** „Dane: KG PSP, SOIA, wersja danych 2026.05 (Zenodo 10.5281/zenodo.21921103); przycięte do granic m.st. Warszawy (TERYT 1465011) przez zespół hackathonowy”. Źródła składowe: OpenStreetMap contributors (ODbL), GUS, GUGiK. Licencja CC BY 4.0. Pełny opis: [dane/soia-warszawa/README.md](../dane/soia-warszawa/README.md).
-- **m.st. Warszawa:** dane z [dane.um.warszawa.pl](https://dane.um.warszawa.pl) i WFS m.st. Warszawy. Katalog portalu podaje licencję „Creative Commons Attribution” bez numeru wersji. Dane na żywo oznaczamy w aplikacji nazwą źródła: ZTM (pojazdy), Zarząd Oczyszczania Miasta (pogoda), Biuro Ochrony Powietrza i Polityki Klimatycznej (powietrze), Biuro Infrastruktury (utrudnienia). **DO UZUPEŁNIENIA:** brzmienie oznaczenia dla warstw WFS.
-- **PSP, miejsca schronienia:** dane z [gdziesieukryc.pl](https://gdziesieukryc.pl), użyte za zgodą PSP.
+- **m.st. Warszawa:** dane z [dane.um.warszawa.pl](https://dane.um.warszawa.pl) i WFS m.st. Warszawy. Katalog portalu podaje licencję „Creative Commons Attribution” bez numeru wersji. Dane na żywo oznaczamy w aplikacji nazwą źródła: ZTM (pojazdy), Zarząd Oczyszczania Miasta (pogoda), Biuro Ochrony Powietrza i Polityki Klimatycznej (powietrze), Biuro Infrastruktury (utrudnienia). Warstwy WFS oznaczamy w stopce „m.st. Warszawa: dane.um.warszawa.pl i WFS” (CC BY) oraz nazwami z paczki: „m.st. Warszawa, WFS PUNKTY_ADRESOWE_WGS84” i „m.st. Warszawa, apteki (WFS, dane z marca 2017)”.
+- **PSP, miejsca schronienia:** dane z [gdziesieukryc.pl](https://gdziesieukryc.pl), informacja sektora publicznego użyta na zasadach ponownego wykorzystywania (art. 14 ustawy o otwartych danych).
+- **Przychodnie, gabinety i szpitale:** © OpenStreetMap contributors (ODbL).
 - **SOR:** Rejestr Państwowego Ratownictwa Medycznego z [dane.gov.pl](https://dane.gov.pl), CC BY 4.0.
 - **Mapa:** © OpenStreetMap contributors (ODbL), kafle Protomaps.
-- **Rozkład GTFS:** mkuran.pl na podstawie danych ZTM Warszawa. **DO UZUPEŁNIENIA:** licencja.
+- **Rozkład GTFS:** ZTM Warszawa, Mikołaj Kuranowski (mkuran.pl), OpenStreetMap contributors. Rozkład na warunkach korzystania z danych ZTM Warszawa, przebiegi autobusów na ODbL.
 - **Veturilo:** Nextbike Polska, feed GBFS, licencja CC0-1.0 (deklaracja w feedzie). Dobudowa weszła do wersji końcowej.
 
 ---
 
 ## 6. Oddanie
 
-**DO UZUPEŁNIENIA** (zadanie F w PLAN.md): godzina oddania, kanał, potwierdzenie organizatora, wynik skanu sekretów.
+- Kanał: e-mail na `rozwiazania@42warsaw.pl`, do 10:59 w niedzielę 18.10.2026 (wymóg organizatora).
+- Wysyłamy: prezentację, link do repozytorium, nazwę projektu („Warszawa w trybie kryzysowym”), nazwę zespołu („AI Slopers”) i jego numer.
+- Skan sekretów (18.10.2026, 8:48): w całej historii gita (`git log -p --all`) nie ma wartości klucza API ani nagłówka `Authorization` z kluczem. Plik `.env` nie jest w repozytorium.
+- Po zakończeniu etapu II nie zmieniamy repozytorium (regulamin §5A ust. 6).
