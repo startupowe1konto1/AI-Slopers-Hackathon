@@ -465,8 +465,9 @@ mark { background: linear-gradient(transparent 62%, var(--zolty) 62%, var(--zolt
     </div>
   </section>
 
-  <!-- 4. Syreny: paski i mapa głośności z adresów (dane.js, build_dane.py) -->
-  <section class="slajd" data-kroki="1" id="s-syreny"
+  <!-- 4. Syreny: paski i mapa głośności z adresów (dane.js, build_dane.py).
+       CHWILOWO UKRYTY (data-pomin, 18.10). Żeby go przywrócić, usuń atrybut data-pomin z <section> poniżej. -->
+  <section class="slajd" data-kroki="1" data-pomin id="s-syreny"
     data-notatka="A w Warszawie? Sprawdziliśmy syreny na danych Państwowej Straży Pożarnej, dla każdego adresu w mieście. Syrenę słychać na zewnątrz przy 92,5% adresów, ale głośno, czyli tak, że najpewniej usłyszysz ją też w domu, tylko przy 48%. To zielony kawałek górnego paska. [klik: wyłącz prąd] Jeśli zabraknie prądu, a syreny analogowe nie mają zasilania awaryjnego, głośno zostaje już tylko przy 37% adresów. Na mapie zielonego ubywa, najbardziej na Pradze-Południe. To model dźwięku na zewnątrz budynków i przybliżenie, dlatego mówimy „jeśli”.">
     <div class="syreny">
       <div class="lewa">
@@ -512,27 +513,13 @@ mark { background: linear-gradient(transparent 62%, var(--zolty) 62%, var(--zolt
   <!-- 5. Zadania ↔ dane -->
   <section class="slajd" data-kroki="0"
     data-notatka="Zaczęliśmy od ludzi, nie od danych: rozpisaliśmy 24 zadania, które mieszkańcy mają do wykonania w kryzysie. Każde połączyliśmy z danymi. Zielone działa w telefonie bez sieci, żółte potrzebuje sieci. 18 z 24 zadań łączy się z danymi. Dla 6 zadań brakuje danych, na przykład gdzie naładować telefon. Tego nie udajemy.">
-    <h2 class="tytul" style="font-size:56px">Każde zadanie połączyliśmy z danymi</h2>
+    <h2 class="tytul" style="font-size:56px">Analizowaliśmy, jakim wyzwaniom będą musieli sprostać mieszkańcy</h2>
     <div class="kratki" id="kratki" role="img"></div>
     <div class="grupy-danych" id="grupy-danych"></div>
     <p class="wniosek" id="wniosek-siatki"></p>
   </section>
 
-  <!-- 6. Rozwiązanie: Przezorny Obywatel -->
-  <section class="slajd" data-kroki="0"
-    data-notatka="Tak powstał Przezorny Obywatel. Jedna strona internetowa, a po wpisaniu adresu pięć kart dopasowanych do twojej sytuacji: syreny, najbliższe miejsce schronienia według PSP, pomoc medyczna, powietrze i wiatr, dotarcie do bliskich. Za kartami są dane na żywo, a wszystko, co da się policzyć z góry, jest w telefonie. Działa, gdy wszystko pada.">
-    <h2 class="tytul">Przezorny Obywatel</h2>
-    <div class="kafle">
-      <div class="kafelek"><div class="k-glowa"><span class="kolo"><svg class="ik" aria-hidden="true"><use href="#i-siren"/></svg></span></div><h3>Syreny</h3><p>Czy usłyszysz alarm i co zrobić, także jeśli zabraknie prądu.</p></div>
-      <div class="kafelek"><div class="k-glowa"><span class="kolo"><svg class="ik" aria-hidden="true"><use href="#i-shield"/></svg></span></div><h3>Najbliższe miejsce schronienia według PSP</h3><p>Trasa piesza po ulicach i przycisk do aplikacji PSP.</p></div>
-      <div class="kafelek"><div class="k-glowa"><span class="kolo"><svg class="ik" aria-hidden="true"><use href="#i-heart-pulse"/></svg></span></div><h3>Pomoc medyczna</h3><p>Najbliższy AED, SOR, apteka i przychodnia, z odległością.</p></div>
-      <div class="kafelek"><div class="k-glowa"><span class="kolo"><svg class="ik" aria-hidden="true"><use href="#i-wind"/></svg></span></div><h3>Powietrze i wiatr</h3><p>Czy wietrzyć i skąd wieje wiatr: rekomendacja, nie tabela.</p></div>
-      <div class="kafelek"><div class="k-glowa"><span class="kolo"><svg class="ik" aria-hidden="true"><use href="#i-users"/></svg></span></div><h3>Dotarcie do bliskich</h3><p>Pieszo i rowerem do zapisanych adresów, najbliższe Veturilo.</p></div>
-      <div class="kafelek paczka"><div class="k-glowa"><span class="kolo"><svg class="ik" aria-hidden="true"><use href="#i-package"/></svg></span><span class="nr">w telefonie</span></div><h3>Paczka offline</h3><p>Dane, mapa Warszawy i trasy w telefonie. Działa bez sieci.</p></div>
-    </div>
-  </section>
-
-  <!-- 8. Na jakich danych stoimy -->
+  <!-- 6. Na jakich danych stoimy -->
   <section class="slajd" data-kroki="0" id="s-dane"
     data-notatka="Aplikacja stoi na otwartych danych Warszawy z portalu dane.um.warszawa.pl. Przez API miasta bierzemy pięć zbiorów. Defibrylatory AED i toalety publiczne pobieramy z góry i zapisujemy w telefonie, więc działają bez sieci. Odjazdy ZTM, pogodę i wiatr oraz jakość powietrza bierzemy na żywo, gdy jest sieć. [Drobno na kafelkach: nazwy funkcji API miasta, dowód dla jury.]">
     <h2 class="tytul" style="font-size:56px">Na otwartych danych Warszawy</h2>
@@ -546,6 +533,20 @@ mark { background: linear-gradient(transparent 62%, var(--zolty) 62%, var(--zolt
         <div class="zbior-kafel zywo" id="z-ztm"><div class="zk-glowa"><span class="kolo"><svg class="ik" aria-hidden="true"><use href="#i-tram"/></svg></span><span class="tryb zywo">na żywo</span></div><h3>Odjazdy ZTM z&nbsp;przystanku</h3><code>get_<wbr>ztm_<wbr>odjazdy_<wbr>linii_<wbr>z_<wbr>przystanku</code></div>
         <div class="zbior-kafel zywo" id="z-pogoda"><div class="zk-glowa"><span class="kolo"><svg class="ik" aria-hidden="true"><use href="#i-wind"/></svg></span><span class="tryb zywo">na żywo</span></div><h3>Pogoda i wiatr</h3><code>get_<wbr>zom_<wbr>pogoda</code></div>
         <div class="zbior-kafel zywo" id="z-powietrze"><div class="zk-glowa"><span class="kolo"><svg class="ik" aria-hidden="true"><use href="#i-cloud"/></svg></span><span class="tryb zywo">na żywo</span></div><h3>Jakość powietrza</h3><code>get_<wbr>bopipk_<wbr>monitoring_<wbr>jakosci_<wbr>powietrza</code></div>
+    </div>
+  </section>
+
+  <!-- 7. Rozwiązanie: Przezorny Obywatel -->
+  <section class="slajd" data-kroki="0"
+    data-notatka="Tak powstał Przezorny Obywatel. Jedna strona internetowa, a po wpisaniu adresu pięć kart dopasowanych do twojej sytuacji: syreny, najbliższe miejsce schronienia według PSP, pomoc medyczna, powietrze i wiatr, dotarcie do bliskich. Za kartami są dane na żywo, a wszystko, co da się policzyć z góry, jest w telefonie. Działa, gdy wszystko pada.">
+    <h2 class="tytul">Przezorny Obywatel</h2>
+    <div class="kafle">
+      <div class="kafelek"><div class="k-glowa"><span class="kolo"><svg class="ik" aria-hidden="true"><use href="#i-siren"/></svg></span></div><h3>Syreny</h3><p>Czy usłyszysz alarm i co zrobić, także jeśli zabraknie prądu.</p></div>
+      <div class="kafelek"><div class="k-glowa"><span class="kolo"><svg class="ik" aria-hidden="true"><use href="#i-shield"/></svg></span></div><h3>Najbliższe miejsce schronienia według PSP</h3><p>Trasa piesza po ulicach i przycisk do aplikacji PSP.</p></div>
+      <div class="kafelek"><div class="k-glowa"><span class="kolo"><svg class="ik" aria-hidden="true"><use href="#i-heart-pulse"/></svg></span></div><h3>Pomoc medyczna</h3><p>Najbliższy AED, SOR, apteka i przychodnia, z odległością.</p></div>
+      <div class="kafelek"><div class="k-glowa"><span class="kolo"><svg class="ik" aria-hidden="true"><use href="#i-wind"/></svg></span></div><h3>Powietrze i wiatr</h3><p>Czy wietrzyć i skąd wieje wiatr: rekomendacja, nie tabela.</p></div>
+      <div class="kafelek"><div class="k-glowa"><span class="kolo"><svg class="ik" aria-hidden="true"><use href="#i-users"/></svg></span></div><h3>Dotarcie do bliskich</h3><p>Pieszo i rowerem do zapisanych adresów, najbliższe Veturilo.</p></div>
+      <div class="kafelek paczka"><div class="k-glowa"><span class="kolo"><svg class="ik" aria-hidden="true"><use href="#i-package"/></svg></span><span class="nr">w telefonie</span></div><h3>Paczka offline</h3><p>Dane, mapa Warszawy i trasy w telefonie. Działa bez sieci.</p></div>
     </div>
   </section>
   <!-- 8. Dzień Kasi: demo w telefonie (telefon.js) -->
@@ -591,12 +592,6 @@ mark { background: linear-gradient(transparent 62%, var(--zolty) 62%, var(--zolt
       <p class="cicho">Czasy są niepewne.</p>
       <p class="cicho" data-krok="1">Warszawa może dać spokój.</p>
       <p data-krok="2">Działa, gdy wszystko <mark>pada</mark>.</p>
-    </div>
-    <div class="linki">
-      <a href="https://warszawa-kryzys.startupaplikujmy.workers.dev/"><svg class="ik" aria-hidden="true"><use href="#i-globe"/></svg>warszawa-kryzys.startupaplikujmy.workers.dev</a>
-      <a href="https://warszawa-kryzys.startupaplikujmy.workers.dev/?offline=1"><svg class="ik" aria-hidden="true"><use href="#i-wifi-off"/></svg>wersja offline: ?offline=1</a>
-      <a href="https://github.com/startupowe1konto1/AI-Slopers-Hackathon"><svg class="ik" aria-hidden="true"><use href="#i-code"/></svg>github.com/startupowe1konto1/AI-Slopers-Hackathon</a>
-      <span><svg class="ik" aria-hidden="true"><use href="#i-users"/></svg>Zespół AI Slopers</span>
     </div>
   </section>
 
