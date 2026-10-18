@@ -366,6 +366,20 @@ mark { background: linear-gradient(transparent 62%, var(--zolty) 62%, var(--zolt
   95% { transform: none; }
 }
 
+/* Zaproszenie do testu (kod QR) */
+.test { position: absolute; left: 112px; right: 112px; top: 50%; transform: translateY(-50%); display: grid; grid-template-columns: 1fr auto; column-gap: 88px; align-items: center; }
+.test .tytul { font-size: 104px; margin-top: 10px; }
+.t-lead { margin-top: 22px; font-size: 30px; line-height: 1.3; color: var(--tekst-2); }
+.t-kroki { list-style: none; margin-top: 40px; display: grid; gap: 18px; }
+.t-kroki li { display: flex; align-items: center; gap: 20px; font-size: 28px; font-weight: 500; }
+.t-kroki .kolo { width: 52px; height: 52px; font-size: 24px; font-weight: 700; }
+.t-uwagi { margin-top: 36px; display: flex; align-items: center; gap: 12px; font-size: 22px; color: var(--szary); }
+.t-uwagi .ik { font-size: 24px; }
+.t-qr { padding: 28px 28px 22px; border-radius: 28px; background: var(--kafel); box-shadow: var(--cien); border: 1px solid var(--linia); }
+.t-qr img { display: block; width: 420px; height: 420px; }
+.t-qr figcaption { margin-top: 10px; display: flex; justify-content: center; align-items: center; gap: 10px; font-size: 24px; font-weight: 600; }
+.t-qr figcaption .ik { font-size: 24px; color: var(--szary); }
+
 /* Nawigacja myszą, notatki */
 .nawig { position: fixed; left: 14px; bottom: 12px; display: flex; gap: 8px; z-index: 20; opacity: .18; transition: opacity .2s; }
 .nawig:hover, .nawig:focus-within { opacity: 1; }
@@ -613,6 +627,28 @@ mark { background: linear-gradient(transparent 62%, var(--zolty) 62%, var(--zolt
       </div>
       <div class="tv-kropka" id="tv-kropka" aria-hidden="true"></div>
       <div class="tv-szklo" aria-hidden="true"></div>
+    </div>
+  </section>
+
+  <!-- 12. Zaproszenie do testu: kod QR do wersji na Vercelu (docs/qr/, kopia w qr/) -->
+  <section class="slajd" data-kroki="0" id="s-test"
+    data-notatka="Zapraszamy do testu. Zeskanujcie kod telefonem, wpiszcie adres, pod którym mieszkacie albo pracujecie, i zobaczcie pięć kart dla swojego miejsca. Każda uwaga nam się przyda.">
+    <div class="test">
+      <div class="t-lewa">
+        <p class="etykieta">Przezorny Obywatel</p>
+        <h2 class="tytul">Zapraszamy do testu</h2>
+        <p class="t-lead">Sprawdź aplikację na swoim telefonie, pod swoim adresem.</p>
+        <ol class="t-kroki">
+          <li><span class="kolo">1</span>Zeskanuj kod aparatem telefonu</li>
+          <li><span class="kolo">2</span>Wpisz adres albo użyj swojej lokalizacji</li>
+          <li><span class="kolo">3</span>Zobacz pięć kart dla swojego miejsca</li>
+        </ol>
+        <p class="t-uwagi"><svg class="ik" aria-hidden="true"><use href="#i-pencil"/></svg>Każda uwaga nam się przyda.</p>
+      </div>
+      <figure class="t-qr">
+        <img src="qr/warszawa-kryzys-vercel.svg" alt="Kod QR do aplikacji: warszawa-kryzys.vercel.app">
+        <figcaption><svg class="ik" aria-hidden="true"><use href="#i-globe"/></svg>warszawa-kryzys.vercel.app</figcaption>
+      </figure>
     </div>
   </section>
 

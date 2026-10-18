@@ -75,8 +75,8 @@ def zbuduj_html() -> Path:
     html = zamien(html, '<script src="dane.js"></script>', skrypt(dane))
     html = zamien(html, '<script src="telefon.js"></script>', skrypt(mapa) + "\n" + skrypt(telefon))
 
-    # Logotypy (img src i <image href> w SVG)
-    html = re.sub(r'(src|href)="(logo/[^"]+)"', lambda m: f'{m[1]}="{data_uri(KATALOG / m[2])}"', html)
+    # Logotypy i kod QR (img src i <image href> w SVG)
+    html = re.sub(r'(src|href)="((?:logo|qr)/[^"]+)"', lambda m: f'{m[1]}="{data_uri(KATALOG / m[2])}"', html)
 
     zostalo = re.findall(r'(?:src|href)="(?!data:|https?:|#)[^"]*"', html)
     if zostalo:
