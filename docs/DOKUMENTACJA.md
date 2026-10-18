@@ -151,9 +151,9 @@ npm ci && npm run typecheck && npm test && npm run build && uv run --project pip
 
 ## 4. Użycie AI
 
-Regulamin (§4 ust. 4) dopuszcza AI i wymaga opisania zakresu jego użycia. Rejestr osoba po osobie: [AI_USAGE.md](AI_USAGE.md).
+Regulamin (§4 ust. 4) dopuszcza AI i wymaga opisania zakresu jego użycia. Pełny opis dla całego zespołu: [AI_USAGE.md](AI_USAGE.md).
 
-Wszystkie cztery osoby w zespole pracowały z **Claude Code**. Każda osoba prowadziła swój pas prac w osobnym `git worktree` i zlecała subagentom zadania z [PLAN.md](PLAN.md), tylko w swoich folderach.
+Wszystkie cztery osoby w zespole pracowały z **Claude Code** (model Claude Opus 5.5). Każda osoba prowadziła swój pas prac w osobnym `git worktree` i zlecała subagentom zadania z [PLAN.md](PLAN.md), tylko w swoich folderach. Sama aplikacja nie korzysta z AI.
 
 AI pomagało w:
 - rozpoznaniu regulaminu, źródeł danych i doświadczeń Kijowa (research w `kontekst/`);
@@ -165,8 +165,9 @@ AI pomagało w:
 Kontrola po stronie ludzi: każda zmiana wchodzi na `main` przez pull request z CI (typy, testy, build, walidacja paczki). Liczby w pitchu i dokumentacji sprawdzaliśmy na plikach z danymi, nie z pamięci modelu.
 
 Czego AI nie zrobiło dobrze i co trzeba było poprawić:
-- **O4 (na żywo i prezentacja):** plan wygenerowany przez AI zakładał jeden zapis pyłu `PM25` i konstruktor, którego nie przepuszcza konfiguracja TypeScriptu. Parsery pisaliśmy więc od nowa na zapisanych próbkach odpowiedzi (`dane/probki/`). Błąd znikającego stożka dymu po przeładowaniu strony wyszedł dopiero przy zrzutach z produkcji, nie w testach.
-- **DO UZUPEŁNIENIA:** po jednym zdaniu od O1, O2 i O3.
+- Plan wygenerowany przez AI zakładał jeden zapis pyłu `PM25` i konstruktor, którego nie przepuszcza konfiguracja TypeScriptu. Parsery pisaliśmy więc od nowa na zapisanych próbkach odpowiedzi (`dane/probki/`).
+- Błąd znikającego stożka dymu po przeładowaniu strony wyszedł dopiero przy zrzutach z produkcji, nie w testach.
+- Pętla autopilota zrobiła i scaliła kilka zadań, nad którymi ktoś pracował jeszcze lokalnie. Od tej pory zadanie trzeba było najpierw zająć na GitHubie.
 
 ---
 
