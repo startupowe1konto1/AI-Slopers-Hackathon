@@ -29,15 +29,32 @@ function apiDev(env: Record<string, string>): Plugin {
   };
 }
 
+// Wersja tylko online (src/offline/tryb.ts) nie rejestruje service workera. Ten sw.js dostaje tylko stary service worker
+// z wcześniejszej wizyty przy aktualizacji: wyrejestrowuje się, czyści cache i odświeża kartę.
+const SW_SAMOUSUWAJACY = `self.addEventListener('install', () => self.skipWaiting());
+self.addEventListener('activate', (e) => e.waitUntil(
+  self.registration.unregister()
+    .then(() => caches.keys()).then((k) => Promise.all(k.map((n) => caches.delete(n))))
+    .then(() => self.clients.matchAll()).then((c) => c.forEach((w) => w.navigate(w.url)))));
+`;
+
+function swSamousuwajacy(): Plugin {
+  return {
+    name: 'sw-samousuwajacy',
+    apply: 'build',
+    generateBundle() {
+      this.emitFile({ type: 'asset', fileName: 'sw.js', source: SW_SAMOUSUWAJACY });
+    },
+  };
+}
+
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
   return {
     plugins: [
       react(),
       apiDev(env),
-      VitePWA({
-        // Wersja tylko online (src/offline/tryb.ts): bez service workera i manifestu PWA.
-        disable: env.VITE_TYLKO_ONLINE === '1',
+      env.VITE_TYLKO_ONLINE === '1' ? swSamousuwajacy() : VitePWA({
         registerType: 'autoUpdate',
         workbox: {
           globPatterns: ['**/*.{js,css,html,svg,png,ico,webmanifest}'],

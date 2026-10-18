@@ -5,7 +5,7 @@ import { moduly } from '../modules';
 import { useSiec } from '../offline/siec';
 import { zapiszTrasyOffline } from '../offline/zapisTras';
 import { sprawdzPolaczenie, type Przygotowanie } from '../offline/polaczenie';
-import { tylkoOnline } from '../offline/tryb';
+import { tylkoOnline, usunZapisyOffline } from '../offline/tryb';
 import { useMiejsca, zapiszMiejsca } from './miejsca';
 import { miejsceTutaj, zTutaj } from './lokalizacja';
 import { Onboarding } from './Onboarding';
@@ -25,7 +25,9 @@ export default function App() {
   // Wersja tylko online: bez ekranu „Sprawdzam połączenie” (nic nie pobieramy na offline), połączenie sprawdzamy w tle.
   const [przygotowanie, setPrzygotowanie] = useState<Przygotowanie | null>(() => (tylkoOnline() ? { siec: true, api: true, paczka: null } : null));
   useEffect(() => {
-    if (tylkoOnline()) void sprawdzPolaczenie().then((w) => setPrzygotowanie({ ...w, paczka: null }));
+    if (!tylkoOnline()) return;
+    void usunZapisyOffline();
+    void sprawdzPolaczenie().then((w) => setPrzygotowanie({ ...w, paczka: null }));
   }, []);
   const siec = useSiec();
   // Sieć wróciła po starcie bez sieci: przechodzimy na online bez ponownego ekranu sprawdzania.

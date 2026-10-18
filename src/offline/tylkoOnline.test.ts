@@ -1,8 +1,9 @@
 import 'fake-indexeddb/auto';
-import { clear } from 'idb-keyval';
+import { clear, keys, set } from 'idb-keyval';
 import { afterEach, beforeEach, expect, it, vi } from 'vitest';
 import { fetchLive } from './live-cache';
 import { trasa } from './trasy';
+import { usunZapisyOffline } from './tryb';
 
 // Wersja tylko online (VITE_TYLKO_ONLINE=1, Vercel): nic nie zostaje w telefonie do pracy bez sieci.
 const ustawSiec = (online: boolean) => vi.spyOn(navigator, 'onLine', 'get').mockReturnValue(online);
@@ -33,4 +34,17 @@ it('trasa z OSRM nie zostaje zapisana na później', async () => {
   expect((await trasa(A, B, 'pieszo')).zrodlo).toBe('osrm');
   ustawSiec(false);
   expect((await trasa(A, B, 'pieszo')).zrodlo).toBe('prosta');
+});
+
+it('sprząta zapisy offline z wcześniejszej wizyty, adresy zostają', async () => {
+  await set('miejsca', []);
+  await set('live:wiatr', {});
+  await set('trasa:pieszo:1,2;3,4', {});
+  localStorage.setItem('paczka', '{}');
+  const removeEntry = vi.fn(async () => {});
+  Object.defineProperty(navigator, 'storage', { value: { getDirectory: async () => ({ removeEntry }) }, configurable: true });
+  await usunZapisyOffline();
+  expect(await keys()).toEqual(['miejsca']);
+  expect(localStorage.getItem('paczka')).toBeNull();
+  expect(removeEntry).toHaveBeenCalledWith('warszawa.pmtiles');
 });
