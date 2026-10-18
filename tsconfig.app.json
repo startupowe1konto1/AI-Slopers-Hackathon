@@ -22,5 +22,5 @@
     "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src", "server", "worker"]
+  "include": ["src", "server", "worker", "api"]
 }
