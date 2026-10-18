@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, expect, it, vi } from 'vitest';
-import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import type { Punkt } from '../../contracts';
 import { najblizsze, zrodlaPaczki } from './najblizsze';
 import { Panel } from './Panel';
@@ -72,8 +72,9 @@ it('kierunek do punktu i odcinek na mapie', async () => {
   const { unmount } = render(<Panel miejsca={[]} wybrane={DOM} online />);
   const pozycje = within(await screen.findByTestId('lista-punktow')).getAllByRole('listitem');
   expect(pozycje[0].textContent).toContain('Kierunek: północ');
-  // odcinek do najbliższego bez ruszania mapy, po kliknięciu: do wybranego z dopasowaniem widoku
-  expect(pokazOdcinek).toHaveBeenLastCalledWith({ od: DOM, do: PSP[0] }, false);
+  // odcinek do najbliższego bez ruszania mapy, po kliknięciu: do wybranego z dopasowaniem widoku.
+  // Lista bywa już w DOM, zanim zadziała efekt z odcinkiem (pod obciążeniem w CI), więc czekamy na niego.
+  await waitFor(() => expect(pokazOdcinek).toHaveBeenLastCalledWith({ od: DOM, do: PSP[0] }, false));
   fireEvent.click(within(pozycje[1]).getByRole('button', { name: 'Pokaż na mapie' }));
   expect(pokazOdcinek).toHaveBeenLastCalledWith({ od: DOM, do: PSP[1] }, true);
   unmount();
