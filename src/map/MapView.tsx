@@ -91,9 +91,13 @@ export function MapView({ centrum, moduly, onMapa }: { centrum: Wsp | null; modu
       <div ref={kontener} aria-label="Mapa Warszawy" />
       {!gotowa && (
         <div className="mapa-stan" role="status">
-          {blad
-            ? 'Mapa niedostępna bez sieci. Połącz się raz, żeby ją zapisać w przeglądarce.'
-            : 'Ładowanie mapy Warszawy (12 MB przy pierwszym otwarciu)…'}
+          {tylkoOnline()
+            ? blad
+              ? 'Mapa niedostępna. Sprawdź połączenie z internetem.'
+              : 'Ładowanie mapy Warszawy…'
+            : blad
+              ? 'Mapa niedostępna bez sieci. Połącz się raz, żeby ją zapisać w przeglądarce.'
+              : 'Ładowanie mapy Warszawy (12 MB przy pierwszym otwarciu)…'}
         </div>
       )}
     </>
