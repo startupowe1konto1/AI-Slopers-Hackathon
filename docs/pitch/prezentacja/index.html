@@ -285,7 +285,6 @@ mark { background: linear-gradient(transparent 62%, var(--zolty) 62%, var(--zolt
 .zrodlo-pas { display: flex; align-items: center; gap: 14px; margin-top: 26px; padding-bottom: 20px; border-bottom: 2px solid var(--akcent-tlo); }
 .zrodlo-pas .ik { font-size: 32px; color: var(--akcent); }
 .zrodlo-pas b { font-size: 30px; font-weight: 700; }
-.zrodlo-pas .z-tag { font-size: 22px; font-weight: 650; line-height: 1.3; color: #fff; background: var(--akcent); border-radius: 999px; padding: 3px 16px; }
 .zrodlo-pas .z-adres { margin-left: auto; font-size: 24px; font-weight: 600; color: var(--akcent); }
 .zbiory-siatka { display: grid; grid-template-columns: repeat(6, 1fr); gap: 22px; margin-top: 26px; }
 .zbior-kafel { grid-column: span 2; display: flex; flex-direction: column; min-height: 222px; background: var(--kafel); border: 1px solid var(--linia); border-top: 6px solid var(--ok); border-radius: 20px; padding: 24px 28px 26px; box-shadow: var(--cien); }
@@ -368,13 +367,11 @@ mark { background: linear-gradient(transparent 62%, var(--zolty) 62%, var(--zolt
 
 /* Zaproszenie do testu (kod QR) */
 .test { position: absolute; left: 112px; right: 112px; top: 50%; transform: translateY(-50%); display: grid; grid-template-columns: 1fr auto; column-gap: 88px; align-items: center; }
-.test .tytul { font-size: 104px; margin-top: 10px; }
+.test .tytul { font-size: 104px; }
 .t-lead { margin-top: 22px; font-size: 30px; line-height: 1.3; color: var(--tekst-2); }
 .t-kroki { list-style: none; margin-top: 40px; display: grid; gap: 18px; }
 .t-kroki li { display: flex; align-items: center; gap: 20px; font-size: 28px; font-weight: 500; }
 .t-kroki .kolo { width: 52px; height: 52px; font-size: 24px; font-weight: 700; }
-.t-uwagi { margin-top: 36px; display: flex; align-items: center; gap: 12px; font-size: 22px; color: var(--szary); }
-.t-uwagi .ik { font-size: 24px; }
 .t-qr { padding: 28px 28px 22px; border-radius: 28px; background: var(--kafel); box-shadow: var(--cien); border: 1px solid var(--linia); }
 .t-qr img { display: block; width: 420px; height: 420px; }
 .t-qr figcaption { margin-top: 10px; display: flex; justify-content: center; align-items: center; gap: 10px; font-size: 24px; font-weight: 600; }
@@ -529,7 +526,7 @@ mark { background: linear-gradient(transparent 62%, var(--zolty) 62%, var(--zolt
     data-notatka="Aplikacja stoi na otwartych danych Warszawy z portalu dane.um.warszawa.pl. Przez API miasta bierzemy pięć zbiorów. Defibrylatory AED i toalety publiczne pobieramy z góry i zapisujemy w telefonie, więc działają bez sieci. Odjazdy ZTM, pogodę i wiatr oraz jakość powietrza bierzemy na żywo, gdy jest sieć. [Drobno na kafelkach: nazwy funkcji API miasta, dowód dla jury.]">
     <h2 class="tytul" style="font-size:56px">Otwarte dane Warszawy, które adresowały problem</h2>
     <div class="zrodlo-pas">
-      <svg class="ik" aria-hidden="true"><use href="#i-landmark"/></svg><b>Otwarte dane m.st. Warszawy</b><span class="z-tag">5 zbiorów</span>
+      <svg class="ik" aria-hidden="true"><use href="#i-landmark"/></svg><b>Otwarte dane m.st. Warszawy</b>
       <span class="z-adres">dane.um.warszawa.pl · API miasta</span>
     </div>
     <div class="zbiory-siatka">
@@ -632,18 +629,16 @@ mark { background: linear-gradient(transparent 62%, var(--zolty) 62%, var(--zolt
 
   <!-- 12. Zaproszenie do testu: kod QR do wersji na Vercelu (docs/qr/, kopia w qr/) -->
   <section class="slajd" data-kroki="0" id="s-test"
-    data-notatka="Zapraszamy do testu. Zeskanujcie kod telefonem, wpiszcie adres, pod którym mieszkacie albo pracujecie, i zobaczcie pięć kart dla swojego miejsca. Każda uwaga nam się przyda.">
+    data-notatka="Zapraszamy do testu. Zeskanujcie kod telefonem, wpiszcie adres, pod którym mieszkacie albo pracujecie, i zobaczcie analizę swojej sytuacji.">
     <div class="test">
       <div class="t-lewa">
-        <p class="etykieta">Przezorny Obywatel</p>
         <h2 class="tytul">Zapraszamy do testu</h2>
-        <p class="t-lead">Sprawdź aplikację na swoim telefonie, pod swoim adresem.</p>
+        <p class="t-lead">Sprawdź aplikację na swoim telefonie.</p>
         <ol class="t-kroki">
           <li><span class="kolo">1</span>Zeskanuj kod aparatem telefonu</li>
           <li><span class="kolo">2</span>Wpisz adres albo użyj swojej lokalizacji</li>
-          <li><span class="kolo">3</span>Zobacz pięć kart dla swojego miejsca</li>
+          <li><span class="kolo">3</span>Zobacz analizę swojej sytuacji</li>
         </ol>
-        <p class="t-uwagi"><svg class="ik" aria-hidden="true"><use href="#i-pencil"/></svg>Każda uwaga nam się przyda.</p>
       </div>
       <figure class="t-qr">
         <img src="qr/warszawa-kryzys-vercel.svg" alt="Kod QR do aplikacji: warszawa-kryzys.vercel.app">
