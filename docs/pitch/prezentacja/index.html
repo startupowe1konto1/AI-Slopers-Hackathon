@@ -53,8 +53,9 @@ p, li, h3 { text-wrap: pretty; }
 .tytul, .haslo { text-wrap: balance; }
 
 /* Scena 1600×900 skalowana do okna */
+/* fixed: na telefonie scena 1600 px nie rozpycha widoku (inaczej innerWidth rośnie i skala jest za duża) */
 .scena {
-  position: absolute; left: 50%; top: 50%;
+  position: fixed; left: 50%; top: 50%;
   width: 1600px; height: 900px;
   transform-origin: 0 0;
   background: var(--tlo);
@@ -659,7 +660,8 @@ mark { background: linear-gradient(transparent 62%, var(--zolty) 62%, var(--zolt
   /* ---------- Skalowanie sceny ---------- */
   const scena = document.getElementById('scena');
   function dopasuj() {
-    const s = Math.min(innerWidth / 1600, innerHeight / 900);
+    const de = document.documentElement;
+    const s = Math.min(de.clientWidth / 1600, de.clientHeight / 900);
     scena.style.transform = `translate(-50%, -50%) scale(${s})`;
     scena.style.transformOrigin = '50% 50%';
     scena.style.left = '50%'; scena.style.top = '50%';
@@ -889,6 +891,15 @@ mark { background: linear-gradient(transparent 62%, var(--zolty) 62%, var(--zolt
   });
   document.getElementById('dalej').addEventListener('click', dalej);
   document.getElementById('wstecz').addEventListener('click', wstecz);
+  // Telefon i tablet: przesunięcie palcem w lewo to dalej, w prawo to wstecz.
+  let dotyk = null;
+  addEventListener('touchstart', (e) => { const t = e.changedTouches[0]; dotyk = [t.clientX, t.clientY]; }, { passive: true });
+  addEventListener('touchend', (e) => {
+    if (!dotyk) return;
+    const t = e.changedTouches[0], dx = t.clientX - dotyk[0], dy = t.clientY - dotyk[1];
+    dotyk = null;
+    if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) (dx < 0 ? dalej : wstecz)();
+  }, { passive: true });
 
   const zHasha = () => (location.hash.slice(1) || '1.0').split('.').map(Number);
   const [s0, k0] = zHasha();
